@@ -1,0 +1,6 @@
+endpoint: https://gamerize-476e004ca6.herokuapp.com/gamerize/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: javascript-client
+    output: ./generated/prisma-client/
