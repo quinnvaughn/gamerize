@@ -1,0 +1,25 @@
+import React from 'react'
+import styled from 'styled-components'
+import HomeTitle from './HomeTitle'
+import GamingJumbotron from '../gaming_jumbotron.jpg'
+
+const TitleContainer = styled.div`
+  width: 100%;
+  height: 800px;
+  position: relative;
+`
+
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+`
+
+export default function Jumbotron(props) {
+  return (
+    <TitleContainer>
+      <Img src={GamingJumbotron} alt="Gaming Jumbotron" />
+      <HomeTitle text="Play with your favorite Gamers" />
+    </TitleContainer>
+  )
+}
