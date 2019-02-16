@@ -8,6 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 16.6666666666%;
+  margin-bottom: 10px;
 `
 
 const Avatar = styled.img`
@@ -17,23 +18,38 @@ const Avatar = styled.img`
 
 const Name = styled.h4`
   font-size: 18px;
-  color: black;
   margin-bottom: 3px;
+`
+
+const Gamers = styled.p`
+  font-size: 16px;
 `
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: black;
   :hover {
+    color: red;
     cursor: pointer;
   }
 `
 
+const noSpaces = string => string.replace(/ /g, '_')
+
 export default function Game(props) {
   return (
     <Container>
-      <StyledLink to={`/games/${props.name}`}>
+      <StyledLink
+        to={{
+          pathname: `/games/${noSpaces(props.name)}`,
+          state: { tags: props.tags, sessions: props.sessions },
+        }}
+      >
         <Avatar src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
+        {props.full && (
+          <Gamers>{`${props.sessions} sessions available`}</Gamers>
+        )}
       </StyledLink>
     </Container>
   )

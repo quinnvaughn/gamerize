@@ -50,16 +50,18 @@ const StyledLink = styled(Link)`
 // pulled function out and named it to make it more obvious and clean up return
 const formatCommas = (favoriteGames, game, index) => {
   if (index < favoriteGames.length - 1) {
-    return <FavoriteGame>{`${game}, `}</FavoriteGame>
+    return <FavoriteGame key={game}>{`${game}, `}</FavoriteGame>
   } else {
-    return <FavoriteGame>{`${game}`}</FavoriteGame>
+    return <FavoriteGame key={game}>{`${game}`}</FavoriteGame>
   }
 }
+
+const noSpaces = string => string.replace(/ /g, '_')
 
 export default function Gamer(props) {
   return (
     <Container>
-      <StyledLink to={`/users/${props.username}`}>
+      <StyledLink to={`/users/${noSpaces(props.username)}`}>
         <Avatar src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
         <Occupation>{props.occupation}</Occupation>

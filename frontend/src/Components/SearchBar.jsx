@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Input = styled.input`
@@ -16,5 +16,13 @@ const Input = styled.input`
 `
 
 export default function SearchBar(props) {
-  return <Input type="text" placeholder="Search" />
+  const [search, setSearch] = useState('')
+  return (
+    <Input
+      type="text"
+      placeholder="Search"
+      value={search}
+      onChange={event => setSearch(event.target.value)}
+    />
+  )
 }

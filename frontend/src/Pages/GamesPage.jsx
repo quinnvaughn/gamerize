@@ -2,10 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 //local imports
 import NavBar from '../Components/NavBar'
-import GamerRow from '../Components/TopGamersRow'
-
-import Jumbotron from '../Components/Jumbotron'
-import GamesRow from '../Components/TopGamesRow'
+import DisplayGames from '../Components/DisplayGames'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -16,17 +13,23 @@ const PageContainer = styled.div`
 const Content = styled.div`
   margin: 0 auto !important;
   padding: 20px;
-  max-width: 1080px;
+
+  padding-left: 80px;
+  padding-right: 80px;
 `
 
-export default function HomePage(props) {
+const Title = styled.h2`
+  font-weight: 800;
+  font-size: 24px;
+`
+
+export default function GamesPage(props) {
   return (
     <PageContainer>
       <NavBar />
-      <Jumbotron />
       <Content>
-        <GamerRow title="Gamers" />
-        <GamesRow title="Most Popular Games" />
+        <Title>Explore Games</Title>
+        <DisplayGames />
       </Content>
     </PageContainer>
   )
