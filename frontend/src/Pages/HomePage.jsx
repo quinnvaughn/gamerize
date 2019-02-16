@@ -6,6 +6,7 @@ import GamerRow from '../Components/TopGamersRow'
 
 import Jumbotron from '../Components/Jumbotron'
 import GamesRow from '../Components/TopGamesRow'
+import Footer from '../Components/Footer'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -28,6 +29,7 @@ export default function HomePage(props) {
         <GamerRow title="Gamers" />
         <GamesRow title="Most Popular Games" />
       </Content>
+      <Footer />
     </PageContainer>
   )
 }

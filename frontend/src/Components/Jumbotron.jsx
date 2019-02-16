@@ -12,7 +12,7 @@ const TitleContainer = styled.div`
 const Img = styled.img`
   width: 100%;
   height: 100%;
-  opacity: 0.85;
+  opacity: 0.6;
 `
 
 export default function Jumbotron(props) {

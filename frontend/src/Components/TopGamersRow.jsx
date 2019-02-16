@@ -27,6 +27,7 @@ const ShowAll = styled(Link)`
   margin-top: 20px;
   color: red;
   text-decoration: none;
+  align-self: flex-start;
   :hover {
     cursor: pointer;
     text-decoration: underline;

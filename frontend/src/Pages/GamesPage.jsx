@@ -3,6 +3,7 @@ import styled from 'styled-components'
 //local imports
 import NavBar from '../Components/NavBar'
 import DisplayGames from '../Components/DisplayGames'
+import Footer from '../Components/Footer'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -31,6 +32,7 @@ export default function GamesPage(props) {
         <Title>Explore Games</Title>
         <DisplayGames />
       </Content>
+      <Footer />
     </PageContainer>
   )
 }

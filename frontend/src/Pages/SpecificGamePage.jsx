@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from 'underscore'
+
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'
 import TopSessionsRow from '../Components/TopSessionsRow'
-import _ from 'underscore'
+import Footer from '../Components/Footer'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -20,6 +22,7 @@ const TitleOfGame = styled.h1`
 const Content = styled.div`
   margin: 0 auto !important;
   padding: 20px;
+
   padding-left: 80px;
   padding-right: 80px;
 `
@@ -156,6 +159,7 @@ export default function SpecificGamePage(props) {
           )
         })}
       </Content>
+      <Footer />
     </PageContainer>
   )
 }
