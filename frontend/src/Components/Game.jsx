@@ -21,8 +21,9 @@ const Name = styled.h4`
   margin-bottom: 3px;
 `
 
-const Gamers = styled.p`
+const Sessions = styled.p`
   font-size: 16px;
+  color: black;
 `
 
 const StyledLink = styled(Link)`
@@ -48,7 +49,7 @@ export default function Game(props) {
         <Avatar src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
         {props.full && (
-          <Gamers>{`${props.sessions} sessions available`}</Gamers>
+          <Sessions>{`${props.sessions} sessions available`}</Sessions>
         )}
       </StyledLink>
     </Container>

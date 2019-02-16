@@ -17,7 +17,6 @@ const Avatar = styled.img`
 
 const Name = styled.h4`
   font-size: 18px;
-  color: black;
   margin-bottom: 3px;
 `
 
@@ -42,7 +41,9 @@ const FavoriteGame = styled.span`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: black;
   :hover {
+    color: red;
     cursor: pointer;
   }
 `
