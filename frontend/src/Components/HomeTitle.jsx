@@ -7,7 +7,7 @@ const Title = styled.h1`
   font-size: 80px;
   font-weight: bold;
   position: absolute;
-  color: white;
+  color: black;
   top: 80px;
   left: 80px;
   text-rendering: optimizeLegibility;
