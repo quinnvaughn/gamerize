@@ -96,6 +96,7 @@ const mapSix = gamers => {
           occupation={gamer.occupation}
           favoriteGames={gamer.favoriteGames}
           username={gamer.username}
+          key={gamer.username}
         />
       )
     )
@@ -108,9 +109,7 @@ export default function GamerRow(props) {
       <RowTitle>{props.title}</RowTitle>
       <AllTheGamers>{mapSix(gamers)}</AllTheGamers>
       {gamersLength > 6 && (
-        <ShowAll
-          to={`/show-all/${props.title}`}
-        >{`Show All Gamers (${gamersLength})`}</ShowAll>
+        <ShowAll to={`/gamers`}>{`Show All Gamers (${gamersLength})`}</ShowAll>
       )}
     </Container>
   )

@@ -9,7 +9,7 @@ const Title = styled.h1`
   position: absolute;
   color: white;
   top: 80px;
-  left: 40px;
+  left: 80px;
   text-rendering: optimizeLegibility;
 `
 

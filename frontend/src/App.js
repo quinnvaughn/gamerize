@@ -1,15 +1,19 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
+import ScrollToTop from './Components/ScrollToTop'
 
 //local imports
 const HomePage = lazy(() => import('./Pages/HomePage'))
+const GamesPage = lazy(() => import('./Pages/GamesPage'))
+const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 
 const GlobalStyle = createGlobalStyle`
-  html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+  body {
+    margin: 0;
+    margin-top: 60px;
+    padding: 0;
+    overflow-x:hidden;
   }
   div {
     box-sizing: border-box;
@@ -30,16 +34,21 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 `
+
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
-          <GlobalStyle />
-          <Switch>
-            <Route path="/" component={HomePage} />
-          </Switch>
-        </Suspense>
+        <ScrollToTop>
+          <Suspense fallback={<div>Loading...</div>}>
+            <GlobalStyle />
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/games" component={GamesPage} />
+              <Route path="/games/:game" component={SpecificGamePage} />
+            </Switch>
+          </Suspense>
+        </ScrollToTop>
       </BrowserRouter>
     )
   }
