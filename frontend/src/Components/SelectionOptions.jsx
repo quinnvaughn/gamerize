@@ -1,0 +1,64 @@
+import React from 'react'
+import styled from 'styled-components'
+import StarRatings from 'react-star-ratings'
+
+const Container = styled.div`
+  flex: 40%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 16px 24px 24px;
+`
+
+const Price = styled.div`
+  font-size: 22px;
+  font-weight: 600;
+`
+
+const Per = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+`
+
+const NumRatings = styled.span`
+  margin-left: 5px;
+  color: black;
+  font-size: 12px;
+  font-weight: 600;
+`
+
+const RatingContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const Top = styled.div`
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #d3d3d3;
+`
+
+export default function SelectionOptions(props) {
+  return (
+    <Container>
+      <Top>
+        <Price>
+          {`$${props.price}`} <Per>per session</Per>
+        </Price>
+        <RatingContainer>
+          <StarRatings
+            rating={props.rating}
+            starRatedColor="red"
+            numberOfStars={5}
+            name="rating"
+            starDimension="12px"
+            starSpacing="1px"
+          />
+          <NumRatings>{`${props.numRatings}`}</NumRatings>
+        </RatingContainer>
+      </Top>
+    </Container>
+  )
+}
