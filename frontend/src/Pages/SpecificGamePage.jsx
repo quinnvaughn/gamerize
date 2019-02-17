@@ -5,12 +5,12 @@ import _ from 'underscore'
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'
 import TopSessionsRow from '../Components/TopSessionsRow'
-import Footer from '../Components/Footer'
 
 const PageContainer = styled.div`
-  width: 100vw;
+  width: 100%;
   max-width: 100%;
-  height: 100vh;
+  height: 100%;
+  box-sizing: border-box;
 `
 
 const TitleOfGame = styled.h1`
@@ -25,6 +25,7 @@ const Content = styled.div`
 
   padding-left: 80px;
   padding-right: 80px;
+  padding-bottom: 60px;
 `
 
 const Tags = styled.div`
@@ -42,7 +43,7 @@ const Tag = styled.div`
   padding: 4px 6px;
   display: inline-block;
   border-radius: 4px;
-  margin-right: 5px;
+  margin-right: 8px;
   :hover {
     cursor: default;
   }
@@ -58,7 +59,7 @@ const Sessions = styled.div`
 const gamers = [
   {
     name: 'Kyle',
-    occupation: 'Celebrities',
+    gamerType: 'Celebrities',
     systems: ['Xbox One'],
     price: 180,
     rating: 4.8,
@@ -67,7 +68,7 @@ const gamers = [
   },
   {
     name: 'Taylor Bennett',
-    occupation: 'Celebrities',
+    gamerType: 'Celebrities',
     systems: ['PS4'],
     price: 200,
     rating: 4.0,
@@ -76,7 +77,7 @@ const gamers = [
   },
   {
     name: 'Shroud',
-    occupation: 'Streamers',
+    gamerType: 'Streamers',
     systems: ['Xbox One, PC'],
     price: 200,
     rating: 4.92,
@@ -85,7 +86,7 @@ const gamers = [
   },
   {
     name: 'TSM Myth',
-    occupation: 'Streamers',
+    gamerType: 'Streamers',
     systems: ['PC, PS4'],
     price: 190,
     rating: 4.6,
@@ -94,7 +95,7 @@ const gamers = [
   },
   {
     name: 'Ninja',
-    occupation: 'Streamers',
+    gamerType: 'Streamers',
     systems: ['PC'],
     price: 250,
     rating: 4.97,
@@ -103,7 +104,7 @@ const gamers = [
   },
   {
     name: 'TimTheTatMan',
-    occupation: 'Streamers',
+    gamerType: 'Streamers',
     systems: ['PC'],
     price: 165,
     rating: 4.8,
@@ -112,7 +113,7 @@ const gamers = [
   },
   {
     name: 'DisguisedToast',
-    occupation: 'Streamers',
+    gamerType: 'Streamers',
     systems: ['PC'],
     price: 100,
     rating: 4.8,
@@ -121,7 +122,7 @@ const gamers = [
   },
   {
     name: 'PewDiePie',
-    occupation: 'Youtubers',
+    gamerType: 'Youtubers',
     systems: ['Xbox One'],
     price: 300,
     rating: 4.4,
@@ -132,7 +133,7 @@ const gamers = [
 
 const noUnderscores = string => string.replace(/_/g, ' ')
 
-const allGamers = _.groupBy(gamers, 'occupation')
+const allGamers = _.groupBy(gamers, 'gamerType')
 
 export default function SpecificGamePage(props) {
   return (
@@ -159,7 +160,6 @@ export default function SpecificGamePage(props) {
           )
         })}
       </Content>
-      <Footer />
     </PageContainer>
   )
 }

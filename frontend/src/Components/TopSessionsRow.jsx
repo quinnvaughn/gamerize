@@ -41,7 +41,7 @@ const mapSix = (gamers, game) => {
           name={gamer.name}
           game={game}
           username={gamer.username}
-          occupation={gamer.occupation}
+          gamerType={gamer.gamerType}
           systems={gamer.systems}
           price={gamer.price}
           rating={gamer.rating}
