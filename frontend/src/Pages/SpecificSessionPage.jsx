@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import DefaultBanner from '../default_banner.jpg'
 import NavBar from '../Components/NavBar'
+import SelectionOptions from '../Components/SelectionOptions'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -14,17 +15,17 @@ const Content = styled.div`
   max-width: 1080px;
   margin: 0 auto;
   padding: 0px 24px;
+  display: flex;
 `
 
-const Title = styled.h1`
+const Gamer = styled.h1`
   font-size: 40px;
   font-weight: bold;
 `
 
-const Systems = styled.div`
-  font-size: 24px;
-  font-weight: 400;
-  margin-top: 10px;
+const Game = styled.h2`
+  font-size: 20px;
+  font-weight: bold;
 `
 
 const Occupations = styled.div`
@@ -32,11 +33,10 @@ const Occupations = styled.div`
   font-weight: 400;
   color: black;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 `
 
 const Occupation = styled.div`
-  margin-top: 10px;
   font-size: 12px;
   font-weight: 400;
   color: black;
@@ -51,8 +51,9 @@ const Occupation = styled.div`
 `
 
 const Requirements = styled.div`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
+  margin-top: 50px;
   margin-bottom: 5px;
 `
 
@@ -168,6 +169,25 @@ const gamers = [
   },
 ]
 
+const LeftSide = styled.div`
+  flex: 60%;
+`
+
+const Systems = styled.span`
+  font-size: 14px;
+  font-weight: 400;
+`
+
+const noUnderscores = string => string.replace(/_/g, ' ')
+
+const formatCommas = (systems, system, index) => {
+  if (index < systems.length - 1) {
+    return <Systems key={system}>{`${system}, `}</Systems>
+  } else {
+    return <Systems key={system}>{`${system}`}</Systems>
+  }
+}
+
 export default function SpecificSessionPage(props) {
   const { user, game } = props.match.params
   // won't need to do when getting data from db.
@@ -176,19 +196,30 @@ export default function SpecificSessionPage(props) {
     <PageContainer>
       <NavBar />
       <Content>
-        <Title>{`${gamer.name} - ${game}`}</Title>
-        {gamer.systems.map(system => (
-          <Systems>{system}</Systems>
-        ))}
-        <Occupations>
-          {gamer.occupation.map(occupation => (
-            <Occupation>{occupation}</Occupation>
+        <LeftSide>
+          <Gamer>{`${gamer.name}`}</Gamer>
+          <Game>
+            {`${noUnderscores(game)} - `}
+            {gamer.systems.map((system, index) =>
+              formatCommas(gamer.systems, system, index)
+            )}
+          </Game>
+          <Occupations>
+            {gamer.occupation.map(occupation => (
+              <Occupation>{occupation}</Occupation>
+            ))}
+          </Occupations>
+          <Requirements>Requirements:</Requirements>
+          {gamer.requirements.map(requirement => (
+            <Requirement>{requirement}</Requirement>
           ))}
-        </Occupations>
-        <Requirements>Requirements:</Requirements>
-        {gamer.requirements.map(requirement => (
-          <Requirement>{requirement}</Requirement>
-        ))}
+        </LeftSide>
+        <SelectionOptions
+          price={gamer.price}
+          numRatings={gamer.numRatings}
+          rating={gamer.rating}
+          systems={gamer.systems}
+        />
       </Content>
     </PageContainer>
   )
