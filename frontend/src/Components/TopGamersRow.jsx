@@ -8,6 +8,7 @@ const RowTitle = styled.h3`
   font-weight: bold;
   width: 100%;
   display: block;
+  cursor: default;
 `
 
 const Container = styled.div`

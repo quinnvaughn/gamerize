@@ -21,6 +21,7 @@ const Container = styled.div`
 const GlobalStyle = createGlobalStyle`
   body {
     margin-top: 110px;
+    height: calc(100% - 110px);
   }
 `
 

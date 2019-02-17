@@ -7,6 +7,7 @@ import ScrollToTop from './Components/ScrollToTop'
 const HomePage = lazy(() => import('./Pages/HomePage'))
 const GamesPage = lazy(() => import('./Pages/GamesPage'))
 const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
+const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -14,6 +15,12 @@ const GlobalStyle = createGlobalStyle`
     margin-top: 60px;
     padding: 0;
     overflow-x:hidden;
+    height: calc(100% - 60px);
+  }
+  body::after {
+    content: '';
+    display: block;
+    height: 60px;
   }
   div {
     box-sizing: border-box;
@@ -46,6 +53,10 @@ class App extends Component {
               <Route exact path="/" component={HomePage} />
               <Route exact path="/games" component={GamesPage} />
               <Route path="/games/:game" component={SpecificGamePage} />
+              <Route
+                path="/users/:user/:game"
+                component={SpecificSessionPage}
+              />
             </Switch>
           </Suspense>
         </ScrollToTop>
