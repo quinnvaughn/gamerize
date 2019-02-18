@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
+import SystemPicker from './SystemPicker'
+import TimeSlots from './TimeSlots'
 
 const Container = styled.div`
   flex: 40%;
@@ -40,25 +42,32 @@ const Top = styled.div`
   border-bottom: 1px solid #d3d3d3;
 `
 
-export default function SelectionOptions(props) {
+export default function SelectionOptions({
+  price,
+  rating,
+  numRatings,
+  systems,
+}) {
   return (
     <Container>
       <Top>
         <Price>
-          {`$${props.price}`} <Per>per session</Per>
+          {`$${price}`} <Per>per session</Per>
         </Price>
         <RatingContainer>
           <StarRatings
-            rating={props.rating}
+            rating={rating}
             starRatedColor="red"
             numberOfStars={5}
             name="rating"
             starDimension="12px"
             starSpacing="1px"
           />
-          <NumRatings>{`${props.numRatings}`}</NumRatings>
+          <NumRatings>{`${numRatings}`}</NumRatings>
         </RatingContainer>
       </Top>
+      <SystemPicker systems={systems} />
+      <TimeSlots />
     </Container>
   )
 }

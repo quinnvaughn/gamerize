@@ -1,9 +1,127 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import DefaultBanner from '../default_banner.jpg'
+import DefaultBanner from '../default-banner.png'
 import NavBar from '../Components/NavBar'
 import SelectionOptions from '../Components/SelectionOptions'
+
+const gamers = [
+  {
+    name: 'Kyle',
+    occupation: ['Celebrity', 'Rapper'],
+    systems: ['Xbox One'],
+    price: 180,
+    rating: 4.8,
+    numRatings: 500,
+    username: 'SuperDuperKyle',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: [
+      '20% off for 4 or more sessions',
+      '10% off for 2 or more users',
+    ],
+  },
+  {
+    name: 'Taylor Bennett',
+    occupation: ['Celebrity', 'Rapper'],
+    systems: ['PS4'],
+    price: 200,
+    rating: 4.0,
+    numRatings: 400,
+    username: 'Taylor_Bennett',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'Shroud',
+    occupation: ['Streamer'],
+    systems: ['Xbox One', 'PC'],
+    price: 200,
+    rating: 4.92,
+    numRatings: 2000,
+    username: 'Shroud',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'TSM Myth',
+    occupation: ['Streamer'],
+    systems: ['PC', 'PS4'],
+    price: 190,
+    rating: 4.6,
+    numRatings: 587,
+    username: 'TSM_Myth',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'Ninja',
+    occupation: ['Streamer'],
+    systems: ['PC'],
+    price: 250,
+    rating: 4.97,
+    numRatings: 5678,
+    username: 'Ninja',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'TimTheTatMan',
+    occupation: ['Streamer'],
+    systems: ['PC'],
+    price: 165,
+    rating: 4.8,
+    numRatings: 5123,
+    username: 'TimTheTatMan',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'DisguisedToast',
+    occupation: ['Streamer'],
+    systems: ['PC'],
+    price: 100,
+    rating: 4.8,
+    numRatings: 786,
+    username: 'DisguisedToast',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+  {
+    name: 'PewDiePie',
+    occupation: ['Youtuber'],
+    systems: ['Xbox One'],
+    price: 300,
+    rating: 4.4,
+    numRatings: 1999,
+    username: 'PewDiePie',
+    requirements: [
+      'Should have at least 50+ wins',
+      'No hate - only good vibes',
+    ],
+    discounts: ['20% off for 4 or more sessions'],
+  },
+]
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -50,6 +168,10 @@ const Occupation = styled.div`
   }
 `
 
+const RequirementsAndDiscountsContainer = styled.div`
+  display: flex;
+`
+
 const Requirements = styled.div`
   font-size: 16px;
   font-weight: 600;
@@ -62,120 +184,40 @@ const Requirement = styled.div`
   font-weight: 400;
 `
 
-const gamers = [
-  {
-    name: 'Kyle',
-    occupation: ['Celebrity', 'Rapper'],
-    systems: ['Xbox One'],
-    price: 180,
-    rating: 4.8,
-    numRatings: 500,
-    username: 'SuperDuperKyle',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'Taylor Bennett',
-    occupation: ['Celebrity', 'Rapper'],
-    systems: ['PS4'],
-    price: 200,
-    rating: 4.0,
-    numRatings: 400,
-    username: 'Taylor_Bennett',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'Shroud',
-    occupation: ['Streamer'],
-    systems: ['Xbox One, PC'],
-    price: 200,
-    rating: 4.92,
-    numRatings: 2000,
-    username: 'Shroud',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'TSM Myth',
-    occupation: ['Streamer'],
-    systems: ['PC, PS4'],
-    price: 190,
-    rating: 4.6,
-    numRatings: 587,
-    username: 'TSM_Myth',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'Ninja',
-    occupation: ['Streamer'],
-    systems: ['PC'],
-    price: 250,
-    rating: 4.97,
-    numRatings: 5678,
-    username: 'Ninja',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'TimTheTatMan',
-    occupation: ['Streamer'],
-    systems: ['PC'],
-    price: 165,
-    rating: 4.8,
-    numRatings: 5123,
-    username: 'TimTheTatMan',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'DisguisedToast',
-    occupation: ['Streamer'],
-    systems: ['PC'],
-    price: 100,
-    rating: 4.8,
-    numRatings: 786,
-    username: 'DisguisedToast',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-  {
-    name: 'PewDiePie',
-    occupation: ['Youtuber'],
-    systems: ['Xbox One'],
-    price: 300,
-    rating: 4.4,
-    numRatings: 1999,
-    username: 'PewDiePie',
-    requirements: [
-      'Should have at least 50+ wins',
-      'No hate - only good vibes',
-    ],
-  },
-]
+const InnerContainer = styled.div`
+  flex: 50%;
+  :not(:last-child) {
+    padding-right: 10px;
+  }
+`
+
+const Discounts = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 50px;
+  margin-bottom: 5px;
+`
+
+const Discount = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+`
 
 const LeftSide = styled.div`
   flex: 60%;
+  padding-right: 10px;
 `
 
 const Systems = styled.span`
   font-size: 14px;
   font-weight: 400;
+`
+
+const BannerContainer = styled.div``
+
+const Banner = styled.img`
+  width: 100%;
+  max-height: 400px;
 `
 
 const noUnderscores = string => string.replace(/_/g, ' ')
@@ -195,6 +237,9 @@ export default function SpecificSessionPage(props) {
   return (
     <PageContainer>
       <NavBar />
+      <BannerContainer>
+        <Banner src={DefaultBanner} alt="Banner" />
+      </BannerContainer>
       <Content>
         <LeftSide>
           <Gamer>{`${gamer.name}`}</Gamer>
@@ -206,13 +251,23 @@ export default function SpecificSessionPage(props) {
           </Game>
           <Occupations>
             {gamer.occupation.map(occupation => (
-              <Occupation>{occupation}</Occupation>
+              <Occupation key={occupation}>{occupation}</Occupation>
             ))}
           </Occupations>
-          <Requirements>Requirements:</Requirements>
-          {gamer.requirements.map(requirement => (
-            <Requirement>{requirement}</Requirement>
-          ))}
+          <RequirementsAndDiscountsContainer>
+            <InnerContainer>
+              <Requirements>Requirements:</Requirements>
+              {gamer.requirements.map(requirement => (
+                <Requirement key={requirement}>{requirement}</Requirement>
+              ))}
+            </InnerContainer>
+            <InnerContainer>
+              <Discounts>Discounts:</Discounts>
+              {gamer.discounts.map(discount => (
+                <Discount key={discount}>{discount}</Discount>
+              ))}
+            </InnerContainer>
+          </RequirementsAndDiscountsContainer>
         </LeftSide>
         <SelectionOptions
           price={gamer.price}
