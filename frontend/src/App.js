@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     overflow-x:hidden;
     height: calc(100% - 60px);
+    position: relative;
   }
   body::after {
     content: '';

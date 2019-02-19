@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaArrowRight } from 'react-icons/fa'
 
+//local
+import Modal from './Modal'
+import Calendar from './Calendar'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,11 +36,12 @@ const SelectionButton = styled.button`
   display: flex;
   width: 100%;
   height: 40px !important;
-  align-items: center;
+  align-items: cimport Calender from './Calendar';
+enter;
   justify-content: space-between;
-  color: ${props => (props.disabled ? 'grey' : 'black')};
+  color: black;
   border-radius: 4px;
-  cursor: ${props => (props.disabled ? 'default' : 'cursor')};
+  cursor: pointer;
   background: white;
 `
 
@@ -49,18 +54,23 @@ const ArrowRight = styled(FaArrowRight)`
 `
 
 export default function TimeSlots(props) {
-  const [open, setOpen] = useState(false)
+  const [showModal, setshowModal] = useState(false)
   return (
     <Container>
       <TimeSlotLabel>
         <TimeSlot>Time Slots</TimeSlot>
       </TimeSlotLabel>
       <SelectionContainer>
-        <SelectionButton onClick={() => setOpen(!open)}>
+        <SelectionButton onClick={() => setshowModal(!showModal)}>
           <SelectedChoice />
           <ArrowRight />
         </SelectionButton>
       </SelectionContainer>
+      {showModal && (
+        <Modal onRequestClose={() => setshowModal(!showModal)} apply={() => {}}>
+          <Calendar />
+        </Modal>
+      )}
     </Container>
   )
 }

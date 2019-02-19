@@ -22,6 +22,7 @@ const gamers = [
       '20% off for 4 or more sessions',
       '10% off for 2 or more users',
     ],
+    players: ['1', '2', '3'],
   },
   {
     name: 'Taylor Bennett',
@@ -36,6 +37,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'Shroud',
@@ -50,6 +52,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'TSM Myth',
@@ -64,6 +67,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'Ninja',
@@ -78,6 +82,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'TimTheTatMan',
@@ -92,6 +97,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'DisguisedToast',
@@ -106,6 +112,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
   {
     name: 'PewDiePie',
@@ -120,6 +127,7 @@ const gamers = [
       'No hate - only good vibes',
     ],
     discounts: ['20% off for 4 or more sessions'],
+    players: ['1', '2', '3'],
   },
 ]
 
@@ -270,6 +278,7 @@ export default function SpecificSessionPage(props) {
           </RequirementsAndDiscountsContainer>
         </LeftSide>
         <SelectionOptions
+          players={gamer.players}
           price={gamer.price}
           numRatings={gamer.numRatings}
           rating={gamer.rating}
