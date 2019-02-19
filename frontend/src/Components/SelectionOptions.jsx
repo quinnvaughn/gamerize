@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
+import PlayersOptions from './PlayersOptions'
 
 const Container = styled.div`
   flex: 40%;
@@ -47,6 +48,7 @@ export default function SelectionOptions({
   rating,
   numRatings,
   systems,
+  players,
 }) {
   return (
     <Container>
@@ -68,6 +70,7 @@ export default function SelectionOptions({
       </Top>
       <SystemPicker systems={systems} />
       <TimeSlots />
+      <PlayersOptions players={players} />
     </Container>
   )
 }
