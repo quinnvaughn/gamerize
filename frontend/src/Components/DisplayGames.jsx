@@ -3,21 +3,21 @@ import styled from 'styled-components'
 import Game from './Game'
 
 const RowTitle = styled.h3`
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
   width: 100%;
   display: block;
 `
 
 const Container = styled.div`
-  min-height: 200px;
+  min-height: 20rem;
   width: 100%;
   display: flex;
   flex-direction: column;
 `
 
 const AllTheGames = styled.div`
-  margin-top: 20px;
+  margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
 `

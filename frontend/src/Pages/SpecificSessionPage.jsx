@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import DefaultBanner from '../default-banner.png'
 import NavBar from '../Components/NavBar'
 import SelectionOptions from '../Components/SelectionOptions'
+import Footer from '../Components/Footer'
 
 const gamers = [
   {
@@ -134,43 +135,45 @@ const gamers = [
 const PageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 100vh;
+  height: 100%;
+  position: relative;
+  padding-bottom: 6rem;
 `
 
 const Content = styled.div`
-  max-width: 1080px;
+  max-width: 108rem;
   margin: 0 auto;
-  padding: 10px 24px 0px;
+  padding: 1rem 2.4rem 0;
   display: flex;
 `
 
 const Gamer = styled.h1`
-  font-size: 40px;
+  font-size: 4rem;
   font-weight: bold;
 `
 
 const Game = styled.h2`
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
 `
 
 const Occupations = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
-  margin-top: 10px;
-  margin-bottom: 16px;
+  margin-top: 1rem;
+  margin-bottom: 1.6rem;
 `
 
 const Occupation = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
   color: black;
   border: 1px solid #dddfe2;
-  padding: 4px 6px;
+  padding: 0.4rem 0.6rem;
   display: inline-block;
   border-radius: 4px;
-  margin-right: 8px;
+  margin-right: 0.8rem;
   :hover {
     cursor: default;
   }
@@ -181,43 +184,43 @@ const RequirementsAndDiscountsContainer = styled.div`
 `
 
 const Requirements = styled.div`
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 600;
-  margin-top: 50px;
-  margin-bottom: 5px;
+  margin-top: 5rem;
+  margin-bottom: 0.5rem;
 `
 
 const Requirement = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
 `
 
 const InnerContainer = styled.div`
   flex: 50%;
   :not(:last-child) {
-    padding-right: 10px;
+    padding-right: 1rem;
   }
 `
 
 const Discounts = styled.div`
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 600;
-  margin-top: 50px;
-  margin-bottom: 5px;
+  margin-top: 5rem;
+  margin-bottom: 0.5rem;
 `
 
 const Discount = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
 `
 
 const LeftSide = styled.div`
   flex: 60%;
-  padding-right: 10px;
+  padding-right: 1rem;
 `
 
 const Systems = styled.span`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
 `
 
@@ -225,7 +228,7 @@ const BannerContainer = styled.div``
 
 const Banner = styled.img`
   width: 100%;
-  max-height: 400px;
+  max-height: 40rem;
 `
 
 const noUnderscores = string => string.replace(/_/g, ' ')
@@ -285,6 +288,7 @@ export default function SpecificSessionPage(props) {
           systems={gamer.systems}
         />
       </Content>
+      <Footer />
     </PageContainer>
   )
 }

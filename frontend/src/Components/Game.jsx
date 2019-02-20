@@ -8,27 +8,28 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 16.6666666666%;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 `
 
 const Avatar = styled.img`
-  height: 100px;
-  width: 100px;
+  height: 10rem;
+  width: 10rem;
 `
 
 const Name = styled.h4`
-  font-size: 18px;
-  margin-bottom: 3px;
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
 `
 
 const Sessions = styled.p`
-  font-size: 16px;
+  font-size: 1.6rem;
   color: black;
 `
 
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
+  font-size: 1.6rem;
   :hover {
     color: red;
     cursor: pointer;

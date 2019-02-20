@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import SearchBar from './SearchBar'
 
 const Container = styled.nav`
-  height: 60px;
+  height: 6rem;
   border-bottom: 1px solid #dddfe2;
   width: 100vw;
   position: sticky;
@@ -17,17 +17,18 @@ const Container = styled.nav`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 20px 40px 20px 80px;
+  padding: 2rem 4rem 2rem 8rem;
   -webkit-backface-visibility: hidden;
 `
 
-const Links = styled.div``
+const Links = styled.div`
+  font-size: 1.6rem;
+`
 
 const StyledLink = styled(Link)`
-  font-size: 16px;
   color: black;
   text-decoration: none;
-  margin-right: 15px;
+  margin-right: 1.5rem;
   :last-child {
     margin-right: 0;
   }

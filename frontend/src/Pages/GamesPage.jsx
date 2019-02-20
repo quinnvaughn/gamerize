@@ -12,15 +12,15 @@ const PageContainer = styled.div`
 
 const Content = styled.div`
   margin: 0 auto !important;
-  padding: 20px;
+  padding: 2rem;
 
-  padding-left: 80px;
-  padding-right: 80px;
+  padding-left: 8rem;
+  padding-right: 8rem;
 `
 
 const Title = styled.h2`
   font-weight: 800;
-  font-size: 24px;
+  font-size: 2.4rem;
 `
 
 export default function GamesPage(props) {

@@ -6,19 +6,20 @@ import GamerRow from '../Components/TopGamersRow'
 
 import Jumbotron from '../Components/Jumbotron'
 import GamesRow from '../Components/TopGamesRow'
+import Footer from '../Components/Footer'
 
 const PageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
   position: relative;
   min-height: 100vh;
-  padding-bottom: 60px;
+  padding-bottom: 6rem;
 `
 
 const Content = styled.div`
   margin: 0 auto !important;
-  padding: 20px;
-  max-width: 1080px;
+  padding: 2rem;
+  max-width: 108rem;
 `
 
 export default function HomePage(props) {
@@ -30,6 +31,7 @@ export default function HomePage(props) {
         <GamerRow title="Gamers" />
         <GamesRow title="Most Popular Games" />
       </Content>
+      <Footer />
     </PageContainer>
   )
 }

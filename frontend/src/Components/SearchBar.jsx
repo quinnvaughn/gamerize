@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Input = styled.input`
-  width: 300px;
-  padding: 5px 15px;
+  width: 30rem;
+  padding: 0.5rem 1.5rem;
   box-sizing: border-box;
   border-radius: 8px;
   border: 1px solid black;

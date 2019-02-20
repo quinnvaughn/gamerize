@@ -4,27 +4,28 @@ import { Link } from 'react-router-dom'
 import Session from './Session'
 
 const RowTitle = styled.h3`
-  font-size: 24px;
+  font-size: 2.4rem;
   font-weight: bold;
   width: 100%;
   display: block;
 `
 
 const Container = styled.div`
-  min-height: 200px;
+  min-height: 20rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 `
 
 const AllTheGamers = styled.div`
-  margin-top: 20px;
+  margin-top: 2rem;
   display: flex;
 `
 
 const ShowAll = styled(Link)`
-  margin-top: 20px;
+  margin-top: 2rem;
+  font-size: 1.6rem;
   color: red;
   text-decoration: none;
   :hover {

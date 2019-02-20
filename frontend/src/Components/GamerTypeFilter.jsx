@@ -7,12 +7,12 @@ import Checkbox from './Checkbox'
 
 const Modal = styled.div`
   position: absolute;
-  top: 40px;
+  top: 4rem;
   left: 0px;
-  width: 300px;
+  width: 30rem;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 24px;
+  padding: 2.4rem;
   background: white;
 `
 
@@ -23,7 +23,7 @@ const Container = styled.div`
 const ModalButton = styled.button`
   outline: none;
   border: 1px solid rgb(220, 224, 224);
-  padding: 6px 12px;
+  padding: 0.6rem 1.2rem;
   border-radius: 4px;
   :focus {
     outline: none;

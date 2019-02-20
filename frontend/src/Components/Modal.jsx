@@ -36,8 +36,8 @@ const Modal = styled.div`
   width: 100%;
   background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0, 0, 0.625rem, rgba(0, 0, 0, 0.2);
-  max-width: 1080px;
+  box-shadow: 0, 0, 1rem, rgba(0, 0, 0, 0.2);
+  max-width: 108rem;
   max-height: 100%;
 `
 

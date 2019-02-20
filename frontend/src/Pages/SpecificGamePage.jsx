@@ -14,46 +14,46 @@ const PageContainer = styled.div`
 `
 
 const TitleOfGame = styled.h1`
-  font-size: 40px;
+  font-size: 4rem;
   color: black;
   line-height: 1.2;
 `
 
 const Content = styled.div`
   margin: 0 auto !important;
-  padding: 20px;
+  padding: 2rem;
 
-  padding-left: 80px;
-  padding-right: 80px;
-  padding-bottom: 60px;
+  padding-left: 8rem;
+  padding-right: 8rem;
+  padding-bottom: 6rem;
 `
 
 const Tags = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 `
 
 const Tag = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
   color: black;
   border: 1px solid #dddfe2;
-  padding: 4px 6px;
+  padding: 0.4rem 0.6rem;
   display: inline-block;
   border-radius: 4px;
-  margin-right: 8px;
+  margin-right: 0.8rem;
   :hover {
     cursor: default;
   }
 `
 
 const Sessions = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
   color: black;
-  margin-bottom: 12px;
+  margin-bottom: 1.2rem;
 `
 
 const gamers = [
