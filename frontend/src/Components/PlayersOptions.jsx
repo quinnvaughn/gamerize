@@ -27,7 +27,7 @@ const SelectionContainer = styled.div`
 `
 
 const SelectionButton = styled.button`
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
   padding: 10px;
   display: flex;
   width: 100%;
@@ -58,7 +58,7 @@ const PlayersChoices = styled.div`
   width: 100%;
   left: 0;
   padding: 10px;
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
   border-radius: 4px;
   z-index: 1;
   background: white;

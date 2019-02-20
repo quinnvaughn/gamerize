@@ -166,7 +166,7 @@ const Occupation = styled.div`
   font-size: 12px;
   font-weight: 400;
   color: black;
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
   padding: 4px 6px;
   display: inline-block;
   border-radius: 4px;

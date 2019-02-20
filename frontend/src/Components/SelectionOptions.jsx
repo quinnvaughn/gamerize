@@ -9,7 +9,7 @@ const Container = styled.div`
   flex: 40%;
   display: flex;
   flex-direction: column;
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
   border-radius: 4px;
   margin-top: 10px;
   padding: 16px 24px 24px;
@@ -40,7 +40,7 @@ const RatingContainer = styled.div`
 const Top = styled.div`
   padding-bottom: 16px;
   margin-bottom: 24px;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
 `
 
 export default function SelectionOptions({
