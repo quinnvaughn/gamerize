@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
-import _ from 'underscore'
 
 const show = keyframes`
     0%: {
@@ -25,12 +24,11 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 1rem;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 9999;
   opacity: 1;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   animation: ${show} 0.5s ease;
 `
 
@@ -45,67 +43,30 @@ const Modal = styled.div`
 
 const ModalContent = styled.div``
 
-const Apply = styled.button`
-  outline: 0;
-  border: 0;
-  padding: 6px 8px;
-  border-radius: 4px;
-  color: #fff;
-  background: red;
-`
-
 export default class SimpleModal extends Component {
-  componentDidMount() {
-    window.addEventListener('keyup', this.handleKeyUp, false)
-    document.addEventListener('click', this.handleOutsideClick, false)
+  componentWillMount() {
+    document.addEventListener('mousedown', this.handleClick, false)
   }
-
   componentWillUnmount() {
-    window.removeEventListener('keyup', this.handleKeyUp, false)
-    document.removeEventListener('click', this.handleOutsideClick, false)
+    document.removeEventListener('mousedown', this.handleClick, false)
   }
 
-  handleKeyUp = e => {
-    const { onRequestClose } = this.props
-    const keys = {
-      27: () => {
-        e.preventDefault()
-        onRequestClose()
-        window.removeEventListener('keyup', this.handleKeyUp, false)
-      },
+  handleClick = e => {
+    if (this.node.contains(e.target)) {
+      return
     }
-    if (keys[e.keyCode]) {
-      keys[e.keyCode]()
-    }
+    this.handleClickOutside()
   }
 
-  handleOutsideClick = e => {
-    const { onRequestClose } = this.props
-
-    if (!_.isNull(this.modal)) {
-      if (!this.modal.contains(e.target)) {
-        onRequestClose()
-        document.removeEventListener('click', this.handleOutsideClick, false)
-      }
-    }
+  handleClickOutside = () => {
+    this.props.onRequestClose()
   }
   render() {
-    const { onRequestClose, children, apply } = this.props
+    const { children } = this.props
     return (
       <Overlay>
-        <Modal ref={node => (this.modal = node)}>
-          <ModalContent>
-            {children}
-            {/* <Apply
-              type="button"
-              onClick={() => {
-                apply()
-                onRequestClose()
-              }}
-            >
-              Apply
-            </Apply> */}
-          </ModalContent>
+        <Modal ref={node => (this.node = node)}>
+          <ModalContent>{children}</ModalContent>
         </Modal>
       </Overlay>
     )

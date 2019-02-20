@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import dateFns from 'date-fns'
+import { withRouter } from 'react-router-dom'
+import TimeSlotsHours from './TimeSlotsHours'
 
 const Container = styled.div`
   display: block;
@@ -16,7 +18,7 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #d3d3d3;
   background: #fff;
-  padding: 40px 20px;
+  padding: 30px 20px;
   margin: 0;
   display: flex;
   flex-direction: row;
@@ -90,7 +92,7 @@ const Cell = styled.div`
   flex-basis: 0;
   max-width: 100%;
   position: relative;
-  height: 7rem;
+  height: 6rem;
   border-right: 1px solid #d3d3d3;
   overflow: hidden;
   cursor: pointer;
@@ -105,6 +107,12 @@ const Cell = styled.div`
 const Number = styled.span`
   position: absolute;
   font-size: 12px;
+  width: ${props => props.current && '24px'};
+  line-height: ${props => props.current && '24px'};
+  border-radius: ${props => props.current && '50%'};
+  text-align: ${props => props.current && 'center'};
+  background: ${props => props.current && 'red'};
+  color: ${props => props.current && 'white'};
   top: 0.75em;
   right: 0.75em;
   font-weight: 700;
@@ -122,10 +130,10 @@ const Row = styled.div`
   }
 `
 
-export default class Calender extends Component {
+class Calendar extends Component {
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date(),
+    currentDay: new Date(),
   }
 
   renderHeader() {
@@ -158,7 +166,7 @@ export default class Calender extends Component {
   }
 
   renderCells() {
-    const { currentMonth, selectedDate } = this.state
+    const { currentMonth, currentDay } = this.state
     const monthStart = dateFns.startOfMonth(currentMonth)
     const monthEnd = dateFns.endOfMonth(monthStart)
     const startDate = dateFns.startOfWeek(monthStart)
@@ -178,11 +186,12 @@ export default class Calender extends Component {
         days.push(
           <Cell
             disabled={!dateFns.isSameMonth(day, monthStart)}
-            selected={dateFns.isSameDay(day, selectedDate)}
-            key={day}
+            key={cloneDay}
             onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
           >
-            <Number>{formattedDate}</Number>
+            <Number current={dateFns.isSameDay(day, currentDay)}>
+              {formattedDate}
+            </Number>
           </Cell>
         )
         day = dateFns.addDays(day, 1)
@@ -194,9 +203,7 @@ export default class Calender extends Component {
   }
 
   onDateClick = day => {
-    this.setState({
-      selectedDate: day,
-    })
+    this.props.setSelectedDay(day)
   }
 
   nextMonth = () => {
@@ -213,11 +220,13 @@ export default class Calender extends Component {
 
   render() {
     return (
-      <div className="calendar">
+      <Container>
         {this.renderHeader()}
         {this.renderDays()}
         {this.renderCells()}
-      </div>
+      </Container>
     )
   }
 }
+
+export default withRouter(Calendar)

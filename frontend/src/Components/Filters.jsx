@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
 //local imports
 import GamerTypeFilter from './GamerTypeFilter'
@@ -12,24 +12,16 @@ const Container = styled.div`
   z-index: 9999;
   display: flex;
   align-items: center;
-  position: fixed;
+  position: sticky;
   height: 50px;
   top: 60px;
   left: 0;
-`
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin-top: 110px;
-    height: calc(100% - 110px);
-  }
 `
 
 export default function Filters(props) {
   return (
     <Container>
       <GamerTypeFilter />
-      <GlobalStyle />
     </Container>
   )
 }

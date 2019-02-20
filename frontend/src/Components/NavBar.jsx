@@ -9,7 +9,7 @@ const Container = styled.nav`
   height: 60px;
   border-bottom: 1px solid #d3d3d3;
   width: 100vw;
-  position: fixed;
+  position: sticky;
   top: 0;
   background: white;
   z-index: 9999;
@@ -18,6 +18,7 @@ const Container = styled.nav`
   justify-content: space-between;
   box-sizing: border-box;
   padding: 20px 40px 20px 80px;
+  -webkit-backface-visibility: hidden;
 `
 
 const Links = styled.div``
