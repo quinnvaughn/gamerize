@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFns, { isThisHour } from 'date-fns'
+import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
 
 const Container = styled.div`

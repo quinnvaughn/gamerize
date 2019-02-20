@@ -4,7 +4,8 @@ import { createGlobalStyle } from 'styled-components'
 import ScrollToTop from './Components/ScrollToTop'
 
 //local imports
-const HomePage = lazy(() => import('./Pages/HomePage'))
+import Loading from './Components/Loading'
+import HomePage from './Pages/HomePage'
 const GamesPage = lazy(() => import('./Pages/GamesPage'))
 const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
@@ -12,6 +13,7 @@ const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
 const GlobalStyle = createGlobalStyle`
 html, body {
   height: 100%;
+  font-size: 62.5%;
 }
   body {
     @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,700');
@@ -51,7 +53,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             <GlobalStyle />
             <Switch>
               <Route exact path="/" component={HomePage} />

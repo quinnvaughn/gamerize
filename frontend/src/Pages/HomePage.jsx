@@ -11,7 +11,6 @@ const PageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
   position: relative;
-  overflow: hidden;
   min-height: 100vh;
   padding-bottom: 60px;
 `
