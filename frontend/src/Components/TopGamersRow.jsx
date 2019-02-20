@@ -4,7 +4,7 @@ import Gamer from './Gamer'
 import { Link } from 'react-router-dom'
 
 const RowTitle = styled.h3`
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
   width: 100%;
   display: block;
@@ -12,21 +12,22 @@ const RowTitle = styled.h3`
 `
 
 const Container = styled.div`
-  min-height: 200px;
+  min-height: 20rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 `
 
 const AllTheGamers = styled.div`
-  margin-top: 20px;
+  margin-top: 2rem;
   display: flex;
 `
 
 const ShowAll = styled(Link)`
-  margin-top: 20px;
+  margin-top: 2rem;
   color: red;
+  font-size: 1.6rem;
   text-decoration: none;
   align-self: flex-start;
   :hover {

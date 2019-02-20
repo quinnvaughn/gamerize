@@ -11,30 +11,30 @@ const Container = styled.div`
 `
 
 const Avatar = styled.img`
-  height: 100px;
-  width: 100px;
+  height: 10rem;
+  width: 10rem;
 `
 
 const Name = styled.h4`
-  font-size: 18px;
-  margin-bottom: 3px;
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
 `
 
 const Occupation = styled.p`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
-  margin-bottom: 3px;
+  margin-bottom: 0.3rem;
 `
 
 const FavoriteGames = styled.p`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
 `
 
 const FavoriteGame = styled.span`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
 `

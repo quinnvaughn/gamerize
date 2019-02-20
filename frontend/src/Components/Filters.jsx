@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import GamerTypeFilter from './GamerTypeFilter'
 
 const Container = styled.div`
-  padding: 10px 80px;
+  padding: 1rem 8rem;
   border-bottom: 1px solid #dddfe2;
   background: white;
   width: 100vw;
@@ -13,8 +13,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   position: sticky;
-  height: 50px;
-  top: 60px;
+  height: 5rem;
+  top: 6rem;
   left: 0;
 `
 

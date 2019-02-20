@@ -7,7 +7,7 @@ const Container = styled.div`
   display: block;
   position: relative;
   width: 100%;
-  max-width: 1080px;
+  max-width: 108rem;
   background: #fff;
   border: 1px solid #dddfe2;
 `
@@ -17,12 +17,12 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 40px 20px;
+  padding: 4rem 2rem;
   margin: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 30px;
+  font-size: 3rem;
   font-weight: 700;
   color: black;
   justify-content: space-between;
@@ -37,7 +37,7 @@ const Header = styled.div`
 const ChevronLeft = styled(FaChevronLeft)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 18px;
+  font-size: 1.8rem;
   color: black;
   :hover {
     transform: scale(1.75);
@@ -47,6 +47,7 @@ const ChevronLeft = styled(FaChevronLeft)`
 `
 
 const Day = styled.span`
+  font-size: 3rem;
   cursor: default;
 `
 
@@ -55,8 +56,8 @@ const Empty = styled.div``
 
 const Row = styled.div`
   margin: 0;
-  padding: 0px 10px 0px 40px;
-  height: 200px;
+  padding: 0px 0px 0px 4rem;
+  height: 20rem;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -69,9 +70,9 @@ const Row = styled.div`
 const Hour = styled.div`
   height: 100%;
   display: flex;
-  width: 60px;
+  width: 6rem;
   align-items: center;
-  padding-right: 10px;
+  padding-right: 1rem;
   border-right: 1px solid #dddfe2;
 `
 
@@ -83,7 +84,7 @@ const Sessions = styled.div`
 `
 
 const Session = styled.div`
-  height: ${props => `${200 / (60 / props.height)}px`};
+  height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props => (props.full ? 'red' : 'white')};
   width: 100%;
   color: ${props => (props.full ? 'white' : 'black')};
@@ -92,7 +93,7 @@ const Session = styled.div`
   position: absolute;
   display: flex;
   z-index: 1;
-  border-radius: 4px;
+  border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
   top: ${props => `${(props.startTime / 60) * 100}%`};
@@ -104,7 +105,9 @@ const Session = styled.div`
   }
 `
 
-const Hours = styled.div``
+const Hours = styled.div`
+  font-size: 1.2rem;
+`
 
 const exampleSessions = [
   {

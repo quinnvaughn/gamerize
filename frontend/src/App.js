@@ -11,8 +11,7 @@ const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
 
 const GlobalStyle = createGlobalStyle`
-html, body {
-  height: 100%;
+html {
   font-size: 62.5%;
 }
   body {
@@ -22,11 +21,7 @@ html, body {
     padding: 0;
     overflow-x:hidden;
     position: relative;
-  }
-  body::after {
-    content: '';
-    display: block;
-    height: 60px;
+    height: 100%;
   }
   div {
     box-sizing: border-box;

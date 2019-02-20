@@ -4,12 +4,12 @@ import styled from 'styled-components'
 const Title = styled.h1`
   margin: 0;
   padding: 0;
-  font-size: 80px;
+  font-size: 8rem;
   font-weight: bold;
   position: absolute;
   color: black;
-  top: 80px;
-  left: 80px;
+  top: 8rem;
+  left: 8rem;
   text-rendering: optimizeLegibility;
 `
 

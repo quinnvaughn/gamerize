@@ -18,12 +18,12 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 30px 20px;
+  padding: 3rem 2rem;
   margin: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 30px;
+  font-size: 3rem;
   font-weight: 700;
   color: black;
   justify-content: space-between;
@@ -34,7 +34,7 @@ const Header = styled.div`
 const ChevronLeft = styled(FaChevronLeft)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 18px;
+  font-size: 1.8rem;
   color: black;
   :hover {
     transform: scale(1.75);
@@ -46,7 +46,7 @@ const ChevronLeft = styled(FaChevronLeft)`
 const ChevronRight = styled(FaChevronRight)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 18px;
+  font-size: 1.8rem;
   color: black;
   :hover {
     transform: scale(1.75);
@@ -75,7 +75,7 @@ const Days = styled.div`
   font-weight: 700;
   color: #dddfe2;
   font-size: 70%;
-  padding: 0.75em 0;
+  padding: 1rem 0;
   border-bottom: 1px solid #dddfe2;
   margin: 0;
   display: flex;
@@ -92,7 +92,7 @@ const Cell = styled.div`
   flex-basis: 0;
   max-width: 100%;
   position: relative;
-  height: 6rem;
+  height: 9.6rem;
   border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
@@ -106,15 +106,15 @@ const Cell = styled.div`
 
 const Number = styled.span`
   position: absolute;
-  font-size: 12px;
-  width: ${props => props.current && '24px'};
-  line-height: ${props => props.current && '24px'};
+  font-size: 1.2rem;
+  width: ${props => props.current && '2.4rem'};
+  line-height: ${props => props.current && '2.4rem'};
   border-radius: ${props => props.current && '50%'};
   text-align: ${props => props.current && 'center'};
   background: ${props => props.current && 'red'};
   color: ${props => props.current && 'white'};
-  top: 0.75em;
-  right: 0.75em;
+  top: 0.75rem;
+  right: 0.75rem;
   font-weight: 700;
 `
 

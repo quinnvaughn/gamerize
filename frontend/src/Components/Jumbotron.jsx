@@ -5,7 +5,7 @@ import GamingJumbotron from '../gaming_jumbotron.jpg'
 
 const TitleContainer = styled.div`
   width: 100%;
-  height: 800px;
+  height: 80rem;
   position: relative;
 `
 

@@ -12,46 +12,47 @@ const Container = styled.div`
 `
 
 const Avatar = styled.img`
-  height: 100px;
-  width: 100px;
+  height: 10rem;
+  width: 10rem;
 `
 
 const Name = styled.h4`
-  font-size: 18px;
+  font-size: 1.8rem;
 
-  margin-bottom: 3px;
+  margin-bottom: 0.3rem;
 `
 
 const Systems = styled.p`
-  font-size: 14px;
+  font-size: 1.4rem;
   color: black;
   font-weight: 400;
 `
 
 const System = styled.span`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
 `
 
 const Price = styled.p`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: black;
 `
 
 const NumRatings = styled.span`
-  margin-left: 5px;
+  margin-left: 0.5rem;
   color: black;
-  font-size: 12px;
+  font-size: 1.2rem;
 `
 const Rating = styled.span`
-  margin-right: 5px;
-  font-size: 12px;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
   color: black;
 `
 
 const StyledLink = styled(Link)`
+  font-size: 1.6rem;
   text-decoration: none;
   color: black;
   :hover {
