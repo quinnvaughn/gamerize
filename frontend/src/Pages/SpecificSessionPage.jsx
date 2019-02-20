@@ -140,7 +140,7 @@ const PageContainer = styled.div`
 const Content = styled.div`
   max-width: 1080px;
   margin: 0 auto;
-  padding: 0px 24px;
+  padding: 10px 24px 0px;
   display: flex;
 `
 

@@ -10,14 +10,15 @@ const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
 
 const GlobalStyle = createGlobalStyle`
+html, body {
+  height: 100%;
+}
   body {
     @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,700');
     font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
-    margin-top: 60px;
     padding: 0;
     overflow-x:hidden;
-    height: calc(100% - 60px);
     position: relative;
   }
   body::after {

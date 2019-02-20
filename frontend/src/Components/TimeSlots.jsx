@@ -4,7 +4,8 @@ import { FaArrowRight } from 'react-icons/fa'
 
 //local
 import Modal from './Modal'
-import Calendar from './Calendar'
+import Calendar from './TimeSlotsCalendar'
+import TimeSlotsHours from './TimeSlotsHours'
 
 const Container = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ const ArrowRight = styled(FaArrowRight)`
 
 export default function TimeSlots(props) {
   const [showModal, setshowModal] = useState(false)
+  const [selectedDay, setSelectedDay] = useState(null)
   return (
     <Container>
       <TimeSlotLabel>
@@ -67,8 +69,20 @@ export default function TimeSlots(props) {
         </SelectionButton>
       </SelectionContainer>
       {showModal && (
-        <Modal onRequestClose={() => setshowModal(!showModal)} apply={() => {}}>
-          <Calendar />
+        <Modal
+          onRequestClose={() => {
+            setshowModal(!showModal)
+            setSelectedDay(null)
+          }}
+        >
+          {selectedDay ? (
+            <TimeSlotsHours
+              day={selectedDay}
+              goBack={() => setSelectedDay(null)}
+            />
+          ) : (
+            <Calendar setSelectedDay={setSelectedDay} />
+          )}
         </Modal>
       )}
     </Container>
