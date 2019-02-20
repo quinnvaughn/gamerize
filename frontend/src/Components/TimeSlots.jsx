@@ -32,7 +32,7 @@ const SelectionContainer = styled.div`
 `
 
 const SelectionButton = styled.button`
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
   padding: 10px;
   display: flex;
   width: 100%;

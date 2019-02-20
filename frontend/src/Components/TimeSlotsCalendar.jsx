@@ -10,13 +10,13 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   background: #fff;
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
 `
 
 const Header = styled.div`
   text-transform: uppercase;
   width: 100%;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   background: #fff;
   padding: 30px 20px;
   margin: 0;
@@ -73,10 +73,10 @@ const Days = styled.div`
   cursor: default;
   text-transform: uppercase;
   font-weight: 700;
-  color: #d3d3d3;
+  color: #dddfe2;
   font-size: 70%;
   padding: 0.75em 0;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   margin: 0;
   display: flex;
   flex-direction: row;
@@ -93,14 +93,14 @@ const Cell = styled.div`
   max-width: 100%;
   position: relative;
   height: 6rem;
-  border-right: 1px solid #d3d3d3;
+  border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
   background: #fff;
   :last-child {
     border-right: none;
   }
-  color: ${props => (props.disabled ? '#d3d3d3' : 'black')};
+  color: ${props => (props.disabled ? '#dddfe2' : 'black')};
   pointer-events: ${props => props.disabled && 'none'};
 `
 
@@ -124,7 +124,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   :last-child {
     border-bottom: none;
   }

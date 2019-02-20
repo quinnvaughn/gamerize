@@ -9,13 +9,13 @@ const Container = styled.div`
   width: 100%;
   max-width: 1080px;
   background: #fff;
-  border: 1px solid #d3d3d3;
+  border: 1px solid #dddfe2;
 `
 
 const Header = styled.div`
   text-transform: uppercase;
   width: 100%;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   background: #fff;
   padding: 40px 20px;
   margin: 0;
@@ -60,7 +60,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   :last-child {
     border-bottom: none;
   }
@@ -72,7 +72,7 @@ const Hour = styled.div`
   width: 60px;
   align-items: center;
   padding-right: 10px;
-  border-right: 1px solid #d3d3d3;
+  border-right: 1px solid #dddfe2;
 `
 
 const Sessions = styled.div`
@@ -87,7 +87,7 @@ const Session = styled.div`
   background: ${props => (props.full ? 'red' : 'white')};
   width: 100%;
   color: ${props => (props.full ? 'white' : 'black')};
-  border: ${props => !props.full && '1px solid black'};
+  border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
   position: absolute;
   display: flex;

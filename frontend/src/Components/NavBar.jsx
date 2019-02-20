@@ -7,7 +7,7 @@ import SearchBar from './SearchBar'
 
 const Container = styled.nav`
   height: 60px;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   width: 100vw;
   position: sticky;
   top: 0;

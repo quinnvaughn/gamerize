@@ -6,7 +6,7 @@ import GamerTypeFilter from './GamerTypeFilter'
 
 const Container = styled.div`
   padding: 10px 80px;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #dddfe2;
   background: white;
   width: 100vw;
   z-index: 9999;
