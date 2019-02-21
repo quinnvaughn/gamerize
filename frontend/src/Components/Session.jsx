@@ -40,12 +40,12 @@ const Price = styled.p`
   color: black;
 `
 
-const NumRatings = styled.span`
+const NumReviews = styled.span`
   margin-left: 0.5rem;
   color: black;
   font-size: 1.2rem;
 `
-const Rating = styled.span`
+const Reviews = styled.span`
   margin-right: 0.5rem;
   font-size: 1.2rem;
   color: black;
@@ -75,16 +75,16 @@ export default function Session(props) {
           ))}
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
-        <Rating>{props.rating}</Rating>
+        <Reviews>{props.reviews}</Reviews>
         <StarRatings
-          rating={props.rating}
+          rating={props.reviews}
           starRatedColor="red"
           numberOfStars={5}
           name="rating"
           starDimension="14px"
           starSpacing="1px"
         />
-        <NumRatings>{`(${props.numRatings})`}</NumRatings>
+        <NumReviews>{`(${props.numReviews})`}</NumReviews>
       </StyledLink>
     </Container>
   )

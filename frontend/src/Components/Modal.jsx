@@ -25,7 +25,7 @@ const Overlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 9999;
+  z-index: 9999 !important;
   opacity: 1;
   overflow-x: hidden;
   overflow-y: auto;
@@ -33,6 +33,8 @@ const Overlay = styled.div`
 `
 
 const Modal = styled.div`
+  position: relative;
+  z-index: 9999 !important;
   width: 100%;
   background-color: #fff;
   border-radius: 4px;
