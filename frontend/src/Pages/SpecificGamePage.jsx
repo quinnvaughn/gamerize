@@ -5,6 +5,7 @@ import _ from 'underscore'
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'
 import TopSessionsRow from '../Components/TopSessionsRow'
+import gamers from '../data/gamers'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -55,81 +56,6 @@ const Sessions = styled.div`
   color: black;
   margin-bottom: 1.2rem;
 `
-
-const gamers = [
-  {
-    name: 'Kyle',
-    gamerType: 'Celebrities',
-    systems: ['Xbox One'],
-    price: 180,
-    rating: 4.8,
-    numRatings: 500,
-    username: 'SuperDuperKyle',
-  },
-  {
-    name: 'Taylor Bennett',
-    gamerType: 'Celebrities',
-    systems: ['PS4'],
-    price: 200,
-    rating: 4.0,
-    numRatings: 400,
-    username: 'Taylor_Bennett',
-  },
-  {
-    name: 'Shroud',
-    gamerType: 'Streamers',
-    systems: ['Xbox One, PC'],
-    price: 200,
-    rating: 4.92,
-    numRatings: 2000,
-    username: 'Shroud',
-  },
-  {
-    name: 'TSM Myth',
-    gamerType: 'Streamers',
-    systems: ['PC, PS4'],
-    price: 190,
-    rating: 4.6,
-    numRatings: 587,
-    username: 'TSM_Myth',
-  },
-  {
-    name: 'Ninja',
-    gamerType: 'Streamers',
-    systems: ['PC'],
-    price: 250,
-    rating: 4.97,
-    numRatings: 5678,
-    username: 'Ninja',
-  },
-  {
-    name: 'TimTheTatMan',
-    gamerType: 'Streamers',
-    systems: ['PC'],
-    price: 165,
-    rating: 4.8,
-    numRatings: 5123,
-    username: 'TimTheTatMan',
-  },
-  {
-    name: 'DisguisedToast',
-    gamerType: 'Streamers',
-    systems: ['PC'],
-    price: 100,
-    rating: 4.8,
-    numRatings: 786,
-    username: 'DisguisedToast',
-  },
-  {
-    name: 'PewDiePie',
-    gamerType: 'Youtubers',
-    systems: ['Xbox One'],
-    price: 300,
-    rating: 4.4,
-    numRatings: 1999,
-    username: 'PewDiePie',
-  },
-]
 
 const noUnderscores = string => string.replace(/_/g, ' ')
 

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import dateFns from 'date-fns'
 
 const Container = styled.div`
+  z-index: -1;
   position: absolute;
   bottom: 0px;
   left: 0px;

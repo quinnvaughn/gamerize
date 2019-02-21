@@ -8,6 +8,8 @@ import PlayersOptions from './PlayersOptions'
 const Container = styled.div`
   flex: 40%;
   display: flex;
+  position: sticky;
+  top: 8.5rem;
   flex-direction: column;
   border: 1px solid #dddfe2;
   border-radius: 0.4rem;
@@ -25,7 +27,7 @@ const Per = styled.span`
   font-weight: 600;
 `
 
-const NumRatings = styled.span`
+const NumReviews = styled.span`
   margin-left: 0.5rem;
   color: black;
   font-size: 1.2rem;
@@ -45,10 +47,12 @@ const Top = styled.div`
 
 export default function SelectionOptions({
   price,
-  rating,
-  numRatings,
+  reviews,
+  numReviews,
   systems,
   players,
+  gamer,
+  game,
 }) {
   return (
     <Container>
@@ -58,18 +62,18 @@ export default function SelectionOptions({
         </Price>
         <RatingContainer>
           <StarRatings
-            rating={rating}
+            rating={reviews}
             starRatedColor="red"
             numberOfStars={5}
             name="rating"
             starDimension="1.2rem"
             starSpacing=".1rem"
           />
-          <NumRatings>{`${numRatings}`}</NumRatings>
+          <NumReviews>{`${numReviews}`}</NumReviews>
         </RatingContainer>
       </Top>
       <SystemPicker systems={systems} />
-      <TimeSlots />
+      <TimeSlots gamer={gamer} game={game} />
       <PlayersOptions players={players} />
     </Container>
   )

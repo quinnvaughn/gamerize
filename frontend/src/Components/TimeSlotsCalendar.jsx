@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import dateFns from 'date-fns'
 import { withRouter } from 'react-router-dom'
-import TimeSlotsHours from './TimeSlotsHours'
 
 const Container = styled.div`
   display: block;

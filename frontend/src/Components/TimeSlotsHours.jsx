@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
 
+import exampleSessions from '../data/sessions'
+
 const Container = styled.div`
   display: block;
   position: relative;
@@ -32,6 +34,7 @@ const Header = styled.div`
   left: 0;
   z-index: 9999;
   max-width: inherit;
+  align-items: center;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -109,51 +112,6 @@ const Hours = styled.div`
   font-size: 1.2rem;
 `
 
-const exampleSessions = [
-  {
-    players: [1],
-    slots: 3,
-    timeStart: 'February 19, 2019 15:00:00',
-    length: 20,
-  },
-  {
-    players: [1, 2],
-    slots: 3,
-    timeStart: 'February 19, 2019 15:20:00',
-    length: 30,
-  },
-  {
-    players: [1, 2],
-    slots: 3,
-    timeStart: 'February 19, 2019 14:00:00',
-    length: 7,
-  },
-  {
-    players: [1, 2],
-    slots: 3,
-    timeStart: 'February 19, 2019 14:07:00',
-    length: 7,
-  },
-  {
-    players: [1, 2],
-    slots: 3,
-    timeStart: 'February 19, 2019 14:14:00',
-    length: 7,
-  },
-  {
-    players: [1, 2, 3],
-    slots: 3,
-    timeStart: 'February 19, 2019 15:50:00',
-    length: 20,
-  },
-  {
-    players: [1, 2],
-    slots: 3,
-    timeStart: 'February 19, 2019 12:20:00',
-    length: 20,
-  },
-]
-
 export default class TimeSlotsHours extends Component {
   renderHeader() {
     const dateFormat = 'MMMM Do, YYYY'
@@ -185,9 +143,13 @@ export default class TimeSlotsHours extends Component {
           <Sessions>
             {sessions.map(session => (
               <Session
+                key={session.timeStart}
                 height={session.length}
                 full={session.players.length === session.slots}
                 startTime={dateFns.getMinutes(session.timeStart)}
+                onClick={() => {
+                  this.props.setSelectedSession(session)
+                }}
               >
                 {`${session.slots - session.players.length} ${
                   session.slots - session.players.length === 1
