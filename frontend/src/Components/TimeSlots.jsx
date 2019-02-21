@@ -6,6 +6,7 @@ import { FaArrowRight } from 'react-icons/fa'
 import Modal from './Modal'
 import Calendar from './TimeSlotsCalendar'
 import TimeSlotsHours from './TimeSlotsHours'
+import TimeSlotSession from './TimeSlotSession'
 
 const Container = styled.div`
   display: flex;
@@ -58,6 +59,7 @@ const ArrowRight = styled(FaArrowRight)`
 export default function TimeSlots(props) {
   const [showModal, setshowModal] = useState(false)
   const [selectedDay, setSelectedDay] = useState(null)
+  const [selectedSession, setSelectedSession] = useState(null)
   return (
     <Container>
       <TimeSlotLabel>
@@ -74,10 +76,19 @@ export default function TimeSlots(props) {
           onRequestClose={() => {
             setshowModal(!showModal)
             setSelectedDay(null)
+            setSelectedSession(null)
           }}
         >
-          {selectedDay ? (
+          {selectedSession ? (
+            <TimeSlotSession
+              selectedSession={selectedSession}
+              gamer={props.gamer}
+              game={props.game}
+              goBack={() => setSelectedSession(null)}
+            />
+          ) : selectedDay ? (
             <TimeSlotsHours
+              setSelectedSession={setSelectedSession}
               day={selectedDay}
               goBack={() => setSelectedDay(null)}
             />
