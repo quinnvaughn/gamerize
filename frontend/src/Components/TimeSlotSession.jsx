@@ -135,7 +135,11 @@ export default function TimeSlotSession(props) {
               {currentUser}
             </Slot>
           )
-        : slots.push(<Slot value={`empty${i}`}>Empty</Slot>)
+        : slots.push(
+            <Slot value={`empty${i}-${props.selectedSession.timeStart}`}>
+              Empty
+            </Slot>
+          )
     }
     return (
       <SlotsContainer>

@@ -37,7 +37,7 @@ const Gamer = styled.h2`
 const GamerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 4;
   align-items: center;
 `
 
@@ -55,7 +55,7 @@ const Title = styled.h1`
 `
 
 const TitleContainer = styled.div`
-  flex: 3;
+  flex: 6;
 `
 
 const Game = styled.h3`
@@ -124,6 +124,7 @@ const Discount = styled.div`
 const LeftSide = styled.div`
   flex: 60%;
   padding-right: 1rem;
+  margin-top: 1rem;
 `
 
 const Systems = styled.span`
@@ -138,6 +139,12 @@ const Banner = styled.img`
   max-height: 40rem;
 `
 
+const TypeOfGame = styled.div`
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
 const noUnderscores = string => string.replace(/_/g, ' ')
 
 const formatCommas = (systems, system, index) => {
@@ -147,6 +154,8 @@ const formatCommas = (systems, system, index) => {
     return <Systems key={system}>{`${system}`}</Systems>
   }
 }
+
+const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 
 export default function SpecificSessionPage(props) {
   const { user, game } = props.match.params
@@ -175,6 +184,11 @@ export default function SpecificSessionPage(props) {
               formatCommas(gamer.systems, system, index)
             )}
           </Game>
+          <TypeOfGame>
+            {gamer.typeOfGame === 'CUSTOM'
+              ? `${capitalize(gamer.typeOfGame)} game`
+              : capitalize(gamer.typeOfGame)}
+          </TypeOfGame>
           <Occupations>
             {gamer.occupation.map(occupation => (
               <Occupation key={occupation}>{occupation}</Occupation>

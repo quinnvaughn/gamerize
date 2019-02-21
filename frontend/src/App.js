@@ -17,7 +17,7 @@ html {
   font-size: 62.5%;
 }
   body {
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,700, 800');
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,600,700, 800');
     font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
     padding: 0;

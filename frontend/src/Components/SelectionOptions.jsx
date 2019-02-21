@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
-import PlayersOptions from './PlayersOptions'
 
 const Container = styled.div`
   flex: 40%;
@@ -15,6 +14,8 @@ const Container = styled.div`
   border-radius: 0.4rem;
   margin-top: 1rem;
   padding: 1rem 2.4rem 2.4rem;
+  align-self: flex-start;
+  margin-left: 4.5rem;
 `
 
 const Price = styled.div`
@@ -43,6 +44,21 @@ const Top = styled.div`
   padding-bottom: 1.6rem;
   margin-bottom: 2.4rem;
   border-bottom: 0.1rem solid #dddfe2;
+`
+
+const Book = styled.button`
+  margin-top: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1;
+  color: white;
+  background: red;
+  border-radius: 4px;
+  line-height: 2.4rem;
+  padding: 1rem 2.2rem;
+  outline: 0;
+  border: 0;
+  font-size: 1.6rem;
 `
 
 export default function SelectionOptions({
@@ -74,7 +90,7 @@ export default function SelectionOptions({
       </Top>
       <SystemPicker systems={systems} />
       <TimeSlots gamer={gamer} game={game} />
-      <PlayersOptions players={players} />
+      <Book>Book</Book>
     </Container>
   )
 }
