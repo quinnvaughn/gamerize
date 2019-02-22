@@ -1,7 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
-import { Provider } from 'unstated'
 
 import ScrollToTop from './Components/ScrollToTop'
 
@@ -52,17 +51,15 @@ class App extends Component {
         <ScrollToTop>
           <Suspense fallback={<Loading />}>
             <GlobalStyle />
-            <Provider>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route exact path="/games" component={GamesPage} />
-                <Route path="/games/:game" component={SpecificGamePage} />
-                <Route
-                  path="/users/:user/:game"
-                  component={SpecificSessionPage}
-                />
-              </Switch>
-            </Provider>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/games" component={GamesPage} />
+              <Route path="/games/:game" component={SpecificGamePage} />
+              <Route
+                path="/users/:user/:game"
+                component={SpecificSessionPage}
+              />
+            </Switch>
           </Suspense>
         </ScrollToTop>
       </BrowserRouter>

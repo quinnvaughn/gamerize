@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { Subscribe } from 'unstated'
+
+import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
   display: flex;
@@ -72,31 +75,42 @@ const SystemChoice = styled.div`
 
 export default function SystemPicker(props) {
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    props.setSystem(props.systems[0])
+  }, {})
   return (
     <Container>
       <SystemLabel>
         <System>System</System>
       </SystemLabel>
-      <SelectionContainer>
-        <SelectionButton
-          onClick={() => props.systems.length >= 1 && setOpen(!open)}
-          disabled={props.systems.length <= 1}
-        >
-          <SelectedChoice>{props.systems[0]}</SelectedChoice>
-          {open ? (
-            <ChevronUp />
-          ) : (
-            <ChevronDown disabled={props.systems.length <= 1} />
-          )}
-          {open && (
-            <SystemChoices>
-              {props.systems.map(system => (
-                <SystemChoice>{system}</SystemChoice>
-              ))}
-            </SystemChoices>
-          )}
-        </SelectionButton>
-      </SelectionContainer>
+      <Subscribe to={[SessionsContainer]}>
+        {session => (
+          <SelectionContainer>
+            <SelectionButton
+              onClick={() => props.systems.length >= 1 && setOpen(!open)}
+              disabled={props.systems.length <= 1}
+            >
+              <SelectedChoice>
+                {session.state.system === null ? '' : session.state.system}
+              </SelectedChoice>
+              {open ? (
+                <ChevronUp />
+              ) : (
+                <ChevronDown disabled={props.systems.length <= 1} />
+              )}
+              {open && (
+                <SystemChoices>
+                  {props.systems.map(system => (
+                    <SystemChoice onClick={() => session.setSystem(system)}>
+                      {system}
+                    </SystemChoice>
+                  ))}
+                </SystemChoices>
+              )}
+            </SelectionButton>
+          </SelectionContainer>
+        )}
+      </Subscribe>
     </Container>
   )
 }

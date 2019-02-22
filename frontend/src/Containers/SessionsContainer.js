@@ -4,7 +4,9 @@ class SessionsContainer extends Container {
   state = {
     selected: [],
     players: 1,
+    system: null,
   }
+
   handleClick = selected => {
     this.setState(prevState => {
       const inArray = prevState.selected.includes(selected)
@@ -16,6 +18,14 @@ class SessionsContainer extends Container {
         ? { selected: newSelected }
         : { selected: [...prevState.selected, selected] }
     })
+  }
+
+  setNumberOfPlayers = players => {
+    this.setState({ players })
+  }
+
+  setSystem = system => {
+    this.setState({ system })
   }
 }
 

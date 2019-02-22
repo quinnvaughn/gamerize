@@ -8,6 +8,8 @@ import SelectionOptions from '../Components/SelectionOptions'
 import Footer from '../Components/Footer'
 import Reviews from '../Components/Reviews'
 import gamers from '../data/gamers'
+import SessionsContainer from '../Containers/SessionsContainer'
+import { Subscribe } from 'unstated'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -139,7 +141,19 @@ const Banner = styled.img`
   max-height: 40rem;
 `
 
-const TypeOfGame = styled.div`
+const TypeOfGameAndSlots = styled.div`
+  display: flex;
+`
+
+const TypeOfGame = styled.span`
+  flex: 1;
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
+const Slots = styled.span`
+  flex: 3;
   margin-top: 1rem;
   font-size: 1.6rem;
   font-weight: 600;
@@ -184,11 +198,14 @@ export default function SpecificSessionPage(props) {
               formatCommas(gamer.systems, system, index)
             )}
           </Game>
-          <TypeOfGame>
-            {gamer.typeOfGame === 'CUSTOM'
-              ? `${capitalize(gamer.typeOfGame)} game`
-              : capitalize(gamer.typeOfGame)}
-          </TypeOfGame>
+          <TypeOfGameAndSlots>
+            <TypeOfGame>
+              {gamer.typeOfGame === 'CUSTOM'
+                ? `${capitalize(gamer.typeOfGame)} game`
+                : capitalize(gamer.typeOfGame)}
+            </TypeOfGame>
+            <Slots>{`${gamer.slots} slots per session`}</Slots>
+          </TypeOfGameAndSlots>
           <Occupations>
             {gamer.occupation.map(occupation => (
               <Occupation key={occupation}>{occupation}</Occupation>
@@ -213,12 +230,13 @@ export default function SpecificSessionPage(props) {
         <SelectionOptions
           gamer={gamer}
           game={game}
-          players={gamer.players}
+          slots={gamer.slots}
           price={gamer.price}
           numReviews={gamer.numReviews}
           reviews={gamer.reviews}
           systems={gamer.systems}
         />
+        )}
       </Content>
       <Footer />
     </PageContainer>
