@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
+import { Subscribe } from 'unstated'
+import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
   flex: 40%;
@@ -66,7 +68,6 @@ export default function SelectionOptions({
   reviews,
   numReviews,
   systems,
-  players,
   gamer,
   game,
 }) {
@@ -88,7 +89,11 @@ export default function SelectionOptions({
           <NumReviews>{`${numReviews}`}</NumReviews>
         </RatingContainer>
       </Top>
-      <SystemPicker systems={systems} />
+      <Subscribe to={[SessionsContainer]}>
+        {session => (
+          <SystemPicker systems={systems} setSystem={session.setSystem} />
+        )}
+      </Subscribe>
       <TimeSlots gamer={gamer} game={game} />
       <Book>Book</Book>
     </Container>
