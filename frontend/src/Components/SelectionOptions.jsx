@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
+import { Subscribe } from 'unstated'
+
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
-import { Subscribe } from 'unstated'
 import SessionsContainer from '../Containers/SessionsContainer'
+import Totals from './Totals'
 
 const Container = styled.div`
   flex: 40%;
@@ -91,10 +93,13 @@ export default function SelectionOptions({
       </Top>
       <Subscribe to={[SessionsContainer]}>
         {session => (
-          <SystemPicker systems={systems} setSystem={session.setSystem} />
+          <Fragment>
+            <SystemPicker systems={systems} setSystem={session.setSystem} />
+            <TimeSlots gamer={gamer} game={game} />
+            {session.state.selected.length >= 1 && <Totals />}
+          </Fragment>
         )}
       </Subscribe>
-      <TimeSlots gamer={gamer} game={game} />
       <Book>Book</Book>
     </Container>
   )
