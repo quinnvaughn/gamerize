@@ -111,8 +111,10 @@ const Session = styled.div`
 const Hours = styled.div`
   font-size: 1.2rem;
 `
-
-export default class TimeSlotsHours extends Component {
+class TimeSlotHours extends Component {
+  componentDidUpdate() {
+    console.log(this.props.scrollTop)
+  }
   renderHeader() {
     const dateFormat = 'MMMM Do, YYYY'
 
@@ -174,3 +176,5 @@ export default class TimeSlotsHours extends Component {
     )
   }
 }
+
+export default TimeSlotHours

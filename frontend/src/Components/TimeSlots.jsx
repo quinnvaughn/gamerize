@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaArrowRight } from 'react-icons/fa'
+import { Subscribe } from 'unstated'
 
 //local
 import Modal from './Modal'
 import Calendar from './TimeSlotsCalendar'
 import TimeSlotsHours from './TimeSlotsHours'
 import TimeSlotSession from './TimeSlotSession'
+import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +16,7 @@ const Container = styled.div`
   width: 100%;
   margin-bottom: 0.8rem;
   position: relative;
+  max-width: 34.6rem;
 `
 
 const TimeSlotLabel = styled.label`
@@ -46,14 +49,15 @@ const SelectionButton = styled.button`
   background: white;
 `
 
-const SelectedChoice = styled.span`
-  font-size: 1.2rem;
-`
-
 const ArrowRight = styled(FaArrowRight)`
   color: black;
   font-size: 1.4rem;
   align-self: end;
+`
+
+const NumberOfSessions = styled.span`
+  font-size: 1.6rem;
+  font-weight: 400;
 `
 
 export default function TimeSlots(props) {
@@ -67,7 +71,14 @@ export default function TimeSlots(props) {
       </TimeSlotLabel>
       <SelectionContainer>
         <SelectionButton onClick={() => setshowModal(!showModal)}>
-          <SelectedChoice />
+          <Subscribe to={[SessionsContainer]}>
+            {sessions => (
+              <NumberOfSessions>{`${
+                sessions.state.selected.length
+              } sessions`}</NumberOfSessions>
+            )}
+          </Subscribe>
+
           <ArrowRight />
         </SelectionButton>
       </SelectionContainer>

@@ -101,7 +101,10 @@ export default function SystemPicker(props) {
               {open && (
                 <SystemChoices>
                   {props.systems.map(system => (
-                    <SystemChoice onClick={() => session.setSystem(system)}>
+                    <SystemChoice
+                      onClick={() => session.setSystem(system)}
+                      key={system}
+                    >
                       {system}
                     </SystemChoice>
                   ))}

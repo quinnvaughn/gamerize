@@ -236,7 +236,6 @@ export default function SpecificSessionPage(props) {
           reviews={gamer.reviews}
           systems={gamer.systems}
         />
-        )}
       </Content>
       <Footer />
     </PageContainer>
