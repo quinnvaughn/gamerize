@@ -1,65 +1,25 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
-import { FaChevronLeft } from 'react-icons/fa'
 
+// local imports
 import exampleSessions from '../data/sessions'
 
 const Container = styled.div`
-  display: block;
-  position: relative;
   width: 100%;
   max-width: 108rem;
+  height: 60rem;
+  overflow-y: scroll;
   background: #fff;
   border: 1px solid #dddfe2;
+  z-index: -1;
+  overflow-x: hidden;
+  border-radius: 4px;
 `
-
-const Header = styled.div`
-  text-transform: uppercase;
-  width: 100%;
-  border-bottom: 1px solid #dddfe2;
-  background: #fff;
-  padding: 4rem 2rem;
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  font-size: 3rem;
-  font-weight: 700;
-  color: black;
-  justify-content: space-between;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  max-width: inherit;
-  align-items: center;
-`
-
-const ChevronLeft = styled(FaChevronLeft)`
-  cursor: pointer;
-  transition: 0.15s ease-out;
-  font-size: 1.8rem;
-  color: black;
-  :hover {
-    transform: scale(1.75);
-    transition: 0.25s ease-out;
-    color: #e62739;
-  }
-`
-
-const Day = styled.span`
-  font-size: 3rem;
-  cursor: default;
-`
-
-//For formatting.
-const Empty = styled.div``
 
 const Row = styled.div`
   margin: 0;
-  padding: 0px 0px 0px 4rem;
+  padding: 0px 0px 0px 2rem;
   height: 20rem;
   display: flex;
   flex-wrap: wrap;
@@ -68,14 +28,15 @@ const Row = styled.div`
   :last-child {
     border-bottom: none;
   }
+  z-index: -1;
 `
 
 const Hour = styled.div`
   height: 100%;
   display: flex;
-  width: 6rem;
+  width: 4rem;
   align-items: center;
-  padding-right: 1rem;
+  padding-right: 2rem;
   border-right: 1px solid #dddfe2;
 `
 
@@ -84,6 +45,7 @@ const Sessions = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 0;
   font-size: 1.6rem;
 `
 
@@ -95,41 +57,47 @@ const Session = styled.div`
   border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
   position: absolute;
+  z-index: 0;
   display: flex;
-  z-index: 1;
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
   top: ${props => `${(props.startTime / 60) * 100}%`};
-  pointer-events: ${props => props.full && 'none'};
   transition: 0.15s ease-out;
+  pointer-events: ${props => props.full && 'none'};
   :hover {
     transform: scale(1.05);
     transition: 0.25s ease-out;
-    z-index: 10;
   }
 `
 
 const Hours = styled.div`
   font-size: 1.2rem;
 `
-class TimeSlotHours extends Component {
-  renderHeader() {
-    const dateFormat = 'MMMM Do, YYYY'
 
-    return (
-      <Header>
-        <ChevronLeft onClick={this.props.goBack} />
-        <Day>{dateFns.format(this.props.day, dateFormat)}</Day>
-        <Empty />
-      </Header>
-    )
-  }
+const AvailabilityContainer = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  position: relative;
+`
 
-  renderHours() {
+const Availability = styled.div`
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+`
+
+const SnapTo = styled.div`
+  position: absolute;
+  top: -70px;
+  left: 0;
+`
+
+export default function TodayAvailability(props) {
+  const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
-    let selectedDate = dateFns.startOfDay(this.props.day)
+    let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
       const sessions = exampleSessions.filter(
@@ -149,7 +117,7 @@ class TimeSlotHours extends Component {
                 full={session.players.length === session.slots}
                 startTime={dateFns.getMinutes(session.timeStart)}
                 onClick={() => {
-                  this.props.setSelectedSession(session)
+                  props.setSelectedSession(session)
                 }}
               >
                 {`${session.slots - session.players.length} ${
@@ -166,14 +134,11 @@ class TimeSlotHours extends Component {
 
     return <Hours>{hours}</Hours>
   }
-  render() {
-    return (
-      <Container>
-        {this.renderHeader()}
-        {this.renderHours()}
-      </Container>
-    )
-  }
+  return (
+    <AvailabilityContainer>
+      <SnapTo id="availability" />
+      <Availability>Today's Availability </Availability>
+      <Container>{renderHours()}</Container>
+    </AvailabilityContainer>
+  )
 }
-
-export default TimeSlotHours

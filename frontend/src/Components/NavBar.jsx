@@ -12,13 +12,12 @@ const Container = styled.nav`
   position: sticky;
   top: 0;
   background: white;
-  z-index: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   padding: 2rem 4rem 2rem 8rem;
-  -webkit-backface-visibility: hidden;
 `
 
 const Links = styled.div`
@@ -34,7 +33,7 @@ const StyledLink = styled(Link)`
   }
   :hover {
     cursor: pointer;
-    color: red;
+    color: #e62739;
   }
 `
 
@@ -55,7 +54,7 @@ const navigationlinks = [
 
 export default function NavBar(props) {
   return (
-    <Container>
+    <Container className="navbar">
       <SearchBar />
       <Links>
         {navigationlinks.map(link => (

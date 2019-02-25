@@ -2,9 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
+import { Subscribe } from 'unstated'
 
 //local imports
 import Slot from './Slot'
+import SessionsContainer from '../Containers/SessionsContainer'
+import SlotOptionsDropdown from './SlotOptionsDropdown'
 
 const Container = styled.div`
   display: block;
@@ -45,7 +48,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   :hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
-    color: red;
+    color: #e62739;
   }
 `
 
@@ -75,24 +78,72 @@ const Time = styled.span`
 const Empty = styled.div``
 
 const SlotsContainer = styled.div`
-  padding: 8rem;
+  padding: 0 8rem 8rem;
   font-size: 1.6rem;
   border-bottom: 1px solid #dddfe2;
   display: flex;
   align-items: center;
-  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 `
 
-const SlotsTitle = styled.div`
-  padding-right: 2rem;
-  width: inherit;
+const SlotOptionsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 1rem 0 2rem;
+  justify-content: space-around;
+  align-items: center;
+`
+
+const NumberOfSlotsContainer = styled.label`
+  font-size: 1.6rem;
+  margin-right: 2rem;
+`
+
+const NumberOfPlayersContainer = styled.label`
+  font-size: 1.6rem;
+  margin-right: 2rem;
 `
 
 const Slots = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
+
+const PickAllSlotsForTeam = styled.button`
+  background: white;
+  padding: 0.6rem 0.8rem;
+  color: #e62739;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #e62739;
+  border-radius: 4px;
+  margin-right: 2rem;
+  :hover {
+    border: 1px solid white;
+    background: #e62739;
+    color: white;
+  }
+`
+const PickAllSlotsForMe = styled.button`
+  background: white;
+  padding: 0.6rem 0.8rem;
+  color: #e62739;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #e62739;
+  border-radius: 4px;
+  :hover {
+    border: 1px solid white;
+    background: #e62739;
+    color: white;
+  }
+`
+
+const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function TimeSlotSession(props) {
   const renderHeader = () => {
@@ -102,7 +153,7 @@ export default function TimeSlotSession(props) {
       <Header>
         <ChevronLeft onClick={props.goBack} />
         <Center>
-          <Title>{`${props.gamer.name} - ${props.game}`}</Title>
+          <Title>{`${props.gamer.name} - ${noUnderscores(props.game)}`}</Title>
           {/* Add system when have that data. */}
           <Date>
             {dateFns.format(props.selectedSession.timeStart, dateFormat)}
@@ -141,17 +192,43 @@ export default function TimeSlotSession(props) {
             </Slot>
           )
     }
+    return <Slots>{slots}</Slots>
+  }
+
+  const renderSlotOptions = () => {
+    return (
+      <Subscribe to={[SessionsContainer]}>
+        {session => (
+          <SlotOptionsContainer>
+            <NumberOfSlotsContainer>
+              Slots: <SlotOptionsDropdown />
+            </NumberOfSlotsContainer>
+            <NumberOfPlayersContainer>
+              Players: <SlotOptionsDropdown />
+            </NumberOfPlayersContainer>
+            <PickAllSlotsForTeam>
+              Fill all the slots with my friends
+            </PickAllSlotsForTeam>
+            <PickAllSlotsForMe>Fill all the slots for me</PickAllSlotsForMe>
+          </SlotOptionsContainer>
+        )}
+      </Subscribe>
+    )
+  }
+
+  const renderPrimary = () => {
     return (
       <SlotsContainer>
-        <SlotsTitle>Slots:</SlotsTitle>
-        <Slots>{slots}</Slots>
+        {renderSlotOptions()}
+        {renderSlots()}
       </SlotsContainer>
     )
   }
+
   return (
     <Container>
       {renderHeader()}
-      {renderSlots()}
+      {renderPrimary()}
     </Container>
   )
 }

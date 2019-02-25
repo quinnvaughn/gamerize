@@ -56,7 +56,7 @@ const Book = styled.button`
   cursor: pointer;
   flex: 1;
   color: white;
-  background: red;
+  background: #e62739;
   border-radius: 4px;
   line-height: 2.4rem;
   padding: 1rem 2.2rem;
@@ -82,7 +82,7 @@ export default function SelectionOptions({
         <RatingContainer>
           <StarRatings
             rating={reviews}
-            starRatedColor="red"
+            starRatedColor="#e62739"
             numberOfStars={5}
             name="rating"
             starDimension="1.2rem"
@@ -96,7 +96,7 @@ export default function SelectionOptions({
           <Fragment>
             <SystemPicker systems={systems} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
-            {session.state.selected.length >= 1 && <Totals />}
+            {session.state.sessions.length >= 1 && <Totals />}
           </Fragment>
         )}
       </Subscribe>
