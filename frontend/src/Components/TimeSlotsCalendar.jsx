@@ -38,7 +38,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   :hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
-    color: red;
+    color: #e62739;
   }
 `
 
@@ -50,7 +50,7 @@ const ChevronRight = styled(FaChevronRight)`
   :hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
-    color: red;
+    color: #e62739;
   }
 `
 
@@ -110,7 +110,7 @@ const Number = styled.span`
   line-height: ${props => props.current && '2.4rem'};
   border-radius: ${props => props.current && '50%'};
   text-align: ${props => props.current && 'center'};
-  background: ${props => props.current && 'red'};
+  background: ${props => props.current && '#e62739'};
   color: ${props => props.current && 'white'};
   top: 0.75rem;
   right: 0.75rem;

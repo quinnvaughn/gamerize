@@ -56,7 +56,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    color: red;
+    color: #e62739;
     cursor: pointer;
   }
 `
@@ -86,7 +86,7 @@ export default function Session(props) {
         <Reviews>{props.reviews}</Reviews>
         <StarRatings
           rating={props.reviews}
-          starRatedColor="red"
+          starRatedColor="#e62739"
           numberOfStars={5}
           name="rating"
           starDimension="14px"

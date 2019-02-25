@@ -2,12 +2,20 @@ import { Container } from 'unstated'
 
 class SessionsContainer extends Container {
   state = {
+    //Picked. Haven't applied to be purchased yet.
     selected: [],
-    players: 1,
+    // Actually about to purchase
+    sessions: [],
     system: null,
   }
 
-  handleClick = selected => {
+  /* 
+    session : {
+      
+    }
+  */
+
+  toggleSelected = selected => {
     this.setState(prevState => {
       const inArray = prevState.selected.includes(selected)
       const newSelected = prevState.selected.filter(
@@ -20,12 +28,15 @@ class SessionsContainer extends Container {
     })
   }
 
-  setNumberOfPlayers = players => {
-    this.setState({ players })
-  }
-
   setSystem = system => {
     this.setState({ system })
+  }
+
+  addSessions = () => {
+    this.setState(prevState => ({
+      sessions: [...prevState.sessions, ...prevState.selected],
+      selected: [],
+    }))
   }
 }
 

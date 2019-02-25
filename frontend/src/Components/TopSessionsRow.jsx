@@ -26,7 +26,7 @@ const AllTheGamers = styled.div`
 const ShowAll = styled(Link)`
   margin-top: 2rem;
   font-size: 1.6rem;
-  color: red;
+  color: #e62739;
   text-decoration: none;
   :hover {
     cursor: pointer;

@@ -11,6 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10rem;
+  position: relative;
 `
 
 const Top = styled.div`
@@ -47,9 +48,16 @@ const ReviewsContainer = styled.div`
   flex-direction: column;
 `
 
+const SnapTo = styled.div`
+  position: absolute;
+  top: -70px;
+  left: 0;
+`
+
 export default function Reviews(props) {
   return (
     <Container>
+      <SnapTo id="reviews" />
       <Top>
         <NumReviewsAndSearch>
           <NumReviews>{props.numReviews} Reviews</NumReviews>
@@ -59,7 +67,7 @@ export default function Reviews(props) {
         </NumReviewsAndSearch>
         <StarRatings
           rating={props.reviews}
-          starRatedColor="red"
+          starRatedColor="#e62739"
           numberOfStars={5}
           name="rating"
           starDimension="1.8rem"

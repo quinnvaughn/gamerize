@@ -1,8 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
-
-import ScrollToTop from './Components/ScrollToTop'
+import createHistory from 'history/createBrowserHistory'
 
 //local imports
 import Loading from './Components/Loading'
@@ -44,24 +43,25 @@ html {
   }
 `
 
+const history = createHistory()
+
+history.listen(_ => {
+  window.scrollTo(0, 0)
+})
+
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <ScrollToTop>
-          <Suspense fallback={<Loading />}>
-            <GlobalStyle />
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/games" component={GamesPage} />
-              <Route path="/games/:game" component={SpecificGamePage} />
-              <Route
-                path="/users/:user/:game"
-                component={SpecificSessionPage}
-              />
-            </Switch>
-          </Suspense>
-        </ScrollToTop>
+      <BrowserRouter history={history}>
+        <Suspense fallback={<Loading />}>
+          <GlobalStyle />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/games" component={GamesPage} />
+            <Route path="/games/:game" component={SpecificGamePage} />
+            <Route path="/users/:user/:game" component={SpecificSessionPage} />
+          </Switch>
+        </Suspense>
       </BrowserRouter>
     )
   }

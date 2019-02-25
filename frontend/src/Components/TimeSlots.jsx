@@ -74,7 +74,7 @@ export default function TimeSlots(props) {
           <Subscribe to={[SessionsContainer]}>
             {sessions => (
               <NumberOfSessions>{`${
-                sessions.state.selected.length
+                sessions.state.sessions.length
               } sessions`}</NumberOfSessions>
             )}
           </Subscribe>

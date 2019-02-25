@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, createGlobalStyle } from 'styled-components'
 
 const show = keyframes`
     0%: {
@@ -34,7 +34,6 @@ const Overlay = styled.div`
 
 const Modal = styled.div`
   position: relative;
-  z-index: 9999 !important;
   width: 100%;
   background-color: #fff;
   border-radius: 4px;
@@ -44,6 +43,13 @@ const Modal = styled.div`
 `
 
 const ModalContent = styled.div``
+
+// So navbar isn't over modal overlay.
+const GlobalStyle = createGlobalStyle`
+  .navbar {
+    z-index: 0;
+  }
+`
 
 export default class SimpleModal extends Component {
   componentWillMount() {
@@ -67,6 +73,7 @@ export default class SimpleModal extends Component {
     const { children } = this.props
     return (
       <Overlay>
+        <GlobalStyle />
         <Modal ref={node => (this.node = node)}>
           <ModalContent>{children}</ModalContent>
         </Modal>
