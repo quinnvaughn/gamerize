@@ -8,11 +8,15 @@ import TimeSlots from './TimeSlots'
 import SessionsContainer from '../Containers/SessionsContainer'
 import Totals from './Totals'
 
+//data
+
+import sessions from '../data/sessions'
+
 const Container = styled.div`
   flex: 40%;
   display: flex;
   position: sticky;
-  top: 8.5rem;
+  top: 2rem;
   flex-direction: column;
   border: 1px solid #dddfe2;
   border-radius: 0.4rem;
@@ -46,7 +50,7 @@ const RatingContainer = styled.div`
 
 const Top = styled.div`
   padding-bottom: 1.6rem;
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
   border-bottom: 0.1rem solid #dddfe2;
 `
 
@@ -64,6 +68,16 @@ const Book = styled.button`
   border: 0;
   font-size: 1.6rem;
 `
+
+const HowManySlots = styled.div`
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+`
+
+const slotsReducer = (acc, cur) => acc + (cur.slots - cur.players.length)
+
+const slotsLeft = sessions.reduce(slotsReducer, 0)
 
 export default function SelectionOptions({
   price,
@@ -94,6 +108,7 @@ export default function SelectionOptions({
       <Subscribe to={[SessionsContainer]}>
         {session => (
           <Fragment>
+            <HowManySlots>{`${slotsLeft} slots left today`}</HowManySlots>
             <SystemPicker systems={systems} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
             {session.state.sessions.length >= 1 && <Totals />}

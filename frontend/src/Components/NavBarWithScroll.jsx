@@ -11,24 +11,25 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function NavBarWithScroll(props) {
-  const [scrollPosition, setScrollPosition] = useState(window.scrollY)
-  const handleScroll = () => {
-    setScrollPosition(window.scrollY)
-  }
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [scrollPosition, handleScroll])
+  // Too complicated for an alpha.
+  // const [scrollPosition, setScrollPosition] = useState(window.scrollY)
+  // const handleScroll = () => {
+  //   setScrollPosition(window.scrollY)
+  // }
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [scrollPosition, handleScroll])
   return (
     <Fragment>
       <NavBar />
       <GlobalStyle />
-      {scrollPosition >= 340 && (
+      {/* {scrollPosition >= 340 && (
         <SessionLinks
           visibleSection={props.visibleSection}
           setVisible={props.setVisible}
         />
-      )}
+      )} */}
     </Fragment>
   )
 }

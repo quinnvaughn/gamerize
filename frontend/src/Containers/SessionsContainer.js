@@ -7,6 +7,9 @@ class SessionsContainer extends Container {
     // Actually about to purchase
     sessions: [],
     system: null,
+    selectedSession: null,
+    selectedDay: null,
+    showModal: false,
   }
 
   /* 
@@ -14,6 +17,18 @@ class SessionsContainer extends Container {
       
     }
   */
+
+  setSelectedSession = session => {
+    this.setState({ selectedSession: session })
+  }
+
+  setSelectedDay = day => {
+    this.setState({ selectedDay: day })
+  }
+
+  setShowModal = show => {
+    this.setState({ showModal: show })
+  }
 
   toggleSelected = selected => {
     this.setState(prevState => {

@@ -1,15 +1,18 @@
-import React, { useState, Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import TrackVisibility from 'react-on-screen'
+import { Link } from 'react-router-dom'
+import _ from 'underscore'
 
 import DefaultBanner from '../default-banner.png'
 import DefaultAvatar from '../default-avatar.png'
 import SelectionOptions from '../Components/SelectionOptions'
 import Footer from '../Components/Footer'
 import Reviews from '../Components/Reviews'
-import gamers from '../data/gamers'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
+
+//data
+import gamers from '../data/gamers'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -37,11 +40,16 @@ const Gamer = styled.h2`
   overflow-wrap: break-word;
 `
 
-const GamerContainer = styled.div`
+const GamerContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   flex: 4;
   align-items: center;
+  text-decoration: none;
+  color: black;
+  :hover {
+    color: #e62739;
+  }
 `
 
 const Avatar = styled.img`
@@ -135,7 +143,9 @@ const Systems = styled.span`
   font-weight: 400;
 `
 
-const BannerContainer = styled.div``
+const BannerContainer = styled.div`
+  height: 40rem;
+`
 
 const Banner = styled.img`
   width: 100%;
@@ -182,16 +192,14 @@ const formatCommas = (systems, system, index) => {
 const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 
 export default function SpecificSessionPage(props) {
-  const [visibleSection, setVisibleSection] = useState(null)
-  const [currentSection, setCurrentSection] = useState('#gamer')
   const { user, game } = props.match.params
   // won't need to do when getting data from db.
-  const gamer = gamers.filter(singleGamer => singleGamer.username === user)[0]
+  const gamer = _.findWhere(gamers, { username: user })
   return (
     <PageContainer>
       <NavBarWithScroll
-        visibleSection={currentSection}
-        setVisible={setVisibleSection}
+      // visibleSection={currentSection}
+      // setVisible={setVisibleSection}
       />
       <BannerContainer>
         <Banner src={DefaultBanner} alt="Banner" />
@@ -199,106 +207,52 @@ export default function SpecificSessionPage(props) {
       <Content>
         <SnapTo id="gamer" />
         <LeftSide>
-          <TrackVisibility partialVisibility offset={-60}>
-            {({ isVisible }) => {
-              if (
-                isVisible &&
-                visibleSection !== '#availability' &&
-                visibleSection !== '#reviews'
-              ) {
-                setVisibleSection('#gamer')
-                setCurrentSection('#gamer')
-              }
-              if (!isVisible && visibleSection === '#gamer') {
-                setVisibleSection(null)
-              }
-              return (
-                <GamerInfo>
-                  <TopContainer>
-                    <TitleContainer>
-                      <Title>{gamer.title}</Title>
-                    </TitleContainer>
-                    <GamerContainer>
-                      <Avatar src={DefaultAvatar} alt="Avatar" />
-                      <Gamer>{`${gamer.name}`}</Gamer>
-                    </GamerContainer>
-                  </TopContainer>
-                  <Game>
-                    {`${noUnderscores(game)} - `}
-                    {gamer.systems.map((system, index) =>
-                      formatCommas(gamer.systems, system, index)
-                    )}
-                  </Game>
-                  <TypeOfGameAndSlots>
-                    <TypeOfGame>
-                      {gamer.typeOfGame === 'CUSTOM'
-                        ? `${capitalize(gamer.typeOfGame)} game`
-                        : capitalize(gamer.typeOfGame)}
-                    </TypeOfGame>
-                    <Slots>{`${gamer.slots} slots per session`}</Slots>
-                  </TypeOfGameAndSlots>
-                  <Occupations>
-                    {gamer.occupation.map(occupation => (
-                      <Occupation key={occupation}>{occupation}</Occupation>
-                    ))}
-                  </Occupations>
-                  <RequirementsAndDiscountsContainer>
-                    <InnerContainer>
-                      <Requirements>Requirements:</Requirements>
-                      {gamer.requirements.map(requirement => (
-                        <Requirement key={requirement}>
-                          {requirement}
-                        </Requirement>
-                      ))}
-                    </InnerContainer>
-                    <InnerContainer>
-                      <Discounts>Discounts:</Discounts>
-                      {gamer.discounts.map(discount => (
-                        <Discount key={discount}>{discount}</Discount>
-                      ))}
-                    </InnerContainer>
-                  </RequirementsAndDiscountsContainer>
-                </GamerInfo>
-              )
-            }}
-          </TrackVisibility>
-          <TrackVisibility partialVisibility offset={-60}>
-            {({ isVisible }) => {
-              if (
-                isVisible &&
-                visibleSection !== '#gamer' &&
-                visibleSection !== '#reviews'
-              ) {
-                setVisibleSection('#availability')
-                setCurrentSection('#availability')
-              }
-              if (!isVisible && visibleSection === '#availability') {
-                setVisibleSection(null)
-              }
-              return <TodayAvailability day={new Date()} />
-            }}
-          </TrackVisibility>
-          <TrackVisibility partialVisibility offset={-60}>
-            {({ isVisible }) => {
-              if (
-                isVisible &&
-                visibleSection !== '#gamer' &&
-                visibleSection !== '#availability'
-              ) {
-                setVisibleSection('#reviews')
-                setCurrentSection('#reviews')
-              }
-              if (!isVisible && visibleSection === '#reviews') {
-                setVisibleSection(null)
-              }
-              return (
-                <Reviews
-                  reviews={gamer.reviews}
-                  numReviews={gamer.numReviews}
-                />
-              )
-            }}
-          </TrackVisibility>
+          <GamerInfo>
+            <TopContainer>
+              <TitleContainer>
+                <Title>{gamer.title}</Title>
+              </TitleContainer>
+              <GamerContainer to={`/users/${gamer.username}`}>
+                <Avatar src={DefaultAvatar} alt="Avatar" />
+                <Gamer>{`${gamer.name}`}</Gamer>
+              </GamerContainer>
+            </TopContainer>
+            <Game>
+              {`${noUnderscores(game)} - `}
+              {gamer.systems.map((system, index) =>
+                formatCommas(gamer.systems, system, index)
+              )}
+            </Game>
+            <TypeOfGameAndSlots>
+              <TypeOfGame>
+                {gamer.typeOfGame === 'CUSTOM'
+                  ? `${capitalize(gamer.typeOfGame)} game`
+                  : capitalize(gamer.typeOfGame)}
+              </TypeOfGame>
+              <Slots>{`${gamer.slots} slots per session`}</Slots>
+            </TypeOfGameAndSlots>
+            <Occupations>
+              {gamer.occupation.map(occupation => (
+                <Occupation key={occupation}>{occupation}</Occupation>
+              ))}
+            </Occupations>
+            <RequirementsAndDiscountsContainer>
+              <InnerContainer>
+                <Requirements>Requirements:</Requirements>
+                {gamer.requirements.map(requirement => (
+                  <Requirement key={requirement}>{requirement}</Requirement>
+                ))}
+              </InnerContainer>
+              <InnerContainer>
+                <Discounts>Discounts:</Discounts>
+                {gamer.discounts.map(discount => (
+                  <Discount key={discount}>{discount}</Discount>
+                ))}
+              </InnerContainer>
+            </RequirementsAndDiscountsContainer>
+          </GamerInfo>
+          <TodayAvailability day={new Date()} />
+          <Reviews reviews={gamer.reviews} numReviews={gamer.numReviews} />
         </LeftSide>
         <SelectionOptions
           gamer={gamer}

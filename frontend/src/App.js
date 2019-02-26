@@ -9,6 +9,7 @@ import HomePage from './Pages/HomePage'
 const GamesPage = lazy(() => import('./Pages/GamesPage'))
 const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
+const UserProfile = lazy(() => import('./Pages/UserProfile'))
 
 const GlobalStyle = createGlobalStyle`
 html {
@@ -60,6 +61,7 @@ class App extends Component {
             <Route exact path="/games" component={GamesPage} />
             <Route path="/games/:game" component={SpecificGamePage} />
             <Route path="/users/:user/:game" component={SpecificSessionPage} />
+            <Route path="/users/:user" component={UserProfile} />
           </Switch>
         </Suspense>
       </BrowserRouter>
