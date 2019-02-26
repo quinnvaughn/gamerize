@@ -8,7 +8,8 @@ import DefaultAvatar from '../default-avatar.png'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 16.6666666666%;
+  flex: 1 0 33.33333%;
+  margin-bottom: 1rem;
 `
 
 const Avatar = styled.img`
@@ -18,7 +19,7 @@ const Avatar = styled.img`
 
 const Name = styled.h4`
   font-size: 1.8rem;
-
+  font-weight: 600;
   margin-bottom: 0.3rem;
 `
 
@@ -73,7 +74,7 @@ const formatCommas = (systems, system, index, username) => {
 
 export default function Session(props) {
   return (
-    <Container>
+    <Container width={props.width}>
       <StyledLink to={`/users/${props.username}/${props.game}`}>
         <Avatar src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>

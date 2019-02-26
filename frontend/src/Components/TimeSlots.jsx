@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { FaArrowRight } from 'react-icons/fa'
 import { Subscribe } from 'unstated'
@@ -61,53 +61,55 @@ const NumberOfSessions = styled.span`
 `
 
 export default function TimeSlots(props) {
-  const [showModal, setshowModal] = useState(false)
-  const [selectedDay, setSelectedDay] = useState(null)
-  const [selectedSession, setSelectedSession] = useState(null)
   return (
     <Container>
       <TimeSlotLabel>
         <TimeSlot>Time Slots</TimeSlot>
       </TimeSlotLabel>
       <SelectionContainer>
-        <SelectionButton onClick={() => setshowModal(!showModal)}>
-          <Subscribe to={[SessionsContainer]}>
-            {sessions => (
+        <Subscribe to={[SessionsContainer]}>
+          {sessions => (
+            <SelectionButton
+              onClick={() => sessions.setshowModal(!sessions.state.showModal)}
+            >
               <NumberOfSessions>{`${
                 sessions.state.sessions.length
               } sessions`}</NumberOfSessions>
-            )}
-          </Subscribe>
-
-          <ArrowRight />
-        </SelectionButton>
-      </SelectionContainer>
-      {showModal && (
-        <Modal
-          onRequestClose={() => {
-            setshowModal(!showModal)
-            setSelectedDay(null)
-            setSelectedSession(null)
-          }}
-        >
-          {selectedSession ? (
-            <TimeSlotSession
-              selectedSession={selectedSession}
-              gamer={props.gamer}
-              game={props.game}
-              goBack={() => setSelectedSession(null)}
-            />
-          ) : selectedDay ? (
-            <TimeSlotsHours
-              setSelectedSession={setSelectedSession}
-              day={selectedDay}
-              goBack={() => setSelectedDay(null)}
-            />
-          ) : (
-            <Calendar setSelectedDay={setSelectedDay} />
+              <ArrowRight />
+            </SelectionButton>
           )}
-        </Modal>
-      )}
+        </Subscribe>
+      </SelectionContainer>
+      <Subscribe to={[SessionsContainer]}>
+        {sessions =>
+          sessions.state.showModal && (
+            <Modal
+              onRequestClose={() => {
+                sessions.setShowModal(!sessions.state.showModal)
+                sessions.setSelectedDay(null)
+                sessions.setSelectedSession(null)
+              }}
+            >
+              {sessions.state.selectedSession ? (
+                <TimeSlotSession
+                  selectedSession={sessions.state.selectedSession}
+                  gamer={props.gamer}
+                  game={props.game}
+                  goBack={() => sessions.setSelectedSession(null)}
+                />
+              ) : sessions.state.selectedDay ? (
+                <TimeSlotsHours
+                  setSelectedSession={sessions.setSelectedSession}
+                  day={sessions.state.selectedDay}
+                  goBack={() => sessions.setSelectedDay(null)}
+                />
+              ) : (
+                <Calendar setSelectedDay={sessions.setSelectedDay} />
+              )}
+            </Modal>
+          )
+        }
+      </Subscribe>
     </Container>
   )
 }

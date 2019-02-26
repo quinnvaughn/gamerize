@@ -1,10 +1,14 @@
 const gamers = [
   {
     name: 'Kyle',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Celebrity', 'Rapper'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     price: 180,
     title: 'Apex Legends sweaty sessions',
     reviews: 4.8,
@@ -22,12 +26,16 @@ const gamers = [
   },
   {
     name: 'Taylor Bennett',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Celebrity', 'Rapper'],
     gamerType: 'Celebrities',
     systems: ['PS4'],
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
     typeOfGame: 'CUSTOM',
     price: 200,
     title: 'Apex Legends sweaty sessions',
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     reviews: 4.0,
     numReviews: 400,
     username: 'Taylor_Bennett',
@@ -40,10 +48,14 @@ const gamers = [
   },
   {
     name: 'Shroud',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Streamer'],
     gamerType: 'Streamers',
     systems: ['Xbox One', 'PC'],
     typeOfGame: 'MATCHMAKING',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     price: 200,
     title: 'Apex Legends sweaty sessions',
     reviews: 4.92,
@@ -58,10 +70,14 @@ const gamers = [
   },
   {
     name: 'TSM Myth',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Streamer'],
     gamerType: 'Streamers',
     systems: ['PC', 'PS4'],
     typeOfGame: 'MATCHMAKING',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     price: 190,
     title: 'Apex Legends sweaty sessions',
     reviews: 4.6,
@@ -76,10 +92,14 @@ const gamers = [
   },
   {
     name: 'Ninja',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Streamer'],
     systems: ['PC'],
     typeOfGame: 'MATCHMAKING',
     gamerType: 'Streamers',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     price: 250,
     title: 'Apex Legends sweaty sessions',
     reviews: 4.97,
@@ -94,10 +114,14 @@ const gamers = [
   },
   {
     name: 'TimTheTatMan',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Streamer'],
     systems: ['PC'],
     typeOfGame: 'MATCHMAKING',
     gamerType: 'Streamers',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     price: 165,
     title: 'Apex Legends sweaty sessions',
     reviews: 4.8,
@@ -112,12 +136,16 @@ const gamers = [
   },
   {
     name: 'DisguisedToast',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Streamer'],
     systems: ['PC'],
     gamerType: 'Streamers',
     typeOfGame: 'CUSTOM',
     price: 100,
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
     title: 'Apex Legends sweaty sessions',
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
     reviews: 4.8,
     numReviews: 786,
     username: 'DisguisedToast',
@@ -130,12 +158,16 @@ const gamers = [
   },
   {
     name: 'PewDiePie',
+    createdAt: 'February 1, 2019 17:00:00',
     occupation: ['Youtuber'],
     gamerType: 'Youtubers',
     typeOfGame: 'MATCHMAKING',
     systems: ['Xbox One'],
     price: 300,
     title: 'Apex Legends sweaty sessions',
+    aboutMe:
+      "Hi my name is blah blah blah. I'm 26 years old. I'm from Phoenix, Arizona originally. I like hiking, surfing, kayaking, and skiing. I'm a professional streamer with 500,000 followers on Twitch.",
+    favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
     reviews: 4.4,
     numReviews: 1999,
     username: 'PewDiePie',

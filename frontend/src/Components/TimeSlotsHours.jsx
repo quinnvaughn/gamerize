@@ -167,6 +167,7 @@ class TimeSlotHours extends Component {
     return <Hours>{hours}</Hours>
   }
   render() {
+    console.log(this.props)
     return (
       <Container>
         {this.renderHeader()}

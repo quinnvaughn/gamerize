@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 //local imports
 import SearchBar from './SearchBar'
@@ -37,6 +37,8 @@ const StyledLink = styled(Link)`
   }
 `
 
+const Empty = styled.div``
+
 const navigationlinks = [
   {
     text: 'Become a Gamer',
@@ -52,10 +54,10 @@ const navigationlinks = [
   },
 ]
 
-export default function NavBar(props) {
+function NavBar(props) {
   return (
     <Container className="navbar">
-      <SearchBar />
+      {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
       <Links>
         {navigationlinks.map(link => (
           <StyledLink key={link.text} to={link.path}>
@@ -66,3 +68,5 @@ export default function NavBar(props) {
     </Container>
   )
 }
+
+export default withRouter(NavBar)
