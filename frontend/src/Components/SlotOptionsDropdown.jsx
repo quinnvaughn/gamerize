@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 const Container = styled.div`
   position: relative;
   width: 100%;
 `
-
-const SelectionContainer = styled.button`
+const SelectionButton = styled.div`
   border: 1px solid #dddfe2;
-  outline: 0;
-  padding: 0.5rem;
+  padding: 1rem;
   display: flex;
   width: 100%;
   height: 4rem;
-  justify-content: space-between;
   align-items: center;
-  color: black;
+  justify-content: space-between;
+  color: ${props => (props.disabled ? 'grey' : 'black')};
   border-radius: 4px;
+  cursor: pointer;
   background: white;
-  font-size: 1.6rem;
+  margin-left: 0.5rem;
 `
 
 const Dropdown = styled.div`
@@ -32,13 +32,35 @@ const Dropdown = styled.div`
   background: white;
 `
 
+const Number = styled.span`
+  font-size: 1.4rem;
+  margin-right: 0.8rem;
+  margin-left: 0.4rem;
+`
+
+const ChevronDown = styled(FaChevronDown)`
+  color: ${props => (props.disabled ? 'grey' : 'black')};
+  font-size: 1.4rem;
+`
+
+const ChevronUp = styled(FaChevronUp)`
+  color: ${props => (props.disabled ? 'grey' : 'black')};
+  font-size: 1.4rem;
+`
+
 export default function SlotOptionsDropdown(props) {
   const [open, setOpen] = useState(false)
   return (
     <Container>
-      <SelectionContainer onClick={() => setOpen(!open)}>
-        1{open && <Dropdown>This many players</Dropdown>}
-      </SelectionContainer>
+      <SelectionButton
+        onClick={() => {
+          setOpen(!open)
+        }}
+      >
+        <Number>1</Number>
+        {open ? <ChevronUp /> : <ChevronDown />}
+        {open && <Dropdown>This many players</Dropdown>}
+      </SelectionButton>
     </Container>
   )
 }

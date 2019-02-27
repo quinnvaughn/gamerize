@@ -14,6 +14,10 @@ class SessionsContainer extends Container {
 
   /* 
     session : {
+      slots: 0,
+      timeStart: Date,
+      length: 20,
+      players: 0,
       
     }
   */

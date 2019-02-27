@@ -104,7 +104,6 @@ const RequirementsAndDiscountsContainer = styled.div`
 const Requirements = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
-  margin-top: 5rem;
   margin-bottom: 0.5rem;
 `
 
@@ -123,7 +122,6 @@ const InnerContainer = styled.div`
 const Discounts = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
-  margin-top: 5rem;
   margin-bottom: 0.5rem;
 `
 

@@ -97,13 +97,15 @@ const SlotOptionsContainer = styled.div`
 `
 
 const NumberOfSlotsContainer = styled.label`
+  display: flex;
+  align-items: center;
   font-size: 1.6rem;
-  margin-right: 2rem;
 `
 
 const NumberOfPlayersContainer = styled.label`
+  display: flex;
+  align-items: center;
   font-size: 1.6rem;
-  margin-right: 2rem;
 `
 
 const Slots = styled.div`

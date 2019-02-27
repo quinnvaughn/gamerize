@@ -70,7 +70,7 @@ export default function TimeSlots(props) {
         <Subscribe to={[SessionsContainer]}>
           {sessions => (
             <SelectionButton
-              onClick={() => sessions.setshowModal(!sessions.state.showModal)}
+              onClick={() => sessions.setShowModal(!sessions.state.showModal)}
             >
               <NumberOfSessions>{`${
                 sessions.state.sessions.length

@@ -48,7 +48,7 @@ const gamers = [
     name: 'Taylor Bennett',
     occupation: 'Rapper',
     favoriteGames: ['NBA 2K', 'Apex Legends', 'Fortnite'],
-    username: 'TaylorBennett',
+    username: 'Taylor_Bennett',
   },
   {
     name: 'Shroud',

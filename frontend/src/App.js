@@ -26,6 +26,7 @@ html {
   }
   div {
     box-sizing: border-box;
+    cursor: default;
   }
   h1 {
     margin: 0;

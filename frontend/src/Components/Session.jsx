@@ -8,7 +8,7 @@ import DefaultAvatar from '../default-avatar.png'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1 0 33.33333%;
+  flex: 1 0 ${props => `${props.width}%`};
   margin-bottom: 1rem;
 `
 
@@ -19,19 +19,18 @@ const Avatar = styled.img`
 
 const Name = styled.h4`
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.3rem;
 `
 
 const Systems = styled.p`
   font-size: 1.4rem;
   color: black;
-  font-weight: 400;
 `
 
 const System = styled.span`
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 600;
   color: black;
 `
 
