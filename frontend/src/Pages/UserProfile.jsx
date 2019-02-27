@@ -11,10 +11,13 @@ import DefaultAvatar from '../default-avatar.png'
 import DefaultGame from '../default-game.gif'
 import Session from '../Components/Session'
 import GamerAvailability from '../Components/GamerAvailability'
+import UserProfileReviews from '../Components/UserProfileReviews'
+import DefaultBanner from '../default-banner.png'
 
 //data
 import specificSessions from '../data/specificusersessions'
 import gamers from '../data/gamers'
+import reviews from '../data/reviews'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -34,7 +37,7 @@ const Content = styled.div`
   max-width: 108rem;
   font-size: 1.6rem;
   margin: 0 auto;
-  margin-top: 12rem;
+  margin-top: 2rem;
   display: flex;
   width: 100%;
 `
@@ -76,7 +79,7 @@ const ProfileInfoContainer = styled.div`
 const Name = styled.h1`
   font-size: 4rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.3rem;
   line-height: 4rem;
 `
 
@@ -84,7 +87,6 @@ const Occupations = styled.div`
   font-size: 1.4rem;
   font-weight: 400;
   color: black;
-  margin-bottom: 1.6rem;
 `
 
 const Occupation = styled.div`
@@ -104,6 +106,7 @@ const Occupation = styled.div`
 const AboutMe = styled.div`
   font-size: 2.2rem;
   font-weight: 800;
+  padding-top: 2.4rem;
 `
 
 const AboutMeParagraph = styled.p`
@@ -111,12 +114,15 @@ const AboutMeParagraph = styled.p`
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 2.2rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid #dddfe2;
 `
 
 const FavoriteGames = styled.div`
-  margin-top: 2.4rem;
   display: flex;
   flex-direction: column;
+  padding: 2.4rem 0;
+  border-bottom: 1px solid #dddfe2;
 `
 
 const FavoriteGameContainer = styled.div`
@@ -129,6 +135,9 @@ const FavoriteGame = styled(Link)`
   flex-direction: column;
   text-decoration: none;
   color: black;
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  font-weight: 700;
   :hover {
     color: #e62739;
   }
@@ -151,7 +160,7 @@ const GamePicture = styled.img`
   border-radius: 4px;
 `
 
-const Reviews = styled.div`
+const ReviewsContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
@@ -176,7 +185,8 @@ const ReviewRating = styled.span`
 const Sessions = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 2.4rem;
+  padding: 2.4rem 0;
+  border-bottom: 1px solid #dddfe2;
 `
 
 const SessionsMapped = styled.div`
@@ -192,22 +202,42 @@ const SessionsTitle = styled.div`
   margin-bottom: 1rem;
 `
 
+const Username = styled.div`
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+`
+
+const BannerContainer = styled.div`
+  height: 40rem;
+`
+
+const Banner = styled.img`
+  width: 100%;
+  max-height: 40rem;
+`
+
 const noSpaces = string => string.replace(/ /g, '_')
 
 export default function UserProfile(props) {
   //will be done with Prisma with backend.
-  const user = _.findWhere(gamers, { username: props.match.params.user })
+  const user = _.findWhere(gamers, {
+    username: noSpaces(props.match.params.user),
+  })
   return (
     <PageContainer>
       <NavBar />
       <GlobalStyle />
+      <BannerContainer>
+        <Banner src={DefaultBanner} alt="Banner" />
+      </BannerContainer>
       <Content>
         <LeftSide>
           <ProfileInfoContainer>
             <ProfilePictureContainer>
               <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
             </ProfilePictureContainer>
-            <Reviews>
+            <ReviewsContainer>
               <NumReviews>{`${user.numReviews} reviews`}</NumReviews>
               <ReviewRatingContainer>
                 <StarRatings
@@ -220,11 +250,12 @@ export default function UserProfile(props) {
                 />
                 <ReviewRating>{`(${user.reviews})`}</ReviewRating>
               </ReviewRatingContainer>
-            </Reviews>
+            </ReviewsContainer>
           </ProfileInfoContainer>
         </LeftSide>
         <RightSide>
           <Name>{user.name}</Name>
+          <Username>@{user.username}</Username>
           <Occupations>
             {user.occupation.map(job => (
               <Occupation>{job}</Occupation>
@@ -244,11 +275,11 @@ export default function UserProfile(props) {
             </FavoriteGameContainer>
           </FavoriteGames>
           <Sessions>
-            <SessionsTitle>{`${user.name}'s Gaming Sessions`}</SessionsTitle>
+            <SessionsTitle>{`Gaming Sessions`}</SessionsTitle>
             <SessionsMapped>
               {specificSessions.map(session => (
                 <Session
-                  width="25%"
+                  width="33"
                   username={user.username}
                   game={session.game}
                   name={session.name}
@@ -262,6 +293,11 @@ export default function UserProfile(props) {
           </Sessions>
           <GamerAvailability
             day={new Date()}
+            name={user.name}
+            username={user.username}
+          />
+          <UserProfileReviews
+            reviews={reviews}
             name={user.name}
             username={user.username}
           />

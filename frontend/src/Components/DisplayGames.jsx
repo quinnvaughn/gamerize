@@ -30,7 +30,7 @@ const games = [
     sessions: 500,
   },
   {
-    name: 'CS:GO',
+    name: 'Counter-Strike: Global Offensive',
     tags: ['FPS', 'Shooter'],
     sessions: 480,
   },

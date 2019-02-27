@@ -39,6 +39,7 @@ const mapSix = (gamers, game) => {
     return (
       index <= 5 && (
         <Session
+          width="16.6666666667"
           name={gamer.name}
           game={game}
           username={gamer.username}

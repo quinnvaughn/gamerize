@@ -66,6 +66,7 @@ const CenterColumn = styled.div`
   width: calc(100% / 7);
   justify-content: center;
   text-align: center;
+  font-size: 1.2rem;
 `
 
 const Days = styled.div`

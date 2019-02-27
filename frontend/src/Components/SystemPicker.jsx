@@ -39,7 +39,7 @@ const SelectionButton = styled.button`
   justify-content: space-between;
   color: ${props => (props.disabled ? 'grey' : 'black')};
   border-radius: 4px;
-  cursor: ${props => (props.disabled ? 'default' : 'cursor')};
+  cursor: ${props => (props.disabled ? 'default' : 'pointer')};
   background: white;
 `
 
