@@ -81,7 +81,7 @@ const Hours = styled.div`
 
 const AvailabilityContainer = styled.div`
   width: 100%;
-  padding: 2.4rem 0 3rem;
+  padding: 2.4rem 0 4rem;
   border-bottom: 1px solid #dddfe2;
   position: relative;
 `
@@ -143,7 +143,7 @@ export default function GamerAvailability(props) {
   }
   return (
     <AvailabilityContainer>
-      <Availability>{`${props.name}'s Availability Today`} </Availability>
+      <Availability>{`Availability Today`} </Availability>
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>
   )

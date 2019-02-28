@@ -17,23 +17,32 @@ const Container = styled.nav`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 2rem 4rem 2rem 8rem;
 `
 
 const Links = styled.div`
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  display: flex;
+  height: 100%;
+  padding-right: 4rem;
 `
 
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
+  box-sizing: border-box;
+  height: 100%;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
   margin-right: 1.5rem;
+  font-weight: 600;
+  padding: 0 0.8rem;
+  display: flex;
+  align-items: center;
   :last-child {
     margin-right: 0;
   }
   :hover {
-    cursor: pointer;
-    color: #e62739;
+    border-bottom: 2px solid #e62739;
   }
 `
 
