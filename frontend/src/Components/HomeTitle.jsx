@@ -6,10 +6,7 @@ const Title = styled.h1`
   padding: 0;
   font-size: 8rem;
   font-weight: bold;
-  position: absolute;
   color: black;
-  top: 8rem;
-  left: 8rem;
   text-rendering: optimizeLegibility;
 `
 
