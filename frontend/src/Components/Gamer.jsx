@@ -18,18 +18,19 @@ const Avatar = styled.img`
 const Name = styled.h4`
   font-size: 1.8rem;
   margin-bottom: 0.3rem;
+  font-weight: 700;
 `
 
 const Occupation = styled.p`
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 600;
   color: black;
   margin-bottom: 0.3rem;
 `
 
 const FavoriteGames = styled.p`
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 600;
   color: black;
 `
 
