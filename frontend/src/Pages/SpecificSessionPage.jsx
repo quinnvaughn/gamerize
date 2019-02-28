@@ -33,6 +33,9 @@ const Content = styled.div`
 const TopContainer = styled.div`
   width: 100%;
   display: flex;
+  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid #dddfe2;
 `
 
 const Gamer = styled.h2`
@@ -80,7 +83,6 @@ const Occupations = styled.div`
   font-weight: 400;
   color: black;
   margin-top: 1rem;
-  margin-bottom: 1.6rem;
 `
 
 const Occupation = styled.div`
@@ -99,6 +101,9 @@ const Occupation = styled.div`
 
 const RequirementsAndDiscountsContainer = styled.div`
   display: flex;
+  padding-bottom: 2.4rem;
+  margin-bottom: 2.4rem;
+  border-bottom: 1px solid #dddfe2;
 `
 
 const Requirements = styled.div`
@@ -177,6 +182,15 @@ const GamerInfo = styled.div`
   width: 100%;
 `
 
+const MiddleContainer = styled.div`
+  padding-bottom: 2.4rem;
+  margin-bottom: 2.4rem;
+  border-bottom: 1px solid #dddfe2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`
+
 const noUnderscores = string => string.replace(/_/g, ' ')
 
 const formatCommas = (systems, system, index) => {
@@ -215,25 +229,27 @@ export default function SpecificSessionPage(props) {
                 <Gamer>{`${gamer.name}`}</Gamer>
               </GamerContainer>
             </TopContainer>
-            <Game>
-              {`${noUnderscores(game)} - `}
-              {gamer.systems.map((system, index) =>
-                formatCommas(gamer.systems, system, index)
-              )}
-            </Game>
-            <TypeOfGameAndSlots>
-              <TypeOfGame>
-                {gamer.typeOfGame === 'CUSTOM'
-                  ? `${capitalize(gamer.typeOfGame)} game`
-                  : capitalize(gamer.typeOfGame)}
-              </TypeOfGame>
-              <Slots>{`${gamer.slots} slots per session`}</Slots>
-            </TypeOfGameAndSlots>
-            <Occupations>
-              {gamer.occupation.map(occupation => (
-                <Occupation key={occupation}>{occupation}</Occupation>
-              ))}
-            </Occupations>
+            <MiddleContainer>
+              <Game>
+                {`${noUnderscores(game)} - `}
+                {gamer.systems.map((system, index) =>
+                  formatCommas(gamer.systems, system, index)
+                )}
+              </Game>
+              <TypeOfGameAndSlots>
+                <TypeOfGame>
+                  {gamer.typeOfGame === 'CUSTOM'
+                    ? `${capitalize(gamer.typeOfGame)} game`
+                    : capitalize(gamer.typeOfGame)}
+                </TypeOfGame>
+                <Slots>{`${gamer.slots} slots per session`}</Slots>
+              </TypeOfGameAndSlots>
+              <Occupations>
+                {gamer.occupation.map(occupation => (
+                  <Occupation key={occupation}>{occupation}</Occupation>
+                ))}
+              </Occupations>
+            </MiddleContainer>
             <RequirementsAndDiscountsContainer>
               <InnerContainer>
                 <Requirements>Requirements:</Requirements>

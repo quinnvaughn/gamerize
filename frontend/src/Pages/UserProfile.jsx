@@ -13,6 +13,7 @@ import Session from '../Components/Session'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
+import Footer from '../Components/Footer'
 
 //data
 import specificSessions from '../data/specificusersessions'
@@ -303,6 +304,7 @@ export default function UserProfile(props) {
           />
         </RightSide>
       </Content>
+      <Footer />
     </PageContainer>
   )
 }
