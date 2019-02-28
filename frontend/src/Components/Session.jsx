@@ -10,6 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   flex: 1 0 ${props => `${props.width}%`};
   margin-bottom: 1rem;
+  max-width: ${props => `${props.width}%`};
 `
 
 const Avatar = styled.img`
