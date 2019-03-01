@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import SessionsContainer from '../Containers/SessionsContainer'
+import { Subscribe } from 'unstated'
+import _ from 'underscore'
 
 const Container = styled.div`
-  position: relative;
   width: 100%;
 `
 const SelectionButton = styled.div`
@@ -19,17 +21,29 @@ const SelectionButton = styled.div`
   cursor: pointer;
   background: white;
   margin-left: 0.5rem;
+  position: relative;
 `
 
 const Dropdown = styled.div`
-  top: 4rem;
+  top: 3.9rem;
   position: absolute;
   width: 100%;
   left: 0;
-  padding: 1rem;
   border: 1px solid #dddfe2;
   border-radius: 4px;
   background: white;
+`
+
+const DropdownItem = styled.div`
+  width: 100%;
+  display: flex;
+  height: auto;
+  padding: 1rem;
+  justify-content: center;
+  cursor: pointer;
+  :hover {
+    background: #dddfe2;
+  }
 `
 
 const Number = styled.span`
@@ -57,9 +71,33 @@ export default function SlotOptionsDropdown(props) {
           setOpen(!open)
         }}
       >
-        <Number>1</Number>
-        {open ? <ChevronUp /> : <ChevronDown />}
-        {open && <Dropdown>This many players</Dropdown>}
+        <Subscribe to={[SessionsContainer]}>
+          {session => (
+            <Fragment>
+              <Number>
+                {props.slots ? session.state.slots : session.state.players}
+              </Number>
+              {open ? <ChevronUp /> : <ChevronDown />}
+              {open && (
+                <Dropdown>
+                  {_.times(session.state.availableSlots + 1, index => {
+                    return (
+                      <DropdownItem
+                        onClick={() => {
+                          return props.slots
+                            ? session.setNumberOfSlots(index)
+                            : session.setNumberOfPlayers(index)
+                        }}
+                      >
+                        {index}
+                      </DropdownItem>
+                    )
+                  })}
+                </Dropdown>
+              )}
+            </Fragment>
+          )}
+        </Subscribe>
       </SelectionButton>
     </Container>
   )

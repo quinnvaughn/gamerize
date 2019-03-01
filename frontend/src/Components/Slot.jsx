@@ -15,7 +15,8 @@ const Container = styled.div`
   pointer-events: ${props => props.taken && 'none'};
   color: ${props => props.taken && '#dddfe2'};
   cursor: ${props => !props.taken && 'pointer'};
-  background: ${props => (props.selected ? '#e62739' : '#fff')};
+  background: ${props =>
+    props.selected ? (props.color ? props.color : '#e62739') : '#fff'};
   font-size: 1.6rem;
   height: 4rem;
   width: 100%;
@@ -36,6 +37,7 @@ export default function Slot(props) {
             selected={selected}
             taken={props.taken}
             onClick={() => sessions.toggleSelected(props.value)}
+            color={props.color}
           >
             {selected ? <Check /> : props.children}
           </Container>

@@ -91,7 +91,7 @@ const SlotsContainer = styled.div`
 const SlotOptionsContainer = styled.div`
   display: flex;
   width: 100%;
-  padding: 1rem 0 2rem;
+  padding: 2rem 0 2rem;
   justify-content: space-around;
   align-items: center;
 `
@@ -117,6 +117,7 @@ const Slots = styled.div`
 
 const PickAllSlotsForTeam = styled.button`
   background: white;
+  height: 4rem;
   padding: 0.6rem 0.8rem;
   color: #e62739;
   cursor: pointer;
@@ -132,6 +133,7 @@ const PickAllSlotsForTeam = styled.button`
 `
 const PickAllSlotsForMe = styled.button`
   background: white;
+  height: 4rem;
   padding: 0.6rem 0.8rem;
   color: #e62739;
   cursor: pointer;
@@ -178,9 +180,24 @@ export default function TimeSlotSession(props) {
     )
   }
 
-  const renderSlots = () => {
+  const renderSlots = session => {
+    let colors = [
+      'blue',
+      'orange',
+      'green',
+      'gold',
+      'pink',
+      'purple',
+      'navy',
+      'salmon',
+      'springgreen',
+      'teal',
+      'steelblue',
+    ]
     let slots = []
+    let counter = session.state.players + 1
     for (let i = 0; i < props.selectedSession.slots; i++) {
+      counter--
       const currentUser = props.selectedSession.players[i]
       currentUser
         ? slots.push(
@@ -189,7 +206,10 @@ export default function TimeSlotSession(props) {
             </Slot>
           )
         : slots.push(
-            <Slot value={`empty${i}-${props.selectedSession.timeStart}`}>
+            <Slot
+              value={`empty${i}-${props.selectedSession.timeStart}`}
+              color={counter > 1 && colors[i]}
+            >
               Empty
             </Slot>
           )
@@ -203,15 +223,19 @@ export default function TimeSlotSession(props) {
         {session => (
           <SlotOptionsContainer>
             <NumberOfSlotsContainer>
-              Slots: <SlotOptionsDropdown />
+              Slots: <SlotOptionsDropdown slots />
             </NumberOfSlotsContainer>
             <NumberOfPlayersContainer>
               Players: <SlotOptionsDropdown />
             </NumberOfPlayersContainer>
-            <PickAllSlotsForTeam>
+            <PickAllSlotsForTeam
+              onClick={() => session.fillAllSlotsWithMyFriends()}
+            >
               Fill all the slots with my friends
             </PickAllSlotsForTeam>
-            <PickAllSlotsForMe>Fill all the slots for me</PickAllSlotsForMe>
+            <PickAllSlotsForMe onClick={() => session.fillAllSlotsForMe()}>
+              Fill all the slots for me
+            </PickAllSlotsForMe>
           </SlotOptionsContainer>
         )}
       </Subscribe>
@@ -220,10 +244,14 @@ export default function TimeSlotSession(props) {
 
   const renderPrimary = () => {
     return (
-      <SlotsContainer>
-        {renderSlotOptions()}
-        {renderSlots()}
-      </SlotsContainer>
+      <Subscribe to={[SessionsContainer]}>
+        {session => (
+          <SlotsContainer>
+            {renderSlotOptions()}
+            {renderSlots(session)}
+          </SlotsContainer>
+        )}
+      </Subscribe>
     )
   }
 

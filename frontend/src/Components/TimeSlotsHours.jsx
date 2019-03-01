@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
@@ -89,47 +89,51 @@ const Sessions = styled.div`
 
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
-  background: ${props => (props.full ? '#e62739' : 'white')};
+  background: ${props =>
+    props.full ? '#e62739' : props.disabled ? '#dddfe2' : 'white'};
   width: 100%;
-  color: ${props => (props.full ? 'white' : 'black')};
+  color: ${props => (props.full || props.disabled ? 'white' : 'black')};
   border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
   position: absolute;
+  z-index: 0;
   display: flex;
-  z-index: 1;
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
   top: ${props => `${(props.startTime / 60) * 100}%`};
-  pointer-events: ${props => props.full && 'none'};
   transition: 0.15s ease-out;
+  pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
     transform: scale(1.05);
     transition: 0.25s ease-out;
-    z-index: 10;
   }
 `
 
 const Hours = styled.div`
   font-size: 1.2rem;
 `
-class TimeSlotHours extends Component {
-  renderHeader() {
+export default function TimeSlotHours(props) {
+  useEffect(() => {
+    document.getElementById('modal').scrollTop =
+      document.getElementById('current').offsetTop - 35
+  }, {})
+  const renderHeader = () => {
     const dateFormat = 'MMMM Do, YYYY'
 
     return (
       <Header>
-        <ChevronLeft onClick={this.props.goBack} />
-        <Day>{dateFns.format(this.props.day, dateFormat)}</Day>
+        <ChevronLeft onClick={props.goBack} />
+        <Day>{dateFns.format(props.day, dateFormat)}</Day>
         <Empty />
       </Header>
     )
   }
 
-  renderHours() {
+  const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
-    let selectedDate = dateFns.startOfDay(this.props.day)
+    let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
       const sessions = exampleSessions.filter(
@@ -137,7 +141,19 @@ class TimeSlotHours extends Component {
       )
 
       hours.push(
-        <Row key={i}>
+        <Row
+          key={i}
+          id={
+            dateFns.isThisHour(
+              new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
+                i
+              )
+            ) && 'current'
+          }
+        >
           <Hour>
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
@@ -149,8 +165,11 @@ class TimeSlotHours extends Component {
                 full={session.players.length === session.slots}
                 startTime={dateFns.getMinutes(session.timeStart)}
                 onClick={() => {
-                  this.props.setSelectedSession(session)
+                  props.setSelectedSession(session)
                 }}
+                disabled={
+                  dateFns.compareAsc(new Date(), session.timeStart) === 1
+                }
               >
                 {`${session.slots - session.players.length} ${
                   session.slots - session.players.length === 1
@@ -166,15 +185,10 @@ class TimeSlotHours extends Component {
 
     return <Hours>{hours}</Hours>
   }
-  render() {
-    console.log(this.props)
-    return (
-      <Container>
-        {this.renderHeader()}
-        {this.renderHours()}
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      {renderHeader()}
+      {renderHours()}
+    </Container>
+  )
 }
-
-export default TimeSlotHours

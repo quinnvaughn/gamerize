@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { Subscribe } from 'unstated'
@@ -54,9 +54,10 @@ const Sessions = styled.div`
 
 const Session = styled(Link)`
   height: ${props => `${20 / (6 / props.height)}px`};
-  background: ${props => (props.full ? '#e62739' : 'white')};
+  background: ${props =>
+    props.full ? '#e62739' : props.disabled ? '#dddfe2' : 'white'};
   width: 100%;
-  color: ${props => (props.full ? 'white' : 'black')};
+  color: ${props => (props.full || props.disabled ? 'white' : 'black')};
   border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
   position: absolute;
@@ -65,10 +66,9 @@ const Session = styled(Link)`
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
-  pointer-events: ${props => props.full && 'none'};
+  pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
     transform: scale(1.05);
     transition: 0.25s ease-out;
@@ -92,9 +92,14 @@ const Availability = styled.div`
   margin-bottom: 1rem;
 `
 
-const noSpaces = string => string.replace(/ /g, '_')
+//const noSpaces = string => string.replace(/ /g, '_')
 
 export default function GamerAvailability(props) {
+  useEffect(() => {
+    const element = document.getElementById('current')
+    element.scrollIntoView()
+    window.parent.scrollTo(0, 0)
+  }, {})
   const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
@@ -107,7 +112,18 @@ export default function GamerAvailability(props) {
 
       hours.push(
         <Row key={i}>
-          <Hour>
+          <Hour
+            id={
+              dateFns.isThisHour(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  selectedDate.getDate(),
+                  i
+                )
+              ) && 'current'
+            }
+          >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
           <Subscribe to={[SessionsContainer]}>
@@ -124,6 +140,9 @@ export default function GamerAvailability(props) {
                       container.setSelectedSession(session)
                     }}
                     to={`/users/${props.username}/${session.game}`}
+                    disabled={
+                      dateFns.compareAsc(new Date(), session.timeStart) === 1
+                    }
                   >
                     {`${session.slots - session.players.length} ${
                       session.slots - session.players.length === 1

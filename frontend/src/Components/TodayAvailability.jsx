@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 
@@ -51,9 +51,10 @@ const Sessions = styled.div`
 
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
-  background: ${props => (props.full ? '#e62739' : 'white')};
+  background: ${props =>
+    props.full ? '#e62739' : props.disabled ? '#dddfe2' : 'white'};
   width: 100%;
-  color: ${props => (props.full ? 'white' : 'black')};
+  color: ${props => (props.full || props.disabled ? 'white' : 'black')};
   border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
   position: absolute;
@@ -64,7 +65,7 @@ const Session = styled.div`
   justify-content: center;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
-  pointer-events: ${props => props.full && 'none'};
+  pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
     transform: scale(1.05);
     transition: 0.25s ease-out;
@@ -94,6 +95,11 @@ const SnapTo = styled.div`
 `
 
 export default function TodayAvailability(props) {
+  useEffect(() => {
+    const element = document.getElementById('current')
+    element.scrollIntoView()
+    window.parent.scrollTo(0, 0)
+  }, {})
   const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
@@ -106,7 +112,18 @@ export default function TodayAvailability(props) {
 
       hours.push(
         <Row key={i}>
-          <Hour>
+          <Hour
+            id={
+              dateFns.isThisHour(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  selectedDate.getDate(),
+                  i
+                )
+              ) && 'current'
+            }
+          >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
           <Sessions>
@@ -119,6 +136,9 @@ export default function TodayAvailability(props) {
                 onClick={() => {
                   props.setSelectedSession(session)
                 }}
+                disabled={
+                  dateFns.compareAsc(new Date(), session.timeStart) === 1
+                }
               >
                 {`${session.slots - session.players.length} ${
                   session.slots - session.players.length === 1

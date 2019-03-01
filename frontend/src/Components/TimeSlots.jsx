@@ -95,7 +95,7 @@ export default function TimeSlots(props) {
                   selectedSession={sessions.state.selectedSession}
                   gamer={props.gamer}
                   game={props.game}
-                  goBack={() => sessions.setSelectedSession(null)}
+                  goBack={() => sessions.goBack()}
                 />
               ) : sessions.state.selectedDay ? (
                 <TimeSlotsHours
