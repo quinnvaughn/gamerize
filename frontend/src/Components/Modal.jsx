@@ -72,7 +72,7 @@ export default class SimpleModal extends Component {
   render() {
     const { children } = this.props
     return (
-      <Overlay>
+      <Overlay id="modal">
         <GlobalStyle />
         <Modal ref={node => (this.node = node)}>
           <ModalContent>{children}</ModalContent>

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 import { Subscribe } from 'unstated'
+import dateFns from 'date-fns'
 
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
@@ -75,7 +76,12 @@ const HowManySlots = styled.div`
   margin-bottom: 1rem;
 `
 
-const slotsReducer = (acc, cur) => acc + (cur.slots - cur.players.length)
+// Will have to fix to do only ones still available for today with filtering.
+const slotsReducer = (acc, cur) => {
+  if (dateFns.compareAsc(new Date(), cur.timeStart) === 1) {
+    return acc
+  } else return acc + (cur.slots - cur.players.length)
+}
 
 const slotsLeft = sessions.reduce(slotsReducer, 0)
 

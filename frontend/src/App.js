@@ -2,6 +2,7 @@ import React, { Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import createHistory from 'history/createBrowserHistory'
+import UNSTATED from 'unstated-debug'
 
 //local imports
 import Loading from './Components/Loading'
@@ -50,6 +51,8 @@ const history = createHistory()
 history.listen(_ => {
   window.scrollTo(0, 0)
 })
+
+UNSTATED.logStatechanges = true
 
 class App extends Component {
   render() {
