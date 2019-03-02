@@ -167,20 +167,6 @@ const AddSessionsContainer = styled.div`
 
 const noUnderscores = string => string.replace(/_/g, ' ')
 
-let colors = [
-  'blue',
-  'orange',
-  'green',
-  'gold',
-  'pink',
-  'purple',
-  'navy',
-  'salmon',
-  'springgreen',
-  'teal',
-  'steelblue',
-]
-
 export default function TimeSlotSession(props) {
   useEffect(() => {
     window.scrollTo(0, 0)

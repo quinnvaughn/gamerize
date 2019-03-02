@@ -9,11 +9,11 @@ const TitleContainer = styled.div`
   padding-bottom: 4rem;
 `
 
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  opacity: 0.6;
-`
+// const Img = styled.img`
+//   width: 100%;
+//   height: 100%;
+//   opacity: 0.6;
+// `
 
 export default function Jumbotron(props) {
   return (
