@@ -145,7 +145,7 @@ class SessionsContainer extends Container {
     const selected = []
     const totalPlayers = slots - players.length
     for (let i = players.length; i < slots; i++) {
-      selected.push({ index: i })
+      selected.push(i)
     }
     this.setState(prevState => ({
       addedSession: {
@@ -161,7 +161,7 @@ class SessionsContainer extends Container {
     const { players, slots } = this.state.selectedSession
     const selected = []
     for (let i = players.length; i < slots; i++) {
-      selected.push({ index: i })
+      selected.push(i)
     }
     this.setState(prevState => ({
       addedSession: {
