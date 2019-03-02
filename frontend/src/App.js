@@ -1,12 +1,12 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
-import createHistory from 'history/createBrowserHistory'
 import UNSTATED from 'unstated-debug'
 
 //local imports
 import Loading from './Components/Loading'
 import HomePage from './Pages/HomePage'
+import ScrollToTop from './Components/ScrollToTop'
 const GamesPage = lazy(() => import('./Pages/GamesPage'))
 const SpecificGamePage = lazy(() => import('./Pages/SpecificGamePage'))
 const SpecificSessionPage = lazy(() => import('./Pages/SpecificSessionPage'))
@@ -46,28 +46,27 @@ html {
   }
 `
 
-const history = createHistory()
-
-history.listen(_ => {
-  window.scrollTo(0, 0)
-})
-
-UNSTATED.logStatechanges = true
+//UNSTATED.logStatechanges = true
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter history={history}>
-        <Suspense fallback={<Loading />}>
-          <GlobalStyle />
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/games" component={GamesPage} />
-            <Route path="/games/:game" component={SpecificGamePage} />
-            <Route path="/users/:user/:game" component={SpecificSessionPage} />
-            <Route path="/users/:user" component={UserProfile} />
-          </Switch>
-        </Suspense>
+      <BrowserRouter>
+        <ScrollToTop>
+          <Suspense fallback={<Loading />}>
+            <GlobalStyle />
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/games" component={GamesPage} />
+              <Route path="/games/:game" component={SpecificGamePage} />
+              <Route
+                path="/users/:user/:game"
+                component={SpecificSessionPage}
+              />
+              <Route path="/users/:user" component={UserProfile} />
+            </Switch>
+          </Suspense>
+        </ScrollToTop>
       </BrowserRouter>
     )
   }

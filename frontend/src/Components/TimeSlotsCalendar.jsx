@@ -136,6 +136,10 @@ class Calendar extends Component {
     currentDay: new Date(),
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   renderHeader() {
     const dateFormat = 'MMMM YYYY'
 

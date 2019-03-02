@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Totals from './Totals'
 
@@ -8,6 +8,11 @@ const Container = styled.div`
 `
 
 export default function Total(props) {
+  useEffect(() => {
+    return () => {
+      props.container.clearSessions()
+    }
+  }, {})
   return (
     <Container>
       <div>This is a total.</div>

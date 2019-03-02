@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import { Subscribe } from 'unstated'
 import dateFns from 'date-fns'
 
 // local imports
 import exampleSessions from '../data/sessions'
+import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
   width: 100%;
@@ -126,28 +128,33 @@ export default function TodayAvailability(props) {
           >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
-          <Sessions>
-            {sessions.map(session => (
-              <Session
-                key={session.timeStart}
-                height={session.length}
-                full={session.players.length === session.slots}
-                startTime={dateFns.getMinutes(session.timeStart)}
-                onClick={() => {
-                  props.setSelectedSession(session)
-                }}
-                disabled={
-                  dateFns.compareAsc(new Date(), session.timeStart) === 1
-                }
-              >
-                {`${session.slots - session.players.length} ${
-                  session.slots - session.players.length === 1
-                    ? 'spot'
-                    : 'spots'
-                } left`}
-              </Session>
-            ))}
-          </Sessions>
+          <Subscribe to={[SessionsContainer]}>
+            {container => (
+              <Sessions>
+                {sessions.map(session => (
+                  <Session
+                    key={session.timeStart}
+                    height={session.length}
+                    full={session.players.length === session.slots}
+                    startTime={dateFns.getMinutes(session.timeStart)}
+                    onClick={() => {
+                      container.setSelectedSession(session)
+                      container.setShowModal(true)
+                    }}
+                    disabled={
+                      dateFns.compareAsc(new Date(), session.timeStart) === 1
+                    }
+                  >
+                    {`${session.slots - session.players.length} ${
+                      session.slots - session.players.length === 1
+                        ? 'spot'
+                        : 'spots'
+                    } left`}
+                  </Session>
+                ))}
+              </Sessions>
+            )}
+          </Subscribe>
         </Row>
       )
     }
