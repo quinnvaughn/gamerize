@@ -66,6 +66,7 @@ const Session = styled(Link)`
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
   pointer-events: ${props => (props.full || props.disabled) && 'none'};
