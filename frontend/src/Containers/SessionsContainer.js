@@ -131,7 +131,9 @@ class SessionsContainer extends Container {
             ? selected
             : prevState.addedSession.selected,
         slots:
-          numPlayers > prevState.addedSession.slots
+          numPlayers === 0
+            ? 0
+            : numPlayers > prevState.addedSession.slots
             ? numPlayers
             : prevState.addedSession.slots,
       },
