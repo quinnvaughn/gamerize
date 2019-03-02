@@ -62,7 +62,6 @@ const SystemChoices = styled.div`
   top: 4rem;
   width: 100%;
   left: 0;
-  padding: 1rem;
   border: 1px solid #dddfe2;
   border-radius: 4px;
   z-index: 1;
@@ -71,6 +70,12 @@ const SystemChoices = styled.div`
 
 const SystemChoice = styled.div`
   font-size: 1.6rem;
+  width: 100%;
+  padding: 1rem;
+  :hover {
+    background: #dddfe2;
+    cursor: pointer;
+  }
 `
 
 export default function SystemPicker(props) {

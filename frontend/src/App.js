@@ -44,6 +44,11 @@ html {
   p {
     margin: 0;
   }
+  button {
+    :focus {
+      outline: 0;
+    }
+  }
 `
 
 UNSTATED.logStatechanges = true
