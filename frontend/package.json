@@ -1,19 +1,24 @@
 {
-  "name": "gamerize",
+  "name": "my-razzle-app",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom",
+    "start:prod": "NODE_ENV=production node build/server.js"
+  },
   "dependencies": {
     "date-fns": "^1.30.1",
-    "formik": "^1.5.0",
-    "npm": "^6.7.0",
-    "react": "^16.8.1",
-    "react-dom": "^16.8.1",
+    "express": "4.16.4",
+    "formik": "^1.5.1",
+    "history": "^4.7.2",
+    "razzle": "2.4.1",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
     "react-icons": "^3.4.0",
     "react-loading-components": "^1.1.12",
-    "react-on-screen": "^2.1.1",
-    "react-provide-scroll-position": "^1.0.2",
-    "react-router-dom": "^4.4.0-beta.6",
-    "react-scripts": "2.1.5",
+    "react-router-dom": "4.3.1",
     "react-scroll-into-view": "^1.5.0",
     "react-star-ratings": "^2.3.0",
     "styled-components": "^4.1.3",
@@ -21,20 +26,5 @@
     "unstated": "^2.1.1",
     "unstated-debug": "^0.3.2",
     "yup": "^0.26.10"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  }
 }
