@@ -1,11 +1,10 @@
-import React, { Component, lazy, Suspense } from 'react'
+import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import { Provider } from 'unstated'
 import UNSTATED from 'unstated-debug'
 
 //local imports
-import Loading from './Components/Loading'
 import HomePage from './Pages/HomePage'
 import ScrollToTop from './Components/ScrollToTop'
 import GamesPage from './Pages/GamesPage'

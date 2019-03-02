@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment /*useEffect, useState */ } from 'react'
 import { createGlobalStyle } from 'styled-components'
 
 import NavBar from './NavBar'
-import SessionLinks from './SessionLinks'
+//import SessionLinks from './SessionLinks'
 
 const GlobalStyle = createGlobalStyle`
   .navbar {

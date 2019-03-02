@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Totals from './Totals'
 
 const Container = styled.div`
   padding-bottom: 1.6rem;

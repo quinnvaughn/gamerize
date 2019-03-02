@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Link } from 'react-router-dom'
 import _ from 'underscore'
-import dateFns from 'date-fns'
 import StarRatings from 'react-star-ratings'
 
 //local imports

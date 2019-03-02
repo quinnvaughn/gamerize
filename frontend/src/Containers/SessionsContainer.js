@@ -1,6 +1,5 @@
 import { Container } from 'unstated'
 import dateFns from 'date-fns'
-import _ from 'underscore'
 
 class SessionsContainer extends Container {
   state = {

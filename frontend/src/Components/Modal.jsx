@@ -52,7 +52,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default class SimpleModal extends Component {
-  componentWillMount() {
+  componentDidMount() {
     document.addEventListener('mousedown', this.handleClick, false)
   }
   componentWillUnmount() {
