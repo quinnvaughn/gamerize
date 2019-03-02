@@ -31,8 +31,6 @@ const Header = styled.div`
   font-weight: 700;
   color: black;
   justify-content: space-between;
-  position: -webkit-sticky;
-  position: sticky;
   top: 0;
   left: 0;
   z-index: 9999;
@@ -169,7 +167,8 @@ const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function TimeSlotSession(props) {
   useEffect(() => {
-    window.scrollTo(0, 0)
+    const element = document.getElementById('modal')
+    element.scrollTop = 0
   }, {})
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
@@ -267,7 +266,7 @@ export default function TimeSlotSession(props) {
   }
 
   return (
-    <Container>
+    <Container id="container">
       {renderHeader()}
       {renderPrimary()}
     </Container>

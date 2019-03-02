@@ -40,6 +40,7 @@ const Modal = styled.div`
   box-shadow: 0, 0, 1rem, rgba(0, 0, 0, 0.2);
   max-width: 108rem;
   max-height: 100%;
+  overflow-y: initial !important;
 `
 
 const ModalContent = styled.div``
