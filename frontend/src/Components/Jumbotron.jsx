@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import HomeTitle from './HomeTitle'
-import GamingJumbotron from '../gaming_jumbotron.jpg'
 
 const TitleContainer = styled.div`
   width: 100%;

@@ -18,21 +18,6 @@ class SessionsContainer extends Container {
     selectedDay: null,
     showModal: false,
   }
-
-  /* 
-    session : {
-      slots: 0,
-      timeStart: Date,
-      length: 20,
-      players: 0,
-    }
-
-    selected: {
-      index: 0,
-      color: #e
-    }
-  */
-
   setSelectedSession = session => {
     session
       ? this.setState(prevState => ({

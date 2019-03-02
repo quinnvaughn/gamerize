@@ -20,9 +20,9 @@ const Container = styled.div`
   width: 100%;
 `
 
-const Selected = styled.span`
-  color: #e62739;
+const Check = styled(FaCheck)`
   font-size: 1.6rem;
+  color: #e62739;
 `
 
 export default function Slot(props) {
@@ -35,7 +35,7 @@ export default function Slot(props) {
           ).length > 0
         return (
           <Container selected={selected} taken={props.taken}>
-            {selected ? <Selected>Selected</Selected> : props.children}
+            {selected ? <Check /> : props.children}
           </Container>
         )
       }}
