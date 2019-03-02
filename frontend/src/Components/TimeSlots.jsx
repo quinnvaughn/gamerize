@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import { FaArrowRight } from 'react-icons/fa'
 import { Subscribe } from 'unstated'
@@ -61,6 +61,9 @@ const NumberOfSessions = styled.span`
 `
 
 export default function TimeSlots(props) {
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, {})
   return (
     <Container>
       <TimeSlotLabel>

@@ -75,24 +75,29 @@ export default function SlotOptionsDropdown(props) {
           {session => (
             <Fragment>
               <Number>
-                {props.slots ? session.state.slots : session.state.players}
+                {props.slots
+                  ? session.state.addedSession.slots
+                  : session.state.addedSession.players}
               </Number>
               {open ? <ChevronUp /> : <ChevronDown />}
               {open && (
                 <Dropdown>
-                  {_.times(session.state.availableSlots + 1, index => {
-                    return (
-                      <DropdownItem
-                        onClick={() => {
-                          return props.slots
-                            ? session.setNumberOfSlots(index)
-                            : session.setNumberOfPlayers(index)
-                        }}
-                      >
-                        {index}
-                      </DropdownItem>
-                    )
-                  })}
+                  {_.times(
+                    session.state.addedSession.availableSlots + 1,
+                    index => {
+                      return (
+                        <DropdownItem
+                          onClick={() => {
+                            return props.slots
+                              ? session.setNumberOfSlots(index)
+                              : session.setNumberOfPlayers(index)
+                          }}
+                        >
+                          {index}
+                        </DropdownItem>
+                      )
+                    }
+                  )}
                 </Dropdown>
               )}
             </Fragment>

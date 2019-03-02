@@ -15,7 +15,9 @@ export default function Totals(props) {
     <Container>
       <Subscribe to={[SessionsContainer]}>
         {sessions =>
-          sessions.state.selected.map(session => <Total session={session} />)
+          sessions.state.sessions.map(session => (
+            <Total session={session} container={sessions} />
+          ))
         }
       </Subscribe>
     </Container>

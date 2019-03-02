@@ -14,16 +14,14 @@ const Container = styled.div`
   justify-content: center;
   pointer-events: ${props => props.taken && 'none'};
   color: ${props => props.taken && '#dddfe2'};
-  cursor: ${props => !props.taken && 'pointer'};
-  background: ${props =>
-    props.selected ? (props.color ? props.color : '#e62739') : '#fff'};
+  background: #fff;
   font-size: 1.6rem;
   height: 4rem;
   width: 100%;
 `
 
-const Check = styled(FaCheck)`
-  color: #fff;
+const Selected = styled.span`
+  color: #e62739;
   font-size: 1.6rem;
 `
 
@@ -31,15 +29,13 @@ export default function Slot(props) {
   return (
     <Subscribe to={[SessionsContainer]}>
       {sessions => {
-        const selected = sessions.state.selected.includes(props.value)
+        const selected =
+          sessions.state.addedSession.selected.filter(
+            selection => selection === props.value
+          ).length > 0
         return (
-          <Container
-            selected={selected}
-            taken={props.taken}
-            onClick={() => sessions.toggleSelected(props.value)}
-            color={props.color}
-          >
-            {selected ? <Check /> : props.children}
+          <Container selected={selected} taken={props.taken}>
+            {selected ? <Selected>Selected</Selected> : props.children}
           </Container>
         )
       }}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
@@ -61,11 +61,12 @@ const Center = styled.div`
 const Title = styled.span`
   font-size: 3rem;
   cursor: default;
+  font-weight: 700;
 `
 
 const Date = styled.span`
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 600;
   cursor: default;
 `
 
@@ -147,9 +148,43 @@ const PickAllSlotsForMe = styled.button`
   }
 `
 
+const AddSessions = styled.button`
+  background: #e62739;
+  padding: 1rem 1.4rem;
+  color: #fff;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #e62739;
+  border-radius: 4px;
+`
+
+const AddSessionsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding-top: 1rem;
+  justify-content: flex-end;
+`
+
 const noUnderscores = string => string.replace(/_/g, ' ')
 
+let colors = [
+  'blue',
+  'orange',
+  'green',
+  'gold',
+  'pink',
+  'purple',
+  'navy',
+  'salmon',
+  'springgreen',
+  'teal',
+  'steelblue',
+]
+
 export default function TimeSlotSession(props) {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, {})
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
     const endTime = 'h:mm:ss a'
@@ -181,40 +216,30 @@ export default function TimeSlotSession(props) {
   }
 
   const renderSlots = session => {
-    let colors = [
-      'blue',
-      'orange',
-      'green',
-      'gold',
-      'pink',
-      'purple',
-      'navy',
-      'salmon',
-      'springgreen',
-      'teal',
-      'steelblue',
-    ]
     let slots = []
-    let counter = session.state.players + 1
-    for (let i = 0; i < props.selectedSession.slots; i++) {
-      counter--
-      const currentUser = props.selectedSession.players[i]
+    let counter = 0
+    let end = session.state.selectedSession.slots
+    while (counter < end) {
+      const currentUser = session.state.selectedSession.players[counter]
       currentUser
         ? slots.push(
-            <Slot taken value={currentUser}>
+            <Slot taken value={counter}>
               {currentUser}
             </Slot>
           )
-        : slots.push(
-            <Slot
-              value={`empty${i}-${props.selectedSession.timeStart}`}
-              color={counter > 1 && colors[i]}
-            >
-              Empty
-            </Slot>
-          )
+        : slots.push(<Slot value={counter}>Empty</Slot>)
+      counter++
     }
-    return <Slots>{slots}</Slots>
+    return (
+      <Slots>
+        {slots}
+        <AddSessionsContainer>
+          <AddSessions onClick={() => session.addSessions()}>
+            Add Session
+          </AddSessions>
+        </AddSessionsContainer>
+      </Slots>
+    )
   }
 
   const renderSlotOptions = () => {
