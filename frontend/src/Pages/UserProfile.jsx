@@ -136,7 +136,6 @@ const FavoriteGame = styled(Link)`
   text-decoration: none;
   color: black;
   font-size: 1.8rem;
-  margin-top: 0.5rem;
   font-weight: 700;
   :hover {
     color: #e62739;
@@ -145,6 +144,7 @@ const FavoriteGame = styled(Link)`
 
 const FavoriteGameTitle = styled.span`
   font-size: 1.6rem;
+  margin-top: 0.5rem;
 `
 
 const FavoriteGamesTitle = styled.div`

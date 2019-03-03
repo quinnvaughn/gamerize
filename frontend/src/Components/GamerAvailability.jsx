@@ -83,7 +83,6 @@ const Hours = styled.div`
 const AvailabilityContainer = styled.div`
   width: 100%;
   padding: 2.4rem 0 4rem;
-  border-bottom: 1px solid #dddfe2;
   position: relative;
 `
 

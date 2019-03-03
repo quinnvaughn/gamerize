@@ -19,6 +19,7 @@ const Avatar = styled.img`
 `
 
 const Name = styled.h4`
+  margin-top: 0.5rem;
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.3rem;

@@ -55,21 +55,6 @@ const Top = styled.div`
   border-bottom: 0.1rem solid #dddfe2;
 `
 
-const Book = styled.button`
-  margin-top: 1.6rem;
-  font-weight: 800;
-  cursor: pointer;
-  flex: 1;
-  color: white;
-  background: #e62739;
-  border-radius: 4px;
-  line-height: 2.4rem;
-  padding: 1rem 2.2rem;
-  outline: 0;
-  border: 0;
-  font-size: 1.6rem;
-`
-
 const HowManySlots = styled.div`
   font-size: 1.8rem;
   font-weight: 800;
@@ -97,7 +82,7 @@ export default function SelectionOptions({
     <Container>
       <Top>
         <Price>
-          {`$${price}`} <Per>per session</Per>
+          {`$${price}`} <Per>per slot</Per>
         </Price>
         <RatingContainer>
           <StarRatings
@@ -117,11 +102,10 @@ export default function SelectionOptions({
             <HowManySlots>{`${slotsLeft} slots left today`}</HowManySlots>
             <SystemPicker systems={systems} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
-            {session.state.sessions.length >= 1 && <Totals />}
+            <Totals price={price} />
           </Fragment>
         )}
       </Subscribe>
-      <Book>Book</Book>
     </Container>
   )
 }
