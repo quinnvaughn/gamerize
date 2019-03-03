@@ -14,7 +14,7 @@ export default function Total(props) {
   }, {})
   return (
     <Container>
-      <div>This is a total.</div>
+      <div>${props.session.slots * props.price}</div>
     </Container>
   )
 }

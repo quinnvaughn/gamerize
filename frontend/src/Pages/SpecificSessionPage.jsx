@@ -43,7 +43,7 @@ const Gamer = styled.h2`
   overflow-wrap: break-word;
 `
 
-const GamerContainer = styled(Link)`
+const GamerLink = styled(Link)`
   display: flex;
   flex-direction: column;
   flex: 4;
@@ -73,9 +73,9 @@ const TitleContainer = styled.div`
 `
 
 const Game = styled.h3`
-  display: inline;
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 2.2rem;
 `
 
 const Occupations = styled.div`
@@ -106,14 +106,9 @@ const RequirementsAndDiscountsContainer = styled.div`
   border-bottom: 1px solid #dddfe2;
 `
 
-const Requirements = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`
-
 const Requirement = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
   font-weight: 400;
 `
 
@@ -124,14 +119,9 @@ const InnerContainer = styled.div`
   }
 `
 
-const Discounts = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`
-
 const Discount = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
   font-weight: 400;
 `
 
@@ -144,6 +134,7 @@ const LeftSide = styled.div`
 const Systems = styled.span`
   font-size: 1.4rem;
   font-weight: 400;
+  line-height: 2.2rem;
 `
 
 const BannerContainer = styled.div`
@@ -155,22 +146,15 @@ const Banner = styled.img`
   max-height: 40rem;
 `
 
-const TypeOfGameAndSlots = styled.div`
-  display: flex;
-`
-
 const TypeOfGame = styled.span`
-  flex: 1;
-  margin-top: 1rem;
+  line-height: 2.2rem;
   font-size: 1.6rem;
-  font-weight: 600;
+  font-weight: 400;
 `
 
 const Slots = styled.span`
-  flex: 3;
-  margin-top: 1rem;
   font-size: 1.6rem;
-  font-weight: 600;
+  font-weight: 400;
 `
 
 const SnapTo = styled.div`
@@ -187,8 +171,26 @@ const MiddleContainer = styled.div`
   margin-bottom: 2.4rem;
   border-bottom: 1px solid #dddfe2;
   display: flex;
+`
+
+const FlexHalf = styled.div`
+  flex: 1;
+`
+
+const TypeOfContent = styled.div`
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-top: 1.6rem;
+  line-height: 2.2rem;
+  :first-child {
+    margin-top: 0;
+  }
+`
+
+const GamerContainer = styled.div`
+  display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  align-items: center;
 `
 
 const noUnderscores = string => string.replace(/_/g, ' ')
@@ -224,41 +226,49 @@ export default function SpecificSessionPage(props) {
               <TitleContainer>
                 <Title>{gamer.title}</Title>
               </TitleContainer>
-              <GamerContainer to={`/users/${gamer.username}`}>
-                <Avatar src={DefaultAvatar} alt="Avatar" />
-                <Gamer>{`${gamer.name}`}</Gamer>
+              <GamerContainer>
+                <GamerLink to={`/users/${gamer.username}`}>
+                  <Avatar src={DefaultAvatar} alt="Avatar" />
+                  <Gamer>{`${gamer.name}`}</Gamer>
+                </GamerLink>
+                <Occupations>
+                  {gamer.occupation.map(occupation => (
+                    <Occupation key={occupation}>{occupation}</Occupation>
+                  ))}
+                </Occupations>
               </GamerContainer>
             </TopContainer>
             <MiddleContainer>
-              <Game>
-                {`${noUnderscores(game)} - `}
+              <FlexHalf>
+                <TypeOfContent>Game</TypeOfContent>
+                <Game>{`${noUnderscores(game)}`}</Game>
+                <TypeOfContent>{`${
+                  gamer.systems.length === 1 ? 'System' : 'Systems'
+                }`}</TypeOfContent>
                 {gamer.systems.map((system, index) =>
                   formatCommas(gamer.systems, system, index)
                 )}
-              </Game>
-              <TypeOfGameAndSlots>
+              </FlexHalf>
+              <FlexHalf>
+                <TypeOfContent>Type Of Game</TypeOfContent>
                 <TypeOfGame>
                   {gamer.typeOfGame === 'CUSTOM'
-                    ? `${capitalize(gamer.typeOfGame)} game`
+                    ? `${capitalize(gamer.typeOfGame)}`
                     : capitalize(gamer.typeOfGame)}
                 </TypeOfGame>
-                <Slots>{`${gamer.slots} slots per session`}</Slots>
-              </TypeOfGameAndSlots>
-              <Occupations>
-                {gamer.occupation.map(occupation => (
-                  <Occupation key={occupation}>{occupation}</Occupation>
-                ))}
-              </Occupations>
+                <TypeOfContent>Slots Per Session</TypeOfContent>
+                <Slots>{`${gamer.slots}`}</Slots>
+              </FlexHalf>
             </MiddleContainer>
             <RequirementsAndDiscountsContainer>
               <InnerContainer>
-                <Requirements>Requirements:</Requirements>
+                <TypeOfContent>Requirements</TypeOfContent>
                 {gamer.requirements.map(requirement => (
                   <Requirement key={requirement}>{requirement}</Requirement>
                 ))}
               </InnerContainer>
               <InnerContainer>
-                <Discounts>Discounts:</Discounts>
+                <TypeOfContent>Discounts</TypeOfContent>
                 {gamer.discounts.map(discount => (
                   <Discount key={discount}>{discount}</Discount>
                 ))}
