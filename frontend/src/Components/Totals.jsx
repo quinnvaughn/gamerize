@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Subscribe } from 'unstated'
 
@@ -67,6 +67,32 @@ const Book = styled.button`
   font-size: 1.6rem;
 `
 
+const NotCharged = styled.div`
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+`
+
+const NotChargedYet = styled.span`
+  font-size: 1.2rem;
+  font-weight: 600;
+  overflow-wrap: break-word;
+`
+
+const HowMuchYouPay = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+`
+
+const YouPay = styled.span`
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  overflow-wrap: break-word;
+`
+
 const DiscountsTitle = styled.span``
 
 const DiscountPercentage = styled.span``
@@ -93,8 +119,8 @@ export default function Totals(props) {
           const discount = 0
 
           const totalMinusDiscounts = total - discount
-
-          return container.state.sessions.length >= 1 ? (
+          const showTotals = container.state.sessions.length >= 1
+          const content = showTotals ? (
             <TotalsContainer>
               <NumberSlots>
                 <Items>
@@ -115,9 +141,25 @@ export default function Totals(props) {
               </Total>
             </TotalsContainer>
           ) : null
+          return (
+            <Fragment>
+              {content}
+              <Book>Book</Book>
+              <NotCharged>
+                <NotChargedYet>You will not be charged yet</NotChargedYet>
+              </NotCharged>
+              {showTotals && (
+                <HowMuchYouPay>
+                  <YouPay>
+                    This is not necessarily how much you will pay, depending on
+                    how many players you have
+                  </YouPay>
+                </HowMuchYouPay>
+              )}
+            </Fragment>
+          )
         }}
       </Subscribe>
-      <Book>Book</Book>
     </Container>
   )
 }
