@@ -12,6 +12,8 @@ const PageContainer = styled.div`
   max-width: 100%;
   height: 100%;
   box-sizing: border-box;
+  overflow-x: auto !important;
+  white-space: normal !important;
 `
 
 const TitleOfGame = styled.h1`
@@ -21,12 +23,23 @@ const TitleOfGame = styled.h1`
 `
 
 const Content = styled.div`
-  margin: 0 auto !important;
-  padding: 2rem;
-
-  padding-left: 8rem;
-  padding-right: 8rem;
+  padding-top: 2rem;
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  max-width: none;
+  overflow-anchor: none;
   padding-bottom: 6rem;
+  @media (min-width: 1128px) {
+    margin: 0 auto;
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+`
+
+const InnerContent = styled.div`
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
+  overflow: hidden;
 `
 
 const Tags = styled.div`
@@ -59,8 +72,6 @@ const Sessions = styled.div`
 
 const noUnderscores = string => string.replace(/_/g, ' ')
 
-const allGamers = _.groupBy(gamers, 'gamerType')
-
 export default function SpecificGamePage(props) {
   return (
     <PageContainer>
@@ -75,16 +86,9 @@ export default function SpecificGamePage(props) {
           {props.location.state &&
             props.location.state.tags.map(tag => <Tag>{tag}</Tag>)}
         </Tags>
-        {Object.keys(allGamers).map(type => {
-          let arrayOfGamers = allGamers[type]
-          return (
-            <TopSessionsRow
-              gamers={arrayOfGamers}
-              game={props.match.params.game}
-              title={type}
-            />
-          )
-        })}
+        <InnerContent>
+          <TopSessionsRow gamers={gamers} game={props.match.params.game} />
+        </InnerContent>
       </Content>
     </PageContainer>
   )
