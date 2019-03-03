@@ -94,6 +94,9 @@ const Occupation = styled.div`
   display: inline-block;
   border-radius: 4px;
   margin-right: 0.8rem;
+  :last-child {
+    margin-right: 0;
+  }
   :hover {
     cursor: default;
   }
