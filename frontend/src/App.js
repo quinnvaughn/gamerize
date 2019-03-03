@@ -17,13 +17,15 @@ html {
   font-size: 62.5%;
 }
   body {
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600,700, 800');
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700, 800');
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x:hidden;
     position: relative;
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
+    max-width: 100%;
   }
   button {
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;

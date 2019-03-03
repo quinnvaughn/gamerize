@@ -21,6 +21,7 @@ const Container = styled.div`
 const AllTheGamers = styled.div`
   margin-top: 2rem;
   display: flex;
+  flex-wrap: wrap;
 `
 
 const ShowAll = styled(Link)`
@@ -34,37 +35,25 @@ const ShowAll = styled(Link)`
   }
 `
 
-const mapSix = (gamers, game) => {
-  return gamers.map((gamer, index) => {
-    return (
-      index <= 5 && (
-        <Session
-          width="16.6666666667"
-          name={gamer.name}
-          game={game}
-          username={gamer.username}
-          gamerType={gamer.gamerType}
-          systems={gamer.systems}
-          price={gamer.price}
-          reviews={gamer.reviews}
-          numReviews={gamer.numReviews}
-          key={gamer.name}
-        />
-      )
-    )
-  })
-}
-
 export default function TopSessionsRow(props) {
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      <AllTheGamers>{mapSix(props.gamers, props.game)}</AllTheGamers>
-      {props.gamers.length > 6 && (
-        <ShowAll
-          to={`/gamers/${props.game}/${props.title}`}
-        >{`Show All Gamers (${props.gamers.length})`}</ShowAll>
-      )}
+      <AllTheGamers>
+        {props.gamers.map(gamer => (
+          <Session
+            name={gamer.name}
+            game={props.game}
+            username={gamer.username}
+            systems={gamer.systems}
+            price={gamer.price}
+            reviews={gamer.reviews}
+            numReviews={gamer.numReviews}
+            key={gamer.name}
+            title={gamer.title}
+          />
+        ))}
+      </AllTheGamers>
     </Container>
   )
 }
