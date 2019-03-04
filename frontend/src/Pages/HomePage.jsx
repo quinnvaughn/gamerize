@@ -17,9 +17,23 @@ const PageContainer = styled.div`
 `
 
 const Content = styled.div`
-  margin: 0 auto !important;
-  padding: 2rem;
-  max-width: 108rem;
+  padding-top: 2rem;
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  max-width: none;
+  overflow-anchor: none;
+  padding-bottom: 6rem;
+  @media (min-width: 1128px) {
+    margin: 0 auto;
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+`
+
+const InnerContent = styled.div`
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
+  overflow: hidden;
 `
 
 export default function HomePage(props) {
@@ -28,8 +42,10 @@ export default function HomePage(props) {
       <NavBar />
       <Jumbotron />
       <Content>
-        <GamerRow title="Gamers" />
-        <GamesRow title="Most Popular Games" />
+        <InnerContent>
+          <GamerRow title="Gamers" />
+          <GamesRow title="Most Popular Games" />
+        </InnerContent>
       </Content>
       <Footer />
     </PageContainer>
