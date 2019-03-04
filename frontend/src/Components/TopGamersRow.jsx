@@ -9,6 +9,7 @@ const RowTitle = styled.h3`
   width: 100%;
   display: block;
   cursor: default;
+  padding-left: 0.8rem;
 `
 
 const Container = styled.div`
@@ -22,10 +23,12 @@ const Container = styled.div`
 const AllTheGamers = styled.div`
   margin-top: 2rem;
   display: flex;
+  flex-wrap: wrap;
 `
 
 const ShowAll = styled(Link)`
   margin-top: 2rem;
+  padding-left: 0.8rem;
   color: #e62739;
   font-size: 1.6rem;
   text-decoration: none;

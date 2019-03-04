@@ -23,11 +23,17 @@ const PageContainer = styled.div`
 `
 
 const Content = styled.div`
-  max-width: 108rem;
-  margin: 0 auto;
-  padding: 1rem 2.4rem 0;
+  padding-top: 2rem;
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  max-width: none;
+  padding-bottom: 6rem;
   display: flex;
-  position: relative;
+  @media (min-width: 1128px) {
+    margin: 0 auto;
+    max-width: 108rem;
+    display: flex;
+  }
 `
 
 const TopContainer = styled.div`

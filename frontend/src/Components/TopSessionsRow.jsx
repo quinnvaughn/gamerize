@@ -24,17 +24,6 @@ const AllTheGamers = styled.div`
   flex-wrap: wrap;
 `
 
-const ShowAll = styled(Link)`
-  margin-top: 2rem;
-  font-size: 1.6rem;
-  color: #e62739;
-  text-decoration: none;
-  :hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-`
-
 export default function TopSessionsRow(props) {
   return (
     <Container>

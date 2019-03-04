@@ -25,6 +25,9 @@ const Container = styled.div`
   @media (max-width: 1509px) and (min-width: 1240px) {
     width: 25% !important;
   }
+  @media (min-width: 1780px) {
+    width: 16.6667% !important;
+  }
 `
 
 const AvatarContainer = styled.div`
