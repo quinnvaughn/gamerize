@@ -9,7 +9,7 @@ import SearchBar from './SearchBar'
 import gql from 'graphql-tag'
 
 const Container = styled.nav`
-  height: 6rem;
+  height: 8rem;
   border-bottom: 1px solid #dddfe2;
   width: 100vw;
   position: sticky;
@@ -20,6 +20,7 @@ const Container = styled.nav`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+  padding-left: 8rem;
 `
 
 const Links = styled.div`
@@ -48,8 +49,6 @@ const StyledLink = styled(Link)`
     border-bottom: 2px solid #e62739;
   }
 `
-
-const Content = styled.div``
 
 const Empty = styled.div``
 
@@ -90,7 +89,6 @@ const GET_ME = gql`
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
   const { data } = useQuery(GET_ME, { skip: !token })
-  console.log(data === {})
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
