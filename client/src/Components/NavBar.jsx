@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
+import { useQuery } from 'react-apollo-hooks'
+import _ from 'lodash'
 
 //local imports
 import SearchBar from './SearchBar'
+import gql from 'graphql-tag'
 
 const Container = styled.nav`
   height: 6rem;
@@ -46,9 +49,11 @@ const StyledLink = styled(Link)`
   }
 `
 
+const Content = styled.div``
+
 const Empty = styled.div``
 
-const navigationlinks = [
+const notSignedInLinks = [
   {
     text: 'Become a Gamer',
     path: '/become-a-gamer',
@@ -63,16 +68,53 @@ const navigationlinks = [
   },
 ]
 
+const signedInLinks = [
+  {
+    text: 'Become a Gamer',
+    path: '/become-a-gamer',
+  },
+  {
+    text: 'Sessions',
+    path: '/sessions',
+  },
+]
+
+const GET_ME = gql`
+  {
+    me {
+      name
+      username
+    }
+  }
+`
 function NavBar(props) {
+  const token = localStorage.getItem('TOKEN')
+  const { data } = useQuery(GET_ME, { skip: !token })
+  console.log(data === {})
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
       <Links>
-        {navigationlinks.map(link => (
-          <StyledLink key={link.text} to={link.path}>
-            {link.text}
-          </StyledLink>
-        ))}
+        {_.isEmpty(data)
+          ? null
+          : !_.get(data, ['me'])
+          ? notSignedInLinks.map(link => (
+              <StyledLink key={link.text} to={link.path}>
+                {link.text}
+              </StyledLink>
+            ))
+          : signedInLinks.map(link => (
+              <StyledLink
+                key={link.text}
+                to={
+                  link.path === '/sessions'
+                    ? `/sessions/${data.me.username}`
+                    : link.path
+                }
+              >
+                {link.text}
+              </StyledLink>
+            ))}
       </Links>
     </Container>
   )

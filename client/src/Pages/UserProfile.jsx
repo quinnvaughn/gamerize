@@ -1,18 +1,17 @@
 import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Link } from 'react-router-dom'
-import _ from 'underscore'
+import _ from 'lodash'
 import StarRatings from 'react-star-ratings'
 
 //local imports
 import NavBar from '../Components/NavBar'
 import DefaultAvatar from '../default-avatar.png'
 import DefaultGame from '../default-game.gif'
-import Session from '../Components/Session'
+import SmallSession from '../Components/SmallSession'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
-import Footer from '../Components/Footer'
 
 //data
 import specificSessions from '../data/specificusersessions'
@@ -217,11 +216,16 @@ const Banner = styled.img`
   max-height: 40rem;
 `
 
+const NegativeMargins = styled.div`
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
+`
+
 const noSpaces = string => string.replace(/ /g, '_')
 
 export default function UserProfile(props) {
   //will be done with Prisma with backend.
-  const user = _.findWhere(gamers, {
+  const user = _.find(gamers, {
     username: noSpaces(props.match.params.user),
   })
   return (
@@ -266,7 +270,7 @@ export default function UserProfile(props) {
           <FavoriteGames>
             <FavoriteGamesTitle>Favorite Games</FavoriteGamesTitle>
             <FavoriteGameContainer>
-              {user.favoriteGames.map(game => (
+              {_.map(user.favoriteGames, game => (
                 <FavoriteGame to={`/games/${noSpaces(game)}`}>
                   <GamePicture src={DefaultGame} alt={game} />
                   <FavoriteGameTitle>{game}</FavoriteGameTitle>
@@ -276,20 +280,22 @@ export default function UserProfile(props) {
           </FavoriteGames>
           <Sessions>
             <SessionsTitle>{`Gaming Sessions`}</SessionsTitle>
-            <SessionsMapped>
-              {specificSessions.map(session => (
-                <Session
-                  width="33"
-                  username={user.username}
-                  game={session.game}
-                  name={session.name}
-                  systems={session.systems}
-                  price={session.price}
-                  reviews={session.reviews}
-                  numReviews={session.numReviews}
-                />
-              ))}
-            </SessionsMapped>
+            <NegativeMargins>
+              <SessionsMapped>
+                {_.map(specificSessions, session => (
+                  <SmallSession
+                    key={session.game}
+                    username={user.username}
+                    game={session.game}
+                    name={session.name}
+                    systems={session.systems}
+                    price={session.price}
+                    reviews={session.reviews}
+                    numReviews={session.numReviews}
+                  />
+                ))}
+              </SessionsMapped>
+            </NegativeMargins>
           </Sessions>
           <GamerAvailability
             day={new Date()}
@@ -303,7 +309,6 @@ export default function UserProfile(props) {
           />
         </RightSide>
       </Content>
-      <Footer />
     </PageContainer>
   )
 }

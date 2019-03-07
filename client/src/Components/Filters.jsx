@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 //local imports
-import GamerTypeFilter from './GamerTypeFilter'
+//import GamerTypeFilter from './GamerTypeFilter'
 
 const Container = styled.div`
   padding: 1rem 8rem;
@@ -21,7 +21,7 @@ const Container = styled.div`
 export default function Filters(props) {
   return (
     <Container>
-      <GamerTypeFilter />
+      <div>Hello</div>
     </Container>
   )
 }

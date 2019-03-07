@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import _ from 'underscore'
 
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'

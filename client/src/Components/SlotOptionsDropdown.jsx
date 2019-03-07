@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { Subscribe } from 'unstated'
-import _ from 'underscore'
+import _ from 'lodash'
 
 const Container = styled.div`
   width: 100%;

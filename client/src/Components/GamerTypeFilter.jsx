@@ -57,57 +57,57 @@ const typings = [
   },
 ]
 
-export default function GamerTypeFilter(props) {
-  const [show, setShow] = useState(false)
-  return (
-    <Container>
-      <ModalButton show={show} onClick={() => setShow(!show)}>
-        Gamer Type
-      </ModalButton>
-      {show && (
-        <Modal>
-          <Formik
-            initialValues={{ checkboxGroup: [] }}
-            onSubmit={(values, actions) => {
-              setTimeout(() => {
-                console.log(JSON.stringify(values, null, 2))
-                actions.setSubmitting(false)
-              })
-            }}
-          >
-            {({
-              handleSubmit,
-              setFieldValue,
-              setFieldTouched,
-              values,
-              errors,
-              touched,
-              isSubmitting,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <CheckboxGroup
-                  id="checkboxGroup"
-                  value={values.checkboxGroup}
-                  onChange={setFieldValue}
-                  onBlur={setFieldTouched}
-                >
-                  {typings.map(type => (
-                    <Field
-                      component={Checkbox}
-                      name="checkboxGroup"
-                      id={type.id}
-                      label={type.label}
-                    />
-                  ))}
-                </CheckboxGroup>
-              </form>
-            )}
-          </Formik>
-          <button type="submit" onClick={() => setShow(false)}>
-            Apply
-          </button>
-        </Modal>
-      )}
-    </Container>
-  )
-}
+// export default function GamerTypeFilter(props) {
+//   const [show, setShow] = useState(false)
+//   return (
+//     <Container>
+//       <ModalButton show={show} onClick={() => setShow(!show)}>
+//         Gamer Type
+//       </ModalButton>
+//       {show && (
+//         <Modal>
+//           <Formik
+//             initialValues={{ checkboxGroup: [] }}
+//             onSubmit={(values, actions) => {
+//               setTimeout(() => {
+//                 console.log(JSON.stringify(values, null, 2))
+//                 actions.setSubmitting(false)
+//               })
+//             }}
+//           >
+//             {({
+//               handleSubmit,
+//               setFieldValue,
+//               setFieldTouched,
+//               values,
+//               errors,
+//               touched,
+//               isSubmitting,
+//             }) => (
+//               <form onSubmit={handleSubmit}>
+//                 <CheckboxGroup
+//                   id="checkboxGroup"
+//                   value={values.checkboxGroup}
+//                   onChange={setFieldValue}
+//                   onBlur={setFieldTouched}
+//                 >
+//                   {typings.map(type => (
+//                     <Field
+//                       component={Checkbox}
+//                       name="checkboxGroup"
+//                       id={type.id}
+//                       label={type.label}
+//                     />
+//                   ))}
+//                 </CheckboxGroup>
+//               </form>
+//             )}
+//           </Formik>
+//           <button type="submit" onClick={() => setShow(false)}>
+//             Apply
+//           </button>
+//         </Modal>
+//       )}
+//     </Container>
+//   )
+// }
