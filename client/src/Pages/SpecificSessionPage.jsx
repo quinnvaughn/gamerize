@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import _ from 'underscore'
+import _ from 'lodash'
 
 import DefaultBanner from '../default-banner.png'
 import DefaultAvatar from '../default-avatar.png'
@@ -217,7 +217,7 @@ const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 export default function SpecificSessionPage(props) {
   const { user, game } = props.match.params
   // won't need to do when getting data from db.
-  const gamer = _.findWhere(gamers, { username: user })
+  const gamer = _.find(gamers, { username: user })
   return (
     <PageContainer>
       <NavBarWithScroll

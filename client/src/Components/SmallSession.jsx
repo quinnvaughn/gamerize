@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import StarRatings from 'react-star-ratings'
 
 import DefaultAvatar from '../default-avatar.png'
 
@@ -9,13 +10,14 @@ const Container = styled.div`
   flex-direction: column;
   margin-bottom: 1.2rem;
   position: relative;
+  width: 33% !important;
   :last-child {
     margin-right: 0;
   }
   @media (max-width: 969px) {
     width: 50% !important;
   }
-  @media (max-width: 1239px) and (min-width: 970px) {
+  /* @media (max-width: 1239px) and (min-width: 970px) {
     width: 33.333% !important;
   }
   @media (max-width: 1779px) and (min-width: 1510px) {
@@ -26,7 +28,7 @@ const Container = styled.div`
   }
   @media (min-width: 1780px) {
     width: 16.6667% !important;
-  }
+  } */
 `
 
 const AvatarContainer = styled.div`
@@ -64,29 +66,57 @@ const Avatar = styled.div`
   background-image: url(${props => props.src});
 `
 
-const Name = styled.h4`
+const Name = styled.div`
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: nowrap;
+  text-size-adjust: 100%;
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  cursor: pointer;
+  line-height: 1.375em;
+`
+
+const Title = styled.div`
+  margin-top: 0.8rem;
   font-size: 1.8rem;
-  margin-bottom: 0.3rem;
-  font-weight: 700;
-  margin-top: 0.5rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 `
 
-const Occupation = styled.p`
+const Systems = styled.p`
   font-size: 1.4rem;
-  font-weight: 600;
-  color: black;
-  margin-bottom: 0.3rem;
-`
-
-const FavoriteGames = styled.p`
-  font-size: 1.4rem;
-  font-weight: 600;
   color: black;
 `
 
-const FavoriteGame = styled.span`
+const System = styled.span`
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: black;
+`
+
+const Price = styled.p`
   font-size: 1.4rem;
   font-weight: 400;
+  color: black;
+`
+
+const NumReviews = styled.span`
+  margin-left: 0.5rem;
+  color: black;
+  font-size: 1.2rem;
+`
+const Reviews = styled.span`
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
   color: black;
 `
 
@@ -103,36 +133,44 @@ const StyledLink = styled(Link)`
 `
 
 // pulled function out and named it to make it more obvious and clean up return
-const formatCommas = (favoriteGames, game, index) => {
-  if (index < favoriteGames.length - 1) {
-    return <FavoriteGame key={game}>{`${game}, `}</FavoriteGame>
+
+const formatCommas = (systems, system, index, username) => {
+  if (index < systems.length - 1) {
+    return <System key={`${username} ${system}`}>{`${system}, `}</System>
   } else {
-    return <FavoriteGame key={game}>{`${game}`}</FavoriteGame>
+    return <System key={`${username} ${system}`}>{system}</System>
   }
 }
 
-const noSpaces = string => string.replace(/ /g, '_')
-
-export default function Gamer(props) {
+export default function SmallSession(props) {
   return (
-    <Container>
-      <StyledLink to={`/users/${noSpaces(props.username)}`}>
-        <AvatarContainer>
+    <Container width={props.width}>
+      <StyledLink to={`/users/${props.username}/${props.game}`}>
+        <AvatarContainer src={DefaultAvatar}>
           <AvatarSecond>
             <AvatarThird>
               <Avatar src={DefaultAvatar} />
             </AvatarThird>
           </AvatarSecond>
         </AvatarContainer>
-
+        <Title>{props.title}</Title>
         <Name>{props.name}</Name>
-        <Occupation>{props.occupation}</Occupation>
-        <FavoriteGames>
-          {`Favorite Games: `}
-          {props.favoriteGames.map((game, index) =>
-            formatCommas(props.favoriteGames, game, index)
+        <Systems>
+          {props.systems.map((system, index) =>
+            formatCommas(props.systems, system, index, props.username)
           )}
-        </FavoriteGames>
+        </Systems>
+        <Price>{`Starting at $${props.price} a game`}</Price>
+        <Reviews>{props.reviews}</Reviews>
+        <StarRatings
+          rating={props.reviews}
+          starRatedColor="#e62739"
+          numberOfStars={1}
+          name="rating"
+          starDimension="14px"
+          starSpacing="1px"
+        />
+        <NumReviews>{`(${props.numReviews})`}</NumReviews>
       </StyledLink>
     </Container>
   )
