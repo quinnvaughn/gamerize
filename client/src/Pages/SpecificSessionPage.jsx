@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import _ from 'lodash'
+import Media from 'react-media'
 
 import DefaultBanner from '../default-banner.png'
 import DefaultAvatar from '../default-avatar.png'
@@ -10,6 +11,7 @@ import Footer from '../Components/Footer'
 import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
+import FixedSelectionOptions from '../Components/FixedSelectionOptions'
 
 //data
 import gamers from '../data/gamers'
@@ -33,6 +35,13 @@ const Content = styled.div`
     margin: 0 auto;
     max-width: 108rem;
     display: flex;
+  }
+  @media (min-width: 744px) {
+    max-width: 69.6rem;
+    margin: 0 auto;
+    width: auto;
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
   }
 `
 
@@ -292,15 +301,23 @@ export default function SpecificSessionPage(props) {
           <TodayAvailability day={new Date()} />
           <Reviews reviews={gamer.reviews} numReviews={gamer.numReviews} />
         </LeftSide>
-        <SelectionOptions
-          gamer={gamer}
-          game={game}
-          slots={gamer.slots}
-          price={gamer.price}
-          numReviews={gamer.numReviews}
-          reviews={gamer.reviews}
-          systems={gamer.systems}
-        />
+        <Media query="(max-width: 1127px)">
+          {matches =>
+            matches ? (
+              <FixedSelectionOptions />
+            ) : (
+              <SelectionOptions
+                gamer={gamer}
+                game={game}
+                slots={gamer.slots}
+                price={gamer.price}
+                numReviews={gamer.numReviews}
+                reviews={gamer.reviews}
+                systems={gamer.systems}
+              />
+            )
+          }
+        </Media>
       </Content>
       <Footer />
     </PageContainer>
