@@ -52,7 +52,7 @@ export default function Reviews(props) {
         </NumReviewsAndSearch>
         <StarRatings
           rating={props.reviews}
-          starRatedColor="#e62739"
+          starRatedColor="#f10e0e"
           numberOfStars={5}
           name="rating"
           starDimension="1.8rem"

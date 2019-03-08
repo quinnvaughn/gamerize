@@ -40,7 +40,7 @@ const Row = styled.div`
   flex-wrap: wrap;
   width: 100%;
   border-bottom: ${props =>
-    props.current ? '3px solid #e62739' : '1px solid #dddfe2'};
+    props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
 
 const Hour = styled.div`
@@ -51,7 +51,7 @@ const Hour = styled.div`
   font-size: 1.2rem;
   top: -0.8rem;
   position: absolute;
-  color: ${props => (props.current ? '#e62739' : 'black')};
+  color: ${props => (props.current ? '#f10e0e' : 'black')};
   font-weight: 600;
 `
 
@@ -69,10 +69,13 @@ const Sessions = styled.div`
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full ? '#e62739' : props.disabled ? '#dddfe2' : 'white'};
+    props.full
+      ? 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
+      : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full || props.disabled ? 'white' : 'black')};
-  border: ${props => !props.full && '1px solid #d3d3d3'};
+  color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
+  border: ${props =>
+    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
@@ -85,7 +88,7 @@ const Session = styled.div`
   transition: 0.15s ease-out;
   pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
-    background: #dddfe2;
+    background: #f99f9f;
   }
 `
 

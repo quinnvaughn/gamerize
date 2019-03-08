@@ -46,7 +46,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   :hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
-    color: #e62739;
+    color: #f10e0e;
   }
 `
 
@@ -118,15 +118,15 @@ const PickAllSlotsForTeam = styled.button`
   background: white;
   height: 4rem;
   padding: 0.6rem 0.8rem;
-  color: #e62739;
+  color: #f10e0e;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #e62739;
+  border: 1px solid #f10e0e;
   border-radius: 4px;
   margin-right: 2rem;
   :hover {
     border: 1px solid white;
-    background: #e62739;
+    background: #f10e0e;
     color: white;
   }
 `
@@ -134,25 +134,25 @@ const PickAllSlotsForMe = styled.button`
   background: white;
   height: 4rem;
   padding: 0.6rem 0.8rem;
-  color: #e62739;
+  color: #f10e0e;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #e62739;
+  border: 1px solid #f10e0e;
   border-radius: 4px;
   :hover {
     border: 1px solid white;
-    background: #e62739;
+    background: #f10e0e;
     color: white;
   }
 `
 
 const AddSessions = styled.button`
-  background: #e62739;
+  background: #f10e0e;
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #e62739;
+  border: 1px solid #f10e0e;
   border-radius: 4px;
 `
 

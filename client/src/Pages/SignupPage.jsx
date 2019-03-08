@@ -48,14 +48,14 @@ const SignupButton = styled.button`
   font-weight: 700;
   padding: 1rem 1.6rem;
   text-transform: uppercase;
-  background: #e62739;
+  background: #f10e0e;
   width: 100%;
   cursor: pointer;
 `
 
 const StyledLink = styled(Link)`
   margin-top: 2rem;
-  color: #e62739;
+  color: #f10e0e;
   font-size: 1.4rem;
   cursor: pointer;
   text-decoration: none;

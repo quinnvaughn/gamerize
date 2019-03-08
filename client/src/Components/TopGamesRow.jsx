@@ -26,7 +26,7 @@ const AllTheGames = styled.div`
 const ShowAll = styled(Link)`
   margin-top: 2rem;
   font-size: 1.6rem;
-  color: #e62739;
+  color: #f10e0e;
   text-decoration: none;
   align-self: flex-start;
   :hover {

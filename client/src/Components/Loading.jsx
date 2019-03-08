@@ -13,7 +13,7 @@ const Container = styled.div`
 export default function LoadingComponent(props) {
   return (
     <Container>
-      <Loading type="grid" fill="#e62739" width={100} height={100} />
+      <Loading type="grid" fill="#f10e0e" width={100} height={100} />
     </Container>
   )
 }

@@ -97,7 +97,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    color: #e62739;
+    color: #f10e0e;
     cursor: pointer;
   }
 `

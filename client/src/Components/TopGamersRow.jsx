@@ -29,7 +29,7 @@ const AllTheGamers = styled.div`
 const ShowAll = styled(Link)`
   margin-top: 2rem;
   padding-left: 0.8rem;
-  color: #e62739;
+  color: #f10e0e;
   font-size: 1.6rem;
   text-decoration: none;
   align-self: flex-start;
