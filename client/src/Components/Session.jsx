@@ -78,6 +78,15 @@ const Name = styled.div`
   margin-bottom: 0.3rem;
   cursor: pointer;
   line-height: 1.375em;
+  color: black;
+`
+
+const TitleContainer = styled.div`
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `
 
 const Title = styled.div`
@@ -85,10 +94,9 @@ const Title = styled.div`
   font-size: 1.8rem;
   font-weight: 800;
   cursor: pointer;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  overflow-wrap: break-word;
   width: 100%;
+  line-height: 1.375em;
 `
 
 const Systems = styled.p`
@@ -114,9 +122,10 @@ const NumReviews = styled.span`
   font-size: 1.2rem;
 `
 const Reviews = styled.span`
-  margin-right: 0.5rem;
   font-size: 1.2rem;
-  color: black;
+  color: #f10e0e;
+  margin-right: 0.5rem;
+  font-weight: 600;
 `
 
 const StyledLink = styled(Link)`
@@ -129,6 +138,11 @@ const StyledLink = styled(Link)`
     color: #f10e0e;
     cursor: pointer;
   }
+`
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 // pulled function out and named it to make it more obvious and clean up return
@@ -152,7 +166,9 @@ export default function Session(props) {
             </AvatarThird>
           </AvatarSecond>
         </AvatarContainer>
-        <Title>{props.title}</Title>
+        <TitleContainer>
+          <Title>{props.title}</Title>
+        </TitleContainer>
         <Name>{props.name}</Name>
         <Systems>
           {props.systems.map((system, index) =>
@@ -160,16 +176,18 @@ export default function Session(props) {
           )}
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
-        <Reviews>{props.reviews}</Reviews>
-        <StarRatings
-          rating={props.reviews}
-          starRatedColor="#f10e0e"
-          numberOfStars={1}
-          name="rating"
-          starDimension="14px"
-          starSpacing="1px"
-        />
-        <NumReviews>{`(${props.numReviews})`}</NumReviews>
+        <Bottom>
+          <Reviews>{props.reviews}</Reviews>
+          <StarRatings
+            rating={props.reviews}
+            starRatedColor="#f10e0e"
+            numberOfStars={5}
+            name="rating"
+            starDimension="14px"
+            starSpacing="1px"
+          />
+          <NumReviews>{`(${props.numReviews})`}</NumReviews>
+        </Bottom>
       </StyledLink>
     </Container>
   )

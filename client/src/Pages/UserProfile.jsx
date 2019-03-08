@@ -284,6 +284,7 @@ export default function UserProfile(props) {
               <SessionsMapped>
                 {_.map(specificSessions, session => (
                   <SmallSession
+                    title={session.title}
                     key={session.game}
                     username={user.username}
                     game={session.game}

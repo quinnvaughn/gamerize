@@ -47,6 +47,7 @@ const TopContainer = styled.div`
 const Gamer = styled.h2`
   font-size: 2rem;
   overflow-wrap: break-word;
+  white-space: nowrap;
 `
 
 const GamerLink = styled(Link)`
