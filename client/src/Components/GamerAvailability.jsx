@@ -67,23 +67,24 @@ const Sessions = styled.div`
   margin-right: 4rem;
 `
 
-const Session = styled.div`
+const Session = styled(Link)`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full
+    props.full || props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
+  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#f10e0e')};
   border: ${props =>
     props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
-  z-index: 10;
+  box-sizing: border-box;
   display: flex;
   border-radius: 0.4rem;
   align-items: center;
+  text-decoration: none;
   justify-content: center;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
