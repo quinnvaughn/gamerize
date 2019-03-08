@@ -58,7 +58,7 @@ const Book = styled.button`
   cursor: pointer;
   flex: 1;
   color: white;
-  background: #e62739;
+  background: #f10e0e;
   border-radius: 4px;
   line-height: 2.4rem;
   padding: 1rem 2.2rem;

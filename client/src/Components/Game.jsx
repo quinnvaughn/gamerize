@@ -31,7 +31,7 @@ const StyledLink = styled(Link)`
   color: black;
   font-size: 1.6rem;
   :hover {
-    color: #e62739;
+    color: #f10e0e;
     cursor: pointer;
   }
 `

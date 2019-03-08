@@ -27,7 +27,7 @@ const Content = styled.div`
 `
 
 const StyledLink = styled.a`
-  color: ${props => (props.active ? 'black' : '#e62739')};
+  color: ${props => (props.active ? 'black' : '#f10e0e')};
   font-size: 1.6rem;
   text-decoration: none;
   cursor: pointer;

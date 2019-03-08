@@ -55,7 +55,7 @@ const Sessions = styled.div`
 const Session = styled(Link)`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full ? '#e62739' : props.disabled ? '#dddfe2' : 'white'};
+    props.full ? '#f10e0e' : props.disabled ? '#dddfe2' : 'white'};
   width: 100%;
   color: ${props => (props.full || props.disabled ? 'white' : 'black')};
   border: ${props => !props.full && '1px solid #d3d3d3'};

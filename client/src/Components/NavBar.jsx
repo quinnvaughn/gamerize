@@ -46,7 +46,7 @@ const StyledLink = styled(Link)`
     margin-right: 0;
   }
   :hover {
-    border-bottom: 2px solid #e62739;
+    border-bottom: 2px solid #f10e0e;
   }
 `
 

@@ -137,7 +137,7 @@ const FavoriteGame = styled(Link)`
   font-size: 1.8rem;
   font-weight: 700;
   :hover {
-    color: #e62739;
+    color: #f10e0e;
   }
 `
 
@@ -246,7 +246,7 @@ export default function UserProfile(props) {
               <ReviewRatingContainer>
                 <StarRatings
                   rating={user.reviews}
-                  starRatedColor="#e62739"
+                  starRatedColor="#f10e0e"
                   numberOfStars={5}
                   name="rating"
                   starDimension="14px"
