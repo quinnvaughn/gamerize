@@ -52,7 +52,6 @@ const Gamer = styled.h2`
 const GamerLink = styled(Link)`
   display: flex;
   flex-direction: column;
-  flex: 4;
   align-items: center;
   text-decoration: none;
   color: black;
@@ -75,7 +74,7 @@ const Title = styled.h1`
 `
 
 const TitleContainer = styled.div`
-  flex: 6;
+  flex: 7;
 `
 
 const Game = styled.h3`
@@ -88,7 +87,10 @@ const Occupations = styled.div`
   font-size: 1.4rem;
   font-weight: 400;
   color: black;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `
 
 const Occupation = styled.div`
@@ -100,6 +102,7 @@ const Occupation = styled.div`
   display: inline-block;
   border-radius: 4px;
   margin-right: 0.8rem;
+  margin-top: 0.5rem;
   :last-child {
     margin-right: 0;
   }
@@ -200,6 +203,7 @@ const GamerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 3;
 `
 
 const noUnderscores = string => string.replace(/_/g, ' ')

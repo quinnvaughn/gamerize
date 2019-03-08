@@ -14,32 +14,45 @@ const Container = styled.div`
   overflow-y: scroll;
   background: #fff;
   border: 1px solid #dddfe2;
-  z-index: -1;
   overflow-x: hidden;
   border-radius: 4px;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `
 
 const Row = styled.div`
   margin: 0;
   padding: 0px 0px 0px 2rem;
   height: 20rem;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-bottom: 1px solid #dddfe2;
-  :last-child {
-    border-bottom: none;
-  }
-  z-index: -1;
+  border-bottom: ${props =>
+    props.current ? '3px solid #e62739' : '1px solid #dddfe2'};
 `
 
 const Hour = styled.div`
-  height: 100%;
-  display: flex;
-  width: 4rem;
-  align-items: center;
-  padding-right: 2rem;
-  border-right: 1px solid #dddfe2;
+  background: #fff;
+  z-index: 0;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  font-size: 1.2rem;
+  top: -0.8rem;
+  position: absolute;
+  color: ${props => (props.current ? '#e62739' : 'black')};
+  font-weight: 600;
 `
 
 const Sessions = styled.div`
@@ -49,6 +62,8 @@ const Sessions = styled.div`
   position: relative;
   z-index: 0;
   font-size: 1.6rem;
+  margin-left: 5rem;
+  margin-right: 4rem;
 `
 
 const Session = styled.div`
@@ -59,8 +74,9 @@ const Session = styled.div`
   color: ${props => (props.full || props.disabled ? 'white' : 'black')};
   border: ${props => !props.full && '1px solid #d3d3d3'};
   cursor: pointer;
+  font-weight: 600;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
   display: flex;
   border-radius: 0.4rem;
   align-items: center;
@@ -69,8 +85,7 @@ const Session = styled.div`
   transition: 0.15s ease-out;
   pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
-    transform: scale(1.05);
-    transition: 0.25s ease-out;
+    background: #dddfe2;
   }
 `
 
@@ -113,7 +128,17 @@ export default function TodayAvailability(props) {
       )
 
       hours.push(
-        <Row key={i}>
+        <Row
+          key={i}
+          current={dateFns.isThisHour(
+            new Date(
+              selectedDate.getFullYear(),
+              selectedDate.getMonth(),
+              selectedDate.getDate(),
+              i + 1
+            )
+          )}
+        >
           <Hour
             id={
               dateFns.isThisHour(
@@ -125,6 +150,14 @@ export default function TodayAvailability(props) {
                 )
               ) && 'current'
             }
+            current={dateFns.isThisHour(
+              new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
+                i
+              )
+            )}
           >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
