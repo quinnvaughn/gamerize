@@ -15,6 +15,7 @@ const routes = [
   },
   {
     path: '/games',
+    exact: true,
     component: GamesPage,
   },
   {

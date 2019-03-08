@@ -70,7 +70,7 @@ const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
     props.full
-      ? 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
+      ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
   color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
