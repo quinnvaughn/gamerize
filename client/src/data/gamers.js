@@ -2,7 +2,7 @@ const gamers = [
   {
     name: 'Kyle',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper'],
+    occupation: ['Celebrity', 'Rapper', 'Actor'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
