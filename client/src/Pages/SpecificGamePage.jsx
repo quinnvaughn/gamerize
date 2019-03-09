@@ -11,7 +11,6 @@ const PageContainer = styled.div`
   max-width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: auto !important;
   white-space: normal !important;
 `
 

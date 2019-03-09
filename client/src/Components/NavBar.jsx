@@ -3,10 +3,12 @@ import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
+import Media from 'react-media'
+import gql from 'graphql-tag'
 
 //local imports
 import SearchBar from './SearchBar'
-import gql from 'graphql-tag'
+import NavBarAvatar from './NavBarAvatar'
 
 const Container = styled.nav`
   height: 8rem;
@@ -15,19 +17,27 @@ const Container = styled.nav`
   position: sticky;
   top: 0;
   background: white;
-  z-index: 1;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   padding-left: 8rem;
+
+  @media (max-width: 1127px) {
+    padding-left: 2.4rem;
+  }
 `
 
 const Links = styled.div`
   font-size: 1.4rem;
   display: flex;
   height: 100%;
-  padding-right: 4rem;
+  padding-right: 8rem;
+
+  @media (max-width: 1127px) {
+    padding-right: 2.4rem;
+  }
 `
 
 const StyledLink = styled(Link)`
@@ -92,28 +102,39 @@ function NavBar(props) {
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
-      <Links>
-        {_.isEmpty(data)
-          ? null
-          : !_.get(data, ['me'])
-          ? notSignedInLinks.map(link => (
-              <StyledLink key={link.text} to={link.path}>
-                {link.text}
-              </StyledLink>
-            ))
-          : signedInLinks.map(link => (
-              <StyledLink
-                key={link.text}
-                to={
-                  link.path === '/sessions'
-                    ? `/sessions/${data.me.username}`
-                    : link.path
-                }
-              >
-                {link.text}
-              </StyledLink>
-            ))}
-      </Links>
+      <Media query="(max-width: 1127px)">
+        {matches =>
+          matches ? (
+            <Links>
+              <NavBarAvatar />
+            </Links>
+          ) : (
+            <Links>
+              {_.isEmpty(data)
+                ? null
+                : !_.get(data, ['me'])
+                ? notSignedInLinks.map(link => (
+                    <StyledLink key={link.text} to={link.path}>
+                      {link.text}
+                    </StyledLink>
+                  ))
+                : signedInLinks.map(link => (
+                    <StyledLink
+                      key={link.text}
+                      to={
+                        link.path === '/sessions'
+                          ? `/sessions/${data.me.username}`
+                          : link.path
+                      }
+                    >
+                      {link.text}
+                    </StyledLink>
+                  ))}
+              <NavBarAvatar />
+            </Links>
+          )
+        }
+      </Media>
     </Container>
   )
 }
