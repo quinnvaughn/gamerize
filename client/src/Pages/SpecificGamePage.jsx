@@ -19,6 +19,7 @@ const PageContainer = styled.div`
 `
 
 const TitleOfGame = styled.h1`
+  font-weight: 800;
   font-size: 4rem;
   color: black;
   line-height: 1.2;

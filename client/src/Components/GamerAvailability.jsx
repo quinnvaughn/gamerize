@@ -117,7 +117,7 @@ const Availability = styled.div`
 //     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 // `
 
-//const noSpaces = string => string.replace(/ /g, '_')
+const noSpaces = string => string.replace(/ /g, '_')
 
 const GamerAvailability = React.memo(function(props) {
   useEffect(() => {
@@ -182,7 +182,7 @@ const GamerAvailability = React.memo(function(props) {
                       container.setShowModal(true)
                       container.setSelectedSession(session)
                     }}
-                    to={`/users/${props.username}/${session.game}`}
+                    to={`/users/${props.username}/${noSpaces(session.game)}`}
                     disabled={
                       dateFns.compareAsc(new Date(), session.timeStart) === 1
                     }
