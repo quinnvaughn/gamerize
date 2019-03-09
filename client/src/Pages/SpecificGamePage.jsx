@@ -1,10 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'
 import TopSessionsRow from '../Components/TopSessionsRow'
+
+//data
 import gamers from '../data/gamers'
+import games from '../data/games'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -71,21 +75,24 @@ const Sessions = styled.div`
 const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function SpecificGamePage(props) {
+  const game = _.find(
+    games,
+    singleGame => singleGame.name === noUnderscores(props.match.params.game)
+  )
   return (
     <PageContainer>
       <NavBar />
       <Filters />
       <Content>
-        <TitleOfGame>{`${noUnderscores(props.match.params.game)}`}</TitleOfGame>
-        <Sessions>
-          {props.location.state && `${props.location.state.sessions} sessions`}
-        </Sessions>
+        <TitleOfGame>{`${game.name}`}</TitleOfGame>
+        <Sessions>{`${game.sessions} sessions`}</Sessions>
         <Tags>
-          {props.location.state &&
-            props.location.state.tags.map(tag => <Tag>{tag}</Tag>)}
+          {game.tags.map(tag => (
+            <Tag>{tag}</Tag>
+          ))}
         </Tags>
         <InnerContent>
-          <TopSessionsRow gamers={gamers} game={props.match.params.game} />
+          <TopSessionsRow gamers={gamers} game={game} />
         </InnerContent>
       </Content>
     </PageContainer>

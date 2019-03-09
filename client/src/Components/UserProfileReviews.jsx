@@ -17,7 +17,7 @@ const Title = styled.div`
   font-weight: 800;
 `
 
-export default function UserProfileReviews(props) {
+const UserProfileReviews = React.memo(function UserProfileReviews(props) {
   return (
     <ReviewsContainer>
       <Title>{`${props.reviews.length} ${
@@ -33,4 +33,6 @@ export default function UserProfileReviews(props) {
       ))}
     </ReviewsContainer>
   )
-}
+})
+
+export default UserProfileReviews
