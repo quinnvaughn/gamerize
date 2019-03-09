@@ -36,7 +36,7 @@ const Content = styled.div`
     max-width: 108rem;
     display: flex;
   }
-  @media (min-width: 744px) {
+  @media (max-width: 743px) {
     max-width: 69.6rem;
     margin: 0 auto;
     width: auto;

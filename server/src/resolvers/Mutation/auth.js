@@ -6,27 +6,28 @@ const auth = {
     const username = input.username.toLowerCase()
     const email = input.email.toLowerCase()
     const password = await bcrypt.hash(input.password, 10)
-    const name = input.name
-    const alreadyUsername = await prisma.user({
+    const name = input.name.toLowerCase()
+    const alreadyUsername = await prisma.userIndex({
       username,
     })
     if (alreadyUsername) {
       throw new Error('Username already exists')
     }
-    const alreadyEmail = await prisma.user({
+    const alreadyEmail = await prisma.userIndex({
       email,
     })
     if (alreadyEmail) {
       throw new Error('Email is already in use')
     }
-    const user = await prisma.createUser({ email, username, name, password })
+    const user = await prisma.createUser({ ...input, password })
+
+    await prisma.createUserIndex({ email, username, name })
 
     return {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
       user,
     }
   },
-
   async login(
     parent,
     {

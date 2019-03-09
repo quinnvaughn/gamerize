@@ -9,12 +9,12 @@ const Container = styled.div`
   border-bottom: 1px solid #dddfe2;
   background: white;
   width: 100vw;
-  z-index: 9999;
+  z-index: 1;
   display: flex;
   align-items: center;
   position: sticky;
   height: 5rem;
-  top: 6rem;
+  top: 8rem;
   left: 0;
 `
 

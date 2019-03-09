@@ -7,6 +7,10 @@ const TitleContainer = styled.div`
   position: relative;
   padding-left: 8rem;
   padding-bottom: 4rem;
+
+  @media (max-width: 1127px) {
+    padding-left: 2.4rem;
+  }
 `
 
 // const Img = styled.img`
