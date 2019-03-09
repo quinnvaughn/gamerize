@@ -15,6 +15,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   user: (where?: UserWhereInput) => Promise<boolean>;
+  userIndex: (where?: UserIndexWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -59,6 +60,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => UserConnectionPromise;
+  userIndex: (where: UserIndexWhereUniqueInput) => UserIndexPromise;
+  userIndexes: (
+    args?: {
+      where?: UserIndexWhereInput;
+      orderBy?: UserIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<UserIndex>;
+  userIndexesConnection: (
+    args?: {
+      where?: UserIndexWhereInput;
+      orderBy?: UserIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => UserIndexConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -81,6 +105,25 @@ export interface Prisma {
   ) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createUserIndex: (data: UserIndexCreateInput) => UserIndexPromise;
+  updateUserIndex: (
+    args: { data: UserIndexUpdateInput; where: UserIndexWhereUniqueInput }
+  ) => UserIndexPromise;
+  updateManyUserIndexes: (
+    args: {
+      data: UserIndexUpdateManyMutationInput;
+      where?: UserIndexWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertUserIndex: (
+    args: {
+      where: UserIndexWhereUniqueInput;
+      create: UserIndexCreateInput;
+      update: UserIndexUpdateInput;
+    }
+  ) => UserIndexPromise;
+  deleteUserIndex: (where: UserIndexWhereUniqueInput) => UserIndexPromise;
+  deleteManyUserIndexes: (where?: UserIndexWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -93,6 +136,9 @@ export interface Subscription {
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  userIndex: (
+    where?: UserIndexSubscriptionWhereInput
+  ) => UserIndexSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -119,14 +165,33 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type UserIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserCreateInput {
+export interface UserIndexCreateInput {
   email: String;
   username: String;
-  password: String;
   name: String;
 }
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
 
 export interface UserUpdateInput {
   email?: String;
@@ -135,11 +200,15 @@ export interface UserUpdateInput {
   name?: String;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  name?: String;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
 export interface UserWhereInput {
@@ -218,102 +287,222 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface UserIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
   email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
   username?: String;
-}>;
-
-export interface NodeNode {
-  id: ID_Output;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: UserIndexWhereInput[] | UserIndexWhereInput;
+  OR?: UserIndexWhereInput[] | UserIndexWhereInput;
+  NOT?: UserIndexWhereInput[] | UserIndexWhereInput;
 }
 
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface UserPreviousValues {
-  id: ID_Output;
+export interface UserCreateInput {
   email: String;
   username: String;
   password: String;
   name: String;
 }
 
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
+export type UserIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface UserIndexUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  name?: String;
+}
+
+export interface UserIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserIndexWhereInput;
+  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+}
+
+export interface UserIndexUpdateInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface NodeNode {
+  id: ID_Output;
+}
+
+export interface UserIndexEdge {
+  node: UserIndex;
+  cursor: String;
+}
+
+export interface UserIndexEdgePromise
+  extends Promise<UserIndexEdge>,
+    Fragmentable {
+  node: <T = UserIndexPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserIndexEdgeSubscription
+  extends Promise<AsyncIterator<UserIndexEdge>>,
+    Fragmentable {
+  node: <T = UserIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserIndexPreviousValues {
+  id: ID_Output;
+  email: String;
+  username: String;
+  name: String;
+}
+
+export interface UserIndexPreviousValuesPromise
+  extends Promise<UserIndexPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   username: () => Promise<String>;
-  password: () => Promise<String>;
   name: () => Promise<String>;
 }
 
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
+export interface UserIndexPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserIndexPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserIndexConnection {
+  pageInfo: PageInfo;
+  edges: UserIndexEdge[];
+}
+
+export interface UserIndexConnectionPromise
+  extends Promise<UserIndexConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserIndexEdge>>() => T;
+  aggregate: <T = AggregateUserIndexPromise>() => T;
+}
+
+export interface UserIndexConnectionSubscription
+  extends Promise<AsyncIterator<UserIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserIndexEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserIndexSubscription>() => T;
 }
 
 export interface UserSubscriptionPayload {
@@ -367,56 +556,151 @@ export interface UserSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
+export interface UserEdge {
+  node: User;
+  cursor: String;
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface UserIndex {
+  id: ID_Output;
+  email: String;
+  username: String;
+  name: String;
+}
+
+export interface UserIndexPromise extends Promise<UserIndex>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface UserIndexSubscription
+  extends Promise<AsyncIterator<UserIndex>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
+export interface AggregateUserIndex {
+  count: Int;
 }
 
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
+export interface AggregateUserIndexPromise
+  extends Promise<AggregateUserIndex>,
     Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserIndexSubscription
+  extends Promise<AsyncIterator<AggregateUserIndex>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  email: String;
+  username: String;
+  password: String;
+  name: String;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  password: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserIndexSubscriptionPayload {
+  mutation: MutationType;
+  node: UserIndex;
+  updatedFields: String[];
+  previousValues: UserIndexPreviousValues;
+}
+
+export interface UserIndexSubscriptionPayloadPromise
+  extends Promise<UserIndexSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserIndexPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserIndexPreviousValuesPromise>() => T;
+}
+
+export interface UserIndexSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserIndexSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserIndexSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserIndexPreviousValuesSubscription>() => T;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type String = string;
-
-export type Long = string;
+export type Int = number;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -424,10 +708,12 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
+export type Long = string;
+
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Int = number;
+export type String = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -441,6 +727,10 @@ export type Boolean = boolean;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "UserIndex",
     embedded: false
   }
 ];

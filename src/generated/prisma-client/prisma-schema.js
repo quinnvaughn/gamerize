@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateUserIndex {
+  count: Int!
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -20,6 +24,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createUserIndex(data: UserIndexCreateInput!): UserIndex!
+  updateUserIndex(data: UserIndexUpdateInput!, where: UserIndexWhereUniqueInput!): UserIndex
+  updateManyUserIndexes(data: UserIndexUpdateManyMutationInput!, where: UserIndexWhereInput): BatchPayload!
+  upsertUserIndex(where: UserIndexWhereUniqueInput!, create: UserIndexCreateInput!, update: UserIndexUpdateInput!): UserIndex!
+  deleteUserIndex(where: UserIndexWhereUniqueInput!): UserIndex
+  deleteManyUserIndexes(where: UserIndexWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -43,11 +53,15 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  userIndex(where: UserIndexWhereUniqueInput!): UserIndex
+  userIndexes(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserIndex]!
+  userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  userIndex(where: UserIndexSubscriptionWhereInput): UserIndexSubscriptionPayload
 }
 
 type User {
@@ -74,6 +88,150 @@ input UserCreateInput {
 type UserEdge {
   node: User!
   cursor: String!
+}
+
+type UserIndex {
+  id: ID!
+  email: String!
+  username: String!
+  name: String!
+}
+
+type UserIndexConnection {
+  pageInfo: PageInfo!
+  edges: [UserIndexEdge]!
+  aggregate: AggregateUserIndex!
+}
+
+input UserIndexCreateInput {
+  email: String!
+  username: String!
+  name: String!
+}
+
+type UserIndexEdge {
+  node: UserIndex!
+  cursor: String!
+}
+
+enum UserIndexOrderByInput {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  username_ASC
+  username_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UserIndexPreviousValues {
+  id: ID!
+  email: String!
+  username: String!
+  name: String!
+}
+
+type UserIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: UserIndex
+  updatedFields: [String!]
+  previousValues: UserIndexPreviousValues
+}
+
+input UserIndexSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserIndexWhereInput
+  AND: [UserIndexSubscriptionWhereInput!]
+  OR: [UserIndexSubscriptionWhereInput!]
+  NOT: [UserIndexSubscriptionWhereInput!]
+}
+
+input UserIndexUpdateInput {
+  email: String
+  username: String
+  name: String
+}
+
+input UserIndexUpdateManyMutationInput {
+  email: String
+  username: String
+  name: String
+}
+
+input UserIndexWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [UserIndexWhereInput!]
+  OR: [UserIndexWhereInput!]
+  NOT: [UserIndexWhereInput!]
+}
+
+input UserIndexWhereUniqueInput {
+  id: ID
+  email: String
+  username: String
 }
 
 enum UserOrderByInput {
