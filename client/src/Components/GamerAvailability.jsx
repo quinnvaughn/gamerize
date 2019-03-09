@@ -119,7 +119,7 @@ const Availability = styled.div`
 
 //const noSpaces = string => string.replace(/ /g, '_')
 
-export default function GamerAvailability(props) {
+const GamerAvailability = React.memo(function(props) {
   useEffect(() => {
     const element = document.getElementById('current')
     element.scrollIntoView()
@@ -209,4 +209,6 @@ export default function GamerAvailability(props) {
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>
   )
-}
+})
+
+export default GamerAvailability

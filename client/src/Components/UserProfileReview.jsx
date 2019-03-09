@@ -77,7 +77,11 @@ const WhichGame = styled(Link)`
 
 const noSpaces = string => string.replace(/ /g, '_')
 
-export default function UserProfileReview({ review, name, username }) {
+const UserProfileReview = React.memo(function UserProfileReview({
+  review,
+  name,
+  username,
+}) {
   const dateFormat = 'MMMM YYYY'
   return (
     <Container>
@@ -98,4 +102,5 @@ export default function UserProfileReview({ review, name, username }) {
       </NameAndAvatar>
     </Container>
   )
-}
+})
+export default UserProfileReview
