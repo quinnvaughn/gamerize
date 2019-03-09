@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import Media from 'react-media'
+
+//local imports
 import Game from './Game'
 
 const RowTitle = styled.h3`
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: bold;
   width: 100%;
   display: block;
   cursor: default;
+  padding-left: 0.8rem;
 `
 
 const Container = styled.div`
@@ -21,6 +25,7 @@ const Container = styled.div`
 const AllTheGames = styled.div`
   margin-top: 2rem;
   display: flex;
+  flex-wrap: wrap;
 `
 
 const ShowAll = styled(Link)`
@@ -28,6 +33,7 @@ const ShowAll = styled(Link)`
   font-size: 1.6rem;
   color: #f10e0e;
   text-decoration: none;
+  padding-left: 0.8rem;
   align-self: flex-start;
   :hover {
     cursor: pointer;
@@ -126,10 +132,10 @@ const games = [
 // will do this different way with graphql but just to show 'Show All' do it this way for now.
 const gamesLength = games.length
 
-const mapSix = games => {
+const map = (games, display) => {
   return games.map((game, index) => {
     return (
-      index <= 5 && (
+      index <= display - 1 && (
         <Game
           name={game.name}
           key={game.name}
@@ -143,11 +149,36 @@ const mapSix = games => {
 }
 
 export default function GamesRow(props) {
+  const [displayed, setDisplayed] = useState(0)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      <AllTheGames>{mapSix(games)}</AllTheGames>
-      {gamesLength > 6 && (
+      <Media query={{ maxWidth: 969 }}>
+        {matches =>
+          matches && <AllTheGames>{map(games, 4, setDisplayed)}</AllTheGames>
+        }
+      </Media>
+      <Media query={{ minWidth: 970, maxWidth: 1239 }}>
+        {matches =>
+          matches && <AllTheGames>{map(games, 6, setDisplayed)}</AllTheGames>
+        }
+      </Media>
+      <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
+        {matches =>
+          matches && <AllTheGames>{map(games, 8, setDisplayed)}</AllTheGames>
+        }
+      </Media>
+      <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
+        {matches =>
+          matches && <AllTheGames>{map(games, 5, setDisplayed)}</AllTheGames>
+        }
+      </Media>
+      <Media query={{ minWidth: 1780 }}>
+        {matches =>
+          matches && <AllTheGames>{map(games, 6, setDisplayed)}</AllTheGames>
+        }
+      </Media>
+      {displayed < gamesLength && (
         <ShowAll to={`/games`}>{`Show All Games (${gamesLength})`}</ShowAll>
       )}
     </Container>

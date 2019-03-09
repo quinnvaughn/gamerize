@@ -28,15 +28,23 @@ html {
   }
   h1 {
     margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
   h2 {
-    margin: 0
+    margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
   h3 {
     margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
   h4 {
     margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
   p {
     margin: 0;

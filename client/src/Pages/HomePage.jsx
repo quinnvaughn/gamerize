@@ -44,7 +44,7 @@ export default function HomePage(props) {
       <Content>
         <InnerContent>
           <GamerRow title="Gamers" />
-          <GamesRow title="Most Popular Games" />
+          <GamesRow title="Most popular games" />
         </InnerContent>
       </Content>
       <Footer />

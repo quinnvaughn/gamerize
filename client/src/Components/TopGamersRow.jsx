@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Gamer from './Gamer'
 import { Link } from 'react-router-dom'
+import Media from 'react-media'
 
 const RowTitle = styled.h3`
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: bold;
   width: 100%;
   display: block;
@@ -93,10 +94,11 @@ const gamers = [
 // will do this different way with graphql but just to show 'Show All' do it this way for now.
 const gamersLength = gamers.length
 
-const mapSix = gamers => {
+const map = (gamers, display, setDisplayed) => {
+  setDisplayed(display)
   return gamers.map((gamer, index) => {
     return (
-      index <= 5 && (
+      index <= display - 1 && (
         <Gamer
           name={gamer.name}
           occupation={gamer.occupation}
@@ -110,11 +112,36 @@ const mapSix = gamers => {
 }
 
 export default function GamerRow(props) {
+  const [displayed, setDisplayed] = useState(0)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      <AllTheGamers>{mapSix(gamers)}</AllTheGamers>
-      {gamersLength > 6 && (
+      <Media query={{ maxWidth: 969 }}>
+        {matches =>
+          matches && <AllTheGamers>{map(gamers, 4, setDisplayed)}</AllTheGamers>
+        }
+      </Media>
+      <Media query={{ minWidth: 970, maxWidth: 1239 }}>
+        {matches =>
+          matches && <AllTheGamers>{map(gamers, 6, setDisplayed)}</AllTheGamers>
+        }
+      </Media>
+      <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
+        {matches =>
+          matches && <AllTheGamers>{map(gamers, 8, setDisplayed)}</AllTheGamers>
+        }
+      </Media>
+      <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
+        {matches =>
+          matches && <AllTheGamers>{map(gamers, 5, setDisplayed)}</AllTheGamers>
+        }
+      </Media>
+      <Media query={{ minWidth: 1780 }}>
+        {matches =>
+          matches && <AllTheGamers>{map(gamers, 6, setDisplayed)}</AllTheGamers>
+        }
+      </Media>
+      {displayed < gamersLength && (
         <ShowAll to={`/gamers`}>{`Show All Gamers (${gamersLength})`}</ShowAll>
       )}
     </Container>

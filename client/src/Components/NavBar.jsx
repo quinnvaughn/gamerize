@@ -99,20 +99,19 @@ const GET_ME = gql`
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
   const { data } = useQuery(GET_ME, { skip: !token })
+  console.log(data == null)
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
-      <Media query="(max-width: 1127px)">
+      <Media query={{ maxWidth: 1127 }}>
         {matches =>
-          matches ? (
+          matches && !_.isEmpty(data) ? (
             <Links>
               <NavBarAvatar />
             </Links>
           ) : (
             <Links>
-              {_.isEmpty(data)
-                ? null
-                : !_.get(data, ['me'])
+              {data === null || !_.get(data, ['me'])
                 ? notSignedInLinks.map(link => (
                     <StyledLink key={link.text} to={link.path}>
                       {link.text}
@@ -130,7 +129,7 @@ function NavBar(props) {
                       {link.text}
                     </StyledLink>
                   ))}
-              <NavBarAvatar />
+              {!_.isEmpty(data) && <NavBarAvatar />}
             </Links>
           )
         }
