@@ -79,10 +79,11 @@ const formatCommas = (favoriteGames, game, index) => {
 }
 
 export default function Gamer(props) {
+  console.log(props)
   return (
     <Container>
       <StyledLink to={`/users/${noSpaces(props.username)}`}>
-        <DynamicImage src={DefaultAvatar} />
+        <DynamicImage src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
         <Occupation>{props.occupation}</Occupation>
         <FavoriteGames>

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 //local imports
 import NavBar from '../Components/NavBar'
-import DisplayGames from '../Components/DisplayGames'
+import DisplayGamers from '../Components/DisplayGamers'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -23,13 +23,13 @@ const Title = styled.h2`
   font-size: 3rem;
 `
 
-export default function GamesPage(props) {
+export default function GamerPage(props) {
   return (
     <PageContainer>
       <NavBar />
       <Content>
-        <Title>Explore games</Title>
-        <DisplayGames />
+        <Title>Explore gamers</Title>
+        <DisplayGamers />
       </Content>
     </PageContainer>
   )

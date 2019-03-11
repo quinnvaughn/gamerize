@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Gamer from './Gamer'
 import { Link } from 'react-router-dom'
 import Media from 'react-media'
+import { FaChevronRight } from 'react-icons/fa'
+
+// local imports
+import Gamer from './Gamer'
 
 const RowTitle = styled.h3`
   font-size: 3rem;
@@ -27,8 +30,15 @@ const AllTheGamers = styled.div`
   flex-wrap: wrap;
 `
 
+const ShowAllContainer = styled.div`
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+`
+
 const ShowAll = styled(Link)`
-  margin-top: 2rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
   padding-left: 0.8rem;
   color: #f10e0e;
   font-size: 1.6rem;
@@ -38,6 +48,13 @@ const ShowAll = styled(Link)`
     cursor: pointer;
     text-decoration: underline;
   }
+`
+
+const ShowAllRight = styled(FaChevronRight)`
+  width: 1rem;
+  height: 1rem;
+  color: #f10e0e;
+  margin-left: 0.1rem;
 `
 
 //replace with actual data eventually
@@ -142,7 +159,11 @@ export default function GamerRow(props) {
         }
       </Media>
       {displayed < gamersLength && (
-        <ShowAll to={`/gamers`}>{`Show All Gamers (${gamersLength})`}</ShowAll>
+        <ShowAllContainer>
+          <ShowAll to={`/gamers`}>
+            {`Show All Gamers (${gamersLength})`} <ShowAllRight />
+          </ShowAll>
+        </ShowAllContainer>
       )}
     </Container>
   )
