@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Media from 'react-media'
+import { FaChevronRight } from 'react-icons/fa'
 
 //local imports
 import Game from './Game'
@@ -28,7 +29,15 @@ const AllTheGames = styled.div`
   flex-wrap: wrap;
 `
 
+const ShowAllContainer = styled.div`
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+`
+
 const ShowAll = styled(Link)`
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
   margin-top: 2rem;
   font-size: 1.6rem;
   color: #f10e0e;
@@ -39,6 +48,13 @@ const ShowAll = styled(Link)`
     cursor: pointer;
     text-decoration: underline;
   }
+`
+
+const ShowAllRight = styled(FaChevronRight)`
+  width: 1rem;
+  height: 1rem;
+  color: #f10e0e;
+  margin-left: 0.1rem;
 `
 
 //replace with actual data eventually
@@ -179,7 +195,11 @@ export default function GamesRow(props) {
         }
       </Media>
       {displayed < gamesLength && (
-        <ShowAll to={`/games`}>{`Show All Games (${gamesLength})`}</ShowAll>
+        <ShowAllContainer>
+          <ShowAll to={`/games`}>
+            {`Show All Games (${gamesLength})`} <ShowAllRight />
+          </ShowAll>
+        </ShowAllContainer>
       )}
     </Container>
   )

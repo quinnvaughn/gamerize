@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 //local imports
-import Game from './Game'
+import Gamer from './Gamer'
 
 //data
-import games from '../data/games'
+import gamers from '../data/gamers'
 
 const Container = styled.div`
   min-height: 20rem;
@@ -22,19 +22,17 @@ const AllTheGames = styled.div`
   margin-right: -0.8rem;
 `
 
-//replace with actual data eventually
-
 export default function DisplayGames(props) {
   return (
     <Container>
       <AllTheGames>
-        {games.map(game => (
-          <Game
-            name={game.name}
-            key={game.name}
-            tags={game.tags}
-            full
-            sessions={game.sessions}
+        {gamers.map(gamer => (
+          <Gamer
+            name={gamer.name}
+            occupation={gamer.occupation}
+            favoriteGames={gamer.favoriteGames}
+            username={gamer.username}
+            key={gamer.username}
           />
         ))}
       </AllTheGames>

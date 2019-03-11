@@ -5,6 +5,7 @@ import SpecificSessionPage from './Pages/SpecificSessionPage'
 import UserProfile from './Pages/UserProfile'
 import LoginPage from './Pages/LoginPage'
 import SignUpPage from './Pages/SignupPage'
+import GamersPage from './Pages/GamerPage'
 import UserSessionsPage from './Pages/UserSessionsPage'
 
 const routes = [
@@ -21,6 +22,10 @@ const routes = [
   {
     path: '/games/:game',
     component: SpecificGamePage,
+  },
+  {
+    path: '/gamers',
+    component: GamersPage,
   },
   {
     path: '/users/:user/:game',
