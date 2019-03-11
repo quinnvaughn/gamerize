@@ -79,6 +79,7 @@ export default function SpecificGamePage(props) {
     games,
     singleGame => singleGame.name === noUnderscores(props.match.params.game)
   )
+  console.log(game)
   return (
     <PageContainer>
       <NavBar />
@@ -92,7 +93,7 @@ export default function SpecificGamePage(props) {
           ))}
         </Tags>
         <InnerContent>
-          <TopSessionsRow gamers={gamers} game={game} />
+          <TopSessionsRow gamers={gamers} game={game.name} />
         </InnerContent>
       </Content>
     </PageContainer>
