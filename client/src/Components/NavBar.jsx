@@ -99,7 +99,6 @@ const GET_ME = gql`
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
   const { data } = useQuery(GET_ME, { skip: !token })
-  console.log(data == null)
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}

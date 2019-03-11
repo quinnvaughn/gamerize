@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import Media from 'react-media'
 
 const RowTitle = styled.h3`
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: bold;
   width: 100%;
   display: block;

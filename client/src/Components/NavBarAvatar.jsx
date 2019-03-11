@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import Media from 'react-media'
 
 // local imports

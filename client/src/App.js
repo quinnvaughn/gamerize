@@ -12,7 +12,7 @@ import client from './ApolloClient'
 import routes from './routes'
 import GlobalStyle from './globalstyles'
 
-UNSTATED.logStatechanges = true
+UNSTATED.logStateChanges = false
 
 class App extends Component {
   render() {
@@ -30,6 +30,7 @@ class App extends Component {
                         path={route.path}
                         component={route.component}
                         exact={route.exact}
+                        key={route.path}
                       />
                     ))}
                   </Switch>

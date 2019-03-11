@@ -14,6 +14,18 @@ html {
     height: 100vh;
     width: 100vw;
     max-width: 100%;
+    ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
   }
   button {
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
