@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 //local imports
 import DefaultAvatar from '../default-avatar.png'
+import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
   padding-bottom: 2.4rem;
@@ -74,8 +75,6 @@ const WhichGame = styled(Link)`
     text-decoration: underline;
   }
 `
-
-const noSpaces = string => string.replace(/ /g, '_')
 
 const UserProfileReview = React.memo(function UserProfileReview({
   review,

@@ -12,6 +12,7 @@ import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
+import { noUnderscores, capitalize } from '../utils/Strings'
 
 //data
 import gamers from '../data/gamers'
@@ -216,8 +217,6 @@ const GamerContainer = styled.div`
   flex: 3;
 `
 
-const noUnderscores = string => string.replace(/_/g, ' ')
-
 const formatCommas = (systems, system, index) => {
   if (index < systems.length - 1) {
     return <Systems key={system}>{`${system}, `}</Systems>
@@ -225,8 +224,6 @@ const formatCommas = (systems, system, index) => {
     return <Systems key={system}>{`${system}`}</Systems>
   }
 }
-
-const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 
 export default function SpecificSessionPage(props) {
   const { user, game } = props.match.params
