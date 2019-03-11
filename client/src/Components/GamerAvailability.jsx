@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 // local imports
 import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
+import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
   width: 100%;
@@ -116,8 +117,6 @@ const Availability = styled.div`
 //   border-bottom: ${props =>
 //     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 // `
-
-const noSpaces = string => string.replace(/ /g, '_')
 
 const GamerAvailability = React.memo(function(props) {
   useEffect(() => {

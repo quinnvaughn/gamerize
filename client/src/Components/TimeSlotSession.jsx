@@ -8,6 +8,7 @@ import { Subscribe } from 'unstated'
 import Slot from './Slot'
 import SessionsContainer from '../Containers/SessionsContainer'
 import SlotOptionsDropdown from './SlotOptionsDropdown'
+import { noUnderscores } from '../utils/Strings'
 
 const Container = styled.div`
   display: block;
@@ -162,8 +163,6 @@ const AddSessionsContainer = styled.div`
   padding-top: 1rem;
   justify-content: flex-end;
 `
-
-const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function TimeSlotSession(props) {
   useEffect(() => {

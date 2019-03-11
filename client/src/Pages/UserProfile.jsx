@@ -12,6 +12,7 @@ import SmallSession from '../Components/SmallSession'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
+import { noSpaces } from '../utils/Strings'
 
 //data
 import specificSessions from '../data/specificusersessions'
@@ -220,8 +221,6 @@ const NegativeMargins = styled.div`
   margin-left: -0.8rem;
   margin-right: -0.8rem;
 `
-
-const noSpaces = string => string.replace(/ /g, '_')
 
 export default function UserProfile(props) {
   //will be done with Prisma with backend.

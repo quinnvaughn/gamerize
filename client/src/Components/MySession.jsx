@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import dateFns from 'date-fns'
 
 import DefaultSessionPicture from '../default-game.gif'
+import { noUnderscores } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -97,8 +98,6 @@ const SessionGame = styled.span`
   font-size: 1.4rem;
   font-weight: 400;
 `
-
-const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function MySession({ session }) {
   const dateFormat = 'MMMM Do, YYYY, h:mm a'

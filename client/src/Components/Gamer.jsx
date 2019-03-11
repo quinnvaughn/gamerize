@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
+import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -110,8 +111,6 @@ const formatCommas = (favoriteGames, game, index) => {
     return <FavoriteGame key={game}>{`${game}`}</FavoriteGame>
   }
 }
-
-const noSpaces = string => string.replace(/ /g, '_')
 
 export default function Gamer(props) {
   return (

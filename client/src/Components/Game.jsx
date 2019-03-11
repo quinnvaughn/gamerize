@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
+import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -83,8 +84,6 @@ const StyledLink = styled(Link)`
     cursor: pointer;
   }
 `
-
-const noSpaces = string => string.replace(/ /g, '_')
 
 export default function Game(props) {
   return (

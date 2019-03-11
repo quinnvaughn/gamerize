@@ -5,6 +5,7 @@ import _ from 'lodash'
 import NavBar from '../Components/NavBar'
 import Filters from '../Components/Filters'
 import TopSessionsRow from '../Components/TopSessionsRow'
+import { noUnderscores } from '../utils/Strings'
 
 //data
 import gamers from '../data/gamers'
@@ -72,8 +73,6 @@ const Sessions = styled.div`
   color: black;
   margin-bottom: 1.2rem;
 `
-
-const noUnderscores = string => string.replace(/_/g, ' ')
 
 export default function SpecificGamePage(props) {
   const game = _.find(
