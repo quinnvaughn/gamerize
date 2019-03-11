@@ -25,6 +25,8 @@ const AllTheGames = styled.div`
   margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
 `
 
 //replace with actual data eventually

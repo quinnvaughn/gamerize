@@ -20,7 +20,7 @@ const Content = styled.div`
 
 const Title = styled.h2`
   font-weight: 800;
-  font-size: 2.4rem;
+  font-size: 3rem;
 `
 
 export default function GamesPage(props) {

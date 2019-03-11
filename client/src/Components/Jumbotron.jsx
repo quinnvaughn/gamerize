@@ -5,6 +5,7 @@ import HomeTitle from './HomeTitle'
 const TitleContainer = styled.div`
   width: 100%;
   position: relative;
+  padding-top: 2rem;
   padding-left: 8rem;
   padding-bottom: 4rem;
 
@@ -23,7 +24,7 @@ export default function Jumbotron(props) {
   return (
     <TitleContainer>
       {/* <Img src={GamingJumbotron} alt="Gaming Jumbotron" /> */}
-      <HomeTitle text="Play with your favorite Gamers" />
+      <HomeTitle text="Play with your favorite gamers" />
     </TitleContainer>
   )
 }
