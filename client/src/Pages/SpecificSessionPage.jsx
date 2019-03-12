@@ -32,17 +32,17 @@ const Content = styled.div`
   max-width: none;
   padding-bottom: 6rem;
   display: flex;
-  @media (min-width: 1128px) {
-    margin: 0 auto;
-    max-width: 108rem;
-    display: flex;
-  }
-  @media (max-width: 743px) {
+  @media (min-width: 743px) {
     max-width: 69.6rem;
     margin: 0 auto;
     width: auto;
     padding-left: 2.4rem;
     padding-right: 2.4rem;
+  }
+  @media (min-width: 1128px) {
+    margin: 0 auto;
+    max-width: 108rem;
+    display: flex;
   }
 `
 
@@ -303,7 +303,15 @@ export default function SpecificSessionPage(props) {
         <Media query="(max-width: 1127px)">
           {matches =>
             matches ? (
-              <FixedSelectionOptions />
+              <FixedSelectionOptions
+                gamer={gamer}
+                game={game}
+                slots={gamer.slots}
+                price={gamer.price}
+                numReviews={gamer.numReviews}
+                reviews={gamer.reviews}
+                systems={gamer.systems}
+              />
             ) : (
               <SelectionOptions
                 gamer={gamer}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { keyframes, createGlobalStyle } from 'styled-components'
+import { ifProp } from 'styled-tools'
 
 const show = keyframes`
     0%: {
@@ -50,7 +51,7 @@ const Modal = styled.div`
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0, 0, 1rem, rgba(0, 0, 0, 0.2);
-  max-width: 108rem;
+  max-width: ${props => (props.width ? `${props.width}px` : '108rem')};
   max-height: 100%;
   overflow-y: initial !important;
 `
@@ -90,7 +91,7 @@ export default class SimpleModal extends Component {
     return (
       <Overlay id="modal">
         <GlobalStyle />
-        <Modal ref={node => (this.node = node)}>
+        <Modal ref={node => (this.node = node)} width={this.props.width}>
           <ModalContent>{children}</ModalContent>
         </Modal>
       </Overlay>
