@@ -30,6 +30,18 @@ const Overlay = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   animation: ${show} 0.5s ease;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `
 
 const Modal = styled.div`

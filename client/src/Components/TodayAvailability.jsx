@@ -40,6 +40,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  border-top: ${props => props.first && '3px solid #f10e0e'};
   border-bottom: ${props =>
     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
@@ -95,6 +96,7 @@ const Session = styled.div`
 
 const Hours = styled.div`
   font-size: 1.2rem;
+  padding-top: 1rem;
 `
 
 const AvailabilityContainer = styled.div`
@@ -128,6 +130,7 @@ export default function TodayAvailability(props) {
       hours.push(
         <Row
           key={i}
+          first={i === 0}
           current={dateFns.isThisHour(
             new Date(
               selectedDate.getFullYear(),

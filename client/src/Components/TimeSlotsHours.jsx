@@ -37,6 +37,7 @@ const Header = styled.div`
   z-index: 9999;
   max-width: inherit;
   align-items: center;
+  height: 11.75rem;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -67,6 +68,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  border-top: ${props => props.first && '3px solid #f10e0e'};
   border-bottom: ${props =>
     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
@@ -81,6 +83,8 @@ const Hour = styled.div`
   position: absolute;
   color: ${props => (props.current ? '#f10e0e' : 'black')};
   font-weight: 600;
+  padding-top: 11.75rem;
+  margin-top: -11.75rem;
 `
 
 const Sessions = styled.div`
@@ -122,6 +126,7 @@ const Session = styled.div`
 
 const Hours = styled.div`
   font-size: 1.2rem;
+  padding-top: 1rem;
 `
 export default function TimeSlotHours(props) {
   useEffect(() => {
@@ -154,6 +159,7 @@ export default function TimeSlotHours(props) {
       hours.push(
         <Row
           key={i}
+          first={i === 0}
           current={dateFns.isThisHour(
             new Date(
               selectedDate.getFullYear(),

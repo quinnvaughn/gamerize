@@ -30,13 +30,7 @@ class SessionsContainer extends Container {
           selectedSession: session,
           selectedDay: prevState.selectedDay
             ? prevState.selectedDay
-            : new Date(
-                `${dateFns.getMonth(
-                  session.timeStart
-                )}/${dateFns.getDaysInMonth(
-                  session.timeStart
-                )}/${dateFns.getYear(session.timeStart)}`
-              ),
+            : new Date(dateFns.parse(session.timeStart)),
         }))
       : this.setState(prevState => ({
           selectedSession: session,
