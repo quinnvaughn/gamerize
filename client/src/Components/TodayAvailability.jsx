@@ -108,12 +108,6 @@ const Availability = styled.div`
   margin-bottom: 1rem;
 `
 
-const SnapTo = styled.div`
-  position: absolute;
-  top: -70px;
-  left: 0;
-`
-
 export default function TodayAvailability(props) {
   useEffect(() => {
     const element = document.getElementById('current')
@@ -199,7 +193,6 @@ export default function TodayAvailability(props) {
   }
   return (
     <AvailabilityContainer>
-      <SnapTo id="availability" />
       <Availability>Today's availability </Availability>
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>

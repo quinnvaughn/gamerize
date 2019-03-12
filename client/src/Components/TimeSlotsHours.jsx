@@ -2,8 +2,10 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
+import { Subscribe } from 'unstated'
 
 import exampleSessions from '../data/sessions'
+import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
   display: block;
@@ -59,24 +61,26 @@ const Empty = styled.div``
 
 const Row = styled.div`
   margin: 0;
-  padding: 0px 0px 0px 4rem;
+  padding: 0px 0px 0px 2rem;
   height: 20rem;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-bottom: 1px solid #dddfe2;
-  :last-child {
-    border-bottom: none;
-  }
+  border-bottom: ${props =>
+    props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
 
 const Hour = styled.div`
-  height: 100%;
-  display: flex;
-  width: 6rem;
-  align-items: center;
-  padding-right: 1rem;
-  border-right: 1px solid #dddfe2;
+  background: #fff;
+  z-index: 0;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  font-size: 1.2rem;
+  top: -0.8rem;
+  position: absolute;
+  color: ${props => (props.current ? '#f10e0e' : 'black')};
+  font-weight: 600;
 `
 
 const Sessions = styled.div`
@@ -84,19 +88,26 @@ const Sessions = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 0;
   font-size: 1.6rem;
+  margin-left: 5rem;
+  margin-right: 4rem;
 `
 
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full ? '#f10e0e' : props.disabled ? '#dddfe2' : 'white'};
+    props.full
+      ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
+      : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full || props.disabled ? 'white' : 'black')};
-  border: ${props => !props.full && '1px solid #d3d3d3'};
+  color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
+  border: ${props =>
+    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
   cursor: pointer;
+  font-weight: 600;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
   display: flex;
   border-radius: 0.4rem;
   align-items: center;
@@ -105,8 +116,7 @@ const Session = styled.div`
   transition: 0.15s ease-out;
   pointer-events: ${props => (props.full || props.disabled) && 'none'};
   :hover {
-    transform: scale(1.05);
-    transition: 0.25s ease-out;
+    background: #f99f9f;
   }
 `
 
@@ -115,8 +125,9 @@ const Hours = styled.div`
 `
 export default function TimeSlotHours(props) {
   useEffect(() => {
-    document.getElementById('modal').scrollTop =
-      document.getElementById('current').offsetTop - 35
+    const element = document.getElementById('currentCalendar')
+    element && element.scrollIntoView()
+    window.parent.scrollTo(0, 0)
   }, {})
   const renderHeader = () => {
     const dateFormat = 'MMMM Do, YYYY'
@@ -143,42 +154,65 @@ export default function TimeSlotHours(props) {
       hours.push(
         <Row
           key={i}
-          id={
-            dateFns.isThisHour(
+          current={dateFns.isThisHour(
+            new Date(
+              selectedDate.getFullYear(),
+              selectedDate.getMonth(),
+              selectedDate.getDate(),
+              i + 1
+            )
+          )}
+        >
+          <Hour
+            id={
+              dateFns.isThisHour(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  selectedDate.getDate(),
+                  i
+                )
+              ) &&
+              dateFns.isToday(new Date(selectedDate)) &&
+              'currentCalendar'
+            }
+            current={dateFns.isThisHour(
               new Date(
                 selectedDate.getFullYear(),
                 selectedDate.getMonth(),
                 selectedDate.getDate(),
                 i
               )
-            ) && 'current'
-          }
-        >
-          <Hour>
+            )}
+          >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
-          <Sessions>
-            {sessions.map(session => (
-              <Session
-                key={session.timeStart}
-                height={session.length}
-                full={session.players.length === session.slots}
-                startTime={dateFns.getMinutes(session.timeStart)}
-                onClick={() => {
-                  props.setSelectedSession(session)
-                }}
-                disabled={
-                  dateFns.compareAsc(new Date(), session.timeStart) === 1
-                }
-              >
-                {`${session.slots - session.players.length} ${
-                  session.slots - session.players.length === 1
-                    ? 'spot'
-                    : 'spots'
-                } left`}
-              </Session>
-            ))}
-          </Sessions>
+          <Subscribe to={[SessionsContainer]}>
+            {container => (
+              <Sessions>
+                {sessions.map(session => (
+                  <Session
+                    key={session.timeStart}
+                    height={session.length}
+                    full={session.players.length === session.slots}
+                    startTime={dateFns.getMinutes(session.timeStart)}
+                    onClick={() => {
+                      container.setSelectedSession(session)
+                    }}
+                    disabled={
+                      dateFns.compareAsc(new Date(), session.timeStart) === 1
+                    }
+                  >
+                    {`${session.slots - session.players.length} ${
+                      session.slots - session.players.length === 1
+                        ? 'spot'
+                        : 'spots'
+                    } left`}
+                  </Session>
+                ))}
+              </Sessions>
+            )}
+          </Subscribe>
         </Row>
       )
     }

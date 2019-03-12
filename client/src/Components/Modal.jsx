@@ -50,6 +50,9 @@ const GlobalStyle = createGlobalStyle`
   .navbar {
     z-index: 0;
   }
+  body {
+    overflow: hidden;
+  }
 `
 
 export default class SimpleModal extends Component {
