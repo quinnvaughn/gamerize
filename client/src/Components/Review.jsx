@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
+import { Link } from 'react-router-dom'
 
 //local imports
 import DefaultAvatar from '../default-avatar.png'
@@ -50,12 +51,16 @@ const ReviewText = styled.div`
   overflow-wrap: wrap;
 `
 
+const AvatarLink = styled(Link)``
+
 export default function Review({ review }) {
   const dateFormat = 'MMMM YYYY'
   return (
     <Container>
       <ReviewTop>
-        <Avatar src={DefaultAvatar} />
+        <AvatarLink to={`/users/${review.username}`}>
+          <Avatar src={DefaultAvatar} />
+        </AvatarLink>
         <ReviewerNameAndDate>
           <ReviewerName>{review.user}</ReviewerName>
           <Date>{dateFns.format(review.date, dateFormat)}</Date>

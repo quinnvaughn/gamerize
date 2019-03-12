@@ -110,6 +110,7 @@ const StyledLink = styled(Link)`
 const Bottom = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 
 // pulled function out and named it to make it more obvious and clean up return
@@ -124,7 +125,7 @@ const formatCommas = (systems, system, index, username) => {
 
 export default function Session(props) {
   return (
-    <Container width={props.width}>
+    <Container>
       <StyledLink to={`/users/${props.username}/${noSpaces(props.game)}`}>
         <DynamicImage src={DefaultAvatar} />
         <TitleContainer>

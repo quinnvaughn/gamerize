@@ -1,18 +1,19 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Link } from 'react-router-dom'
 import _ from 'lodash'
+import Media from 'react-media'
 import StarRatings from 'react-star-ratings'
 
 //local imports
 import NavBar from '../Components/NavBar'
 import DefaultAvatar from '../default-avatar.png'
-import DefaultGame from '../default-game.gif'
 import SmallSession from '../Components/SmallSession'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
 import { noSpaces } from '../utils/Strings'
+import FavoriteGame from '../Components/FavoriteGame'
 
 //data
 import specificSessions from '../data/specificusersessions'
@@ -34,12 +35,24 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const Content = styled.div`
-  max-width: 108rem;
   font-size: 1.6rem;
   margin: 0 auto;
-  margin-top: 2rem;
+  margin-top: 2rem !important;
   display: flex;
   width: 100%;
+  @media (max-width: 1127px) {
+    flex-direction: column;
+  }
+  @media (min-width: 744px) {
+    max-width: 696px;
+    margin: 0 auto;
+    width: auto;
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
+  }
+  @media (min-width: 1128px) {
+    max-width: 108rem;
+  }
 `
 
 const LeftSide = styled.div`
@@ -49,10 +62,16 @@ const LeftSide = styled.div`
 
 const RightSide = styled.div`
   flex: 2;
-  padding-left: 8.8rem;
-  padding-right: 0.8rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  @media (min-width: 744px) {
+    padding: 0;
+  }
+  @media (min-width: 1128px) {
+    padding-left: 8.8rem;
+    padding-right: 0.8rem;
+  }
 `
 
 const ProfilePicture = styled.img`
@@ -127,24 +146,9 @@ const FavoriteGames = styled.div`
 
 const FavoriteGameContainer = styled.div`
   display: flex;
-`
-
-const FavoriteGame = styled(Link)`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  text-decoration: none;
-  color: black;
-  font-size: 1.8rem;
-  font-weight: 700;
-  :hover {
-    color: #f10e0e;
-  }
-`
-
-const FavoriteGameTitle = styled.span`
-  font-size: 1.6rem;
-  margin-top: 0.5rem;
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
+  flex-wrap: wrap;
 `
 
 const FavoriteGamesTitle = styled.div`
@@ -152,12 +156,6 @@ const FavoriteGamesTitle = styled.div`
   font-weight: 800;
   flex: 1;
   margin-bottom: 1rem;
-`
-
-const GamePicture = styled.img`
-  width: 10rem;
-  height: 12rem;
-  border-radius: 4px;
 `
 
 const ReviewsContainer = styled.div`
@@ -222,6 +220,19 @@ const NegativeMargins = styled.div`
   margin-right: -0.8rem;
 `
 
+const SmallContainer = styled.div`
+  padding-top: 2rem;
+  display: flex;
+`
+
+const SmallLeft = styled.div`
+  flex: 80%;
+`
+
+const SmallRight = styled.div`
+  flex: 20%;
+`
+
 export default function UserProfile(props) {
   //will be done with Prisma with backend.
   const user = _.find(gamers, {
@@ -235,50 +246,76 @@ export default function UserProfile(props) {
         <Banner src={DefaultBanner} alt="Banner" />
       </BannerContainer>
       <Content>
-        <LeftSide>
-          <ProfileInfoContainer>
-            <ProfilePictureContainer>
-              <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
-            </ProfilePictureContainer>
-            <ReviewsContainer>
-              <NumReviews>{`${user.numReviews} reviews`}</NumReviews>
-              <ReviewRatingContainer>
-                <StarRatings
-                  rating={user.reviews}
-                  starRatedColor="#f10e0e"
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="14px"
-                  starSpacing="1px"
-                />
-                <ReviewRating>{`(${user.reviews})`}</ReviewRating>
-              </ReviewRatingContainer>
-            </ReviewsContainer>
-          </ProfileInfoContainer>
-        </LeftSide>
+        <Media query={{ maxWidth: 1127 }}>
+          {matches =>
+            matches ? null : (
+              <LeftSide>
+                <ProfileInfoContainer>
+                  <ProfilePictureContainer>
+                    <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
+                  </ProfilePictureContainer>
+                  <ReviewsContainer>
+                    <NumReviews>{`${user.numReviews} reviews`}</NumReviews>
+                    <ReviewRatingContainer>
+                      <StarRatings
+                        rating={user.reviews}
+                        starRatedColor="#f10e0e"
+                        numberOfStars={5}
+                        name="rating"
+                        starDimension="14px"
+                        starSpacing="1px"
+                      />
+                      <ReviewRating>{`(${user.reviews})`}</ReviewRating>
+                    </ReviewRatingContainer>
+                  </ReviewsContainer>
+                </ProfileInfoContainer>
+              </LeftSide>
+            )
+          }
+        </Media>
         <RightSide>
-          <Name>{user.name}</Name>
-          <Username>@{user.username}</Username>
-          <Occupations>
-            {user.occupation.map(job => (
-              <Occupation>{job}</Occupation>
-            ))}
-          </Occupations>
-          <AboutMe>About Me</AboutMe>
+          <Media query={{ maxWidth: 1127 }}>
+            {matches =>
+              matches ? (
+                <SmallContainer>
+                  <SmallLeft>
+                    <Name>{user.name}</Name>
+                    <Username>@{user.username}</Username>
+                    <Occupations>
+                      {user.occupations.map(job => (
+                        <Occupation>{job}</Occupation>
+                      ))}
+                    </Occupations>
+                  </SmallLeft>
+                  <SmallRight>
+                    <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
+                  </SmallRight>
+                </SmallContainer>
+              ) : (
+                <Fragment>
+                  <Name>{user.name}</Name>
+                  <Username>@{user.username}</Username>
+                  <Occupations>
+                    {user.occupations.map(job => (
+                      <Occupation>{job}</Occupation>
+                    ))}
+                  </Occupations>
+                </Fragment>
+              )
+            }
+          </Media>
+          <AboutMe>About me</AboutMe>
           <AboutMeParagraph>{user.aboutMe}</AboutMeParagraph>
           <FavoriteGames>
-            <FavoriteGamesTitle>Favorite Games</FavoriteGamesTitle>
+            <FavoriteGamesTitle>Favorite games</FavoriteGamesTitle>
             <FavoriteGameContainer>
               {_.map(user.favoriteGames, game => (
-                <FavoriteGame to={`/games/${noSpaces(game)}`}>
-                  <GamePicture src={DefaultGame} alt={game} />
-                  <FavoriteGameTitle>{game}</FavoriteGameTitle>
-                </FavoriteGame>
+                <FavoriteGame game={game} />
               ))}
             </FavoriteGameContainer>
           </FavoriteGames>
           <Sessions>
-            <SessionsTitle>{`Gaming Sessions`}</SessionsTitle>
+            <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
             <NegativeMargins>
               <SessionsMapped>
                 {_.map(specificSessions, session => (

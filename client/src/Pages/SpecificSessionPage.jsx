@@ -229,6 +229,7 @@ export default function SpecificSessionPage(props) {
   const { user, game } = props.match.params
   // won't need to do when getting data from db.
   const gamer = _.find(gamers, { username: user })
+  console.log(user, game, gamer)
   return (
     <PageContainer>
       <NavBarWithScroll
@@ -252,7 +253,7 @@ export default function SpecificSessionPage(props) {
                   <Gamer>{`${gamer.name}`}</Gamer>
                 </GamerLink>
                 <Occupations>
-                  {gamer.occupation.map(occupation => (
+                  {gamer.occupations.map(occupation => (
                     <Occupation key={occupation}>{occupation}</Occupation>
                   ))}
                 </Occupations>
@@ -270,13 +271,13 @@ export default function SpecificSessionPage(props) {
                 )}
               </FlexHalf>
               <FlexHalf>
-                <TypeOfContent>Type Of Game</TypeOfContent>
+                <TypeOfContent>Type of game</TypeOfContent>
                 <TypeOfGame>
                   {gamer.typeOfGame === 'CUSTOM'
                     ? `${capitalize(gamer.typeOfGame)}`
                     : capitalize(gamer.typeOfGame)}
                 </TypeOfGame>
-                <TypeOfContent>Slots Per Session</TypeOfContent>
+                <TypeOfContent>Slots per session</TypeOfContent>
                 <Slots>{`${gamer.slots}`}</Slots>
               </FlexHalf>
             </MiddleContainer>

@@ -6,6 +6,7 @@ import { FaChevronRight } from 'react-icons/fa'
 
 // local imports
 import Gamer from './Gamer'
+import gamers from '../data/gamers'
 
 const RowTitle = styled.h3`
   font-size: 3rem;
@@ -57,57 +58,6 @@ const ShowAllRight = styled(FaChevronRight)`
   margin-left: 0.1rem;
 `
 
-//replace with actual data eventually
-const gamers = [
-  {
-    name: 'Kyle',
-    occupation: 'Rapper',
-    favoriteGames: ['NBA 2K', 'GTA 5', 'Fortnite'],
-    username: 'SuperDuperKyle',
-  },
-  {
-    name: 'Taylor Bennett',
-    occupation: 'Rapper',
-    favoriteGames: ['NBA 2K', 'Apex Legends', 'Fortnite'],
-    username: 'Taylor_Bennett',
-  },
-  {
-    name: 'Shroud',
-    occupation: 'Streamer',
-    favoriteGames: ['RDR2', 'PUBG', 'Rocket League'],
-    username: 'Shroud',
-  },
-  {
-    name: 'Shroud',
-    occupation: 'Streamer',
-    favoriteGames: ['RDR2', 'PUBG', 'Rocket League'],
-    username: 'Shroud',
-  },
-  {
-    name: 'Ninja',
-    occupation: 'Streamer',
-    favoriteGames: ['Fortnite', 'PUBG', 'Rocket League'],
-    username: 'Ninja',
-  },
-  {
-    name: 'TimTheTatMan',
-    occupation: 'Streamer',
-    favoriteGames: ['RDR2', 'PUBG', 'Rocket League'],
-    username: 'TimTheTatMan',
-  },
-  {
-    name: 'Shroud',
-    occupation: 'Streamer',
-    favoriteGames: ['RDR2', 'PUBG', 'Rocket League'],
-    username: 'shroud',
-  },
-  {
-    name: 'TimTheTatMan',
-    occupation: 'Streamer',
-    favoriteGames: ['RDR2', 'PUBG', 'Rocket League'],
-    username: 'TimTheTatMan',
-  },
-]
 // will do this different way with graphql but just to show 'Show All' do it this way for now.
 const gamersLength = gamers.length
 
@@ -118,7 +68,7 @@ const map = (gamers, display, setDisplayed) => {
       index <= display - 1 && (
         <Gamer
           name={gamer.name}
-          occupation={gamer.occupation}
+          occupations={gamer.occupations}
           favoriteGames={gamer.favoriteGames}
           username={gamer.username}
           key={gamer.username}
