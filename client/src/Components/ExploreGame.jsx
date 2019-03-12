@@ -9,25 +9,16 @@ import DynamicImage from './DynamicImage'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.2rem;
-  position: relative;
-  :last-child {
-    margin-right: 0;
-  }
-  @media (max-width: 969px) {
+  margin-bottom: 1rem;
+
+  @media (max-width: 1127px) {
     width: 50% !important;
   }
-  @media (max-width: 1239px) and (min-width: 970px) {
-    width: 33.333% !important;
-  }
-  @media (max-width: 1779px) and (min-width: 1510px) {
-    width: 20% !important;
-  }
-  @media (max-width: 1509px) and (min-width: 1240px) {
+  @media (min-width: 1128px) and (max-width: 1439px) {
     width: 25% !important;
   }
-  @media (min-width: 1780px) {
-    width: 16.6667% !important;
+  @media (min-width: 1440px) {
+    width: 20% !important;
   }
 `
 
@@ -54,7 +45,7 @@ const StyledLink = styled(Link)`
   }
 `
 
-export default function Game(props) {
+export default function ExploreGame(props) {
   return (
     <Container>
       <StyledLink

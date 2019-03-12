@@ -12,10 +12,17 @@ const PageContainer = styled.div`
 
 const Content = styled.div`
   margin: 0 auto !important;
-  padding: 2rem;
+  padding-top: 2rem;
 
-  padding-left: 8rem;
-  padding-right: 8rem;
+  @media (max-width: 1127px) {
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
+  }
+
+  @media (min-width: 1128px) {
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
 `
 
 const Title = styled.h2`

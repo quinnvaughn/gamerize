@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-//local imports
-import Game from './Game'
+//local import
+import ExploreGame from './ExploreGame'
 
 //data
 import games from '../data/games'
@@ -29,7 +29,7 @@ export default function DisplayGames(props) {
     <Container>
       <AllTheGames>
         {games.map(game => (
-          <Game
+          <ExploreGame
             name={game.name}
             key={game.name}
             tags={game.tags}
