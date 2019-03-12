@@ -12,7 +12,7 @@ import client from './ApolloClient'
 import routes from './routes'
 import GlobalStyle from './globalstyles'
 
-UNSTATED.logStateChanges = false
+UNSTATED.logStateChanges = true
 
 class App extends Component {
   render() {

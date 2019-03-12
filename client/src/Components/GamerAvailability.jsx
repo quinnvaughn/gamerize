@@ -41,6 +41,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  border-top: ${props => props.first && '3px solid #f10e0e'};
   border-bottom: ${props =>
     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
@@ -97,6 +98,7 @@ const Session = styled(Link)`
 
 const Hours = styled.div`
   font-size: 1.2rem;
+  padding-top: 1rem;
 `
 
 const AvailabilityContainer = styled.div`
@@ -110,13 +112,6 @@ const Availability = styled.div`
   font-weight: 800;
   margin-bottom: 1rem;
 `
-
-// const ExtraSpace = styled.div`
-//   height: 10px;
-//   width: 100%;
-//   border-bottom: ${props =>
-//     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
-// `
 
 const GamerAvailability = React.memo(function(props) {
   useEffect(() => {
@@ -137,6 +132,7 @@ const GamerAvailability = React.memo(function(props) {
       hours.push(
         <Row
           key={i}
+          first={i === 0}
           current={dateFns.isThisHour(
             new Date(
               selectedDate.getFullYear(),
