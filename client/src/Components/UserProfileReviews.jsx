@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 //local imports
 import UserProfileReview from './UserProfileReview'
+import { singleOrPlural } from '../utils/Strings'
 
 const ReviewsContainer = styled.div`
   width: 100%;
@@ -20,9 +21,10 @@ const Title = styled.div`
 const UserProfileReviews = React.memo(function UserProfileReviews(props) {
   return (
     <ReviewsContainer>
-      <Title>{`${props.reviews.length} ${
-        props.reviews.length === 1 ? 'review' : 'reviews'
-      }`}</Title>
+      <Title>{`${props.reviews.length} ${singleOrPlural(
+        props.reviews,
+        'review'
+      )}`}</Title>
       {props.reviews.map((review, index) => (
         <UserProfileReview
           review={review}
