@@ -29,7 +29,7 @@ export default function DisplayGames(props) {
         {gamers.map(gamer => (
           <Gamer
             name={gamer.name}
-            occupation={gamer.occupation}
+            occupations={gamer.occupations}
             favoriteGames={gamer.favoriteGames}
             username={gamer.username}
             key={gamer.username}

@@ -76,6 +76,8 @@ const WhichGame = styled(Link)`
   }
 `
 
+const AvatarLink = styled(Link)``
+
 const UserProfileReview = React.memo(function UserProfileReview({
   review,
   name,
@@ -94,7 +96,9 @@ const UserProfileReview = React.memo(function UserProfileReview({
         <ReviewText>{review.text}</ReviewText>
       </ReviewTop>
       <NameAndAvatar>
-        <Avatar src={DefaultAvatar} />
+        <AvatarLink to={`/users/${review.username}`}>
+          <Avatar src={DefaultAvatar} />
+        </AvatarLink>
         <ReviewerNameContainer>
           <ReviewerName>{review.user}</ReviewerName>
         </ReviewerNameContainer>

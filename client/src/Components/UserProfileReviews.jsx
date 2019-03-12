@@ -21,7 +21,7 @@ const UserProfileReviews = React.memo(function UserProfileReviews(props) {
   return (
     <ReviewsContainer>
       <Title>{`${props.reviews.length} ${
-        props.reviews.length === 1 ? 'Review' : 'Reviews'
+        props.reviews.length === 1 ? 'review' : 'reviews'
       }`}</Title>
       {props.reviews.map((review, index) => (
         <UserProfileReview

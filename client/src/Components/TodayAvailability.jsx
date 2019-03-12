@@ -200,7 +200,7 @@ export default function TodayAvailability(props) {
   return (
     <AvailabilityContainer>
       <SnapTo id="availability" />
-      <Availability>Today's Availability </Availability>
+      <Availability>Today's availability </Availability>
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>
   )

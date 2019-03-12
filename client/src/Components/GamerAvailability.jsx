@@ -204,7 +204,7 @@ const GamerAvailability = React.memo(function(props) {
   }
   return (
     <AvailabilityContainer>
-      <Availability>{`Availability Today`} </Availability>
+      <Availability>{`Availability today`} </Availability>
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>
   )

@@ -38,10 +38,7 @@ const Name = styled.h4`
   margin-top: 0.5rem;
 `
 
-const Occupation = styled.p`
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: black;
+const Occupations = styled.p`
   margin-bottom: 0.3rem;
 `
 
@@ -69,8 +66,14 @@ const StyledLink = styled(Link)`
   }
 `
 
+const Occupation = styled.span`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: black;
+`
+
 // pulled function out and named it to make it more obvious and clean up return
-const formatCommas = (favoriteGames, game, index) => {
+const formatCommasGames = (favoriteGames, game, index) => {
   if (index < favoriteGames.length - 1) {
     return <FavoriteGame key={game}>{`${game}, `}</FavoriteGame>
   } else {
@@ -78,18 +81,29 @@ const formatCommas = (favoriteGames, game, index) => {
   }
 }
 
+const formatCommasOccupations = (occupations, occupation, index) => {
+  if (index < occupations.length - 1) {
+    return <Occupation key={occupation}>{`${occupation}, `}</Occupation>
+  } else {
+    return <Occupation key={occupation}>{`${occupation}`}</Occupation>
+  }
+}
+
 export default function Gamer(props) {
-  console.log(props)
   return (
     <Container>
       <StyledLink to={`/users/${noSpaces(props.username)}`}>
         <DynamicImage src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
-        <Occupation>{props.occupation}</Occupation>
+        <Occupations>
+          {props.occupations.map((occupation, index) =>
+            formatCommasOccupations(props.occupations, occupation, index)
+          )}
+        </Occupations>
         <FavoriteGames>
           {`Favorite Games: `}
           {props.favoriteGames.map((game, index) =>
-            formatCommas(props.favoriteGames, game, index)
+            formatCommasGames(props.favoriteGames, game, index)
           )}
         </FavoriteGames>
       </StyledLink>

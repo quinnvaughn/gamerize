@@ -23,7 +23,7 @@ const Title = styled.h2`
   font-size: 3rem;
 `
 
-export default function GamerPage(props) {
+export default function GamersPage(props) {
   return (
     <PageContainer>
       <NavBar />

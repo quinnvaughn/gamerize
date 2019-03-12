@@ -2,7 +2,7 @@ const gamers = [
   {
     name: 'Kyle',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper', 'Actor'],
+    occupations: ['Celebrity', 'Rapper', 'Actor'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
@@ -27,7 +27,7 @@ const gamers = [
   {
     name: 'Ben Simmons',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper'],
+    occupations: ['Celebrity', 'Athlete'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
@@ -52,7 +52,7 @@ const gamers = [
   {
     name: 'Joel Embiid',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper'],
+    occupations: ['Celebrity', 'Athlete'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
@@ -77,7 +77,7 @@ const gamers = [
   {
     name: 'Gordon Hayward',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper'],
+    occupations: ['Celebrity', 'Athlete'],
     gamerType: 'Celebrities',
     systems: ['Xbox One'],
     typeOfGame: 'CUSTOM',
@@ -102,7 +102,7 @@ const gamers = [
   {
     name: 'Taylor Bennett',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Celebrity', 'Rapper'],
+    occupations: ['Celebrity', 'Rapper'],
     gamerType: 'Celebrities',
     systems: ['PS4'],
     favoriteGames: ['NBA 2K', 'Apex Legends', 'PUBG'],
@@ -124,7 +124,7 @@ const gamers = [
   {
     name: 'Shroud',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Streamer'],
+    occupations: ['Streamer'],
     gamerType: 'Streamers',
     systems: ['Xbox One', 'PC'],
     typeOfGame: 'MATCHMAKING',
@@ -146,7 +146,7 @@ const gamers = [
   {
     name: 'TSM Myth',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Streamer'],
+    occupations: ['Streamer'],
     gamerType: 'Streamers',
     systems: ['PC', 'PS4'],
     typeOfGame: 'MATCHMAKING',
@@ -168,7 +168,7 @@ const gamers = [
   {
     name: 'Ninja',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Streamer'],
+    occupations: ['Streamer'],
     systems: ['PC'],
     typeOfGame: 'MATCHMAKING',
     gamerType: 'Streamers',
@@ -190,7 +190,7 @@ const gamers = [
   {
     name: 'TimTheTatMan',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Streamer'],
+    occupations: ['Streamer'],
     systems: ['PC'],
     typeOfGame: 'MATCHMAKING',
     gamerType: 'Streamers',
@@ -212,7 +212,7 @@ const gamers = [
   {
     name: 'DisguisedToast',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Streamer'],
+    occupations: ['Streamer'],
     systems: ['PC'],
     gamerType: 'Streamers',
     typeOfGame: 'CUSTOM',
@@ -234,7 +234,7 @@ const gamers = [
   {
     name: 'PewDiePie',
     createdAt: 'February 1, 2019 17:00:00',
-    occupation: ['Youtuber'],
+    occupations: ['Youtuber'],
     gamerType: 'Youtubers',
     typeOfGame: 'MATCHMAKING',
     systems: ['Xbox One'],
