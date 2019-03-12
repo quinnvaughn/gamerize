@@ -9,6 +9,7 @@ import Calendar from './TimeSlotsCalendar'
 import TimeSlotsHours from './TimeSlotsHours'
 import TimeSlotSession from './TimeSlotSession'
 import SessionsContainer from '../Containers/SessionsContainer'
+import { singleOrPlural } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -75,9 +76,12 @@ export default function TimeSlots(props) {
             <SelectionButton
               onClick={() => sessions.setShowModal(!sessions.state.showModal)}
             >
-              <NumberOfSessions>{`${sessions.state.sessions.length} ${
-                sessions.state.sessions.length === 1 ? 'session' : 'sessions'
-              }`}</NumberOfSessions>
+              <NumberOfSessions>{`${
+                sessions.state.sessions.length
+              } ${singleOrPlural(
+                sessions.state.sessions,
+                'session'
+              )}`}</NumberOfSessions>
               <ArrowRight />
             </SelectionButton>
           )}

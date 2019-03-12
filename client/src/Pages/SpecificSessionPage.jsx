@@ -12,7 +12,7 @@ import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
-import { noUnderscores, capitalize } from '../utils/Strings'
+import { noUnderscores, capitalize, singleOrPlural } from '../utils/Strings'
 
 //data
 import gamers from '../data/gamers'
@@ -263,9 +263,10 @@ export default function SpecificSessionPage(props) {
               <FlexHalf>
                 <TypeOfContent>Game</TypeOfContent>
                 <Game>{`${noUnderscores(game)}`}</Game>
-                <TypeOfContent>{`${
-                  gamer.systems.length === 1 ? 'System' : 'Systems'
-                }`}</TypeOfContent>
+                <TypeOfContent>{`${singleOrPlural(
+                  gamer.systems,
+                  'System'
+                )}`}</TypeOfContent>
                 {gamer.systems.map((system, index) =>
                   formatCommas(gamer.systems, system, index)
                 )}

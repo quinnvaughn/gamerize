@@ -6,6 +6,7 @@ import dateFns from 'date-fns'
 // local imports
 import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
+import { singleOrPlural } from '../utils/Strings'
 
 const Container = styled.div`
   width: 100%;
@@ -175,11 +176,11 @@ export default function TodayAvailability(props) {
                       dateFns.compareAsc(new Date(), session.timeStart) === 1
                     }
                   >
-                    {`${session.slots - session.players.length} ${
-                      session.slots - session.players.length === 1
-                        ? 'spot'
-                        : 'spots'
-                    } left`}
+                    {`${session.slots -
+                      session.players.length} ${singleOrPlural(
+                      session.slots - session.players.length,
+                      'spot'
+                    )} left`}
                   </Session>
                 ))}
               </Sessions>
