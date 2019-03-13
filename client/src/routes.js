@@ -7,7 +7,8 @@ import LoginPage from './Pages/LoginPage'
 import SignUpPage from './Pages/SignupPage'
 import GamersPage from './Pages/GamersPage'
 import UserSessionsPage from './Pages/UserSessionsPage'
-import BecomeAGamerPage from './Pages/BecomeAGamerPage'
+import BecomeAGamerIntroPage from './Pages/BecomeAGamerIntroPage'
+import BecomeAGamerBackground from './Pages/BecomeAGamerBackgroundPage'
 
 const routes = [
   {
@@ -34,7 +35,12 @@ const routes = [
   },
   {
     path: '/become-a-gamer',
-    component: BecomeAGamerPage,
+    exact: true,
+    component: BecomeAGamerIntroPage,
+  },
+  {
+    path: '/become-a-gamer/background',
+    component: BecomeAGamerBackground,
   },
   {
     path: '/users/:user',

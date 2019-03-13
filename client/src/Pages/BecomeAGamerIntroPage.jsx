@@ -108,7 +108,7 @@ const ReadyTitle = styled.div`
   font-size: 6rem;
   font-weight: 800;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 `
 
 const GetStarted = styled(Link)`
@@ -122,7 +122,7 @@ const GetStarted = styled(Link)`
   background: #f10e0e;
 `
 
-export default function BecomeAGamerPage(props) {
+export default function BecomeAGamerIntroPage(props) {
   return (
     <PageContainer>
       <BecomeAGamerNav />
