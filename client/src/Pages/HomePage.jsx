@@ -7,6 +7,7 @@ import GamerRow from '../Components/TopGamersRow'
 import Jumbotron from '../Components/Jumbotron'
 import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
+import useTitle from '../Hooks/useTitle'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -37,6 +38,7 @@ const InnerContent = styled.div`
 `
 
 export default function HomePage(props) {
+  useTitle('Play games with your favorite people - Gamerize')
   return (
     <PageContainer>
       <NavBar />
