@@ -115,7 +115,7 @@ const GetStarted = styled(Link)`
   color: #fff;
   text-decoration: none;
   outline: 0;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
   padding: 1rem 2.2rem;

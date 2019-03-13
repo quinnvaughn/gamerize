@@ -33,6 +33,9 @@ html {
   input {
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   }
+  textarea {
+    font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  }
   div {
     box-sizing: border-box;
     cursor: default;

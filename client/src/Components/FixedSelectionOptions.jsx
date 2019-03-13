@@ -67,6 +67,8 @@ const RatingContainer = styled.div`
 
 const LeftSide = styled.div``
 
+const BookContainer = styled.div``
+
 export default function FixedSelectionOptions(props) {
   const [open, setModal] = useState(false)
   return (
@@ -88,7 +90,9 @@ export default function FixedSelectionOptions(props) {
             <NumReviews>{`${props.numReviews}`}</NumReviews>
           </RatingContainer>
         </LeftSide>
-        <Book onClick={() => setModal(true)}>Book</Book>
+        <BookContainer>
+          <Book onClick={() => setModal(true)}>Book</Book>
+        </BookContainer>
         {open && (
           <Modal onRequestClose={() => setModal(false)} width={376}>
             <SmallSelectionOptions {...props} close={() => setModal(false)} />
