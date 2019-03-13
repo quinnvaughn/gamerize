@@ -103,15 +103,32 @@ export default function TimeSlots(props) {
                   gamer={props.gamer}
                   game={props.game}
                   goBack={() => sessions.goBack()}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
                 />
               ) : sessions.state.selectedDay ? (
                 <TimeSlotsHours
                   setSelectedSession={sessions.setSelectedSession}
                   day={sessions.state.selectedDay}
                   goBack={() => sessions.setSelectedDay(null)}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
                 />
               ) : (
-                <Calendar setSelectedDay={sessions.setSelectedDay} />
+                <Calendar
+                  setSelectedDay={sessions.setSelectedDay}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
+                />
               )}
             </Modal>
           )

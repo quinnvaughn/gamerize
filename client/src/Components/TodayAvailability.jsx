@@ -40,7 +40,12 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-top: ${props => props.first && '3px solid #f10e0e'};
+  border-top: ${props =>
+    props.first
+      ? props.current
+        ? '3px solid #f10e0e'
+        : '1px solid #dddfe2'
+      : null};
   border-bottom: ${props =>
     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `

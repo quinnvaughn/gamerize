@@ -91,7 +91,7 @@ export default function FixedSelectionOptions(props) {
         <Book onClick={() => setModal(true)}>Book</Book>
         {open && (
           <Modal onRequestClose={() => setModal(false)} width={376}>
-            <SmallSelectionOptions {...props} />
+            <SmallSelectionOptions {...props} close={() => setModal(false)} />
           </Modal>
         )}
       </Content>
