@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
 import { Subscribe } from 'unstated'
+import { MdClose } from 'react-icons/md'
 
 import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
@@ -32,7 +33,7 @@ const Header = styled.div`
   justify-content: space-between;
   position: -webkit-sticky;
   position: sticky;
-  top: 0;
+  top: 3rem;
   left: 0;
   z-index: 9999;
   max-width: inherit;
@@ -68,7 +69,12 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border-top: ${props => props.first && '3px solid #f10e0e'};
+  border-top: ${props =>
+    props.first
+      ? props.current
+        ? '3px solid #f10e0e'
+        : '1px solid #dddfe2'
+      : null};
   border-bottom: ${props =>
     props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
@@ -83,8 +89,8 @@ const Hour = styled.div`
   position: absolute;
   color: ${props => (props.current ? '#f10e0e' : 'black')};
   font-weight: 600;
-  padding-top: 11.75rem;
-  margin-top: -11.75rem;
+  padding-top: 14.75rem;
+  margin-top: -14.75rem;
 `
 
 const Sessions = styled.div`
@@ -128,6 +134,29 @@ const Hours = styled.div`
   font-size: 1.2rem;
   padding-top: 1rem;
 `
+
+const Exit = styled(MdClose)`
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 1000;
+  color: black;
+  :hover {
+    color: #f10e0e;
+  }
+`
+
+const ExitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: #fff;
+  height: 3rem;
+`
+
 export default function TimeSlotHours(props) {
   useEffect(() => {
     const element = document.getElementById('currentCalendar')
@@ -227,6 +256,9 @@ export default function TimeSlotHours(props) {
   }
   return (
     <Container>
+      <ExitContainer>
+        <Exit onClick={props.close} />
+      </ExitContainer>
       {renderHeader()}
       {renderHours()}
     </Container>

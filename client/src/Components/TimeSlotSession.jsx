@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
 import { Subscribe } from 'unstated'
+import { MdClose } from 'react-icons/md'
 
 //local imports
 import Slot from './Slot'
@@ -94,6 +95,20 @@ const SlotOptionsContainer = styled.div`
   padding: 2rem 0 2rem;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
+`
+
+const OptionsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 1127px) {
+    flex: 50%;
+
+    button {
+      margin-top: 1rem;
+    }
+  }
 `
 
 const NumberOfSlotsContainer = styled.label`
@@ -124,7 +139,6 @@ const PickAllSlotsForTeam = styled.button`
   outline: 0;
   border: 1px solid #f10e0e;
   border-radius: 4px;
-  margin-right: 2rem;
   :hover {
     border: 1px solid white;
     background: #f10e0e;
@@ -162,6 +176,28 @@ const AddSessionsContainer = styled.div`
   display: flex;
   padding-top: 1rem;
   justify-content: flex-end;
+`
+
+const Exit = styled(MdClose)`
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 1000;
+  color: black;
+  :hover {
+    color: #f10e0e;
+  }
+`
+
+const ExitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: #fff;
+  height: 3rem;
 `
 
 export default function TimeSlotSession(props) {
@@ -231,20 +267,28 @@ export default function TimeSlotSession(props) {
       <Subscribe to={[SessionsContainer]}>
         {session => (
           <SlotOptionsContainer>
-            <NumberOfSlotsContainer>
-              Slots: <SlotOptionsDropdown slots />
-            </NumberOfSlotsContainer>
-            <NumberOfPlayersContainer>
-              Players: <SlotOptionsDropdown />
-            </NumberOfPlayersContainer>
-            <PickAllSlotsForTeam
-              onClick={() => session.fillAllSlotsWithMyFriends()}
-            >
-              Fill all the slots with my friends
-            </PickAllSlotsForTeam>
-            <PickAllSlotsForMe onClick={() => session.fillAllSlotsForMe()}>
-              Fill all the slots for me
-            </PickAllSlotsForMe>
+            <OptionsContainer>
+              <NumberOfSlotsContainer>
+                Slots: <SlotOptionsDropdown slots />
+              </NumberOfSlotsContainer>
+            </OptionsContainer>
+            <OptionsContainer>
+              <NumberOfPlayersContainer>
+                Players: <SlotOptionsDropdown />
+              </NumberOfPlayersContainer>
+            </OptionsContainer>
+            <OptionsContainer>
+              <PickAllSlotsForTeam
+                onClick={() => session.fillAllSlotsWithMyFriends()}
+              >
+                Fill all the slots with my friends
+              </PickAllSlotsForTeam>
+            </OptionsContainer>
+            <OptionsContainer>
+              <PickAllSlotsForMe onClick={() => session.fillAllSlotsForMe()}>
+                Fill all the slots for me
+              </PickAllSlotsForMe>
+            </OptionsContainer>
           </SlotOptionsContainer>
         )}
       </Subscribe>
@@ -265,7 +309,10 @@ export default function TimeSlotSession(props) {
   }
 
   return (
-    <Container id="container">
+    <Container>
+      <ExitContainer>
+        <Exit onClick={props.close} />
+      </ExitContainer>
       {renderHeader()}
       {renderPrimary()}
     </Container>

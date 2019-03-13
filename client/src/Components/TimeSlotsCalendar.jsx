@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { MdClose } from 'react-icons/md'
 import dateFns from 'date-fns'
 import { withRouter } from 'react-router-dom'
 
@@ -17,7 +18,7 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 3rem 2rem;
+  padding: 1rem 2rem 3rem;
   margin: 0;
   display: flex;
   flex-direction: row;
@@ -130,6 +131,22 @@ const Row = styled.div`
   }
 `
 
+const Exit = styled(MdClose)`
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 1000;
+  color: black;
+  :hover {
+    color: #f10e0e;
+  }
+`
+
+const ExitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+`
+
 class Calendar extends Component {
   state = {
     currentMonth: new Date(),
@@ -225,6 +242,9 @@ class Calendar extends Component {
   render() {
     return (
       <Container>
+        <ExitContainer>
+          <Exit onClick={this.props.close} />
+        </ExitContainer>
         {this.renderHeader()}
         {this.renderDays()}
         {this.renderCells()}

@@ -23,6 +23,7 @@ const gamers = [
       '10% off for 2 or more users',
     ],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Ben Simmons',
@@ -48,6 +49,7 @@ const gamers = [
       '10% off for 2 or more users',
     ],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Joel Embiid',
@@ -73,6 +75,7 @@ const gamers = [
       '10% off for 2 or more users',
     ],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Gordon Hayward',
@@ -98,6 +101,7 @@ const gamers = [
       '10% off for 2 or more users',
     ],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Taylor Bennett',
@@ -120,6 +124,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Shroud',
@@ -142,6 +147,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'TSM Myth',
@@ -164,6 +170,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'Ninja',
@@ -186,6 +193,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'TimTheTatMan',
@@ -208,6 +216,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'DisguisedToast',
@@ -230,6 +239,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
   {
     name: 'PewDiePie',
@@ -252,6 +262,7 @@ const gamers = [
     ],
     discounts: ['20% off for 4 or more sessions'],
     slots: 3,
+    length: 20,
   },
 ]
 

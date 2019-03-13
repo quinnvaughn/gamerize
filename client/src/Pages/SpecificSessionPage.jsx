@@ -180,6 +180,11 @@ const Slots = styled.span`
   font-weight: 400;
 `
 
+const Length = styled.span`
+  font-size: 1.6rem;
+  font-weight: 400;
+`
+
 const SnapTo = styled.div`
   position: absolute;
   top: -70px;
@@ -194,6 +199,12 @@ const MiddleContainer = styled.div`
   margin-bottom: 2.4rem;
   border-bottom: 1px solid #dddfe2;
   display: flex;
+`
+
+const Flex = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
 `
 
 const FlexHalf = styled.div`
@@ -261,25 +272,37 @@ export default function SpecificSessionPage(props) {
             </TopContainer>
             <MiddleContainer>
               <FlexHalf>
-                <TypeOfContent>Game</TypeOfContent>
-                <Game>{`${noUnderscores(game)}`}</Game>
-                <TypeOfContent>{`${singleOrPlural(
-                  gamer.systems,
-                  'System'
-                )}`}</TypeOfContent>
-                {gamer.systems.map((system, index) =>
-                  formatCommas(gamer.systems, system, index)
-                )}
+                <Flex>
+                  <TypeOfContent>Game</TypeOfContent>
+                  <Game>{`${noUnderscores(game)}`}</Game>
+                </Flex>
+                <Flex>
+                  <TypeOfContent>{`${singleOrPlural(
+                    gamer.systems,
+                    'System'
+                  )}`}</TypeOfContent>
+                  {gamer.systems.map((system, index) =>
+                    formatCommas(gamer.systems, system, index)
+                  )}
+                </Flex>
+                <Flex>
+                  <TypeOfContent>Length</TypeOfContent>
+                  <Length>{`${gamer.length} minutes`}</Length>
+                </Flex>
               </FlexHalf>
               <FlexHalf>
-                <TypeOfContent>Type of game</TypeOfContent>
-                <TypeOfGame>
-                  {gamer.typeOfGame === 'CUSTOM'
-                    ? `${capitalize(gamer.typeOfGame)}`
-                    : capitalize(gamer.typeOfGame)}
-                </TypeOfGame>
-                <TypeOfContent>Slots per session</TypeOfContent>
-                <Slots>{`${gamer.slots}`}</Slots>
+                <Flex>
+                  <TypeOfContent>Type of game</TypeOfContent>
+                  <TypeOfGame>
+                    {gamer.typeOfGame === 'CUSTOM'
+                      ? `${capitalize(gamer.typeOfGame)}`
+                      : capitalize(gamer.typeOfGame)}
+                  </TypeOfGame>
+                </Flex>
+                <Flex>
+                  <TypeOfContent>Slots per session</TypeOfContent>
+                  <Slots>{`${gamer.slots}`}</Slots>
+                </Flex>
               </FlexHalf>
             </MiddleContainer>
             <RequirementsAndDiscountsContainer>

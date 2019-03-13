@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled, { keyframes, createGlobalStyle } from 'styled-components'
-import { ifProp } from 'styled-tools'
 
 const show = keyframes`
     0%: {
@@ -56,7 +55,9 @@ const Modal = styled.div`
   overflow-y: initial !important;
 `
 
-const ModalContent = styled.div``
+const ModalContent = styled.div`
+  position: relative;
+`
 
 // So navbar isn't over modal overlay.
 const GlobalStyle = createGlobalStyle`

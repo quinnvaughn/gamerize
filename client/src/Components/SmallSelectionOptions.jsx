@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 import { Subscribe } from 'unstated'
 import dateFns from 'date-fns'
+import { MdClose } from 'react-icons/md'
 
 import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
@@ -52,6 +53,28 @@ const HowManySlots = styled.div`
   margin-bottom: 1rem;
 `
 
+const Exit = styled(MdClose)`
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 1000;
+  color: black;
+  :hover {
+    color: #f10e0e;
+  }
+`
+
+const ExitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: #fff;
+  height: 3rem;
+`
+
 // Will have to fix to do only ones still available for today with filtering.
 const slotsReducer = (acc, cur) => {
   if (dateFns.compareAsc(new Date(), cur.timeStart) === 1) {
@@ -68,9 +91,13 @@ export default function SmallSelectionOptions({
   systems,
   gamer,
   game,
+  close,
 }) {
   return (
     <Container>
+      <ExitContainer>
+        <Exit onClick={close} />
+      </ExitContainer>
       <Top>
         <Price>
           {`$${price}`} <Per>per slot</Per>
