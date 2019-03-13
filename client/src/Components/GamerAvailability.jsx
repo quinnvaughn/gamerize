@@ -48,7 +48,7 @@ const Row = styled.div`
         : '1px solid #dddfe2'
       : null};
   border-bottom: ${props =>
-    props.current ? '3px solid #f10e0e' : '1px solid #dddfe2'};
+    props.current && !props.first ? '3px solid #f10e0e' : '1px solid #dddfe2'};
 `
 
 const Hour = styled.div`
@@ -138,14 +138,25 @@ const GamerAvailability = React.memo(function(props) {
         <Row
           key={i}
           first={i === 0}
-          current={dateFns.isThisHour(
-            new Date(
-              selectedDate.getFullYear(),
-              selectedDate.getMonth(),
-              selectedDate.getDate(),
-              i + 1
-            )
-          )}
+          current={
+            i === 0
+              ? dateFns.isThisHour(
+                  new Date(
+                    selectedDate.getFullYear(),
+                    selectedDate.getMonth(),
+                    selectedDate.getDate(),
+                    i
+                  )
+                )
+              : dateFns.isThisHour(
+                  new Date(
+                    selectedDate.getFullYear(),
+                    selectedDate.getMonth(),
+                    selectedDate.getDate(),
+                    i + 1
+                  )
+                )
+          }
         >
           <Hour
             id={
