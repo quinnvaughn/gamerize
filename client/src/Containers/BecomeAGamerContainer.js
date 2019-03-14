@@ -2,8 +2,8 @@ import { Container } from 'unstated'
 
 class BecomeAGamerContainer extends Container {
   state = {
-    occupation: [],
-    addToOccupation: '',
+    occupations: [],
+    addToOccupations: '',
     socialMedia: {
       twitter: '',
       facebook: '',

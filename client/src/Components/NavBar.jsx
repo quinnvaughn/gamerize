@@ -128,7 +128,7 @@ function NavBar(props) {
                       {link.text}
                     </StyledLink>
                   ))}
-              {!_.isEmpty(data) && <NavBarAvatar />}
+              {!_.isEmpty(data) && !_.isEmpty(data.me) && <NavBarAvatar />}
             </Links>
           )
         }

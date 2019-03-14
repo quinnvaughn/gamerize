@@ -140,6 +140,7 @@ const CREATE_GAMER_REQUEST = gql`
   mutation($input: CreateGamerRequestInput!) {
     createGamerRequest(input: $input) {
       created
+      msg
     }
   }
 `

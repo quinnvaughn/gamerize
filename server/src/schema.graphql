@@ -1,4 +1,4 @@
-# import * from '../prisma/datamodel.graphql'
+# import * from './generated/prisma.graphql'
 
 type Query {
   me: User
@@ -7,7 +7,12 @@ type Query {
 type Mutation {
   signup(input: SignupInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
-  createGamerRequest(input: CreateGamerRequestInput): CreateGamerRequestPayload!
+  createGamerRequest(
+    input: CreateGamerRequestInput!
+  ): CreateGamerRequestPayload!
+  respondToGamerRequest(
+    input: RespondToGamerRequestInput!
+  ): RespondToGamerRequestPayload!
 }
 
 type AuthPayload {
@@ -33,6 +38,23 @@ input CreateGamerRequestInput {
 type CreateGamerRequestPayload {
   created: Boolean!
   request: GamerRequest
+  msg: String
+}
+
+input RespondToGamerRequestInput {
+  ## currently not using this as not getting gamer request by ID.
+  #gamerRequestId: String!
+  userId: String!
+  decision: Decision!
+}
+
+enum Decision {
+  ACCEPT
+  DENY
+}
+
+type RespondToGamerRequestPayload {
+  responded: Boolean!
   msg: String
 }
 
