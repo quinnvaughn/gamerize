@@ -3,7 +3,7 @@ const { importSchema } = require('graphql-import')
 const { prisma } = require('./generated/prisma-client')
 const resolvers = require('./resolvers')
 
-const typeDefs = importSchema('./src/schema.graphql')
+const typeDefs = gql(importSchema('./src/schema.graphql'))
 
 const server = new ApolloServer({
   typeDefs,

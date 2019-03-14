@@ -9,3 +9,5 @@ generate:
 hooks:
   post-deploy:
     - prisma generate
+    - graphql get-schema --project prisma
+    - graphql prepare
