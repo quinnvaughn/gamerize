@@ -5,7 +5,7 @@ const User = {
     const alreadyRequested = await ctx.prisma.gamerRequests({
       where: { user: { id: userId } },
     })
-    return alreadyRequested ? true : false
+    return alreadyRequested.length === 1 ? true : false
   },
 }
 

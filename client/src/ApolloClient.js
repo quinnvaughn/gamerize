@@ -1,4 +1,5 @@
 import { ApolloClient } from 'apollo-client'
+import { onError } from 'apollo-link-error'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -19,12 +20,13 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+// const errorLink = onError(({ networkError, graphQLErrors }) => {
+//   console.log('graphQLErrors: ', graphQLErrors)
+//   console.log('networkError: ', networkError)
+// })
+
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  onError: ({ networkError, graphQLErrors }) => {
-    console.log('graphQLErrors: ', graphQLErrors)
-    console.log('networkError: ', networkError)
-  },
   cache: new InMemoryCache(),
 })
 

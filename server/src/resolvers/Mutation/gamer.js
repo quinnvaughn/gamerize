@@ -6,7 +6,7 @@ const gamer = {
     const alreadyRequested = await context.prisma.gamerRequests({
       where: { user: { id: userId } },
     })
-    if (!alreadyRequested) {
+    if (alreadyRequested.length === 0) {
       const request = await context.prisma.createGamerRequest({
         addToOccupations: input.addToOccupations,
         occupations: { set: input.occupations },
@@ -22,6 +22,23 @@ const gamer = {
         : { msg: 'Gamer request failed. Try again.', created: false }
     }
     return { msg: 'You already have a pending gamer request', created: false }
+  },
+  async respondToGamerRequest(parent, { input }, { prisma }) {
+    const user = await prisma.updateUser({
+      where: { id: input.userId },
+      data: { isGamer: input.decision === 'ACCEPT' ? true : false },
+    })
+    // Do delete many for now because of unique issue.
+    user &&
+      (await prisma.deleteManyGamerRequests({
+        user: { id: input.userId },
+      }))
+    return user
+      ? { responded: true }
+      : {
+          msg: 'Your attempt cannot be processed. Please try again.',
+          responded: false,
+        }
   },
 }
 
