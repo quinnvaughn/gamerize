@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Subscribe } from 'unstated'
-import { Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { FaChevronLeft } from 'react-icons/fa'
+import { useMutation } from 'react-apollo-hooks'
 import _ from 'lodash'
+import gql from 'graphql-tag'
 
 //local imports
 import Gamer from '../Containers/BecomeAGamerContainer'
@@ -92,16 +94,21 @@ const PreviousArrow = styled(FaChevronLeft)`
   margin-right: 0.5rem;
 `
 
-const Finish = styled(Link)`
+const Finish = styled.button`
   color: #fff;
   text-decoration: none;
   outline: 0;
   border-radius: 4px;
   font-size: 1.6rem;
+  cursor: pointer;
   font-weight: 600;
   padding: 1rem 2.2rem;
   background: ${props => (props.disabled ? '#dddfe2' : '#f10e0e')};
   pointer-events: ${props => props.disabled && 'none'};
+  border: none;
+  :focus {
+    outline: none;
+  }
 `
 
 const ButtonsContainer = styled.div`
@@ -129,8 +136,17 @@ const Buttons = styled.div`
   width: 60%;
 `
 
-export default function BecomeAGamerDetails(props) {
+const CREATE_GAMER_REQUEST = gql`
+  mutation($input: CreateGamerRequestInput!) {
+    createGamerRequest(input: $input) {
+      created
+    }
+  }
+`
+
+function BecomeAGamerDetails(props) {
   useTitle('Let us know who you are')
+  const createGamerRequest = useMutation(CREATE_GAMER_REQUEST)
   return (
     <Subscribe to={[Gamer]}>
       {container => (
@@ -218,8 +234,16 @@ export default function BecomeAGamerDetails(props) {
                     <PreviousText>Previous</PreviousText>
                   </Previous>
                   <Finish
-                    to="/become-a-gamer/finished"
                     disabled={objectIsEmpty(container.state.socialMedia)}
+                    onClick={async () => {
+                      const input = { ...container.state }
+                      await createGamerRequest({
+                        variables: {
+                          input,
+                        },
+                      })
+                      props.history.push('/become-a-gamer/finished')
+                    }}
                   >
                     Finish
                   </Finish>
@@ -232,3 +256,5 @@ export default function BecomeAGamerDetails(props) {
     </Subscribe>
   )
 }
+
+export default withRouter(BecomeAGamerDetails)

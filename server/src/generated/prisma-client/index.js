@@ -11,6 +11,18 @@ var models = [
   {
     name: "UserIndex",
     embedded: false
+  },
+  {
+    name: "GamerRequest",
+    embedded: false
+  },
+  {
+    name: "SocialMedia",
+    embedded: false
+  },
+  {
+    name: "Occupations",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
