@@ -1,3 +1,5 @@
+# import * from '../prisma/datamodel.graphql'
+
 type Query {
   me: User
 }
@@ -5,6 +7,7 @@ type Query {
 type Mutation {
   signup(input: SignupInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
+  createGamerRequest(input: CreateGamerRequestInput): CreateGamerRequestPayload!
 }
 
 type AuthPayload {
@@ -12,11 +15,33 @@ type AuthPayload {
   user: User!
 }
 
+input SocialMediaInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input CreateGamerRequestInput {
+  occupations: [Occupations!]!
+  addToOccupations: String
+  socialMedia: SocialMediaInput!
+}
+
+type CreateGamerRequestPayload {
+  created: Boolean!
+  request: GamerRequest
+  msg: String
+}
+
 type User {
   id: ID!
   email: String!
   name: String!
   username: String!
+  currentGamerRequest: Boolean!
 }
 
 input SignupInput {

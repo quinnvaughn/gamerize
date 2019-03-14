@@ -14,6 +14,8 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  gamerRequest: (where?: GamerRequestWhereInput) => Promise<boolean>;
+  socialMedia: (where?: SocialMediaWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
   userIndex: (where?: UserIndexWhereInput) => Promise<boolean>;
 }
@@ -37,6 +39,50 @@ export interface Prisma {
    * Queries
    */
 
+  gamerRequests: (
+    args?: {
+      where?: GamerRequestWhereInput;
+      orderBy?: GamerRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<GamerRequest>;
+  gamerRequestsConnection: (
+    args?: {
+      where?: GamerRequestWhereInput;
+      orderBy?: GamerRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => GamerRequestConnectionPromise;
+  socialMedias: (
+    args?: {
+      where?: SocialMediaWhereInput;
+      orderBy?: SocialMediaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SocialMedia>;
+  socialMediasConnection: (
+    args?: {
+      where?: SocialMediaWhereInput;
+      orderBy?: SocialMediaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SocialMediaConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -89,6 +135,26 @@ export interface Prisma {
    * Mutations
    */
 
+  createGamerRequest: (data: GamerRequestCreateInput) => GamerRequestPromise;
+  updateManyGamerRequests: (
+    args: {
+      data: GamerRequestUpdateManyMutationInput;
+      where?: GamerRequestWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  deleteManyGamerRequests: (
+    where?: GamerRequestWhereInput
+  ) => BatchPayloadPromise;
+  createSocialMedia: (data: SocialMediaCreateInput) => SocialMediaPromise;
+  updateManySocialMedias: (
+    args: {
+      data: SocialMediaUpdateManyMutationInput;
+      where?: SocialMediaWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  deleteManySocialMedias: (
+    where?: SocialMediaWhereInput
+  ) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -133,6 +199,12 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  gamerRequest: (
+    where?: GamerRequestSubscriptionWhereInput
+  ) => GamerRequestSubscriptionPayloadSubscription;
+  socialMedia: (
+    where?: SocialMediaSubscriptionWhereInput
+  ) => SocialMediaSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -149,6 +221,64 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type Occupations =
+  | "CELEBRITY"
+  | "INFLUENCER"
+  | "ENTERTAINER"
+  | "STREAMER"
+  | "YOUTUBER"
+  | "MEDIA"
+  | "SPORTS_PERSONALITY"
+  | "INTERNET_PERSONALITY"
+  | "ATHLETE"
+  | "PROFESIONAL_GAMER"
+  | "ACTOR"
+  | "COMEDIAN"
+  | "ROCK_STAR"
+  | "RAPPER"
+  | "SINGER"
+  | "MUSICIAN"
+  | "POLITICIAN"
+  | "DJ"
+  | "MUSIC_PRODUCER"
+  | "ENTREPRENEUR"
+  | "ARTIST"
+  | "ACTRESS"
+  | "MODEL"
+  | "ADULT_PERFORMER";
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type GamerRequestOrderByInput =
+  | "addToOccupations_ASC"
+  | "addToOccupations_DESC"
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type SocialMediaOrderByInput =
+  | "twitter_ASC"
+  | "twitter_DESC"
+  | "facebook_ASC"
+  | "facebook_DESC"
+  | "youtube_ASC"
+  | "youtube_DESC"
+  | "instagram_ASC"
+  | "instagram_DESC"
+  | "twitch_ASC"
+  | "twitch_DESC"
+  | "snapchat_ASC"
+  | "snapchat_DESC"
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -158,8 +288,12 @@ export type UserOrderByInput =
   | "username_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "isGamer_ASC"
+  | "isGamer_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "aboutMe_ASC"
+  | "aboutMe_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -179,36 +313,13 @@ export type UserIndexOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export interface UserIndexCreateInput {
-  email: String;
-  username: String;
-  name: String;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  username?: String;
-}>;
-
-export interface UserUpdateInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  name?: String;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+export interface SocialMediaUpdateManyMutationInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
 }
 
 export interface UserWhereInput {
@@ -268,6 +379,8 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
+  isGamer?: Boolean;
+  isGamer_not?: Boolean;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -282,9 +395,126 @@ export interface UserWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  aboutMe?: String;
+  aboutMe_not?: String;
+  aboutMe_in?: String[] | String;
+  aboutMe_not_in?: String[] | String;
+  aboutMe_lt?: String;
+  aboutMe_lte?: String;
+  aboutMe_gt?: String;
+  aboutMe_gte?: String;
+  aboutMe_contains?: String;
+  aboutMe_not_contains?: String;
+  aboutMe_starts_with?: String;
+  aboutMe_not_starts_with?: String;
+  aboutMe_ends_with?: String;
+  aboutMe_not_ends_with?: String;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface SocialMediaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SocialMediaWhereInput;
+  AND?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+  OR?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+  NOT?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+}
+
+export interface GamerRequestWhereInput {
+  user?: UserWhereInput;
+  addToOccupations?: String;
+  addToOccupations_not?: String;
+  addToOccupations_in?: String[] | String;
+  addToOccupations_not_in?: String[] | String;
+  addToOccupations_lt?: String;
+  addToOccupations_lte?: String;
+  addToOccupations_gt?: String;
+  addToOccupations_gte?: String;
+  addToOccupations_contains?: String;
+  addToOccupations_not_contains?: String;
+  addToOccupations_starts_with?: String;
+  addToOccupations_not_starts_with?: String;
+  addToOccupations_ends_with?: String;
+  addToOccupations_not_ends_with?: String;
+  socialMedia?: SocialMediaWhereInput;
+  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+}
+
+export interface SocialMediaCreateInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface UserIndexUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface SocialMediaCreateOneInput {
+  create?: SocialMediaCreateInput;
+}
+
+export interface UserIndexUpdateInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface GamerRequestCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+}
+
+export type UserIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface UserUpdateInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+}
+
+export interface UserCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface UserIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserIndexWhereInput;
+  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
 }
 
 export interface UserIndexWhereInput {
@@ -349,93 +579,194 @@ export interface UserIndexWhereInput {
   NOT?: UserIndexWhereInput[] | UserIndexWhereInput;
 }
 
+export interface GamerRequestUpdateManyMutationInput {
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+}
+
+export interface GamerRequestSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamerRequestWhereInput;
+  AND?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  OR?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  NOT?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+}
+
+export interface GamerRequestCreateInput {
+  user: UserCreateOneInput;
+  occupations?: GamerRequestCreateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia: SocialMediaCreateOneInput;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
 export interface UserCreateInput {
   email: String;
   username: String;
   password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface UserIndexCreateInput {
+  email: String;
+  username: String;
   name: String;
 }
 
-export type UserIndexWhereUniqueInput = AtLeastOne<{
+export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   email?: String;
   username?: String;
 }>;
 
-export interface UserIndexUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  name?: String;
+export interface GamerRequestUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  name?: String;
+export interface SocialMediaWhereInput {
+  twitter?: String;
+  twitter_not?: String;
+  twitter_in?: String[] | String;
+  twitter_not_in?: String[] | String;
+  twitter_lt?: String;
+  twitter_lte?: String;
+  twitter_gt?: String;
+  twitter_gte?: String;
+  twitter_contains?: String;
+  twitter_not_contains?: String;
+  twitter_starts_with?: String;
+  twitter_not_starts_with?: String;
+  twitter_ends_with?: String;
+  twitter_not_ends_with?: String;
+  facebook?: String;
+  facebook_not?: String;
+  facebook_in?: String[] | String;
+  facebook_not_in?: String[] | String;
+  facebook_lt?: String;
+  facebook_lte?: String;
+  facebook_gt?: String;
+  facebook_gte?: String;
+  facebook_contains?: String;
+  facebook_not_contains?: String;
+  facebook_starts_with?: String;
+  facebook_not_starts_with?: String;
+  facebook_ends_with?: String;
+  facebook_not_ends_with?: String;
+  youtube?: String;
+  youtube_not?: String;
+  youtube_in?: String[] | String;
+  youtube_not_in?: String[] | String;
+  youtube_lt?: String;
+  youtube_lte?: String;
+  youtube_gt?: String;
+  youtube_gte?: String;
+  youtube_contains?: String;
+  youtube_not_contains?: String;
+  youtube_starts_with?: String;
+  youtube_not_starts_with?: String;
+  youtube_ends_with?: String;
+  youtube_not_ends_with?: String;
+  instagram?: String;
+  instagram_not?: String;
+  instagram_in?: String[] | String;
+  instagram_not_in?: String[] | String;
+  instagram_lt?: String;
+  instagram_lte?: String;
+  instagram_gt?: String;
+  instagram_gte?: String;
+  instagram_contains?: String;
+  instagram_not_contains?: String;
+  instagram_starts_with?: String;
+  instagram_not_starts_with?: String;
+  instagram_ends_with?: String;
+  instagram_not_ends_with?: String;
+  twitch?: String;
+  twitch_not?: String;
+  twitch_in?: String[] | String;
+  twitch_not_in?: String[] | String;
+  twitch_lt?: String;
+  twitch_lte?: String;
+  twitch_gt?: String;
+  twitch_gte?: String;
+  twitch_contains?: String;
+  twitch_not_contains?: String;
+  twitch_starts_with?: String;
+  twitch_not_starts_with?: String;
+  twitch_ends_with?: String;
+  twitch_not_ends_with?: String;
+  snapchat?: String;
+  snapchat_not?: String;
+  snapchat_in?: String[] | String;
+  snapchat_not_in?: String[] | String;
+  snapchat_lt?: String;
+  snapchat_lte?: String;
+  snapchat_gt?: String;
+  snapchat_gte?: String;
+  snapchat_contains?: String;
+  snapchat_not_contains?: String;
+  snapchat_starts_with?: String;
+  snapchat_not_starts_with?: String;
+  snapchat_ends_with?: String;
+  snapchat_not_ends_with?: String;
+  AND?: SocialMediaWhereInput[] | SocialMediaWhereInput;
+  OR?: SocialMediaWhereInput[] | SocialMediaWhereInput;
+  NOT?: SocialMediaWhereInput[] | SocialMediaWhereInput;
 }
 
-export interface UserIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserIndexWhereInput;
-  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-}
-
-export interface UserIndexUpdateInput {
-  email?: String;
-  username?: String;
-  name?: String;
+export interface UserUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface UserIndexEdge {
-  node: UserIndex;
-  cursor: String;
+export interface GamerRequestConnection {
+  pageInfo: PageInfo;
+  edges: GamerRequestEdge[];
 }
 
-export interface UserIndexEdgePromise
-  extends Promise<UserIndexEdge>,
+export interface GamerRequestConnectionPromise
+  extends Promise<GamerRequestConnection>,
     Fragmentable {
-  node: <T = UserIndexPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamerRequestEdge>>() => T;
+  aggregate: <T = AggregateGamerRequestPromise>() => T;
 }
 
-export interface UserIndexEdgeSubscription
-  extends Promise<AsyncIterator<UserIndexEdge>>,
+export interface GamerRequestConnectionSubscription
+  extends Promise<AsyncIterator<GamerRequestConnection>>,
     Fragmentable {
-  node: <T = UserIndexSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamerRequestEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamerRequestSubscription>() => T;
 }
 
 export interface UserIndexPreviousValues {
@@ -463,25 +794,84 @@ export interface UserIndexPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
+export interface SocialMedia {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+export interface SocialMediaPromise extends Promise<SocialMedia>, Fragmentable {
+  twitter: () => Promise<String>;
+  facebook: () => Promise<String>;
+  youtube: () => Promise<String>;
+  instagram: () => Promise<String>;
+  twitch: () => Promise<String>;
+  snapchat: () => Promise<String>;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface SocialMediaSubscription
+  extends Promise<AsyncIterator<SocialMedia>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  twitter: () => Promise<AsyncIterator<String>>;
+  facebook: () => Promise<AsyncIterator<String>>;
+  youtube: () => Promise<AsyncIterator<String>>;
+  instagram: () => Promise<AsyncIterator<String>>;
+  twitch: () => Promise<AsyncIterator<String>>;
+  snapchat: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUserIndex {
+  count: Int;
+}
+
+export interface AggregateUserIndexPromise
+  extends Promise<AggregateUserIndex>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserIndexSubscription
+  extends Promise<AsyncIterator<AggregateUserIndex>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  email: String;
+  username: String;
+  password: String;
+  isGamer: Boolean;
+  occupations: Occupations[];
+  name: String;
+  aboutMe?: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  password: () => Promise<String>;
+  isGamer: () => Promise<Boolean>;
+  occupations: () => Promise<Occupations[]>;
+  name: () => Promise<String>;
+  aboutMe: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  isGamer: () => Promise<AsyncIterator<Boolean>>;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  name: () => Promise<AsyncIterator<String>>;
+  aboutMe: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserIndexConnection {
@@ -503,6 +893,101 @@ export interface UserIndexConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<UserIndexEdgeSubscription>>>() => T;
   aggregate: <T = AggregateUserIndexSubscription>() => T;
+}
+
+export interface GamerRequest {
+  occupations: Occupations[];
+  addToOccupations?: String;
+}
+
+export interface GamerRequestPromise
+  extends Promise<GamerRequest>,
+    Fragmentable {
+  user: <T = UserPromise>() => T;
+  occupations: () => Promise<Occupations[]>;
+  addToOccupations: () => Promise<String>;
+  socialMedia: <T = SocialMediaPromise>() => T;
+}
+
+export interface GamerRequestSubscription
+  extends Promise<AsyncIterator<GamerRequest>>,
+    Fragmentable {
+  user: <T = UserSubscription>() => T;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  addToOccupations: () => Promise<AsyncIterator<String>>;
+  socialMedia: <T = SocialMediaSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface SocialMediaEdge {
+  node: SocialMedia;
+  cursor: String;
+}
+
+export interface SocialMediaEdgePromise
+  extends Promise<SocialMediaEdge>,
+    Fragmentable {
+  node: <T = SocialMediaPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SocialMediaEdgeSubscription
+  extends Promise<AsyncIterator<SocialMediaEdge>>,
+    Fragmentable {
+  node: <T = SocialMediaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -530,86 +1015,107 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface User {
-  id: ID_Output;
-  email: String;
-  username: String;
-  password: String;
-  name: String;
+export interface SocialMediaConnection {
+  pageInfo: PageInfo;
+  edges: SocialMediaEdge[];
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  username: () => Promise<String>;
-  password: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface SocialMediaConnectionPromise
+  extends Promise<SocialMediaConnection>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SocialMediaEdge>>() => T;
+  aggregate: <T = AggregateSocialMediaPromise>() => T;
 }
 
-export interface UserEdge {
-  node: User;
+export interface SocialMediaConnectionSubscription
+  extends Promise<AsyncIterator<SocialMediaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SocialMediaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSocialMediaSubscription>() => T;
+}
+
+export interface GamerRequestSubscriptionPayload {
+  mutation: MutationType;
+  node: GamerRequest;
+  updatedFields: String[];
+  previousValues: GamerRequestPreviousValues;
+}
+
+export interface GamerRequestSubscriptionPayloadPromise
+  extends Promise<GamerRequestSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GamerRequestPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GamerRequestPreviousValuesPromise>() => T;
+}
+
+export interface GamerRequestSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GamerRequestSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GamerRequestSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GamerRequestPreviousValuesSubscription>() => T;
+}
+
+export interface GamerRequestPreviousValues {
+  occupations: Occupations[];
+  addToOccupations?: String;
+}
+
+export interface GamerRequestPreviousValuesPromise
+  extends Promise<GamerRequestPreviousValues>,
+    Fragmentable {
+  occupations: () => Promise<Occupations[]>;
+  addToOccupations: () => Promise<String>;
+}
+
+export interface GamerRequestPreviousValuesSubscription
+  extends Promise<AsyncIterator<GamerRequestPreviousValues>>,
+    Fragmentable {
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  addToOccupations: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GamerRequestEdge {
+  node: GamerRequest;
   cursor: String;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
+export interface GamerRequestEdgePromise
+  extends Promise<GamerRequestEdge>,
+    Fragmentable {
+  node: <T = GamerRequestPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface GamerRequestEdgeSubscription
+  extends Promise<AsyncIterator<GamerRequestEdge>>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
+  node: <T = GamerRequestSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserIndex {
-  id: ID_Output;
-  email: String;
-  username: String;
-  name: String;
+export interface UserIndexEdge {
+  node: UserIndex;
+  cursor: String;
 }
 
-export interface UserIndexPromise extends Promise<UserIndex>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  username: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface UserIndexSubscription
-  extends Promise<AsyncIterator<UserIndex>>,
+export interface UserIndexEdgePromise
+  extends Promise<UserIndexEdge>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
+  node: <T = UserIndexPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateUserIndex {
-  count: Int;
-}
-
-export interface AggregateUserIndexPromise
-  extends Promise<AggregateUserIndex>,
+export interface UserIndexEdgeSubscription
+  extends Promise<AsyncIterator<UserIndexEdge>>,
     Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserIndexSubscription
-  extends Promise<AsyncIterator<AggregateUserIndex>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = UserIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserPreviousValues {
@@ -617,7 +1123,10 @@ export interface UserPreviousValues {
   email: String;
   username: String;
   password: String;
+  isGamer: Boolean;
+  occupations: Occupations[];
   name: String;
+  aboutMe?: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -627,7 +1136,10 @@ export interface UserPreviousValuesPromise
   email: () => Promise<String>;
   username: () => Promise<String>;
   password: () => Promise<String>;
+  isGamer: () => Promise<Boolean>;
+  occupations: () => Promise<Occupations[]>;
   name: () => Promise<String>;
+  aboutMe: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -637,7 +1149,66 @@ export interface UserPreviousValuesSubscription
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  isGamer: () => Promise<AsyncIterator<Boolean>>;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
   name: () => Promise<AsyncIterator<String>>;
+  aboutMe: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SocialMediaPreviousValues {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface SocialMediaPreviousValuesPromise
+  extends Promise<SocialMediaPreviousValues>,
+    Fragmentable {
+  twitter: () => Promise<String>;
+  facebook: () => Promise<String>;
+  youtube: () => Promise<String>;
+  instagram: () => Promise<String>;
+  twitch: () => Promise<String>;
+  snapchat: () => Promise<String>;
+}
+
+export interface SocialMediaPreviousValuesSubscription
+  extends Promise<AsyncIterator<SocialMediaPreviousValues>>,
+    Fragmentable {
+  twitter: () => Promise<AsyncIterator<String>>;
+  facebook: () => Promise<AsyncIterator<String>>;
+  youtube: () => Promise<AsyncIterator<String>>;
+  instagram: () => Promise<AsyncIterator<String>>;
+  twitch: () => Promise<AsyncIterator<String>>;
+  snapchat: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SocialMediaSubscriptionPayload {
+  mutation: MutationType;
+  node: SocialMedia;
+  updatedFields: String[];
+  previousValues: SocialMediaPreviousValues;
+}
+
+export interface SocialMediaSubscriptionPayloadPromise
+  extends Promise<SocialMediaSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SocialMediaPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SocialMediaPreviousValuesPromise>() => T;
+}
+
+export interface SocialMediaSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SocialMediaSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SocialMediaSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SocialMediaPreviousValuesSubscription>() => T;
 }
 
 export interface UserIndexSubscriptionPayload {
@@ -665,36 +1236,99 @@ export interface UserIndexSubscriptionPayloadSubscription
   previousValues: <T = UserIndexPreviousValuesSubscription>() => T;
 }
 
-export interface BatchPayload {
-  count: Long;
+export interface UserIndex {
+  id: ID_Output;
+  email: String;
+  username: String;
+  name: String;
 }
 
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
+export interface UserIndexPromise extends Promise<UserIndex>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface UserIndexSubscription
+  extends Promise<AsyncIterator<UserIndex>>,
     Fragmentable {
-  count: () => Promise<Long>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser {
+export interface AggregateGamerRequest {
   count: Int;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface AggregateGamerRequestPromise
+  extends Promise<AggregateGamerRequest>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
+export interface AggregateGamerRequestSubscription
+  extends Promise<AsyncIterator<AggregateGamerRequest>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateSocialMedia {
+  count: Int;
+}
+
+export interface AggregateSocialMediaPromise
+  extends Promise<AggregateSocialMedia>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSocialMediaSubscription
+  extends Promise<AsyncIterator<AggregateSocialMedia>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -702,23 +1336,23 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 */
 export type Int = number;
 
+export type Long = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-export type Long = string;
-
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
 
 /**
  * Model Metadata
@@ -731,6 +1365,18 @@ export const models: Model[] = [
   },
   {
     name: "UserIndex",
+    embedded: false
+  },
+  {
+    name: "GamerRequest",
+    embedded: false
+  },
+  {
+    name: "SocialMedia",
+    embedded: false
+  },
+  {
+    name: "Occupations",
     embedded: false
   }
 ];

@@ -1,0 +1,61 @@
+type User {
+  id: ID! @unique
+  email: String! @unique
+  username: String! @unique
+  password: String!
+  isGamer: Boolean! @default(value: false)
+  occupations: [Occupations!]!
+  name: String!
+  aboutMe: String
+}
+
+## Workaround for no case insensitive search in prisma yet.
+type UserIndex {
+  id: ID! @unique
+  email: String! @unique
+  username: String! @unique
+  name: String!
+}
+
+type GamerRequest {
+  user: User!
+  occupations: [Occupations!]!
+  addToOccupations: String
+  socialMedia: SocialMedia!
+}
+
+type SocialMedia {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+enum Occupations {
+  CELEBRITY
+  INFLUENCER
+  ENTERTAINER
+  STREAMER
+  YOUTUBER
+  MEDIA
+  SPORTS_PERSONALITY
+  INTERNET_PERSONALITY
+  ATHLETE
+  PROFESIONAL_GAMER
+  ACTOR
+  COMEDIAN
+  ROCK_STAR
+  RAPPER
+  SINGER
+  MUSICIAN
+  POLITICIAN
+  DJ
+  MUSIC_PRODUCER
+  ENTREPRENEUR
+  ARTIST
+  ACTRESS
+  MODEL
+  ADULT_PERFORMER
+}

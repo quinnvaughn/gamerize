@@ -9,6 +9,7 @@ import _ from 'lodash'
 import Gamer from '../Containers/BecomeAGamerContainer'
 import ProgressNav from '../Components/ProgressNav'
 import useTitle from '../Hooks/useTitle'
+import { noUnderscores, capitalize } from '../utils/Strings'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -21,8 +22,8 @@ const Content = styled.div`
   margin: 0 auto;
   padding-left: 2.4rem;
   padding-right: 2.4rem;
-  height: 100%;
   padding-top: 7rem;
+  margin-bottom: 9rem;
 `
 
 const Container = styled.div`
@@ -42,7 +43,7 @@ const Title = styled.div`
 const Subtitle = styled.div`
   font-weight: 400;
   font-size: 1.4rem;
-  line-height: 1.25em;
+  line-height: 1.5em;
   margin-bottom: 2rem;
 `
 
@@ -149,27 +150,30 @@ const YoursText = styled.textarea`
 `
 
 const occupation = [
-  'Celebrity',
-  'Influencer',
-  'Streamer',
-  'Youtuber',
-  'Media',
-  'Sports Personality',
-  'Internet Personality',
-  'Athlete',
-  'Professional Gamer',
-  'Actor',
-  'Comedian',
-  'Rock Star',
-  'Rapper',
-  'Singer',
-  'Musician',
-  'Politician',
+  'CELEBRITY',
+  'INFLUENCER',
+  'ENTERTAINER',
+  'STREAMER',
+  'YOUTUBER',
+  'MEDIA',
+  'SPORTS_PERSONALITY',
+  'INTERNET_PERSONALITY',
+  'ATHLETE',
+  'PROFESSIONAL_GAMER',
+  'ACTOR',
+  'ACTRESS',
+  'COMEDIAN',
+  'ROCK_STAR',
+  'RAPPER',
+  'SINGER',
+  'MUSICIAN',
+  'POLITICIAN',
   'DJ',
-  'Music Producer',
-  'Entrepreneur',
-  'Artist',
-  'Actress',
+  'MUSIC_PRODUCER',
+  'ENTREPRENEUR',
+  'ARTIST',
+  'MODEL',
+  'ADULT_PERFORMER',
 ]
 
 export default function BecomeAGamerBackground(props) {
@@ -182,14 +186,17 @@ export default function BecomeAGamerBackground(props) {
           <Content>
             <Container>
               <Title>What kind of gamer are you?</Title>
-              <Subtitle>You may pick multiple</Subtitle>
+              <Subtitle>
+                You may pick multiple if they apply. Would make you show up in
+                more searches.
+              </Subtitle>
               <Types>
                 {_.map(occupation, type => (
                   <TypeOfGamer
                     onClick={() => container.setOccupation(type)}
                     selected={container.state.occupation.includes(type)}
                   >
-                    {type}
+                    {type === 'DJ' ? type : capitalize(noUnderscores(type))}
                   </TypeOfGamer>
                 ))}
               </Types>
