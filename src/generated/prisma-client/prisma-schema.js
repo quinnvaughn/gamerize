@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregateGamerRequest {
+  count: Int!
+}
+
+type AggregateSocialMedia {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -15,9 +23,109 @@ type BatchPayload {
   count: Long!
 }
 
+type GamerRequest {
+  user: User!
+  occupations: [Occupations!]!
+  addToOccupations: String
+  socialMedia: SocialMedia!
+}
+
+type GamerRequestConnection {
+  pageInfo: PageInfo!
+  edges: [GamerRequestEdge]!
+  aggregate: AggregateGamerRequest!
+}
+
+input GamerRequestCreateInput {
+  user: UserCreateOneInput!
+  occupations: GamerRequestCreateoccupationsInput
+  addToOccupations: String
+  socialMedia: SocialMediaCreateOneInput!
+}
+
+input GamerRequestCreateoccupationsInput {
+  set: [Occupations!]
+}
+
+type GamerRequestEdge {
+  node: GamerRequest!
+  cursor: String!
+}
+
+enum GamerRequestOrderByInput {
+  addToOccupations_ASC
+  addToOccupations_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GamerRequestPreviousValues {
+  occupations: [Occupations!]!
+  addToOccupations: String
+}
+
+type GamerRequestSubscriptionPayload {
+  mutation: MutationType!
+  node: GamerRequest
+  updatedFields: [String!]
+  previousValues: GamerRequestPreviousValues
+}
+
+input GamerRequestSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GamerRequestWhereInput
+  AND: [GamerRequestSubscriptionWhereInput!]
+  OR: [GamerRequestSubscriptionWhereInput!]
+  NOT: [GamerRequestSubscriptionWhereInput!]
+}
+
+input GamerRequestUpdateManyMutationInput {
+  occupations: GamerRequestUpdateoccupationsInput
+  addToOccupations: String
+}
+
+input GamerRequestUpdateoccupationsInput {
+  set: [Occupations!]
+}
+
+input GamerRequestWhereInput {
+  user: UserWhereInput
+  addToOccupations: String
+  addToOccupations_not: String
+  addToOccupations_in: [String!]
+  addToOccupations_not_in: [String!]
+  addToOccupations_lt: String
+  addToOccupations_lte: String
+  addToOccupations_gt: String
+  addToOccupations_gte: String
+  addToOccupations_contains: String
+  addToOccupations_not_contains: String
+  addToOccupations_starts_with: String
+  addToOccupations_not_starts_with: String
+  addToOccupations_ends_with: String
+  addToOccupations_not_ends_with: String
+  socialMedia: SocialMediaWhereInput
+  AND: [GamerRequestWhereInput!]
+  OR: [GamerRequestWhereInput!]
+  NOT: [GamerRequestWhereInput!]
+}
+
 scalar Long
 
 type Mutation {
+  createGamerRequest(data: GamerRequestCreateInput!): GamerRequest!
+  updateManyGamerRequests(data: GamerRequestUpdateManyMutationInput!, where: GamerRequestWhereInput): BatchPayload!
+  deleteManyGamerRequests(where: GamerRequestWhereInput): BatchPayload!
+  createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
+  updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
+  deleteManySocialMedias(where: SocialMediaWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -42,6 +150,33 @@ interface Node {
   id: ID!
 }
 
+enum Occupations {
+  CELEBRITY
+  INFLUENCER
+  ENTERTAINER
+  STREAMER
+  YOUTUBER
+  MEDIA
+  SPORTS_PERSONALITY
+  INTERNET_PERSONALITY
+  ATHLETE
+  PROFESIONAL_GAMER
+  ACTOR
+  COMEDIAN
+  ROCK_STAR
+  RAPPER
+  SINGER
+  MUSICIAN
+  POLITICIAN
+  DJ
+  MUSIC_PRODUCER
+  ENTREPRENEUR
+  ARTIST
+  ACTRESS
+  MODEL
+  ADULT_PERFORMER
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -50,6 +185,10 @@ type PageInfo {
 }
 
 type Query {
+  gamerRequests(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerRequest]!
+  gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
+  socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
+  socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -59,7 +198,189 @@ type Query {
   node(id: ID!): Node
 }
 
+type SocialMedia {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+type SocialMediaConnection {
+  pageInfo: PageInfo!
+  edges: [SocialMediaEdge]!
+  aggregate: AggregateSocialMedia!
+}
+
+input SocialMediaCreateInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input SocialMediaCreateOneInput {
+  create: SocialMediaCreateInput
+}
+
+type SocialMediaEdge {
+  node: SocialMedia!
+  cursor: String!
+}
+
+enum SocialMediaOrderByInput {
+  twitter_ASC
+  twitter_DESC
+  facebook_ASC
+  facebook_DESC
+  youtube_ASC
+  youtube_DESC
+  instagram_ASC
+  instagram_DESC
+  twitch_ASC
+  twitch_DESC
+  snapchat_ASC
+  snapchat_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SocialMediaPreviousValues {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+type SocialMediaSubscriptionPayload {
+  mutation: MutationType!
+  node: SocialMedia
+  updatedFields: [String!]
+  previousValues: SocialMediaPreviousValues
+}
+
+input SocialMediaSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SocialMediaWhereInput
+  AND: [SocialMediaSubscriptionWhereInput!]
+  OR: [SocialMediaSubscriptionWhereInput!]
+  NOT: [SocialMediaSubscriptionWhereInput!]
+}
+
+input SocialMediaUpdateManyMutationInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input SocialMediaWhereInput {
+  twitter: String
+  twitter_not: String
+  twitter_in: [String!]
+  twitter_not_in: [String!]
+  twitter_lt: String
+  twitter_lte: String
+  twitter_gt: String
+  twitter_gte: String
+  twitter_contains: String
+  twitter_not_contains: String
+  twitter_starts_with: String
+  twitter_not_starts_with: String
+  twitter_ends_with: String
+  twitter_not_ends_with: String
+  facebook: String
+  facebook_not: String
+  facebook_in: [String!]
+  facebook_not_in: [String!]
+  facebook_lt: String
+  facebook_lte: String
+  facebook_gt: String
+  facebook_gte: String
+  facebook_contains: String
+  facebook_not_contains: String
+  facebook_starts_with: String
+  facebook_not_starts_with: String
+  facebook_ends_with: String
+  facebook_not_ends_with: String
+  youtube: String
+  youtube_not: String
+  youtube_in: [String!]
+  youtube_not_in: [String!]
+  youtube_lt: String
+  youtube_lte: String
+  youtube_gt: String
+  youtube_gte: String
+  youtube_contains: String
+  youtube_not_contains: String
+  youtube_starts_with: String
+  youtube_not_starts_with: String
+  youtube_ends_with: String
+  youtube_not_ends_with: String
+  instagram: String
+  instagram_not: String
+  instagram_in: [String!]
+  instagram_not_in: [String!]
+  instagram_lt: String
+  instagram_lte: String
+  instagram_gt: String
+  instagram_gte: String
+  instagram_contains: String
+  instagram_not_contains: String
+  instagram_starts_with: String
+  instagram_not_starts_with: String
+  instagram_ends_with: String
+  instagram_not_ends_with: String
+  twitch: String
+  twitch_not: String
+  twitch_in: [String!]
+  twitch_not_in: [String!]
+  twitch_lt: String
+  twitch_lte: String
+  twitch_gt: String
+  twitch_gte: String
+  twitch_contains: String
+  twitch_not_contains: String
+  twitch_starts_with: String
+  twitch_not_starts_with: String
+  twitch_ends_with: String
+  twitch_not_ends_with: String
+  snapchat: String
+  snapchat_not: String
+  snapchat_in: [String!]
+  snapchat_not_in: [String!]
+  snapchat_lt: String
+  snapchat_lte: String
+  snapchat_gt: String
+  snapchat_gte: String
+  snapchat_contains: String
+  snapchat_not_contains: String
+  snapchat_starts_with: String
+  snapchat_not_starts_with: String
+  snapchat_ends_with: String
+  snapchat_not_ends_with: String
+  AND: [SocialMediaWhereInput!]
+  OR: [SocialMediaWhereInput!]
+  NOT: [SocialMediaWhereInput!]
+}
+
 type Subscription {
+  gamerRequest(where: GamerRequestSubscriptionWhereInput): GamerRequestSubscriptionPayload
+  socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   userIndex(where: UserIndexSubscriptionWhereInput): UserIndexSubscriptionPayload
 }
@@ -69,7 +390,10 @@ type User {
   email: String!
   username: String!
   password: String!
+  isGamer: Boolean!
+  occupations: [Occupations!]!
   name: String!
+  aboutMe: String
 }
 
 type UserConnection {
@@ -82,7 +406,19 @@ input UserCreateInput {
   email: String!
   username: String!
   password: String!
+  isGamer: Boolean
+  occupations: UserCreateoccupationsInput
   name: String!
+  aboutMe: String
+}
+
+input UserCreateoccupationsInput {
+  set: [Occupations!]
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type UserEdge {
@@ -243,8 +579,12 @@ enum UserOrderByInput {
   username_DESC
   password_ASC
   password_DESC
+  isGamer_ASC
+  isGamer_DESC
   name_ASC
   name_DESC
+  aboutMe_ASC
+  aboutMe_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -256,7 +596,10 @@ type UserPreviousValues {
   email: String!
   username: String!
   password: String!
+  isGamer: Boolean!
+  occupations: [Occupations!]!
   name: String!
+  aboutMe: String
 }
 
 type UserSubscriptionPayload {
@@ -281,14 +624,24 @@ input UserUpdateInput {
   email: String
   username: String
   password: String
+  isGamer: Boolean
+  occupations: UserUpdateoccupationsInput
   name: String
+  aboutMe: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
   username: String
   password: String
+  isGamer: Boolean
+  occupations: UserUpdateoccupationsInput
   name: String
+  aboutMe: String
+}
+
+input UserUpdateoccupationsInput {
+  set: [Occupations!]
 }
 
 input UserWhereInput {
@@ -348,6 +701,8 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  isGamer: Boolean
+  isGamer_not: Boolean
   name: String
   name_not: String
   name_in: [String!]
@@ -362,6 +717,20 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  aboutMe: String
+  aboutMe_not: String
+  aboutMe_in: [String!]
+  aboutMe_not_in: [String!]
+  aboutMe_lt: String
+  aboutMe_lte: String
+  aboutMe_gt: String
+  aboutMe_gte: String
+  aboutMe_contains: String
+  aboutMe_not_contains: String
+  aboutMe_starts_with: String
+  aboutMe_not_starts_with: String
+  aboutMe_ends_with: String
+  aboutMe_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

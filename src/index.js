@@ -1,10 +1,12 @@
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer, gql } = require('apollo-server')
 const { importSchema } = require('graphql-import')
 const { prisma } = require('./generated/prisma-client')
 const resolvers = require('./resolvers')
 
+const typeDefs = importSchema('./src/schema.graphql')
+
 const server = new ApolloServer({
-  typeDefs: importSchema('src/schema.graphql'),
+  typeDefs,
   resolvers,
   context: request => {
     return {
