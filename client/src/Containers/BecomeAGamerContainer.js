@@ -14,15 +14,15 @@ class BecomeAGamerContainer extends Container {
     },
   }
 
-  setOccupation = type => {
+  setOccupations = type => {
     this.setState(prev => {
-      const inArray = prev.occupation.includes(type)
+      const inArray = prev.occupations.includes(type)
 
-      const filteredArray = prev.occupation.filter(item => item !== type)
+      const filteredArray = prev.occupations.filter(item => item !== type)
 
       return inArray
-        ? { occupation: filteredArray }
-        : { occupation: [...prev.occupation, type] }
+        ? { occupations: filteredArray }
+        : { occupations: [...prev.occupations, type] }
     })
   }
 

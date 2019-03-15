@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Mar 13 2019 23:54:24 GMT-0500 (CDT)
+# timestamp: Thu Mar 14 2019 20:02:29 GMT-0500 (CDT)
 
 type AggregateGamerRequest {
   count: Int!
@@ -22,7 +22,8 @@ type BatchPayload {
   count: Long!
 }
 
-type GamerRequest {
+type GamerRequest implements Node {
+  id: ID!
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
@@ -60,10 +61,10 @@ type GamerRequestEdge {
 }
 
 enum GamerRequestOrderByInput {
-  addToOccupations_ASC
-  addToOccupations_DESC
   id_ASC
   id_DESC
+  addToOccupations_ASC
+  addToOccupations_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -71,6 +72,7 @@ enum GamerRequestOrderByInput {
 }
 
 type GamerRequestPreviousValues {
+  id: ID!
   occupations: [Occupations!]!
   addToOccupations: String
 }
@@ -114,6 +116,13 @@ input GamerRequestSubscriptionWhereInput {
   node: GamerRequestWhereInput
 }
 
+input GamerRequestUpdateInput {
+  addToOccupations: String
+  occupations: GamerRequestUpdateoccupationsInput
+  user: UserUpdateOneRequiredInput
+  socialMedia: SocialMediaUpdateOneRequiredInput
+}
+
 input GamerRequestUpdateManyMutationInput {
   addToOccupations: String
   occupations: GamerRequestUpdateoccupationsInput
@@ -132,6 +141,46 @@ input GamerRequestWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [GamerRequestWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   addToOccupations: String
 
   """All values that are not equal to given value."""
@@ -176,6 +225,10 @@ input GamerRequestWhereInput {
   socialMedia: SocialMediaWhereInput
 }
 
+input GamerRequestWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -191,10 +244,16 @@ type Mutation {
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
   createUser(data: UserCreateInput!): User!
   updateUserIndex(data: UserIndexUpdateInput!, where: UserIndexWhereUniqueInput!): UserIndex
+  updateGamerRequest(data: GamerRequestUpdateInput!, where: GamerRequestWhereUniqueInput!): GamerRequest
+  updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteUserIndex(where: UserIndexWhereUniqueInput!): UserIndex
+  deleteGamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
+  deleteSocialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   deleteUser(where: UserWhereUniqueInput!): User
   upsertUserIndex(where: UserIndexWhereUniqueInput!, create: UserIndexCreateInput!, update: UserIndexUpdateInput!): UserIndex!
+  upsertGamerRequest(where: GamerRequestWhereUniqueInput!, create: GamerRequestCreateInput!, update: GamerRequestUpdateInput!): GamerRequest!
+  upsertSocialMedia(where: SocialMediaWhereUniqueInput!, create: SocialMediaCreateInput!, update: SocialMediaUpdateInput!): SocialMedia!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyUserIndexes(data: UserIndexUpdateManyMutationInput!, where: UserIndexWhereInput): BatchPayload!
   updateManyGamerRequests(data: GamerRequestUpdateManyMutationInput!, where: GamerRequestWhereInput): BatchPayload!
@@ -271,6 +330,8 @@ type Query {
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   userIndex(where: UserIndexWhereUniqueInput!): UserIndex
+  gamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
+  socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   user(where: UserWhereUniqueInput!): User
   userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
@@ -284,7 +345,8 @@ type Query {
   ): Node
 }
 
-type SocialMedia {
+type SocialMedia implements Node {
+  id: ID!
   twitter: String
   facebook: String
   youtube: String
@@ -314,6 +376,7 @@ input SocialMediaCreateInput {
 
 input SocialMediaCreateOneInput {
   create: SocialMediaCreateInput
+  connect: SocialMediaWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -326,6 +389,8 @@ type SocialMediaEdge {
 }
 
 enum SocialMediaOrderByInput {
+  id_ASC
+  id_DESC
   twitter_ASC
   twitter_DESC
   facebook_ASC
@@ -338,8 +403,6 @@ enum SocialMediaOrderByInput {
   twitch_DESC
   snapchat_ASC
   snapchat_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -347,6 +410,7 @@ enum SocialMediaOrderByInput {
 }
 
 type SocialMediaPreviousValues {
+  id: ID!
   twitter: String
   facebook: String
   youtube: String
@@ -394,6 +458,24 @@ input SocialMediaSubscriptionWhereInput {
   node: SocialMediaWhereInput
 }
 
+input SocialMediaUpdateDataInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input SocialMediaUpdateInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
 input SocialMediaUpdateManyMutationInput {
   twitter: String
   facebook: String
@@ -401,6 +483,18 @@ input SocialMediaUpdateManyMutationInput {
   instagram: String
   twitch: String
   snapchat: String
+}
+
+input SocialMediaUpdateOneRequiredInput {
+  create: SocialMediaCreateInput
+  connect: SocialMediaWhereUniqueInput
+  update: SocialMediaUpdateDataInput
+  upsert: SocialMediaUpsertNestedInput
+}
+
+input SocialMediaUpsertNestedInput {
+  update: SocialMediaUpdateDataInput!
+  create: SocialMediaCreateInput!
 }
 
 input SocialMediaWhereInput {
@@ -412,6 +506,46 @@ input SocialMediaWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [SocialMediaWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   twitter: String
 
   """All values that are not equal to given value."""
@@ -652,6 +786,10 @@ input SocialMediaWhereInput {
 
   """All values not ending with the given string."""
   snapchat_not_ends_with: String
+}
+
+input SocialMediaWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {
@@ -1063,6 +1201,16 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  name: String
+  aboutMe: String
+  occupations: UserUpdateoccupationsInput
+}
+
 input UserUpdateInput {
   email: String
   username: String
@@ -1085,6 +1233,18 @@ input UserUpdateManyMutationInput {
 
 input UserUpdateoccupationsInput {
   set: [Occupations!]
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {

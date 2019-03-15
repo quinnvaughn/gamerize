@@ -24,6 +24,7 @@ type BatchPayload {
 }
 
 type GamerRequest {
+  id: ID!
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
@@ -53,10 +54,10 @@ type GamerRequestEdge {
 }
 
 enum GamerRequestOrderByInput {
-  addToOccupations_ASC
-  addToOccupations_DESC
   id_ASC
   id_DESC
+  addToOccupations_ASC
+  addToOccupations_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -64,6 +65,7 @@ enum GamerRequestOrderByInput {
 }
 
 type GamerRequestPreviousValues {
+  id: ID!
   occupations: [Occupations!]!
   addToOccupations: String
 }
@@ -86,6 +88,13 @@ input GamerRequestSubscriptionWhereInput {
   NOT: [GamerRequestSubscriptionWhereInput!]
 }
 
+input GamerRequestUpdateInput {
+  user: UserUpdateOneRequiredInput
+  occupations: GamerRequestUpdateoccupationsInput
+  addToOccupations: String
+  socialMedia: SocialMediaUpdateOneRequiredInput
+}
+
 input GamerRequestUpdateManyMutationInput {
   occupations: GamerRequestUpdateoccupationsInput
   addToOccupations: String
@@ -96,6 +105,20 @@ input GamerRequestUpdateoccupationsInput {
 }
 
 input GamerRequestWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   user: UserWhereInput
   addToOccupations: String
   addToOccupations_not: String
@@ -117,14 +140,24 @@ input GamerRequestWhereInput {
   NOT: [GamerRequestWhereInput!]
 }
 
+input GamerRequestWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
   createGamerRequest(data: GamerRequestCreateInput!): GamerRequest!
+  updateGamerRequest(data: GamerRequestUpdateInput!, where: GamerRequestWhereUniqueInput!): GamerRequest
   updateManyGamerRequests(data: GamerRequestUpdateManyMutationInput!, where: GamerRequestWhereInput): BatchPayload!
+  upsertGamerRequest(where: GamerRequestWhereUniqueInput!, create: GamerRequestCreateInput!, update: GamerRequestUpdateInput!): GamerRequest!
+  deleteGamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   deleteManyGamerRequests(where: GamerRequestWhereInput): BatchPayload!
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
+  updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
   updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
+  upsertSocialMedia(where: SocialMediaWhereUniqueInput!, create: SocialMediaCreateInput!, update: SocialMediaUpdateInput!): SocialMedia!
+  deleteSocialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   deleteManySocialMedias(where: SocialMediaWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
@@ -185,8 +218,10 @@ type PageInfo {
 }
 
 type Query {
+  gamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   gamerRequests(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerRequest]!
   gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
+  socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
   socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
   user(where: UserWhereUniqueInput!): User
@@ -199,6 +234,7 @@ type Query {
 }
 
 type SocialMedia {
+  id: ID!
   twitter: String
   facebook: String
   youtube: String
@@ -224,6 +260,7 @@ input SocialMediaCreateInput {
 
 input SocialMediaCreateOneInput {
   create: SocialMediaCreateInput
+  connect: SocialMediaWhereUniqueInput
 }
 
 type SocialMediaEdge {
@@ -232,6 +269,8 @@ type SocialMediaEdge {
 }
 
 enum SocialMediaOrderByInput {
+  id_ASC
+  id_DESC
   twitter_ASC
   twitter_DESC
   facebook_ASC
@@ -244,8 +283,6 @@ enum SocialMediaOrderByInput {
   twitch_DESC
   snapchat_ASC
   snapchat_DESC
-  id_ASC
-  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -253,6 +290,7 @@ enum SocialMediaOrderByInput {
 }
 
 type SocialMediaPreviousValues {
+  id: ID!
   twitter: String
   facebook: String
   youtube: String
@@ -279,6 +317,24 @@ input SocialMediaSubscriptionWhereInput {
   NOT: [SocialMediaSubscriptionWhereInput!]
 }
 
+input SocialMediaUpdateDataInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input SocialMediaUpdateInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
 input SocialMediaUpdateManyMutationInput {
   twitter: String
   facebook: String
@@ -288,7 +344,33 @@ input SocialMediaUpdateManyMutationInput {
   snapchat: String
 }
 
+input SocialMediaUpdateOneRequiredInput {
+  create: SocialMediaCreateInput
+  update: SocialMediaUpdateDataInput
+  upsert: SocialMediaUpsertNestedInput
+  connect: SocialMediaWhereUniqueInput
+}
+
+input SocialMediaUpsertNestedInput {
+  update: SocialMediaUpdateDataInput!
+  create: SocialMediaCreateInput!
+}
+
 input SocialMediaWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   twitter: String
   twitter_not: String
   twitter_in: [String!]
@@ -376,6 +458,10 @@ input SocialMediaWhereInput {
   AND: [SocialMediaWhereInput!]
   OR: [SocialMediaWhereInput!]
   NOT: [SocialMediaWhereInput!]
+}
+
+input SocialMediaWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {
@@ -620,6 +706,16 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  occupations: UserUpdateoccupationsInput
+  name: String
+  aboutMe: String
+}
+
 input UserUpdateInput {
   email: String
   username: String
@@ -642,6 +738,18 @@ input UserUpdateManyMutationInput {
 
 input UserUpdateoccupationsInput {
   set: [Occupations!]
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
