@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -64,10 +64,6 @@ const Empty = styled.div``
 
 const notSignedInLinks = [
   {
-    text: 'Become a Gamer',
-    path: '/become-a-gamer',
-  },
-  {
     text: 'Sign Up',
     path: '/sign-up',
   },
@@ -99,7 +95,7 @@ const GET_ME = gql`
 `
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
-  const { data, loading, refetch} = useQuery(GET_ME, { skip: !token })
+  const { data, loading, refetch } = useQuery(GET_ME, { skip: !token })
   useEffect(() => {
     refetch()
   }, [token])

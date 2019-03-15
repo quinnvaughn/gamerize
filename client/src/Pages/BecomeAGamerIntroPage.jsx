@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -178,7 +178,10 @@ const GET_ME = gql`
 `
 
 export default function BecomeAGamerIntroPage(props) {
-  const { data, loading } = useQuery(GET_ME)
+  const { data, loading, refetch } = useQuery(GET_ME)
+  useEffect(() => {
+    refetch()
+  }, {})
   return (
     <PageContainer>
       <BecomeAGamerNav />

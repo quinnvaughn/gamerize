@@ -39,18 +39,22 @@ const routes = [
   {
     path: '/become-a-gamer',
     exact: true,
+    protected: true,
     component: BecomeAGamerIntroPage,
   },
   {
     path: '/become-a-gamer/background',
+    protected: true,
     component: BecomeAGamerBackground,
   },
   {
     path: '/become-a-gamer/details',
+    protected: true,
     component: BecomeAGamerDetails,
   },
   {
     path: '/become-a-gamer/finished',
+    protected: true,
     component: BecomeAGamerFinished,
   },
   {
@@ -71,6 +75,7 @@ const routes = [
   },
   {
     path: '/sessions/',
+    protected: true,
     component: UserSessionsPage,
   },
 ]

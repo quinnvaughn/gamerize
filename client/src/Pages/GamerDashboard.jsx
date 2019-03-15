@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Route } from 'react-router-dom'
 
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import GamerDashboardCalendar from './GamerDashboardCalendar'
 import GamerDashboardSessions from './GamerDashboardSessions'
 import GamerDashboardHome from './GamerDashboardHome'
+import GamerRoute from '../Components/GamerRoute'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -33,7 +33,7 @@ export default function GamerDashboard(props) {
     <PageContainer>
       <GamerDashboardNav />
       {routes.map(route => (
-        <Route
+        <GamerRoute
           path={route.path}
           key={route.path}
           exact={route.exact}
