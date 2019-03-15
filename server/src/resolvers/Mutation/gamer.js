@@ -26,13 +26,18 @@ const gamer = {
   async respondToGamerRequest(parent, { input }, { prisma }) {
     const user = await prisma.updateUser({
       where: { id: input.userId },
-      data: { isGamer: input.decision === 'ACCEPT' ? true : false },
+      data: {
+        isGamer: input.decision === 'ACCEPT' ? true : false,
+        occupations: inputs.occupations,
+      },
     })
     // Do delete many for now because of unique issue.
-    user &&
-      (await prisma.deleteManyGamerRequests({
-        user: { id: input.userId },
-      }))
+    let request
+    if (user) {
+      request = await prisma.deleteGamerRequest({
+        id: input.gamerRequestId,
+      })
+    }
     return user
       ? { responded: true }
       : {
