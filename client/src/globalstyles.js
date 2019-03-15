@@ -5,7 +5,7 @@ html {
   font-size: 62.5%;
 }
   body {
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700, 800');
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700, 800, 900');
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
     padding: 0;
