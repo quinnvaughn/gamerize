@@ -93,46 +93,65 @@ const GET_ME = gql`
     me {
       name
       username
+      isGamer
     }
   }
 `
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
-  const { data } = useQuery(GET_ME, { skip: !token })
+  const { data, loading } = useQuery(GET_ME, { skip: !token })
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
-      <Media query={{ maxWidth: 1127 }}>
-        {matches =>
-          matches && !_.isEmpty(data) ? (
-            <Links>
-              <NavBarAvatar />
-            </Links>
-          ) : (
-            <Links>
-              {data === null || !_.get(data, ['me'])
-                ? notSignedInLinks.map(link => (
-                    <StyledLink key={link.text} to={link.path}>
-                      {link.text}
-                    </StyledLink>
-                  ))
-                : signedInLinks.map(link => (
-                    <StyledLink
-                      key={link.text}
-                      to={
-                        link.path === '/sessions'
-                          ? `/sessions/${data.me.username}`
-                          : link.path
+      {loading ? null : (
+        <Media query={{ maxWidth: 1127 }}>
+          {matches =>
+            matches && !_.isEmpty(data) ? (
+              <Links>
+                <NavBarAvatar />
+              </Links>
+            ) : (
+              <Links>
+                {data === null || !_.get(data, ['me'])
+                  ? notSignedInLinks.map(link => (
+                      <StyledLink key={link.text} to={link.path}>
+                        {link.text}
+                      </StyledLink>
+                    ))
+                  : signedInLinks.map(link => {
+                      if (
+                        link.path === '/become-a-gamer' &&
+                        data.me.isGamer === true
+                      ) {
+                        return (
+                          <StyledLink
+                            key={link.text}
+                            to={'/gamer-dashboard/home'}
+                          >
+                            {`Gamer Dashboard`}
+                          </StyledLink>
+                        )
+                      } else {
+                        return (
+                          <StyledLink
+                            key={link.text}
+                            to={
+                              link.path === '/sessions'
+                                ? `/sessions/${data.me.username}`
+                                : link.path
+                            }
+                          >
+                            {link.text}
+                          </StyledLink>
+                        )
                       }
-                    >
-                      {link.text}
-                    </StyledLink>
-                  ))}
-              {!_.isEmpty(data) && !_.isEmpty(data.me) && <NavBarAvatar />}
-            </Links>
-          )
-        }
-      </Media>
+                    })}
+                {!_.isEmpty(data) && !_.isEmpty(data.me) && <NavBarAvatar />}
+              </Links>
+            )
+          }
+        </Media>
+      )}
     </Container>
   )
 }

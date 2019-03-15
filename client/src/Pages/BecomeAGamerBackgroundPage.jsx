@@ -194,7 +194,7 @@ export default function BecomeAGamerBackground(props) {
                 {_.map(occupation, type => (
                   <TypeOfGamer
                     onClick={() => container.setOccupation(type)}
-                    selected={container.state.occupation.includes(type)}
+                    selected={container.state.occupations.includes(type)}
                   >
                     {type === 'DJ' ? type : capitalize(noUnderscores(type))}
                   </TypeOfGamer>
@@ -217,7 +217,7 @@ export default function BecomeAGamerBackground(props) {
                 </Previous>
                 <Next
                   to="/become-a-gamer/details"
-                  disabled={container.state.occupation.length <= 0}
+                  disabled={container.state.occupations.length <= 0}
                 >
                   Next
                 </Next>

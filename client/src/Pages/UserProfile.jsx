@@ -14,6 +14,7 @@ import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
 import { noSpaces } from '../utils/Strings'
 import FavoriteGame from '../Components/FavoriteGame'
+import useTitle from '../Hooks/useTitle'
 
 //data
 import specificSessions from '../data/specificusersessions'
@@ -38,7 +39,8 @@ const Content = styled.div`
   font-size: 1.6rem;
   margin: 0 auto;
   margin-top: 2rem !important;
-  display: flex;
+  display: flex
+
   width: 100%;
   @media (max-width: 1127px) {
     flex-direction: column;
@@ -238,6 +240,7 @@ export default function UserProfile(props) {
   const user = _.find(gamers, {
     username: noSpaces(props.match.params.user),
   })
+  useTitle(`${user.name} - Gamerize`)
   return (
     <PageContainer>
       <NavBar />
