@@ -64,6 +64,7 @@ type User {
   name: String!
   username: String!
   currentGamerRequest: Boolean!
+  isGamer: Boolean!
 }
 
 input SignupInput {
