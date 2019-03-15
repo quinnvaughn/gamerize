@@ -193,7 +193,7 @@ export default function BecomeAGamerBackground(props) {
               <Types>
                 {_.map(occupation, type => (
                   <TypeOfGamer
-                    onClick={() => container.setOccupation(type)}
+                    onClick={() => container.setOccupations(type)}
                     selected={container.state.occupations.includes(type)}
                   >
                     {type === 'DJ' ? type : capitalize(noUnderscores(type))}

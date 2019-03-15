@@ -238,6 +238,7 @@ function BecomeAGamerDetails(props) {
                     disabled={objectIsEmpty(container.state.socialMedia)}
                     onClick={async () => {
                       const input = { ...container.state }
+                      console.log(input)
                       await createGamerRequest({
                         variables: {
                           input,

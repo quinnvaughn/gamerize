@@ -18,13 +18,16 @@ type UserIndex {
 }
 
 type GamerRequest {
+  id: ID! @unique
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
   socialMedia: SocialMedia!
+    @relation(name: "GamerRequestSocialMedia", onDelete: CASCADE)
 }
 
 type SocialMedia {
+  id: ID! @unique
   twitter: String
   facebook: String
   youtube: String

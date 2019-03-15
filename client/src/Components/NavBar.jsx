@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -99,7 +99,10 @@ const GET_ME = gql`
 `
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
-  const { data, loading } = useQuery(GET_ME, { skip: !token })
+  const { data, loading, refetch} = useQuery(GET_ME, { skip: !token })
+  useEffect(() => {
+    refetch()
+  }, [token])
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
