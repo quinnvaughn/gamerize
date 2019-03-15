@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import ReactCardFlip from 'react-card-flip'
+import TimePicker from 'react-time-picker'
 
 //local imports
 import { noUnderscores } from '../utils/Strings'
@@ -52,8 +53,19 @@ const Length = styled.div`
   font-weight: 400;
 `
 
+const Buttons = styled.div`
+  display: flex;
+`
+
+const OneAdd = styled.div``
+
+const BulkAdd = styled.div``
+
 export default function GamerSessionCard({ session }) {
+  const [addState, setAddState] = useState(null)
   const [flipped, setFlipped] = useState(false)
+  const [time, setTime] = useState('')
+  const [endTime, setEndTime] = useState('')
   return (
     <ReactCardFlip isFlipped={flipped} flipDirection="horizontal">
       <Card key="front" onClick={() => setFlipped(true)}>
@@ -67,7 +79,54 @@ export default function GamerSessionCard({ session }) {
         {/* Will be names of gamers when I'm actually getting from db. Will be mapped.*/}
       </Card>
       <Card key="back" onClick={() => setFlipped(false)}>
-        <input type="text" onClick={e => e.stopPropagation()} />
+        {addState === null && (
+          <Buttons>
+            <button
+              onClick={e => {
+                e.stopPropagation()
+                setAddState('one')
+              }}
+            >
+              Add One
+            </button>
+            <button
+              onClick={e => {
+                e.stopPropagation()
+                setAddState('bulk')
+              }}
+            >
+              Add Bulk
+            </button>
+          </Buttons>
+        )}
+        {addState === 'one' && (
+          <OneAdd>
+            <div>Time Start</div>
+            <TimePicker
+              disableClock
+              onClick={e => e.stopPropagation()}
+              onChange={time => setTime(time)}
+            />
+          </OneAdd>
+        )}
+        {addState === 'bulk' && (
+          <BulkAdd>
+            <div>Time Start</div>
+            <TimePicker
+              disableClock
+              onClick={e => e.stopPropagation()}
+              onChange={time => setTime(time)}
+              value={time}
+            />
+            <div>Time End</div>
+            <TimePicker
+              disableClock
+              onClick={e => e.stopPropagation()}
+              onChange={time => setEndTime(time)}
+              value={endTime}
+            />
+          </BulkAdd>
+        )}
       </Card>
     </ReactCardFlip>
   )
