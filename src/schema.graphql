@@ -42,8 +42,7 @@ type CreateGamerRequestPayload {
 }
 
 input RespondToGamerRequestInput {
-  ## currently not using this as not getting gamer request by ID.
-  #gamerRequestId: String!
+  gamerRequestId: String!
   userId: String!
   decision: Decision!
 }
