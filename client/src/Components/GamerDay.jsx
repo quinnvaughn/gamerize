@@ -31,11 +31,6 @@ const Header = styled.div`
   font-weight: 700;
   color: black;
   justify-content: space-between;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 3rem;
-  left: 0;
-  z-index: 9999;
   max-width: inherit;
   align-items: center;
   height: 11.75rem;
