@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useReducer } from 'react'
+import React, { Fragment, useReducer, useRef, useCallback } from 'react'
 import styled from 'styled-components'
 import ReactCardFlip from 'react-card-flip'
 import { FaChevronLeft } from 'react-icons/fa'
@@ -7,8 +7,7 @@ import { FaChevronLeft } from 'react-icons/fa'
 import { noUnderscores } from '../utils/Strings'
 import TimePicker from './TimePicker'
 import SelectDayForSession from './SelectDayForSession'
-import useOutsideClick from '../Hooks/useOutsideClick'
-import { startOfYesterday } from 'date-fns'
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const Container = styled.div``
 const Card = styled.div`
@@ -267,16 +266,19 @@ function reducer(state, action) {
 }
 
 export default function GamerSessionCard({ session }) {
+  const node = useRef()
   const [state, dispatch] = useReducer(reducer, initialState)
-  const onOutsideClick = e => {
-    if (node.current.contains(e.target)) {
-      return
-    }
+  const clearAndFlip = () => {
     dispatch({ type: 'clearState' })
     dispatch({ type: 'flip', payload: false })
     dispatch({ type: 'addState', payload: null })
   }
-  const node = useOutsideClick(onOutsideClick)
+  useOnOutsideClick(
+    node,
+    useCallback(() => {
+      clearAndFlip()
+    }, [])
+  )
   return (
     <Container ref={node}>
       <ReactCardFlip isFlipped={state.flip} flipDirection="horizontal">
@@ -363,7 +365,7 @@ export default function GamerSessionCard({ session }) {
                 <LabelAndPicker>
                   <Label>Start Time</Label>
                   <TimePicker
-                    type="setAddBulk"
+                    type="setAddBulkStart"
                     dispatch={dispatch}
                     state={state.addBulk.start}
                   />
@@ -371,7 +373,7 @@ export default function GamerSessionCard({ session }) {
                 <LabelAndPicker>
                   <Label>End Time</Label>
                   <TimePicker
-                    type="setAddBulk"
+                    type="setAddBulkEnd"
                     dispatch={dispatch}
                     state={state.addBulk.end}
                   />
