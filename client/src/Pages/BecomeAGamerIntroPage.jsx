@@ -172,6 +172,7 @@ const GoBack = styled(Link)`
 const GET_ME = gql`
   {
     me {
+      id
       currentGamerRequest
     }
   }
@@ -185,7 +186,7 @@ export default function BecomeAGamerIntroPage(props) {
   return (
     <PageContainer>
       <BecomeAGamerNav />
-      {loading ? null : data.me.currentGamerRequest ? (
+      {loading ? null : data.me && data.me.currentGamerRequest ? (
         <Content>
           <StopContainer>
             <Stop>Stop!</Stop>

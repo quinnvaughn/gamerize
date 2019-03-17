@@ -21,7 +21,35 @@ var models = [
     embedded: false
   },
   {
+    name: "Game",
+    embedded: false
+  },
+  {
+    name: "GameIndex",
+    embedded: false
+  },
+  {
+    name: "GamingSession",
+    embedded: false
+  },
+  {
+    name: "GamingSessionIndex",
+    embedded: false
+  },
+  {
+    name: "SessionReview",
+    embedded: false
+  },
+  {
+    name: "SessionReviewIndex",
+    embedded: false
+  },
+  {
     name: "Occupations",
+    embedded: false
+  },
+  {
+    name: "Tags",
     embedded: false
   }
 ];

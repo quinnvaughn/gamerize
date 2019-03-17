@@ -2,6 +2,8 @@
 
 type Query {
   me: User
+  searchGames(search: String!): [Game!]!
+  mySessions: [GamingSession!]!
 }
 
 type Mutation {
@@ -13,6 +15,10 @@ type Mutation {
   respondToGamerRequest(
     input: RespondToGamerRequestInput!
   ): RespondToGamerRequestPayload!
+  createGame(input: CreateGameInput!): CreateGamePayload!
+  createGamingSession(
+    input: CreateGamingSessionInput!
+  ): CreateGamingSessionPayload!
 }
 
 type AuthPayload {
@@ -35,6 +41,20 @@ input CreateGamerRequestInput {
   socialMedia: SocialMediaInput!
 }
 
+input CreateGamingSessionInput {
+  gameName: String!
+  gamersIds: [String!]!
+  title: String!
+  length: Int!
+  price: Int!
+}
+
+type CreateGamingSessionPayload {
+  gamingSession: GamingSession
+  msg: String
+  created: Boolean!
+}
+
 type CreateGamerRequestPayload {
   created: Boolean!
   request: GamerRequest
@@ -45,6 +65,17 @@ input RespondToGamerRequestInput {
   gamerRequestId: String!
   userId: String!
   decision: Decision!
+}
+
+input CreateGameInput {
+  tags: [Tags!]!
+  name: String!
+}
+
+type CreateGamePayload {
+  created: Boolean!
+  game: Game
+  msg: String
 }
 
 enum Decision {

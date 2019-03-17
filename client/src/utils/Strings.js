@@ -7,3 +7,8 @@ export const capitalize = s =>
 
 export const singleOrPlural = (decider, word) =>
   (decider.length || Number(decider)) === 1 ? String(word) : `${String(word)}s`
+
+export const formatTags = tag => {
+  const words = tag.split('_')
+  console.log(words)
+}
