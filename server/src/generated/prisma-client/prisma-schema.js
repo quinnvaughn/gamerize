@@ -3,7 +3,31 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateGamerRequest {
+/* GraphQL */ `type AggregateGame {
+  count: Int!
+}
+
+type AggregateGameIndex {
+  count: Int!
+}
+
+type AggregateGamerRequest {
+  count: Int!
+}
+
+type AggregateGamingSession {
+  count: Int!
+}
+
+type AggregateGamingSessionIndex {
+  count: Int!
+}
+
+type AggregateSessionReview {
+  count: Int!
+}
+
+type AggregateSessionReviewIndex {
   count: Int!
 }
 
@@ -21,6 +45,172 @@ type AggregateUserIndex {
 
 type BatchPayload {
   count: Long!
+}
+
+scalar DateTime
+
+type Game {
+  id: ID!
+  name: String!
+  tags: [Tags!]!
+  sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+}
+
+type GameConnection {
+  pageInfo: PageInfo!
+  edges: [GameEdge]!
+  aggregate: AggregateGame!
+}
+
+input GameCreateInput {
+  name: String!
+  tags: GameCreatetagsInput
+  sessions: GamingSessionCreateManyWithoutGameInput
+}
+
+input GameCreateOneInput {
+  create: GameCreateInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreateOneWithoutSessionsInput {
+  create: GameCreateWithoutSessionsInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreatetagsInput {
+  set: [Tags!]
+}
+
+input GameCreateWithoutSessionsInput {
+  name: String!
+  tags: GameCreatetagsInput
+}
+
+type GameEdge {
+  node: Game!
+  cursor: String!
+}
+
+type GameIndex {
+  id: ID!
+  name: String!
+  game: Game!
+}
+
+type GameIndexConnection {
+  pageInfo: PageInfo!
+  edges: [GameIndexEdge]!
+  aggregate: AggregateGameIndex!
+}
+
+input GameIndexCreateInput {
+  name: String!
+  game: GameCreateOneInput!
+}
+
+type GameIndexEdge {
+  node: GameIndex!
+  cursor: String!
+}
+
+enum GameIndexOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GameIndexPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type GameIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: GameIndex
+  updatedFields: [String!]
+  previousValues: GameIndexPreviousValues
+}
+
+input GameIndexSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GameIndexWhereInput
+  AND: [GameIndexSubscriptionWhereInput!]
+  OR: [GameIndexSubscriptionWhereInput!]
+  NOT: [GameIndexSubscriptionWhereInput!]
+}
+
+input GameIndexUpdateInput {
+  name: String
+  game: GameUpdateOneRequiredInput
+}
+
+input GameIndexUpdateManyMutationInput {
+  name: String
+}
+
+input GameIndexWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  game: GameWhereInput
+  AND: [GameIndexWhereInput!]
+  OR: [GameIndexWhereInput!]
+  NOT: [GameIndexWhereInput!]
+}
+
+input GameIndexWhereUniqueInput {
+  id: ID
+}
+
+enum GameOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GamePreviousValues {
+  id: ID!
+  name: String!
+  tags: [Tags!]!
 }
 
 type GamerRequest {
@@ -144,15 +334,619 @@ input GamerRequestWhereUniqueInput {
   id: ID
 }
 
+type GameSubscriptionPayload {
+  mutation: MutationType!
+  node: Game
+  updatedFields: [String!]
+  previousValues: GamePreviousValues
+}
+
+input GameSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GameWhereInput
+  AND: [GameSubscriptionWhereInput!]
+  OR: [GameSubscriptionWhereInput!]
+  NOT: [GameSubscriptionWhereInput!]
+}
+
+input GameUpdateDataInput {
+  name: String
+  tags: GameUpdatetagsInput
+  sessions: GamingSessionUpdateManyWithoutGameInput
+}
+
+input GameUpdateInput {
+  name: String
+  tags: GameUpdatetagsInput
+  sessions: GamingSessionUpdateManyWithoutGameInput
+}
+
+input GameUpdateManyMutationInput {
+  name: String
+  tags: GameUpdatetagsInput
+}
+
+input GameUpdateOneRequiredInput {
+  create: GameCreateInput
+  update: GameUpdateDataInput
+  upsert: GameUpsertNestedInput
+  connect: GameWhereUniqueInput
+}
+
+input GameUpdateOneRequiredWithoutSessionsInput {
+  create: GameCreateWithoutSessionsInput
+  update: GameUpdateWithoutSessionsDataInput
+  upsert: GameUpsertWithoutSessionsInput
+  connect: GameWhereUniqueInput
+}
+
+input GameUpdatetagsInput {
+  set: [Tags!]
+}
+
+input GameUpdateWithoutSessionsDataInput {
+  name: String
+  tags: GameUpdatetagsInput
+}
+
+input GameUpsertNestedInput {
+  update: GameUpdateDataInput!
+  create: GameCreateInput!
+}
+
+input GameUpsertWithoutSessionsInput {
+  update: GameUpdateWithoutSessionsDataInput!
+  create: GameCreateWithoutSessionsInput!
+}
+
+input GameWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  sessions_every: GamingSessionWhereInput
+  sessions_some: GamingSessionWhereInput
+  sessions_none: GamingSessionWhereInput
+  AND: [GameWhereInput!]
+  OR: [GameWhereInput!]
+  NOT: [GameWhereInput!]
+}
+
+input GameWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+type GamingSession {
+  id: ID!
+  gamers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  game: Game!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
+}
+
+type GamingSessionConnection {
+  pageInfo: PageInfo!
+  edges: [GamingSessionEdge]!
+  aggregate: AggregateGamingSession!
+}
+
+input GamingSessionCreateInput {
+  gamers: UserCreateManyWithoutSessionsInput
+  game: GameCreateOneWithoutSessionsInput!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateManyWithoutGameInput {
+  create: [GamingSessionCreateWithoutGameInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+}
+
+input GamingSessionCreateManyWithoutGamersInput {
+  create: [GamingSessionCreateWithoutGamersInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+}
+
+input GamingSessionCreateOneInput {
+  create: GamingSessionCreateInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionCreateOneWithoutReviewsInput {
+  create: GamingSessionCreateWithoutReviewsInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionCreateWithoutGameInput {
+  gamers: UserCreateManyWithoutSessionsInput
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateWithoutGamersInput {
+  game: GameCreateOneWithoutSessionsInput!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateWithoutReviewsInput {
+  gamers: UserCreateManyWithoutSessionsInput
+  game: GameCreateOneWithoutSessionsInput!
+  title: String!
+  length: Int!
+  price: Float!
+}
+
+type GamingSessionEdge {
+  node: GamingSession!
+  cursor: String!
+}
+
+type GamingSessionIndex {
+  id: ID!
+  title: String!
+  gamingSession: GamingSession!
+}
+
+type GamingSessionIndexConnection {
+  pageInfo: PageInfo!
+  edges: [GamingSessionIndexEdge]!
+  aggregate: AggregateGamingSessionIndex!
+}
+
+input GamingSessionIndexCreateInput {
+  title: String!
+  gamingSession: GamingSessionCreateOneInput!
+}
+
+type GamingSessionIndexEdge {
+  node: GamingSessionIndex!
+  cursor: String!
+}
+
+enum GamingSessionIndexOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GamingSessionIndexPreviousValues {
+  id: ID!
+  title: String!
+}
+
+type GamingSessionIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: GamingSessionIndex
+  updatedFields: [String!]
+  previousValues: GamingSessionIndexPreviousValues
+}
+
+input GamingSessionIndexSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GamingSessionIndexWhereInput
+  AND: [GamingSessionIndexSubscriptionWhereInput!]
+  OR: [GamingSessionIndexSubscriptionWhereInput!]
+  NOT: [GamingSessionIndexSubscriptionWhereInput!]
+}
+
+input GamingSessionIndexUpdateInput {
+  title: String
+  gamingSession: GamingSessionUpdateOneRequiredInput
+}
+
+input GamingSessionIndexUpdateManyMutationInput {
+  title: String
+}
+
+input GamingSessionIndexWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  gamingSession: GamingSessionWhereInput
+  AND: [GamingSessionIndexWhereInput!]
+  OR: [GamingSessionIndexWhereInput!]
+  NOT: [GamingSessionIndexWhereInput!]
+}
+
+input GamingSessionIndexWhereUniqueInput {
+  id: ID
+}
+
+enum GamingSessionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  length_ASC
+  length_DESC
+  price_ASC
+  price_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GamingSessionPreviousValues {
+  id: ID!
+  title: String!
+  length: Int!
+  price: Float!
+}
+
+input GamingSessionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  length: Int
+  length_not: Int
+  length_in: [Int!]
+  length_not_in: [Int!]
+  length_lt: Int
+  length_lte: Int
+  length_gt: Int
+  length_gte: Int
+  price: Float
+  price_not: Float
+  price_in: [Float!]
+  price_not_in: [Float!]
+  price_lt: Float
+  price_lte: Float
+  price_gt: Float
+  price_gte: Float
+  AND: [GamingSessionScalarWhereInput!]
+  OR: [GamingSessionScalarWhereInput!]
+  NOT: [GamingSessionScalarWhereInput!]
+}
+
+type GamingSessionSubscriptionPayload {
+  mutation: MutationType!
+  node: GamingSession
+  updatedFields: [String!]
+  previousValues: GamingSessionPreviousValues
+}
+
+input GamingSessionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GamingSessionWhereInput
+  AND: [GamingSessionSubscriptionWhereInput!]
+  OR: [GamingSessionSubscriptionWhereInput!]
+  NOT: [GamingSessionSubscriptionWhereInput!]
+}
+
+input GamingSessionUpdateDataInput {
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateInput {
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateManyDataInput {
+  title: String
+  length: Int
+  price: Float
+}
+
+input GamingSessionUpdateManyMutationInput {
+  title: String
+  length: Int
+  price: Float
+}
+
+input GamingSessionUpdateManyWithoutGameInput {
+  create: [GamingSessionCreateWithoutGameInput!]
+  delete: [GamingSessionWhereUniqueInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+  set: [GamingSessionWhereUniqueInput!]
+  disconnect: [GamingSessionWhereUniqueInput!]
+  update: [GamingSessionUpdateWithWhereUniqueWithoutGameInput!]
+  upsert: [GamingSessionUpsertWithWhereUniqueWithoutGameInput!]
+  deleteMany: [GamingSessionScalarWhereInput!]
+  updateMany: [GamingSessionUpdateManyWithWhereNestedInput!]
+}
+
+input GamingSessionUpdateManyWithoutGamersInput {
+  create: [GamingSessionCreateWithoutGamersInput!]
+  delete: [GamingSessionWhereUniqueInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+  set: [GamingSessionWhereUniqueInput!]
+  disconnect: [GamingSessionWhereUniqueInput!]
+  update: [GamingSessionUpdateWithWhereUniqueWithoutGamersInput!]
+  upsert: [GamingSessionUpsertWithWhereUniqueWithoutGamersInput!]
+  deleteMany: [GamingSessionScalarWhereInput!]
+  updateMany: [GamingSessionUpdateManyWithWhereNestedInput!]
+}
+
+input GamingSessionUpdateManyWithWhereNestedInput {
+  where: GamingSessionScalarWhereInput!
+  data: GamingSessionUpdateManyDataInput!
+}
+
+input GamingSessionUpdateOneRequiredInput {
+  create: GamingSessionCreateInput
+  update: GamingSessionUpdateDataInput
+  upsert: GamingSessionUpsertNestedInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionUpdateOneRequiredWithoutReviewsInput {
+  create: GamingSessionCreateWithoutReviewsInput
+  update: GamingSessionUpdateWithoutReviewsDataInput
+  upsert: GamingSessionUpsertWithoutReviewsInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionUpdateWithoutGameDataInput {
+  gamers: UserUpdateManyWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateWithoutGamersDataInput {
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateWithoutReviewsDataInput {
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+}
+
+input GamingSessionUpdateWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput!
+  data: GamingSessionUpdateWithoutGameDataInput!
+}
+
+input GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput!
+  data: GamingSessionUpdateWithoutGamersDataInput!
+}
+
+input GamingSessionUpsertNestedInput {
+  update: GamingSessionUpdateDataInput!
+  create: GamingSessionCreateInput!
+}
+
+input GamingSessionUpsertWithoutReviewsInput {
+  update: GamingSessionUpdateWithoutReviewsDataInput!
+  create: GamingSessionCreateWithoutReviewsInput!
+}
+
+input GamingSessionUpsertWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput!
+  update: GamingSessionUpdateWithoutGameDataInput!
+  create: GamingSessionCreateWithoutGameInput!
+}
+
+input GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput!
+  update: GamingSessionUpdateWithoutGamersDataInput!
+  create: GamingSessionCreateWithoutGamersInput!
+}
+
+input GamingSessionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  gamers_every: UserWhereInput
+  gamers_some: UserWhereInput
+  gamers_none: UserWhereInput
+  game: GameWhereInput
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  length: Int
+  length_not: Int
+  length_in: [Int!]
+  length_not_in: [Int!]
+  length_lt: Int
+  length_lte: Int
+  length_gt: Int
+  length_gte: Int
+  price: Float
+  price_not: Float
+  price_in: [Float!]
+  price_not_in: [Float!]
+  price_lt: Float
+  price_lte: Float
+  price_gt: Float
+  price_gte: Float
+  reviews_every: SessionReviewWhereInput
+  reviews_some: SessionReviewWhereInput
+  reviews_none: SessionReviewWhereInput
+  AND: [GamingSessionWhereInput!]
+  OR: [GamingSessionWhereInput!]
+  NOT: [GamingSessionWhereInput!]
+}
+
+input GamingSessionWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
+  createGame(data: GameCreateInput!): Game!
+  updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
+  updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
+  upsertGame(where: GameWhereUniqueInput!, create: GameCreateInput!, update: GameUpdateInput!): Game!
+  deleteGame(where: GameWhereUniqueInput!): Game
+  deleteManyGames(where: GameWhereInput): BatchPayload!
+  createGameIndex(data: GameIndexCreateInput!): GameIndex!
+  updateGameIndex(data: GameIndexUpdateInput!, where: GameIndexWhereUniqueInput!): GameIndex
+  updateManyGameIndexes(data: GameIndexUpdateManyMutationInput!, where: GameIndexWhereInput): BatchPayload!
+  upsertGameIndex(where: GameIndexWhereUniqueInput!, create: GameIndexCreateInput!, update: GameIndexUpdateInput!): GameIndex!
+  deleteGameIndex(where: GameIndexWhereUniqueInput!): GameIndex
+  deleteManyGameIndexes(where: GameIndexWhereInput): BatchPayload!
   createGamerRequest(data: GamerRequestCreateInput!): GamerRequest!
   updateGamerRequest(data: GamerRequestUpdateInput!, where: GamerRequestWhereUniqueInput!): GamerRequest
   updateManyGamerRequests(data: GamerRequestUpdateManyMutationInput!, where: GamerRequestWhereInput): BatchPayload!
   upsertGamerRequest(where: GamerRequestWhereUniqueInput!, create: GamerRequestCreateInput!, update: GamerRequestUpdateInput!): GamerRequest!
   deleteGamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   deleteManyGamerRequests(where: GamerRequestWhereInput): BatchPayload!
+  createGamingSession(data: GamingSessionCreateInput!): GamingSession!
+  updateGamingSession(data: GamingSessionUpdateInput!, where: GamingSessionWhereUniqueInput!): GamingSession
+  updateManyGamingSessions(data: GamingSessionUpdateManyMutationInput!, where: GamingSessionWhereInput): BatchPayload!
+  upsertGamingSession(where: GamingSessionWhereUniqueInput!, create: GamingSessionCreateInput!, update: GamingSessionUpdateInput!): GamingSession!
+  deleteGamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
+  deleteManyGamingSessions(where: GamingSessionWhereInput): BatchPayload!
+  createGamingSessionIndex(data: GamingSessionIndexCreateInput!): GamingSessionIndex!
+  updateGamingSessionIndex(data: GamingSessionIndexUpdateInput!, where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  updateManyGamingSessionIndexes(data: GamingSessionIndexUpdateManyMutationInput!, where: GamingSessionIndexWhereInput): BatchPayload!
+  upsertGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!, create: GamingSessionIndexCreateInput!, update: GamingSessionIndexUpdateInput!): GamingSessionIndex!
+  deleteGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  deleteManyGamingSessionIndexes(where: GamingSessionIndexWhereInput): BatchPayload!
+  createSessionReview(data: SessionReviewCreateInput!): SessionReview!
+  updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
+  updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
+  upsertSessionReview(where: SessionReviewWhereUniqueInput!, create: SessionReviewCreateInput!, update: SessionReviewUpdateInput!): SessionReview!
+  deleteSessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
+  deleteManySessionReviews(where: SessionReviewWhereInput): BatchPayload!
+  createSessionReviewIndex(data: SessionReviewIndexCreateInput!): SessionReviewIndex!
+  updateSessionReviewIndex(data: SessionReviewIndexUpdateInput!, where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  updateManySessionReviewIndexes(data: SessionReviewIndexUpdateManyMutationInput!, where: SessionReviewIndexWhereInput): BatchPayload!
+  upsertSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!, create: SessionReviewIndexCreateInput!, update: SessionReviewIndexUpdateInput!): SessionReviewIndex!
+  deleteSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  deleteManySessionReviewIndexes(where: SessionReviewIndexWhereInput): BatchPayload!
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
   updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
   updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
@@ -218,9 +1012,27 @@ type PageInfo {
 }
 
 type Query {
+  game(where: GameWhereUniqueInput!): Game
+  games(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game]!
+  gamesConnection(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameConnection!
+  gameIndex(where: GameIndexWhereUniqueInput!): GameIndex
+  gameIndexes(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GameIndex]!
+  gameIndexesConnection(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameIndexConnection!
   gamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   gamerRequests(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerRequest]!
   gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
+  gamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
+  gamingSessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession]!
+  gamingSessionsConnection(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionConnection!
+  gamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  gamingSessionIndexes(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSessionIndex]!
+  gamingSessionIndexesConnection(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionIndexConnection!
+  sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
+  sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
+  sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
+  sessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  sessionReviewIndexes(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReviewIndex]!
+  sessionReviewIndexesConnection(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewIndexConnection!
   socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
   socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
@@ -231,6 +1043,340 @@ type Query {
   userIndexes(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserIndex]!
   userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   node(id: ID!): Node
+}
+
+type SessionReview {
+  id: ID!
+  createdAt: DateTime!
+  user: User!
+  session: GamingSession!
+  text: String!
+}
+
+type SessionReviewConnection {
+  pageInfo: PageInfo!
+  edges: [SessionReviewEdge]!
+  aggregate: AggregateSessionReview!
+}
+
+input SessionReviewCreateInput {
+  user: UserCreateOneInput!
+  session: GamingSessionCreateOneWithoutReviewsInput!
+  text: String!
+}
+
+input SessionReviewCreateManyWithoutSessionInput {
+  create: [SessionReviewCreateWithoutSessionInput!]
+  connect: [SessionReviewWhereUniqueInput!]
+}
+
+input SessionReviewCreateOneInput {
+  create: SessionReviewCreateInput
+  connect: SessionReviewWhereUniqueInput
+}
+
+input SessionReviewCreateWithoutSessionInput {
+  user: UserCreateOneInput!
+  text: String!
+}
+
+type SessionReviewEdge {
+  node: SessionReview!
+  cursor: String!
+}
+
+type SessionReviewIndex {
+  id: ID!
+  text: String!
+  sessionReview: SessionReview!
+}
+
+type SessionReviewIndexConnection {
+  pageInfo: PageInfo!
+  edges: [SessionReviewIndexEdge]!
+  aggregate: AggregateSessionReviewIndex!
+}
+
+input SessionReviewIndexCreateInput {
+  text: String!
+  sessionReview: SessionReviewCreateOneInput!
+}
+
+type SessionReviewIndexEdge {
+  node: SessionReviewIndex!
+  cursor: String!
+}
+
+enum SessionReviewIndexOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SessionReviewIndexPreviousValues {
+  id: ID!
+  text: String!
+}
+
+type SessionReviewIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: SessionReviewIndex
+  updatedFields: [String!]
+  previousValues: SessionReviewIndexPreviousValues
+}
+
+input SessionReviewIndexSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SessionReviewIndexWhereInput
+  AND: [SessionReviewIndexSubscriptionWhereInput!]
+  OR: [SessionReviewIndexSubscriptionWhereInput!]
+  NOT: [SessionReviewIndexSubscriptionWhereInput!]
+}
+
+input SessionReviewIndexUpdateInput {
+  text: String
+  sessionReview: SessionReviewUpdateOneRequiredInput
+}
+
+input SessionReviewIndexUpdateManyMutationInput {
+  text: String
+}
+
+input SessionReviewIndexWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  sessionReview: SessionReviewWhereInput
+  AND: [SessionReviewIndexWhereInput!]
+  OR: [SessionReviewIndexWhereInput!]
+  NOT: [SessionReviewIndexWhereInput!]
+}
+
+input SessionReviewIndexWhereUniqueInput {
+  id: ID
+}
+
+enum SessionReviewOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  text_ASC
+  text_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SessionReviewPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  text: String!
+}
+
+input SessionReviewScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  AND: [SessionReviewScalarWhereInput!]
+  OR: [SessionReviewScalarWhereInput!]
+  NOT: [SessionReviewScalarWhereInput!]
+}
+
+type SessionReviewSubscriptionPayload {
+  mutation: MutationType!
+  node: SessionReview
+  updatedFields: [String!]
+  previousValues: SessionReviewPreviousValues
+}
+
+input SessionReviewSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SessionReviewWhereInput
+  AND: [SessionReviewSubscriptionWhereInput!]
+  OR: [SessionReviewSubscriptionWhereInput!]
+  NOT: [SessionReviewSubscriptionWhereInput!]
+}
+
+input SessionReviewUpdateDataInput {
+  user: UserUpdateOneRequiredInput
+  session: GamingSessionUpdateOneRequiredWithoutReviewsInput
+  text: String
+}
+
+input SessionReviewUpdateInput {
+  user: UserUpdateOneRequiredInput
+  session: GamingSessionUpdateOneRequiredWithoutReviewsInput
+  text: String
+}
+
+input SessionReviewUpdateManyDataInput {
+  text: String
+}
+
+input SessionReviewUpdateManyMutationInput {
+  text: String
+}
+
+input SessionReviewUpdateManyWithoutSessionInput {
+  create: [SessionReviewCreateWithoutSessionInput!]
+  delete: [SessionReviewWhereUniqueInput!]
+  connect: [SessionReviewWhereUniqueInput!]
+  set: [SessionReviewWhereUniqueInput!]
+  disconnect: [SessionReviewWhereUniqueInput!]
+  update: [SessionReviewUpdateWithWhereUniqueWithoutSessionInput!]
+  upsert: [SessionReviewUpsertWithWhereUniqueWithoutSessionInput!]
+  deleteMany: [SessionReviewScalarWhereInput!]
+  updateMany: [SessionReviewUpdateManyWithWhereNestedInput!]
+}
+
+input SessionReviewUpdateManyWithWhereNestedInput {
+  where: SessionReviewScalarWhereInput!
+  data: SessionReviewUpdateManyDataInput!
+}
+
+input SessionReviewUpdateOneRequiredInput {
+  create: SessionReviewCreateInput
+  update: SessionReviewUpdateDataInput
+  upsert: SessionReviewUpsertNestedInput
+  connect: SessionReviewWhereUniqueInput
+}
+
+input SessionReviewUpdateWithoutSessionDataInput {
+  user: UserUpdateOneRequiredInput
+  text: String
+}
+
+input SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput!
+  data: SessionReviewUpdateWithoutSessionDataInput!
+}
+
+input SessionReviewUpsertNestedInput {
+  update: SessionReviewUpdateDataInput!
+  create: SessionReviewCreateInput!
+}
+
+input SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput!
+  update: SessionReviewUpdateWithoutSessionDataInput!
+  create: SessionReviewCreateWithoutSessionInput!
+}
+
+input SessionReviewWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  user: UserWhereInput
+  session: GamingSessionWhereInput
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  AND: [SessionReviewWhereInput!]
+  OR: [SessionReviewWhereInput!]
+  NOT: [SessionReviewWhereInput!]
+}
+
+input SessionReviewWhereUniqueInput {
+  id: ID
 }
 
 type SocialMedia {
@@ -465,10 +1611,53 @@ input SocialMediaWhereUniqueInput {
 }
 
 type Subscription {
+  game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
+  gameIndex(where: GameIndexSubscriptionWhereInput): GameIndexSubscriptionPayload
   gamerRequest(where: GamerRequestSubscriptionWhereInput): GamerRequestSubscriptionPayload
+  gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
+  gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
+  sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
+  sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   userIndex(where: UserIndexSubscriptionWhereInput): UserIndexSubscriptionPayload
+}
+
+enum Tags {
+  ACTION
+  ADVENTURE_GAME
+  CARD_AND_BOARD_GAME
+  COMPILATION
+  DRIVING_SLASH_RACING_GAME
+  EDUCATIONAL_GAME
+  FIGHTING
+  FLIGHT_SIMULATOR
+  FPS
+  GAMBLING_GAME
+  HIDDEN_OBJECTS
+  HORROR
+  INDIE_GAME
+  METROIDVANIA
+  MMORPG
+  MOBA
+  OPEN_WORLD
+  PINBALL
+  PLATFORMER
+  POINT_AND_CLICK
+  PUZZLE
+  RHYTHM_AND_MUSIC_GAME
+  ROGUELIKE
+  RPG
+  RTS
+  SERIES_COLON_SOULS
+  SHOOT_HYPHEN_EM_UP
+  SHOOTER
+  SIMULATION
+  SPORTS_GAME
+  STEALTH
+  STRATEGY
+  SURVIVAL
+  VISUAL_NOVEL
 }
 
 type User {
@@ -480,6 +1669,7 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+  sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
 }
 
 type UserConnection {
@@ -496,6 +1686,12 @@ input UserCreateInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
+  sessions: GamingSessionCreateManyWithoutGamersInput
+}
+
+input UserCreateManyWithoutSessionsInput {
+  create: [UserCreateWithoutSessionsInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateoccupationsInput {
@@ -505,6 +1701,16 @@ input UserCreateoccupationsInput {
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutSessionsInput {
+  email: String!
+  username: String!
+  password: String!
+  isGamer: Boolean
+  occupations: UserCreateoccupationsInput
+  name: String!
+  aboutMe: String
 }
 
 type UserEdge {
@@ -517,6 +1723,7 @@ type UserIndex {
   email: String!
   username: String!
   name: String!
+  user: User!
 }
 
 type UserIndexConnection {
@@ -529,6 +1736,7 @@ input UserIndexCreateInput {
   email: String!
   username: String!
   name: String!
+  user: UserCreateOneInput!
 }
 
 type UserIndexEdge {
@@ -580,6 +1788,7 @@ input UserIndexUpdateInput {
   email: String
   username: String
   name: String
+  user: UserUpdateOneRequiredInput
 }
 
 input UserIndexUpdateManyMutationInput {
@@ -645,6 +1854,7 @@ input UserIndexWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  user: UserWhereInput
   AND: [UserIndexWhereInput!]
   OR: [UserIndexWhereInput!]
   NOT: [UserIndexWhereInput!]
@@ -688,6 +1898,98 @@ type UserPreviousValues {
   aboutMe: String
 }
 
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  isGamer: Boolean
+  isGamer_not: Boolean
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  aboutMe: String
+  aboutMe_not: String
+  aboutMe_in: [String!]
+  aboutMe_not_in: [String!]
+  aboutMe_lt: String
+  aboutMe_lte: String
+  aboutMe_gt: String
+  aboutMe_gte: String
+  aboutMe_contains: String
+  aboutMe_not_contains: String
+  aboutMe_starts_with: String
+  aboutMe_not_starts_with: String
+  aboutMe_ends_with: String
+  aboutMe_not_ends_with: String
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -714,9 +2016,21 @@ input UserUpdateDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  sessions: GamingSessionUpdateManyWithoutGamersInput
 }
 
 input UserUpdateInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  occupations: UserUpdateoccupationsInput
+  name: String
+  aboutMe: String
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+}
+
+input UserUpdateManyDataInput {
   email: String
   username: String
   password: String
@@ -736,6 +2050,23 @@ input UserUpdateManyMutationInput {
   aboutMe: String
 }
 
+input UserUpdateManyWithoutSessionsInput {
+  create: [UserCreateWithoutSessionsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutSessionsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutSessionsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
 input UserUpdateoccupationsInput {
   set: [Occupations!]
 }
@@ -747,9 +2078,30 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutSessionsDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  occupations: UserUpdateoccupationsInput
+  name: String
+  aboutMe: String
+}
+
+input UserUpdateWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutSessionsDataInput!
+}
+
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutSessionsDataInput!
+  create: UserCreateWithoutSessionsInput!
 }
 
 input UserWhereInput {
@@ -839,6 +2191,9 @@ input UserWhereInput {
   aboutMe_not_starts_with: String
   aboutMe_ends_with: String
   aboutMe_not_ends_with: String
+  sessions_every: GamingSessionWhereInput
+  sessions_some: GamingSessionWhereInput
+  sessions_none: GamingSessionWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

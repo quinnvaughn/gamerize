@@ -1,0 +1,20 @@
+#import User from './user.graphql'
+#import Game from './game.graphql'
+#import SessionReview from './sessionreview.graphql'
+
+type GamingSession {
+  id: ID! @unique
+  gamers: [User!]! @relation(name: "MySessions")
+  game: Game!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: [SessionReview!]!
+}
+
+## Workaround for no case insensitive search in prisma yet.
+type GamingSessionIndex {
+  id: ID! @unique
+  title: String!
+  gamingSession: GamingSession!
+}

@@ -31,6 +31,9 @@ const Container = styled.div`
   transition: box-shadow 200ms ease-in;
   transition: width 200ms ease-in;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  :hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
+  }
 `
 
 const StyledSearch = styled(FaSearch)`
