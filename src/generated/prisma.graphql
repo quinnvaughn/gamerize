@@ -1,7 +1,31 @@
 # source: http://localhost:4466
-# timestamp: Thu Mar 14 2019 20:02:29 GMT-0500 (CDT)
+# timestamp: Sun Mar 17 2019 00:43:22 GMT-0500 (CDT)
+
+type AggregateGame {
+  count: Int!
+}
+
+type AggregateGameIndex {
+  count: Int!
+}
 
 type AggregateGamerRequest {
+  count: Int!
+}
+
+type AggregateGamingSession {
+  count: Int!
+}
+
+type AggregateGamingSessionIndex {
+  count: Int!
+}
+
+type AggregateSessionReview {
+  count: Int!
+}
+
+type AggregateSessionReviewIndex {
   count: Int!
 }
 
@@ -20,6 +44,266 @@ type AggregateUserIndex {
 type BatchPayload {
   """The number of nodes that have been affected by the Batch operation."""
   count: Long!
+}
+
+scalar DateTime
+
+type Game implements Node {
+  id: ID!
+  name: String!
+  tags: [Tags!]!
+  sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+}
+
+"""A connection to a list of items."""
+type GameConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GameEdge]!
+  aggregate: AggregateGame!
+}
+
+input GameCreateInput {
+  name: String!
+  tags: GameCreatetagsInput
+  sessions: GamingSessionCreateManyWithoutGameInput
+}
+
+input GameCreateOneInput {
+  create: GameCreateInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreateOneWithoutSessionsInput {
+  create: GameCreateWithoutSessionsInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreatetagsInput {
+  set: [Tags!]
+}
+
+input GameCreateWithoutSessionsInput {
+  name: String!
+  tags: GameCreatetagsInput
+}
+
+"""An edge in a connection."""
+type GameEdge {
+  """The item at the end of the edge."""
+  node: Game!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type GameIndex implements Node {
+  id: ID!
+  name: String!
+  game: Game!
+}
+
+"""A connection to a list of items."""
+type GameIndexConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GameIndexEdge]!
+  aggregate: AggregateGameIndex!
+}
+
+input GameIndexCreateInput {
+  name: String!
+  game: GameCreateOneInput!
+}
+
+"""An edge in a connection."""
+type GameIndexEdge {
+  """The item at the end of the edge."""
+  node: GameIndex!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum GameIndexOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type GameIndexPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type GameIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: GameIndex
+  updatedFields: [String!]
+  previousValues: GameIndexPreviousValues
+}
+
+input GameIndexSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameIndexSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameIndexSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameIndexSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GameIndexWhereInput
+}
+
+input GameIndexUpdateInput {
+  name: String
+  game: GameUpdateOneRequiredInput
+}
+
+input GameIndexUpdateManyMutationInput {
+  name: String
+}
+
+input GameIndexWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameIndexWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameIndexWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameIndexWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  game: GameWhereInput
+}
+
+input GameIndexWhereUniqueInput {
+  id: ID
+}
+
+enum GameOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type GamePreviousValues {
+  id: ID!
+  name: String!
+  tags: [Tags!]!
 }
 
 type GamerRequest implements Node {
@@ -229,6 +513,937 @@ input GamerRequestWhereUniqueInput {
   id: ID
 }
 
+type GameSubscriptionPayload {
+  mutation: MutationType!
+  node: Game
+  updatedFields: [String!]
+  previousValues: GamePreviousValues
+}
+
+input GameSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GameWhereInput
+}
+
+input GameUpdateDataInput {
+  name: String
+  tags: GameUpdatetagsInput
+  sessions: GamingSessionUpdateManyWithoutGameInput
+}
+
+input GameUpdateInput {
+  name: String
+  tags: GameUpdatetagsInput
+  sessions: GamingSessionUpdateManyWithoutGameInput
+}
+
+input GameUpdateManyMutationInput {
+  name: String
+  tags: GameUpdatetagsInput
+}
+
+input GameUpdateOneRequiredInput {
+  create: GameCreateInput
+  connect: GameWhereUniqueInput
+  update: GameUpdateDataInput
+  upsert: GameUpsertNestedInput
+}
+
+input GameUpdateOneRequiredWithoutSessionsInput {
+  create: GameCreateWithoutSessionsInput
+  connect: GameWhereUniqueInput
+  update: GameUpdateWithoutSessionsDataInput
+  upsert: GameUpsertWithoutSessionsInput
+}
+
+input GameUpdatetagsInput {
+  set: [Tags!]
+}
+
+input GameUpdateWithoutSessionsDataInput {
+  name: String
+  tags: GameUpdatetagsInput
+}
+
+input GameUpsertNestedInput {
+  update: GameUpdateDataInput!
+  create: GameCreateInput!
+}
+
+input GameUpsertWithoutSessionsInput {
+  update: GameUpdateWithoutSessionsDataInput!
+  create: GameCreateWithoutSessionsInput!
+}
+
+input GameWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  sessions_every: GamingSessionWhereInput
+  sessions_some: GamingSessionWhereInput
+  sessions_none: GamingSessionWhereInput
+}
+
+input GameWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+type GamingSession implements Node {
+  id: ID!
+  gamers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  game: Game!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
+}
+
+"""A connection to a list of items."""
+type GamingSessionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GamingSessionEdge]!
+  aggregate: AggregateGamingSession!
+}
+
+input GamingSessionCreateInput {
+  title: String!
+  length: Int!
+  price: Float!
+  gamers: UserCreateManyWithoutSessionsInput
+  game: GameCreateOneWithoutSessionsInput!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateManyWithoutGameInput {
+  create: [GamingSessionCreateWithoutGameInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+}
+
+input GamingSessionCreateManyWithoutGamersInput {
+  create: [GamingSessionCreateWithoutGamersInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+}
+
+input GamingSessionCreateOneInput {
+  create: GamingSessionCreateInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionCreateOneWithoutReviewsInput {
+  create: GamingSessionCreateWithoutReviewsInput
+  connect: GamingSessionWhereUniqueInput
+}
+
+input GamingSessionCreateWithoutGameInput {
+  title: String!
+  length: Int!
+  price: Float!
+  gamers: UserCreateManyWithoutSessionsInput
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateWithoutGamersInput {
+  title: String!
+  length: Int!
+  price: Float!
+  game: GameCreateOneWithoutSessionsInput!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+}
+
+input GamingSessionCreateWithoutReviewsInput {
+  title: String!
+  length: Int!
+  price: Float!
+  gamers: UserCreateManyWithoutSessionsInput
+  game: GameCreateOneWithoutSessionsInput!
+}
+
+"""An edge in a connection."""
+type GamingSessionEdge {
+  """The item at the end of the edge."""
+  node: GamingSession!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type GamingSessionIndex implements Node {
+  id: ID!
+  title: String!
+  gamingSession: GamingSession!
+}
+
+"""A connection to a list of items."""
+type GamingSessionIndexConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GamingSessionIndexEdge]!
+  aggregate: AggregateGamingSessionIndex!
+}
+
+input GamingSessionIndexCreateInput {
+  title: String!
+  gamingSession: GamingSessionCreateOneInput!
+}
+
+"""An edge in a connection."""
+type GamingSessionIndexEdge {
+  """The item at the end of the edge."""
+  node: GamingSessionIndex!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum GamingSessionIndexOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type GamingSessionIndexPreviousValues {
+  id: ID!
+  title: String!
+}
+
+type GamingSessionIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: GamingSessionIndex
+  updatedFields: [String!]
+  previousValues: GamingSessionIndexPreviousValues
+}
+
+input GamingSessionIndexSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GamingSessionIndexSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GamingSessionIndexSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GamingSessionIndexSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GamingSessionIndexWhereInput
+}
+
+input GamingSessionIndexUpdateInput {
+  title: String
+  gamingSession: GamingSessionUpdateOneRequiredInput
+}
+
+input GamingSessionIndexUpdateManyMutationInput {
+  title: String
+}
+
+input GamingSessionIndexWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GamingSessionIndexWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GamingSessionIndexWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GamingSessionIndexWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  gamingSession: GamingSessionWhereInput
+}
+
+input GamingSessionIndexWhereUniqueInput {
+  id: ID
+}
+
+enum GamingSessionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  length_ASC
+  length_DESC
+  price_ASC
+  price_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type GamingSessionPreviousValues {
+  id: ID!
+  title: String!
+  length: Int!
+  price: Float!
+}
+
+input GamingSessionScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GamingSessionScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GamingSessionScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GamingSessionScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  length: Int
+
+  """All values that are not equal to given value."""
+  length_not: Int
+
+  """All values that are contained in given list."""
+  length_in: [Int!]
+
+  """All values that are not contained in given list."""
+  length_not_in: [Int!]
+
+  """All values less than the given value."""
+  length_lt: Int
+
+  """All values less than or equal the given value."""
+  length_lte: Int
+
+  """All values greater than the given value."""
+  length_gt: Int
+
+  """All values greater than or equal the given value."""
+  length_gte: Int
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+}
+
+type GamingSessionSubscriptionPayload {
+  mutation: MutationType!
+  node: GamingSession
+  updatedFields: [String!]
+  previousValues: GamingSessionPreviousValues
+}
+
+input GamingSessionSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GamingSessionSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GamingSessionSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GamingSessionSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GamingSessionWhereInput
+}
+
+input GamingSessionUpdateDataInput {
+  title: String
+  length: Int
+  price: Float
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateInput {
+  title: String
+  length: Int
+  price: Float
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateManyDataInput {
+  title: String
+  length: Int
+  price: Float
+}
+
+input GamingSessionUpdateManyMutationInput {
+  title: String
+  length: Int
+  price: Float
+}
+
+input GamingSessionUpdateManyWithoutGameInput {
+  create: [GamingSessionCreateWithoutGameInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+  set: [GamingSessionWhereUniqueInput!]
+  disconnect: [GamingSessionWhereUniqueInput!]
+  delete: [GamingSessionWhereUniqueInput!]
+  update: [GamingSessionUpdateWithWhereUniqueWithoutGameInput!]
+  updateMany: [GamingSessionUpdateManyWithWhereNestedInput!]
+  deleteMany: [GamingSessionScalarWhereInput!]
+  upsert: [GamingSessionUpsertWithWhereUniqueWithoutGameInput!]
+}
+
+input GamingSessionUpdateManyWithoutGamersInput {
+  create: [GamingSessionCreateWithoutGamersInput!]
+  connect: [GamingSessionWhereUniqueInput!]
+  set: [GamingSessionWhereUniqueInput!]
+  disconnect: [GamingSessionWhereUniqueInput!]
+  delete: [GamingSessionWhereUniqueInput!]
+  update: [GamingSessionUpdateWithWhereUniqueWithoutGamersInput!]
+  updateMany: [GamingSessionUpdateManyWithWhereNestedInput!]
+  deleteMany: [GamingSessionScalarWhereInput!]
+  upsert: [GamingSessionUpsertWithWhereUniqueWithoutGamersInput!]
+}
+
+input GamingSessionUpdateManyWithWhereNestedInput {
+  where: GamingSessionScalarWhereInput!
+  data: GamingSessionUpdateManyDataInput!
+}
+
+input GamingSessionUpdateOneRequiredInput {
+  create: GamingSessionCreateInput
+  connect: GamingSessionWhereUniqueInput
+  update: GamingSessionUpdateDataInput
+  upsert: GamingSessionUpsertNestedInput
+}
+
+input GamingSessionUpdateOneRequiredWithoutReviewsInput {
+  create: GamingSessionCreateWithoutReviewsInput
+  connect: GamingSessionWhereUniqueInput
+  update: GamingSessionUpdateWithoutReviewsDataInput
+  upsert: GamingSessionUpsertWithoutReviewsInput
+}
+
+input GamingSessionUpdateWithoutGameDataInput {
+  title: String
+  length: Int
+  price: Float
+  gamers: UserUpdateManyWithoutSessionsInput
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateWithoutGamersDataInput {
+  title: String
+  length: Int
+  price: Float
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+}
+
+input GamingSessionUpdateWithoutReviewsDataInput {
+  title: String
+  length: Int
+  price: Float
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+}
+
+input GamingSessionUpdateWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput!
+  data: GamingSessionUpdateWithoutGameDataInput!
+}
+
+input GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput!
+  data: GamingSessionUpdateWithoutGamersDataInput!
+}
+
+input GamingSessionUpsertNestedInput {
+  update: GamingSessionUpdateDataInput!
+  create: GamingSessionCreateInput!
+}
+
+input GamingSessionUpsertWithoutReviewsInput {
+  update: GamingSessionUpdateWithoutReviewsDataInput!
+  create: GamingSessionCreateWithoutReviewsInput!
+}
+
+input GamingSessionUpsertWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput!
+  update: GamingSessionUpdateWithoutGameDataInput!
+  create: GamingSessionCreateWithoutGameInput!
+}
+
+input GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput!
+  update: GamingSessionUpdateWithoutGamersDataInput!
+  create: GamingSessionCreateWithoutGamersInput!
+}
+
+input GamingSessionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GamingSessionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GamingSessionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GamingSessionWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  length: Int
+
+  """All values that are not equal to given value."""
+  length_not: Int
+
+  """All values that are contained in given list."""
+  length_in: [Int!]
+
+  """All values that are not contained in given list."""
+  length_not_in: [Int!]
+
+  """All values less than the given value."""
+  length_lt: Int
+
+  """All values less than or equal the given value."""
+  length_lte: Int
+
+  """All values greater than the given value."""
+  length_gt: Int
+
+  """All values greater than or equal the given value."""
+  length_gte: Int
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  gamers_every: UserWhereInput
+  gamers_some: UserWhereInput
+  gamers_none: UserWhereInput
+  game: GameWhereInput
+  reviews_every: SessionReviewWhereInput
+  reviews_some: SessionReviewWhereInput
+  reviews_none: SessionReviewWhereInput
+}
+
+input GamingSessionWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -241,27 +1456,63 @@ scalar Long
 type Mutation {
   createUserIndex(data: UserIndexCreateInput!): UserIndex!
   createGamerRequest(data: GamerRequestCreateInput!): GamerRequest!
+  createGameIndex(data: GameIndexCreateInput!): GameIndex!
+  createGamingSessionIndex(data: GamingSessionIndexCreateInput!): GamingSessionIndex!
+  createSessionReviewIndex(data: SessionReviewIndexCreateInput!): SessionReviewIndex!
+  createGame(data: GameCreateInput!): Game!
+  createSessionReview(data: SessionReviewCreateInput!): SessionReview!
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
+  createGamingSession(data: GamingSessionCreateInput!): GamingSession!
   createUser(data: UserCreateInput!): User!
   updateUserIndex(data: UserIndexUpdateInput!, where: UserIndexWhereUniqueInput!): UserIndex
   updateGamerRequest(data: GamerRequestUpdateInput!, where: GamerRequestWhereUniqueInput!): GamerRequest
+  updateGameIndex(data: GameIndexUpdateInput!, where: GameIndexWhereUniqueInput!): GameIndex
+  updateGamingSessionIndex(data: GamingSessionIndexUpdateInput!, where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  updateSessionReviewIndex(data: SessionReviewIndexUpdateInput!, where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
+  updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
   updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
+  updateGamingSession(data: GamingSessionUpdateInput!, where: GamingSessionWhereUniqueInput!): GamingSession
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteUserIndex(where: UserIndexWhereUniqueInput!): UserIndex
   deleteGamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
+  deleteGameIndex(where: GameIndexWhereUniqueInput!): GameIndex
+  deleteGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  deleteSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  deleteGame(where: GameWhereUniqueInput!): Game
+  deleteSessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   deleteSocialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
+  deleteGamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
   deleteUser(where: UserWhereUniqueInput!): User
   upsertUserIndex(where: UserIndexWhereUniqueInput!, create: UserIndexCreateInput!, update: UserIndexUpdateInput!): UserIndex!
   upsertGamerRequest(where: GamerRequestWhereUniqueInput!, create: GamerRequestCreateInput!, update: GamerRequestUpdateInput!): GamerRequest!
+  upsertGameIndex(where: GameIndexWhereUniqueInput!, create: GameIndexCreateInput!, update: GameIndexUpdateInput!): GameIndex!
+  upsertGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!, create: GamingSessionIndexCreateInput!, update: GamingSessionIndexUpdateInput!): GamingSessionIndex!
+  upsertSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!, create: SessionReviewIndexCreateInput!, update: SessionReviewIndexUpdateInput!): SessionReviewIndex!
+  upsertGame(where: GameWhereUniqueInput!, create: GameCreateInput!, update: GameUpdateInput!): Game!
+  upsertSessionReview(where: SessionReviewWhereUniqueInput!, create: SessionReviewCreateInput!, update: SessionReviewUpdateInput!): SessionReview!
   upsertSocialMedia(where: SocialMediaWhereUniqueInput!, create: SocialMediaCreateInput!, update: SocialMediaUpdateInput!): SocialMedia!
+  upsertGamingSession(where: GamingSessionWhereUniqueInput!, create: GamingSessionCreateInput!, update: GamingSessionUpdateInput!): GamingSession!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyUserIndexes(data: UserIndexUpdateManyMutationInput!, where: UserIndexWhereInput): BatchPayload!
   updateManyGamerRequests(data: GamerRequestUpdateManyMutationInput!, where: GamerRequestWhereInput): BatchPayload!
+  updateManyGameIndexes(data: GameIndexUpdateManyMutationInput!, where: GameIndexWhereInput): BatchPayload!
+  updateManyGamingSessionIndexes(data: GamingSessionIndexUpdateManyMutationInput!, where: GamingSessionIndexWhereInput): BatchPayload!
+  updateManySessionReviewIndexes(data: SessionReviewIndexUpdateManyMutationInput!, where: SessionReviewIndexWhereInput): BatchPayload!
+  updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
+  updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
   updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
+  updateManyGamingSessions(data: GamingSessionUpdateManyMutationInput!, where: GamingSessionWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyUserIndexes(where: UserIndexWhereInput): BatchPayload!
   deleteManyGamerRequests(where: GamerRequestWhereInput): BatchPayload!
+  deleteManyGameIndexes(where: GameIndexWhereInput): BatchPayload!
+  deleteManyGamingSessionIndexes(where: GamingSessionIndexWhereInput): BatchPayload!
+  deleteManySessionReviewIndexes(where: SessionReviewIndexWhereInput): BatchPayload!
+  deleteManyGames(where: GameWhereInput): BatchPayload!
+  deleteManySessionReviews(where: SessionReviewWhereInput): BatchPayload!
   deleteManySocialMedias(where: SocialMediaWhereInput): BatchPayload!
+  deleteManyGamingSessions(where: GamingSessionWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
@@ -327,15 +1578,33 @@ enum PrismaDatabase {
 type Query {
   userIndexes(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserIndex]!
   gamerRequests(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerRequest]!
+  gameIndexes(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GameIndex]!
+  gamingSessionIndexes(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSessionIndex]!
+  sessionReviewIndexes(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReviewIndex]!
+  games(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game]!
+  sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
+  gamingSessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   userIndex(where: UserIndexWhereUniqueInput!): UserIndex
   gamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
+  gameIndex(where: GameIndexWhereUniqueInput!): GameIndex
+  gamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
+  sessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  game(where: GameWhereUniqueInput!): Game
+  sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
+  gamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
   user(where: UserWhereUniqueInput!): User
   userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
+  gameIndexesConnection(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameIndexConnection!
+  gamingSessionIndexesConnection(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionIndexConnection!
+  sessionReviewIndexesConnection(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewIndexConnection!
+  gamesConnection(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameConnection!
+  sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
   socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
+  gamingSessionsConnection(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -343,6 +1612,597 @@ type Query {
     """The ID of an object"""
     id: ID!
   ): Node
+}
+
+type SessionReview implements Node {
+  id: ID!
+  createdAt: DateTime!
+  user: User!
+  session: GamingSession!
+  text: String!
+}
+
+"""A connection to a list of items."""
+type SessionReviewConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SessionReviewEdge]!
+  aggregate: AggregateSessionReview!
+}
+
+input SessionReviewCreateInput {
+  text: String!
+  user: UserCreateOneInput!
+  session: GamingSessionCreateOneWithoutReviewsInput!
+}
+
+input SessionReviewCreateManyWithoutSessionInput {
+  create: [SessionReviewCreateWithoutSessionInput!]
+  connect: [SessionReviewWhereUniqueInput!]
+}
+
+input SessionReviewCreateOneInput {
+  create: SessionReviewCreateInput
+  connect: SessionReviewWhereUniqueInput
+}
+
+input SessionReviewCreateWithoutSessionInput {
+  text: String!
+  user: UserCreateOneInput!
+}
+
+"""An edge in a connection."""
+type SessionReviewEdge {
+  """The item at the end of the edge."""
+  node: SessionReview!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type SessionReviewIndex implements Node {
+  id: ID!
+  text: String!
+  sessionReview: SessionReview!
+}
+
+"""A connection to a list of items."""
+type SessionReviewIndexConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SessionReviewIndexEdge]!
+  aggregate: AggregateSessionReviewIndex!
+}
+
+input SessionReviewIndexCreateInput {
+  text: String!
+  sessionReview: SessionReviewCreateOneInput!
+}
+
+"""An edge in a connection."""
+type SessionReviewIndexEdge {
+  """The item at the end of the edge."""
+  node: SessionReviewIndex!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SessionReviewIndexOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SessionReviewIndexPreviousValues {
+  id: ID!
+  text: String!
+}
+
+type SessionReviewIndexSubscriptionPayload {
+  mutation: MutationType!
+  node: SessionReviewIndex
+  updatedFields: [String!]
+  previousValues: SessionReviewIndexPreviousValues
+}
+
+input SessionReviewIndexSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SessionReviewIndexSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SessionReviewIndexSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SessionReviewIndexSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SessionReviewIndexWhereInput
+}
+
+input SessionReviewIndexUpdateInput {
+  text: String
+  sessionReview: SessionReviewUpdateOneRequiredInput
+}
+
+input SessionReviewIndexUpdateManyMutationInput {
+  text: String
+}
+
+input SessionReviewIndexWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SessionReviewIndexWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SessionReviewIndexWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SessionReviewIndexWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  sessionReview: SessionReviewWhereInput
+}
+
+input SessionReviewIndexWhereUniqueInput {
+  id: ID
+}
+
+enum SessionReviewOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  text_ASC
+  text_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SessionReviewPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  text: String!
+}
+
+input SessionReviewScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SessionReviewScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SessionReviewScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SessionReviewScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+}
+
+type SessionReviewSubscriptionPayload {
+  mutation: MutationType!
+  node: SessionReview
+  updatedFields: [String!]
+  previousValues: SessionReviewPreviousValues
+}
+
+input SessionReviewSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SessionReviewSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SessionReviewSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SessionReviewSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SessionReviewWhereInput
+}
+
+input SessionReviewUpdateDataInput {
+  text: String
+  user: UserUpdateOneRequiredInput
+  session: GamingSessionUpdateOneRequiredWithoutReviewsInput
+}
+
+input SessionReviewUpdateInput {
+  text: String
+  user: UserUpdateOneRequiredInput
+  session: GamingSessionUpdateOneRequiredWithoutReviewsInput
+}
+
+input SessionReviewUpdateManyDataInput {
+  text: String
+}
+
+input SessionReviewUpdateManyMutationInput {
+  text: String
+}
+
+input SessionReviewUpdateManyWithoutSessionInput {
+  create: [SessionReviewCreateWithoutSessionInput!]
+  connect: [SessionReviewWhereUniqueInput!]
+  set: [SessionReviewWhereUniqueInput!]
+  disconnect: [SessionReviewWhereUniqueInput!]
+  delete: [SessionReviewWhereUniqueInput!]
+  update: [SessionReviewUpdateWithWhereUniqueWithoutSessionInput!]
+  updateMany: [SessionReviewUpdateManyWithWhereNestedInput!]
+  deleteMany: [SessionReviewScalarWhereInput!]
+  upsert: [SessionReviewUpsertWithWhereUniqueWithoutSessionInput!]
+}
+
+input SessionReviewUpdateManyWithWhereNestedInput {
+  where: SessionReviewScalarWhereInput!
+  data: SessionReviewUpdateManyDataInput!
+}
+
+input SessionReviewUpdateOneRequiredInput {
+  create: SessionReviewCreateInput
+  connect: SessionReviewWhereUniqueInput
+  update: SessionReviewUpdateDataInput
+  upsert: SessionReviewUpsertNestedInput
+}
+
+input SessionReviewUpdateWithoutSessionDataInput {
+  text: String
+  user: UserUpdateOneRequiredInput
+}
+
+input SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput!
+  data: SessionReviewUpdateWithoutSessionDataInput!
+}
+
+input SessionReviewUpsertNestedInput {
+  update: SessionReviewUpdateDataInput!
+  create: SessionReviewCreateInput!
+}
+
+input SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput!
+  update: SessionReviewUpdateWithoutSessionDataInput!
+  create: SessionReviewCreateWithoutSessionInput!
+}
+
+input SessionReviewWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SessionReviewWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SessionReviewWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SessionReviewWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  user: UserWhereInput
+  session: GamingSessionWhereInput
+}
+
+input SessionReviewWhereUniqueInput {
+  id: ID
 }
 
 type SocialMedia implements Node {
@@ -795,8 +2655,51 @@ input SocialMediaWhereUniqueInput {
 type Subscription {
   userIndex(where: UserIndexSubscriptionWhereInput): UserIndexSubscriptionPayload
   gamerRequest(where: GamerRequestSubscriptionWhereInput): GamerRequestSubscriptionPayload
+  gameIndex(where: GameIndexSubscriptionWhereInput): GameIndexSubscriptionPayload
+  gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
+  sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
+  game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
+  sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
+  gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+enum Tags {
+  ACTION
+  ADVENTURE_GAME
+  CARD_AND_BOARD_GAME
+  COMPILATION
+  DRIVING_SLASH_RACING_GAME
+  EDUCATIONAL_GAME
+  FIGHTING
+  FLIGHT_SIMULATOR
+  FPS
+  GAMBLING_GAME
+  HIDDEN_OBJECTS
+  HORROR
+  INDIE_GAME
+  METROIDVANIA
+  MMORPG
+  MOBA
+  OPEN_WORLD
+  PINBALL
+  PLATFORMER
+  POINT_AND_CLICK
+  PUZZLE
+  RHYTHM_AND_MUSIC_GAME
+  ROGUELIKE
+  RPG
+  RTS
+  SERIES_COLON_SOULS
+  SHOOT_HYPHEN_EM_UP
+  SHOOTER
+  SIMULATION
+  SPORTS_GAME
+  STEALTH
+  STRATEGY
+  SURVIVAL
+  VISUAL_NOVEL
 }
 
 type User implements Node {
@@ -808,6 +2711,7 @@ type User implements Node {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+  sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
 }
 
 """A connection to a list of items."""
@@ -828,6 +2732,12 @@ input UserCreateInput {
   name: String!
   aboutMe: String
   occupations: UserCreateoccupationsInput
+  sessions: GamingSessionCreateManyWithoutGamersInput
+}
+
+input UserCreateManyWithoutSessionsInput {
+  create: [UserCreateWithoutSessionsInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateoccupationsInput {
@@ -837,6 +2747,16 @@ input UserCreateoccupationsInput {
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutSessionsInput {
+  email: String!
+  username: String!
+  password: String!
+  isGamer: Boolean
+  name: String!
+  aboutMe: String
+  occupations: UserCreateoccupationsInput
 }
 
 """An edge in a connection."""
@@ -853,6 +2773,7 @@ type UserIndex implements Node {
   email: String!
   username: String!
   name: String!
+  user: User!
 }
 
 """A connection to a list of items."""
@@ -869,6 +2790,7 @@ input UserIndexCreateInput {
   email: String!
   username: String!
   name: String!
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -945,6 +2867,7 @@ input UserIndexUpdateInput {
   email: String
   username: String
   name: String
+  user: UserUpdateOneRequiredInput
 }
 
 input UserIndexUpdateManyMutationInput {
@@ -1122,6 +3045,7 @@ input UserIndexWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  user: UserWhereInput
 }
 
 input UserIndexWhereUniqueInput {
@@ -1160,6 +3084,261 @@ type UserPreviousValues {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+}
+
+input UserScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  username: String
+
+  """All values that are not equal to given value."""
+  username_not: String
+
+  """All values that are contained in given list."""
+  username_in: [String!]
+
+  """All values that are not contained in given list."""
+  username_not_in: [String!]
+
+  """All values less than the given value."""
+  username_lt: String
+
+  """All values less than or equal the given value."""
+  username_lte: String
+
+  """All values greater than the given value."""
+  username_gt: String
+
+  """All values greater than or equal the given value."""
+  username_gte: String
+
+  """All values containing the given string."""
+  username_contains: String
+
+  """All values not containing the given string."""
+  username_not_contains: String
+
+  """All values starting with the given string."""
+  username_starts_with: String
+
+  """All values not starting with the given string."""
+  username_not_starts_with: String
+
+  """All values ending with the given string."""
+  username_ends_with: String
+
+  """All values not ending with the given string."""
+  username_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  isGamer: Boolean
+
+  """All values that are not equal to given value."""
+  isGamer_not: Boolean
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  aboutMe: String
+
+  """All values that are not equal to given value."""
+  aboutMe_not: String
+
+  """All values that are contained in given list."""
+  aboutMe_in: [String!]
+
+  """All values that are not contained in given list."""
+  aboutMe_not_in: [String!]
+
+  """All values less than the given value."""
+  aboutMe_lt: String
+
+  """All values less than or equal the given value."""
+  aboutMe_lte: String
+
+  """All values greater than the given value."""
+  aboutMe_gt: String
+
+  """All values greater than or equal the given value."""
+  aboutMe_gte: String
+
+  """All values containing the given string."""
+  aboutMe_contains: String
+
+  """All values not containing the given string."""
+  aboutMe_not_contains: String
+
+  """All values starting with the given string."""
+  aboutMe_starts_with: String
+
+  """All values not starting with the given string."""
+  aboutMe_not_starts_with: String
+
+  """All values ending with the given string."""
+  aboutMe_ends_with: String
+
+  """All values not ending with the given string."""
+  aboutMe_not_ends_with: String
 }
 
 type UserSubscriptionPayload {
@@ -1209,9 +3388,21 @@ input UserUpdateDataInput {
   name: String
   aboutMe: String
   occupations: UserUpdateoccupationsInput
+  sessions: GamingSessionUpdateManyWithoutGamersInput
 }
 
 input UserUpdateInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  name: String
+  aboutMe: String
+  occupations: UserUpdateoccupationsInput
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+}
+
+input UserUpdateManyDataInput {
   email: String
   username: String
   password: String
@@ -1231,6 +3422,23 @@ input UserUpdateManyMutationInput {
   occupations: UserUpdateoccupationsInput
 }
 
+input UserUpdateManyWithoutSessionsInput {
+  create: [UserCreateWithoutSessionsInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutSessionsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutSessionsInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
 input UserUpdateoccupationsInput {
   set: [Occupations!]
 }
@@ -1242,9 +3450,30 @@ input UserUpdateOneRequiredInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateWithoutSessionsDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  name: String
+  aboutMe: String
+  occupations: UserUpdateoccupationsInput
+}
+
+input UserUpdateWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutSessionsDataInput!
+}
+
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutSessionsDataInput!
+  create: UserCreateWithoutSessionsInput!
 }
 
 input UserWhereInput {
@@ -1500,6 +3729,9 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   aboutMe_not_ends_with: String
+  sessions_every: GamingSessionWhereInput
+  sessions_some: GamingSessionWhereInput
+  sessions_none: GamingSessionWhereInput
 }
 
 input UserWhereUniqueInput {

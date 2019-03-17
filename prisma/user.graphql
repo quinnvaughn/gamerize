@@ -1,0 +1,22 @@
+#import * from './enums.graphql'
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  username: String! @unique
+  password: String!
+  isGamer: Boolean! @default(value: false)
+  occupations: [Occupations!]!
+  name: String!
+  aboutMe: String
+  sessions: [GamingSession!]! @relation(name: "MySessions")
+}
+
+## Workaround for no case insensitive search in prisma yet.
+type UserIndex {
+  id: ID! @unique
+  email: String! @unique
+  username: String! @unique
+  name: String!
+  user: User!
+}

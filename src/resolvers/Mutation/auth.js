@@ -21,7 +21,12 @@ const auth = {
     }
     const user = await prisma.createUser({ ...input, password })
 
-    await prisma.createUserIndex({ email, username, name })
+    await prisma.createUserIndex({
+      email,
+      username,
+      name,
+      user: { connect: { id: user.id } },
+    })
 
     return {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),

@@ -1,0 +1,16 @@
+#import Tags from './enums.graphql'
+#import GamingSession from './gamingsession.graphql'
+
+type Game {
+  id: ID! @unique
+  name: String! @unique
+  tags: [Tags!]!
+  sessions: [GamingSession!]!
+}
+
+## until Prisma gets case insensitive search
+type GameIndex {
+  id: ID! @unique
+  name: String!
+  game: Game!
+}

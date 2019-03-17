@@ -14,7 +14,17 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  game: (where?: GameWhereInput) => Promise<boolean>;
+  gameIndex: (where?: GameIndexWhereInput) => Promise<boolean>;
   gamerRequest: (where?: GamerRequestWhereInput) => Promise<boolean>;
+  gamingSession: (where?: GamingSessionWhereInput) => Promise<boolean>;
+  gamingSessionIndex: (
+    where?: GamingSessionIndexWhereInput
+  ) => Promise<boolean>;
+  sessionReview: (where?: SessionReviewWhereInput) => Promise<boolean>;
+  sessionReviewIndex: (
+    where?: SessionReviewIndexWhereInput
+  ) => Promise<boolean>;
   socialMedia: (where?: SocialMediaWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
   userIndex: (where?: UserIndexWhereInput) => Promise<boolean>;
@@ -39,6 +49,52 @@ export interface Prisma {
    * Queries
    */
 
+  game: (where: GameWhereUniqueInput) => GamePromise;
+  games: (
+    args?: {
+      where?: GameWhereInput;
+      orderBy?: GameOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Game>;
+  gamesConnection: (
+    args?: {
+      where?: GameWhereInput;
+      orderBy?: GameOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => GameConnectionPromise;
+  gameIndex: (where: GameIndexWhereUniqueInput) => GameIndexPromise;
+  gameIndexes: (
+    args?: {
+      where?: GameIndexWhereInput;
+      orderBy?: GameIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<GameIndex>;
+  gameIndexesConnection: (
+    args?: {
+      where?: GameIndexWhereInput;
+      orderBy?: GameIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => GameIndexConnectionPromise;
   gamerRequest: (where: GamerRequestWhereUniqueInput) => GamerRequestPromise;
   gamerRequests: (
     args?: {
@@ -62,6 +118,102 @@ export interface Prisma {
       last?: Int;
     }
   ) => GamerRequestConnectionPromise;
+  gamingSession: (where: GamingSessionWhereUniqueInput) => GamingSessionPromise;
+  gamingSessions: (
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<GamingSession>;
+  gamingSessionsConnection: (
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => GamingSessionConnectionPromise;
+  gamingSessionIndex: (
+    where: GamingSessionIndexWhereUniqueInput
+  ) => GamingSessionIndexPromise;
+  gamingSessionIndexes: (
+    args?: {
+      where?: GamingSessionIndexWhereInput;
+      orderBy?: GamingSessionIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<GamingSessionIndex>;
+  gamingSessionIndexesConnection: (
+    args?: {
+      where?: GamingSessionIndexWhereInput;
+      orderBy?: GamingSessionIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => GamingSessionIndexConnectionPromise;
+  sessionReview: (where: SessionReviewWhereUniqueInput) => SessionReviewPromise;
+  sessionReviews: (
+    args?: {
+      where?: SessionReviewWhereInput;
+      orderBy?: SessionReviewOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SessionReview>;
+  sessionReviewsConnection: (
+    args?: {
+      where?: SessionReviewWhereInput;
+      orderBy?: SessionReviewOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SessionReviewConnectionPromise;
+  sessionReviewIndex: (
+    where: SessionReviewIndexWhereUniqueInput
+  ) => SessionReviewIndexPromise;
+  sessionReviewIndexes: (
+    args?: {
+      where?: SessionReviewIndexWhereInput;
+      orderBy?: SessionReviewIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SessionReviewIndex>;
+  sessionReviewIndexesConnection: (
+    args?: {
+      where?: SessionReviewIndexWhereInput;
+      orderBy?: SessionReviewIndexOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SessionReviewIndexConnectionPromise;
   socialMedia: (where: SocialMediaWhereUniqueInput) => SocialMediaPromise;
   socialMedias: (
     args?: {
@@ -137,6 +289,41 @@ export interface Prisma {
    * Mutations
    */
 
+  createGame: (data: GameCreateInput) => GamePromise;
+  updateGame: (
+    args: { data: GameUpdateInput; where: GameWhereUniqueInput }
+  ) => GamePromise;
+  updateManyGames: (
+    args: { data: GameUpdateManyMutationInput; where?: GameWhereInput }
+  ) => BatchPayloadPromise;
+  upsertGame: (
+    args: {
+      where: GameWhereUniqueInput;
+      create: GameCreateInput;
+      update: GameUpdateInput;
+    }
+  ) => GamePromise;
+  deleteGame: (where: GameWhereUniqueInput) => GamePromise;
+  deleteManyGames: (where?: GameWhereInput) => BatchPayloadPromise;
+  createGameIndex: (data: GameIndexCreateInput) => GameIndexPromise;
+  updateGameIndex: (
+    args: { data: GameIndexUpdateInput; where: GameIndexWhereUniqueInput }
+  ) => GameIndexPromise;
+  updateManyGameIndexes: (
+    args: {
+      data: GameIndexUpdateManyMutationInput;
+      where?: GameIndexWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertGameIndex: (
+    args: {
+      where: GameIndexWhereUniqueInput;
+      create: GameIndexCreateInput;
+      update: GameIndexUpdateInput;
+    }
+  ) => GameIndexPromise;
+  deleteGameIndex: (where: GameIndexWhereUniqueInput) => GameIndexPromise;
+  deleteManyGameIndexes: (where?: GameIndexWhereInput) => BatchPayloadPromise;
   createGamerRequest: (data: GamerRequestCreateInput) => GamerRequestPromise;
   updateGamerRequest: (
     args: { data: GamerRequestUpdateInput; where: GamerRequestWhereUniqueInput }
@@ -159,6 +346,114 @@ export interface Prisma {
   ) => GamerRequestPromise;
   deleteManyGamerRequests: (
     where?: GamerRequestWhereInput
+  ) => BatchPayloadPromise;
+  createGamingSession: (data: GamingSessionCreateInput) => GamingSessionPromise;
+  updateGamingSession: (
+    args: {
+      data: GamingSessionUpdateInput;
+      where: GamingSessionWhereUniqueInput;
+    }
+  ) => GamingSessionPromise;
+  updateManyGamingSessions: (
+    args: {
+      data: GamingSessionUpdateManyMutationInput;
+      where?: GamingSessionWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertGamingSession: (
+    args: {
+      where: GamingSessionWhereUniqueInput;
+      create: GamingSessionCreateInput;
+      update: GamingSessionUpdateInput;
+    }
+  ) => GamingSessionPromise;
+  deleteGamingSession: (
+    where: GamingSessionWhereUniqueInput
+  ) => GamingSessionPromise;
+  deleteManyGamingSessions: (
+    where?: GamingSessionWhereInput
+  ) => BatchPayloadPromise;
+  createGamingSessionIndex: (
+    data: GamingSessionIndexCreateInput
+  ) => GamingSessionIndexPromise;
+  updateGamingSessionIndex: (
+    args: {
+      data: GamingSessionIndexUpdateInput;
+      where: GamingSessionIndexWhereUniqueInput;
+    }
+  ) => GamingSessionIndexPromise;
+  updateManyGamingSessionIndexes: (
+    args: {
+      data: GamingSessionIndexUpdateManyMutationInput;
+      where?: GamingSessionIndexWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertGamingSessionIndex: (
+    args: {
+      where: GamingSessionIndexWhereUniqueInput;
+      create: GamingSessionIndexCreateInput;
+      update: GamingSessionIndexUpdateInput;
+    }
+  ) => GamingSessionIndexPromise;
+  deleteGamingSessionIndex: (
+    where: GamingSessionIndexWhereUniqueInput
+  ) => GamingSessionIndexPromise;
+  deleteManyGamingSessionIndexes: (
+    where?: GamingSessionIndexWhereInput
+  ) => BatchPayloadPromise;
+  createSessionReview: (data: SessionReviewCreateInput) => SessionReviewPromise;
+  updateSessionReview: (
+    args: {
+      data: SessionReviewUpdateInput;
+      where: SessionReviewWhereUniqueInput;
+    }
+  ) => SessionReviewPromise;
+  updateManySessionReviews: (
+    args: {
+      data: SessionReviewUpdateManyMutationInput;
+      where?: SessionReviewWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertSessionReview: (
+    args: {
+      where: SessionReviewWhereUniqueInput;
+      create: SessionReviewCreateInput;
+      update: SessionReviewUpdateInput;
+    }
+  ) => SessionReviewPromise;
+  deleteSessionReview: (
+    where: SessionReviewWhereUniqueInput
+  ) => SessionReviewPromise;
+  deleteManySessionReviews: (
+    where?: SessionReviewWhereInput
+  ) => BatchPayloadPromise;
+  createSessionReviewIndex: (
+    data: SessionReviewIndexCreateInput
+  ) => SessionReviewIndexPromise;
+  updateSessionReviewIndex: (
+    args: {
+      data: SessionReviewIndexUpdateInput;
+      where: SessionReviewIndexWhereUniqueInput;
+    }
+  ) => SessionReviewIndexPromise;
+  updateManySessionReviewIndexes: (
+    args: {
+      data: SessionReviewIndexUpdateManyMutationInput;
+      where?: SessionReviewIndexWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertSessionReviewIndex: (
+    args: {
+      where: SessionReviewIndexWhereUniqueInput;
+      create: SessionReviewIndexCreateInput;
+      update: SessionReviewIndexUpdateInput;
+    }
+  ) => SessionReviewIndexPromise;
+  deleteSessionReviewIndex: (
+    where: SessionReviewIndexWhereUniqueInput
+  ) => SessionReviewIndexPromise;
+  deleteManySessionReviewIndexes: (
+    where?: SessionReviewIndexWhereInput
   ) => BatchPayloadPromise;
   createSocialMedia: (data: SocialMediaCreateInput) => SocialMediaPromise;
   updateSocialMedia: (
@@ -225,9 +520,27 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  game: (
+    where?: GameSubscriptionWhereInput
+  ) => GameSubscriptionPayloadSubscription;
+  gameIndex: (
+    where?: GameIndexSubscriptionWhereInput
+  ) => GameIndexSubscriptionPayloadSubscription;
   gamerRequest: (
     where?: GamerRequestSubscriptionWhereInput
   ) => GamerRequestSubscriptionPayloadSubscription;
+  gamingSession: (
+    where?: GamingSessionSubscriptionWhereInput
+  ) => GamingSessionSubscriptionPayloadSubscription;
+  gamingSessionIndex: (
+    where?: GamingSessionIndexSubscriptionWhereInput
+  ) => GamingSessionIndexSubscriptionPayloadSubscription;
+  sessionReview: (
+    where?: SessionReviewSubscriptionWhereInput
+  ) => SessionReviewSubscriptionPayloadSubscription;
+  sessionReviewIndex: (
+    where?: SessionReviewIndexSubscriptionWhereInput
+  ) => SessionReviewIndexSubscriptionPayloadSubscription;
   socialMedia: (
     where?: SocialMediaSubscriptionWhereInput
   ) => SocialMediaSubscriptionPayloadSubscription;
@@ -252,6 +565,64 @@ export type GamerRequestOrderByInput =
   | "id_DESC"
   | "addToOccupations_ASC"
   | "addToOccupations_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "isGamer_ASC"
+  | "isGamer_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "aboutMe_ASC"
+  | "aboutMe_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type GameIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type UserIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type GamingSessionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "length_ASC"
+  | "length_DESC"
+  | "price_ASC"
+  | "price_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -283,6 +654,84 @@ export type Occupations =
   | "MODEL"
   | "ADULT_PERFORMER";
 
+export type SessionReviewOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "text_ASC"
+  | "text_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type GameOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type Tags =
+  | "ACTION"
+  | "ADVENTURE_GAME"
+  | "CARD_AND_BOARD_GAME"
+  | "COMPILATION"
+  | "DRIVING_SLASH_RACING_GAME"
+  | "EDUCATIONAL_GAME"
+  | "FIGHTING"
+  | "FLIGHT_SIMULATOR"
+  | "FPS"
+  | "GAMBLING_GAME"
+  | "HIDDEN_OBJECTS"
+  | "HORROR"
+  | "INDIE_GAME"
+  | "METROIDVANIA"
+  | "MMORPG"
+  | "MOBA"
+  | "OPEN_WORLD"
+  | "PINBALL"
+  | "PLATFORMER"
+  | "POINT_AND_CLICK"
+  | "PUZZLE"
+  | "RHYTHM_AND_MUSIC_GAME"
+  | "ROGUELIKE"
+  | "RPG"
+  | "RTS"
+  | "SERIES_COLON_SOULS"
+  | "SHOOT_HYPHEN_EM_UP"
+  | "SHOOTER"
+  | "SIMULATION"
+  | "SPORTS_GAME"
+  | "STEALTH"
+  | "STRATEGY"
+  | "SURVIVAL"
+  | "VISUAL_NOVEL";
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type GamingSessionIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type SessionReviewIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "text_ASC"
+  | "text_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type SocialMediaOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -303,66 +752,61 @@ export type SocialMediaOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "isGamer_ASC"
-  | "isGamer_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "aboutMe_ASC"
-  | "aboutMe_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type UserIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export interface UserCreateInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
 }
 
-export type GamerRequestWhereUniqueInput = AtLeastOne<{
+export type GameWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  name?: String;
 }>;
 
-export interface SocialMediaCreateInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface GameCreateInput {
+  name: String;
+  tags?: GameCreatetagsInput;
+  sessions?: GamingSessionCreateManyWithoutGameInput;
 }
 
-export interface GamerRequestWhereInput {
+export interface GamerRequestUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia?: SocialMediaUpdateOneRequiredInput;
+}
+
+export interface GameCreatetagsInput {
+  set?: Tags[] | Tags;
+}
+
+export interface GamingSessionUpdateManyWithoutGamersInput {
+  create?:
+    | GamingSessionCreateWithoutGamersInput[]
+    | GamingSessionCreateWithoutGamersInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionCreateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+}
+
+export interface SessionReviewWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -377,32 +821,188 @@ export interface GamerRequestWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
   user?: UserWhereInput;
-  addToOccupations?: String;
-  addToOccupations_not?: String;
-  addToOccupations_in?: String[] | String;
-  addToOccupations_not_in?: String[] | String;
-  addToOccupations_lt?: String;
-  addToOccupations_lte?: String;
-  addToOccupations_gt?: String;
-  addToOccupations_gte?: String;
-  addToOccupations_contains?: String;
-  addToOccupations_not_contains?: String;
-  addToOccupations_starts_with?: String;
-  addToOccupations_not_starts_with?: String;
-  addToOccupations_ends_with?: String;
-  addToOccupations_not_ends_with?: String;
-  socialMedia?: SocialMediaWhereInput;
-  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  session?: GamingSessionWhereInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  AND?: SessionReviewWhereInput[] | SessionReviewWhereInput;
+  OR?: SessionReviewWhereInput[] | SessionReviewWhereInput;
+  NOT?: SessionReviewWhereInput[] | SessionReviewWhereInput;
 }
 
-export interface GamerRequestUpdateInput {
-  user?: UserUpdateOneRequiredInput;
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
-  socialMedia?: SocialMediaUpdateOneRequiredInput;
+export interface GamingSessionCreateWithoutGameInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+}
+
+export interface SocialMediaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SocialMediaWhereInput;
+  AND?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+  OR?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+  NOT?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+}
+
+export interface UserCreateManyWithoutSessionsInput {
+  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface SessionReviewSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SessionReviewWhereInput;
+  AND?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+  OR?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+  NOT?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+}
+
+export interface UserCreateWithoutSessionsInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+}
+
+export interface GamingSessionSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamingSessionWhereInput;
+  AND?:
+    | GamingSessionSubscriptionWhereInput[]
+    | GamingSessionSubscriptionWhereInput;
+  OR?:
+    | GamingSessionSubscriptionWhereInput[]
+    | GamingSessionSubscriptionWhereInput;
+  NOT?:
+    | GamingSessionSubscriptionWhereInput[]
+    | GamingSessionSubscriptionWhereInput;
+}
+
+export interface UserCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface GamerRequestSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamerRequestWhereInput;
+  AND?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  OR?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  NOT?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+}
+
+export interface SessionReviewCreateManyWithoutSessionInput {
+  create?:
+    | SessionReviewCreateWithoutSessionInput[]
+    | SessionReviewCreateWithoutSessionInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+}
+
+export interface GameIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GameIndexWhereInput;
+  AND?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  OR?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  NOT?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+}
+
+export interface SessionReviewCreateWithoutSessionInput {
+  user: UserCreateOneInput;
+  text: String;
+}
+
+export interface UserIndexUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export type GamerRequestWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserCreateInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+}
+
+export interface GamingSessionCreateManyWithoutGamersInput {
+  create?:
+    | GamingSessionCreateWithoutGamersInput[]
+    | GamingSessionCreateWithoutGamersInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
 }
 
 export interface SocialMediaWhereInput {
@@ -509,12 +1109,15 @@ export interface SocialMediaWhereInput {
   NOT?: SocialMediaWhereInput[] | SocialMediaWhereInput;
 }
 
-export interface GamerRequestUpdateManyMutationInput {
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
+export interface GamingSessionCreateWithoutGamersInput {
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
 }
 
-export interface UserUpdateDataInput {
+export interface UserUpdateInput {
   email?: String;
   username?: String;
   password?: String;
@@ -522,6 +1125,420 @@ export interface UserUpdateDataInput {
   occupations?: UserUpdateoccupationsInput;
   name?: String;
   aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+}
+
+export interface GameCreateOneWithoutSessionsInput {
+  create?: GameCreateWithoutSessionsInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface SocialMediaUpdateInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface GameCreateWithoutSessionsInput {
+  name: String;
+  tags?: GameCreatetagsInput;
+}
+
+export interface SessionReviewIndexUpdateManyMutationInput {
+  text?: String;
+}
+
+export interface GameUpdateInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+}
+
+export interface SessionReviewUpdateDataInput {
+  user?: UserUpdateOneRequiredInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+}
+
+export interface GameUpdatetagsInput {
+  set?: Tags[] | Tags;
+}
+
+export interface SessionReviewUpdateOneRequiredInput {
+  create?: SessionReviewCreateInput;
+  update?: SessionReviewUpdateDataInput;
+  upsert?: SessionReviewUpsertNestedInput;
+  connect?: SessionReviewWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface SessionReviewIndexUpdateInput {
+  text?: String;
+  sessionReview?: SessionReviewUpdateOneRequiredInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGameDataInput;
+}
+
+export interface SessionReviewIndexCreateInput {
+  text: String;
+  sessionReview: SessionReviewCreateOneInput;
+}
+
+export interface GamingSessionUpdateWithoutGameDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+}
+
+export type SessionReviewWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateManyWithoutSessionsInput {
+  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutSessionsInput[]
+    | UserUpdateWithWhereUniqueWithoutSessionsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutSessionsInput[]
+    | UserUpsertWithWhereUniqueWithoutSessionsInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionUpdateWithoutReviewsDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutSessionsDataInput;
+}
+
+export type SessionReviewIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithoutSessionsDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+}
+
+export interface SessionReviewIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  sessionReview?: SessionReviewWhereInput;
+  AND?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+  OR?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+  NOT?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+}
+
+export interface UserUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface GamingSessionCreateWithoutReviewsInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutSessionsDataInput;
+  create: UserCreateWithoutSessionsInput;
+}
+
+export interface SessionReviewCreateInput {
+  user: UserCreateOneInput;
+  session: GamingSessionCreateOneWithoutReviewsInput;
+  text: String;
+}
+
+export interface UserScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  isGamer?: Boolean;
+  isGamer_not?: Boolean;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  aboutMe?: String;
+  aboutMe_not?: String;
+  aboutMe_in?: String[] | String;
+  aboutMe_not_in?: String[] | String;
+  aboutMe_lt?: String;
+  aboutMe_lte?: String;
+  aboutMe_gt?: String;
+  aboutMe_gte?: String;
+  aboutMe_contains?: String;
+  aboutMe_not_contains?: String;
+  aboutMe_starts_with?: String;
+  aboutMe_not_starts_with?: String;
+  aboutMe_ends_with?: String;
+  aboutMe_not_ends_with?: String;
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
+}
+
+export interface GamingSessionWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  gamers_every?: UserWhereInput;
+  gamers_some?: UserWhereInput;
+  gamers_none?: UserWhereInput;
+  game?: GameWhereInput;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  reviews_every?: SessionReviewWhereInput;
+  reviews_some?: SessionReviewWhereInput;
+  reviews_none?: SessionReviewWhereInput;
+  AND?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+  OR?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+  NOT?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+}
+
+export interface SocialMediaUpsertNestedInput {
+  update: SocialMediaUpdateDataInput;
+  create: SocialMediaCreateInput;
+}
+
+export interface GamingSessionUpsertNestedInput {
+  update: GamingSessionUpdateDataInput;
+  create: GamingSessionCreateInput;
+}
+
+export interface UserUpdateManyDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface SessionReviewUpdateManyWithoutSessionInput {
+  create?:
+    | SessionReviewCreateWithoutSessionInput[]
+    | SessionReviewCreateWithoutSessionInput;
+  delete?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  set?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  disconnect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  update?:
+    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput[]
+    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput;
+  upsert?:
+    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput[]
+    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput;
+  deleteMany?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  updateMany?:
+    | SessionReviewUpdateManyWithWhereNestedInput[]
+    | SessionReviewUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionIndexUpdateInput {
+  title?: String;
+  gamingSession?: GamingSessionUpdateOneRequiredInput;
+}
+
+export interface SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput;
+  data: SessionReviewUpdateWithoutSessionDataInput;
+}
+
+export type UserIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface SessionReviewUpdateWithoutSessionDataInput {
+  user?: UserUpdateOneRequiredInput;
+  text?: String;
 }
 
 export interface UserIndexWhereInput {
@@ -581,6 +1598,7 @@ export interface UserIndexWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  user?: UserWhereInput;
   AND?: UserIndexWhereInput[] | UserIndexWhereInput;
   OR?: UserIndexWhereInput[] | UserIndexWhereInput;
   NOT?: UserIndexWhereInput[] | UserIndexWhereInput;
@@ -593,9 +1611,349 @@ export interface UserUpdateOneRequiredInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface SocialMediaUpsertNestedInput {
-  update: SocialMediaUpdateDataInput;
-  create: SocialMediaCreateInput;
+export interface GamingSessionUpdateInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+}
+
+export interface UserUpdateDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+}
+
+export interface GamerRequestUpdateManyMutationInput {
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+}
+
+export interface SocialMediaUpdateDataInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface UserIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserIndexWhereInput;
+  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGamersDataInput;
+}
+
+export interface SessionReviewIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SessionReviewIndexWhereInput;
+  AND?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  OR?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  NOT?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+}
+
+export interface GamingSessionUpdateWithoutGamersDataInput {
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+}
+
+export type GameIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GameUpdateOneRequiredWithoutSessionsInput {
+  create?: GameCreateWithoutSessionsInput;
+  update?: GameUpdateWithoutSessionsDataInput;
+  upsert?: GameUpsertWithoutSessionsInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface GameSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GameWhereInput;
+  AND?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+  OR?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+  NOT?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+}
+
+export interface GameUpdateWithoutSessionsDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+}
+
+export interface UserIndexCreateInput {
+  email: String;
+  username: String;
+  name: String;
+  user: UserCreateOneInput;
+}
+
+export interface GameUpsertWithoutSessionsInput {
+  update: GameUpdateWithoutSessionsDataInput;
+  create: GameCreateWithoutSessionsInput;
+}
+
+export interface GameWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  sessions_every?: GamingSessionWhereInput;
+  sessions_some?: GamingSessionWhereInput;
+  sessions_none?: GamingSessionWhereInput;
+  AND?: GameWhereInput[] | GameWhereInput;
+  OR?: GameWhereInput[] | GameWhereInput;
+  NOT?: GameWhereInput[] | GameWhereInput;
+}
+
+export interface GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput;
+  update: GamingSessionUpdateWithoutGamersDataInput;
+  create: GamingSessionCreateWithoutGamersInput;
+}
+
+export type GamingSessionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GamingSessionScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  AND?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  OR?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  NOT?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+}
+
+export type GamingSessionIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GamingSessionUpdateManyWithWhereNestedInput {
+  where: GamingSessionScalarWhereInput;
+  data: GamingSessionUpdateManyDataInput;
+}
+
+export interface SessionReviewCreateOneInput {
+  create?: SessionReviewCreateInput;
+  connect?: SessionReviewWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateManyDataInput {
+  title?: String;
+  length?: Int;
+  price?: Float;
+}
+
+export interface GamingSessionUpsertWithoutReviewsInput {
+  update: GamingSessionUpdateWithoutReviewsDataInput;
+  create: GamingSessionCreateWithoutReviewsInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface SessionReviewUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+}
+
+export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput;
+  update: SessionReviewUpdateWithoutSessionDataInput;
+  create: SessionReviewCreateWithoutSessionInput;
+}
+
+export interface GamingSessionCreateOneWithoutReviewsInput {
+  create?: GamingSessionCreateWithoutReviewsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface SessionReviewScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  AND?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  OR?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  NOT?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+}
+
+export interface GamingSessionIndexUpdateManyMutationInput {
+  title?: String;
+}
+
+export interface SessionReviewUpdateManyWithWhereNestedInput {
+  where: SessionReviewScalarWhereInput;
+  data: SessionReviewUpdateManyDataInput;
+}
+
+export interface GamingSessionUpdateOneRequiredInput {
+  create?: GamingSessionCreateInput;
+  update?: GamingSessionUpdateDataInput;
+  upsert?: GamingSessionUpsertNestedInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyDataInput {
+  text?: String;
+}
+
+export interface GamingSessionIndexCreateInput {
+  title: String;
+  gamingSession: GamingSessionCreateOneInput;
+}
+
+export interface GamingSessionUpsertWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  update: GamingSessionUpdateWithoutGameDataInput;
+  create: GamingSessionCreateWithoutGameInput;
+}
+
+export interface GamingSessionCreateInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+}
+
+export interface GameUpdateManyMutationInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -609,19 +1967,6 @@ export interface UserSubscriptionWhereInput {
   NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface SocialMediaUpdateDataInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
-}
-
-export type SocialMediaWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
 export interface SocialMediaUpdateOneRequiredInput {
   create?: SocialMediaCreateInput;
   update?: SocialMediaUpdateDataInput;
@@ -629,97 +1974,103 @@ export interface SocialMediaUpdateOneRequiredInput {
   connect?: SocialMediaWhereUniqueInput;
 }
 
-export interface UserIndexUpdateManyMutationInput {
-  email?: String;
-  username?: String;
+export interface GameIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
   name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  game?: GameWhereInput;
+  AND?: GameIndexWhereInput[] | GameIndexWhereInput;
+  OR?: GameIndexWhereInput[] | GameIndexWhereInput;
+  NOT?: GameIndexWhereInput[] | GameIndexWhereInput;
 }
 
 export interface GamerRequestUpdateoccupationsInput {
   set?: Occupations[] | Occupations;
 }
 
-export interface UserIndexCreateInput {
-  email: String;
-  username: String;
-  name: String;
-}
-
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-}
-
-export interface SocialMediaUpdateManyMutationInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
-}
-
-export interface GamerRequestCreateInput {
-  user: UserCreateOneInput;
-  occupations?: GamerRequestCreateoccupationsInput;
+export interface GamerRequestWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
   addToOccupations?: String;
-  socialMedia: SocialMediaCreateOneInput;
+  addToOccupations_not?: String;
+  addToOccupations_in?: String[] | String;
+  addToOccupations_not_in?: String[] | String;
+  addToOccupations_lt?: String;
+  addToOccupations_lte?: String;
+  addToOccupations_gt?: String;
+  addToOccupations_gte?: String;
+  addToOccupations_contains?: String;
+  addToOccupations_not_contains?: String;
+  addToOccupations_starts_with?: String;
+  addToOccupations_not_starts_with?: String;
+  addToOccupations_ends_with?: String;
+  addToOccupations_not_ends_with?: String;
+  socialMedia?: SocialMediaWhereInput;
+  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
 }
 
-export type UserIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  username?: String;
-}>;
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
+export interface GameIndexCreateInput {
+  name: String;
+  game: GameCreateOneInput;
 }
 
-export interface SocialMediaSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SocialMediaWhereInput;
-  AND?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
-  OR?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
-  NOT?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
+export interface SessionReviewUpsertNestedInput {
+  update: SessionReviewUpdateDataInput;
+  create: SessionReviewCreateInput;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
+export interface GameCreateOneInput {
+  create?: GameCreateInput;
+  connect?: GameWhereUniqueInput;
 }
 
-export interface UserIndexUpdateInput {
-  email?: String;
-  username?: String;
+export interface SessionReviewUpdateManyMutationInput {
+  text?: String;
+}
+
+export interface GameIndexUpdateInput {
   name?: String;
-}
-
-export interface UserCreateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface UserUpdateInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-}
-
-export interface UserUpdateoccupationsInput {
-  set?: Occupations[] | Occupations;
+  game?: GameUpdateOneRequiredInput;
 }
 
 export interface UserWhereInput {
@@ -809,9 +2160,91 @@ export interface UserWhereInput {
   aboutMe_not_starts_with?: String;
   aboutMe_ends_with?: String;
   aboutMe_not_ends_with?: String;
+  sessions_every?: GamingSessionWhereInput;
+  sessions_some?: GamingSessionWhereInput;
+  sessions_none?: GamingSessionWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface GameUpdateOneRequiredInput {
+  create?: GameCreateInput;
+  update?: GameUpdateDataInput;
+  upsert?: GameUpsertNestedInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+}
+
+export interface GameUpdateDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+}
+
+export interface GamingSessionUpdateManyMutationInput {
+  title?: String;
+  length?: Int;
+  price?: Float;
+}
+
+export interface GameUpsertNestedInput {
+  update: GameUpdateDataInput;
+  create: GameCreateInput;
+}
+
+export interface GamingSessionIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamingSessionIndexWhereInput;
+  AND?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  OR?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  NOT?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+}
+
+export interface GameIndexUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface SocialMediaUpdateManyMutationInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface GamingSessionUpdateOneRequiredWithoutReviewsInput {
+  create?: GamingSessionCreateWithoutReviewsInput;
+  update?: GamingSessionUpdateWithoutReviewsDataInput;
+  upsert?: GamingSessionUpsertWithoutReviewsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface SocialMediaCreateInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
 }
 
 export interface SocialMediaCreateOneInput {
@@ -823,47 +2256,62 @@ export interface GamerRequestCreateoccupationsInput {
   set?: Occupations[] | Occupations;
 }
 
-export interface SocialMediaUpdateInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface GamerRequestCreateInput {
+  user: UserCreateOneInput;
+  occupations?: GamerRequestCreateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia: SocialMediaCreateOneInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export type SocialMediaWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  email?: String;
-  username?: String;
 }>;
 
-export interface GamerRequestSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GamerRequestWhereInput;
-  AND?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
-  OR?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
-  NOT?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
+export interface GamingSessionIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  gamingSession?: GamingSessionWhereInput;
+  AND?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
+  OR?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
+  NOT?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
 }
 
-export interface UserIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserIndexWhereInput;
-  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+export interface UserIndexUpdateInput {
+  email?: String;
+  username?: String;
+  name?: String;
+  user?: UserUpdateOneRequiredInput;
+}
+
+export interface GamingSessionCreateOneInput {
+  create?: GamingSessionCreateInput;
+  connect?: GamingSessionWhereUniqueInput;
 }
 
 export interface NodeNode {
@@ -895,138 +2343,193 @@ export interface UserIndexPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SocialMediaEdge {
-  node: SocialMedia;
-  cursor: String;
+export interface GamerRequest {
+  id: ID_Output;
+  occupations: Occupations[];
+  addToOccupations?: String;
 }
 
-export interface SocialMediaEdgePromise
-  extends Promise<SocialMediaEdge>,
+export interface GamerRequestPromise
+  extends Promise<GamerRequest>,
     Fragmentable {
-  node: <T = SocialMediaPromise>() => T;
-  cursor: () => Promise<String>;
+  id: () => Promise<ID_Output>;
+  user: <T = UserPromise>() => T;
+  occupations: () => Promise<Occupations[]>;
+  addToOccupations: () => Promise<String>;
+  socialMedia: <T = SocialMediaPromise>() => T;
 }
 
-export interface SocialMediaEdgeSubscription
-  extends Promise<AsyncIterator<SocialMediaEdge>>,
+export interface GamerRequestSubscription
+  extends Promise<AsyncIterator<GamerRequest>>,
     Fragmentable {
-  node: <T = SocialMediaSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  user: <T = UserSubscription>() => T;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  addToOccupations: () => Promise<AsyncIterator<String>>;
+  socialMedia: <T = SocialMediaSubscription>() => T;
 }
 
-export interface GamerRequestConnection {
-  pageInfo: PageInfo;
-  edges: GamerRequestEdge[];
+export interface GamingSession {
+  id: ID_Output;
+  title: String;
+  length: Int;
+  price: Float;
 }
 
-export interface GamerRequestConnectionPromise
-  extends Promise<GamerRequestConnection>,
+export interface GamingSessionPromise
+  extends Promise<GamingSession>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamerRequestEdge>>() => T;
-  aggregate: <T = AggregateGamerRequestPromise>() => T;
+  id: () => Promise<ID_Output>;
+  gamers: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  game: <T = GamePromise>() => T;
+  title: () => Promise<String>;
+  length: () => Promise<Int>;
+  price: () => Promise<Float>;
+  reviews: <T = FragmentableArray<SessionReview>>(
+    args?: {
+      where?: SessionReviewWhereInput;
+      orderBy?: SessionReviewOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface GamerRequestConnectionSubscription
-  extends Promise<AsyncIterator<GamerRequestConnection>>,
+export interface GamingSessionSubscription
+  extends Promise<AsyncIterator<GamingSession>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GamerRequestEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGamerRequestSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  gamers: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  game: <T = GameSubscription>() => T;
+  title: () => Promise<AsyncIterator<String>>;
+  length: () => Promise<AsyncIterator<Int>>;
+  price: () => Promise<AsyncIterator<Float>>;
+  reviews: <T = Promise<AsyncIterator<SessionReviewSubscription>>>(
+    args?: {
+      where?: SessionReviewWhereInput;
+      orderBy?: SessionReviewOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface AggregateSocialMedia {
+export interface AggregateGameIndex {
   count: Int;
 }
 
-export interface AggregateSocialMediaPromise
-  extends Promise<AggregateSocialMedia>,
+export interface AggregateGameIndexPromise
+  extends Promise<AggregateGameIndex>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateSocialMediaSubscription
-  extends Promise<AsyncIterator<AggregateSocialMedia>>,
+export interface AggregateGameIndexSubscription
+  extends Promise<AsyncIterator<AggregateGameIndex>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface SocialMedia {
+export interface User {
   id: ID_Output;
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+  email: String;
+  username: String;
+  password: String;
+  isGamer: Boolean;
+  occupations: Occupations[];
+  name: String;
+  aboutMe?: String;
 }
 
-export interface SocialMediaPromise extends Promise<SocialMedia>, Fragmentable {
+export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
-  twitter: () => Promise<String>;
-  facebook: () => Promise<String>;
-  youtube: () => Promise<String>;
-  instagram: () => Promise<String>;
-  twitch: () => Promise<String>;
-  snapchat: () => Promise<String>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  password: () => Promise<String>;
+  isGamer: () => Promise<Boolean>;
+  occupations: () => Promise<Occupations[]>;
+  name: () => Promise<String>;
+  aboutMe: () => Promise<String>;
+  sessions: <T = FragmentableArray<GamingSession>>(
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface SocialMediaSubscription
-  extends Promise<AsyncIterator<SocialMedia>>,
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  twitter: () => Promise<AsyncIterator<String>>;
-  facebook: () => Promise<AsyncIterator<String>>;
-  youtube: () => Promise<AsyncIterator<String>>;
-  instagram: () => Promise<AsyncIterator<String>>;
-  twitch: () => Promise<AsyncIterator<String>>;
-  snapchat: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  isGamer: () => Promise<AsyncIterator<Boolean>>;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  name: () => Promise<AsyncIterator<String>>;
+  aboutMe: () => Promise<AsyncIterator<String>>;
+  sessions: <T = Promise<AsyncIterator<GamingSessionSubscription>>>(
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface SocialMediaConnection {
-  pageInfo: PageInfo;
-  edges: SocialMediaEdge[];
+export interface GameIndexEdge {
+  node: GameIndex;
+  cursor: String;
 }
 
-export interface SocialMediaConnectionPromise
-  extends Promise<SocialMediaConnection>,
+export interface GameIndexEdgePromise
+  extends Promise<GameIndexEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SocialMediaEdge>>() => T;
-  aggregate: <T = AggregateSocialMediaPromise>() => T;
+  node: <T = GameIndexPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface SocialMediaConnectionSubscription
-  extends Promise<AsyncIterator<SocialMediaConnection>>,
+export interface GameIndexEdgeSubscription
+  extends Promise<AsyncIterator<GameIndexEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SocialMediaEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSocialMediaSubscription>() => T;
+  node: <T = GameIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateUserIndex {
@@ -1043,6 +2546,27 @@ export interface AggregateUserIndexSubscription
   extends Promise<AsyncIterator<AggregateUserIndex>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GameIndexConnection {
+  pageInfo: PageInfo;
+  edges: GameIndexEdge[];
+}
+
+export interface GameIndexConnectionPromise
+  extends Promise<GameIndexConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GameIndexEdge>>() => T;
+  aggregate: <T = AggregateGameIndexPromise>() => T;
+}
+
+export interface GameIndexConnectionSubscription
+  extends Promise<AsyncIterator<GameIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GameIndexEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGameIndexSubscription>() => T;
 }
 
 export interface UserIndexConnection {
@@ -1103,6 +2627,59 @@ export interface UserPreviousValuesSubscription
   aboutMe: () => Promise<AsyncIterator<String>>;
 }
 
+export interface SocialMediaPreviousValues {
+  id: ID_Output;
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface SocialMediaPreviousValuesPromise
+  extends Promise<SocialMediaPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  twitter: () => Promise<String>;
+  facebook: () => Promise<String>;
+  youtube: () => Promise<String>;
+  instagram: () => Promise<String>;
+  twitch: () => Promise<String>;
+  snapchat: () => Promise<String>;
+}
+
+export interface SocialMediaPreviousValuesSubscription
+  extends Promise<AsyncIterator<SocialMediaPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  twitter: () => Promise<AsyncIterator<String>>;
+  facebook: () => Promise<AsyncIterator<String>>;
+  youtube: () => Promise<AsyncIterator<String>>;
+  instagram: () => Promise<AsyncIterator<String>>;
+  twitch: () => Promise<AsyncIterator<String>>;
+  snapchat: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserIndexEdge {
+  node: UserIndex;
+  cursor: String;
+}
+
+export interface UserIndexEdgePromise
+  extends Promise<UserIndexEdge>,
+    Fragmentable {
+  node: <T = UserIndexPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserIndexEdgeSubscription
+  extends Promise<AsyncIterator<UserIndexEdge>>,
+    Fragmentable {
+  node: <T = UserIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserIndex {
   id: ID_Output;
   email: String;
@@ -1115,6 +2692,7 @@ export interface UserIndexPromise extends Promise<UserIndex>, Fragmentable {
   email: () => Promise<String>;
   username: () => Promise<String>;
   name: () => Promise<String>;
+  user: <T = UserPromise>() => T;
 }
 
 export interface UserIndexSubscription
@@ -1124,32 +2702,335 @@ export interface UserIndexSubscription
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
 }
 
-export interface GamerRequest {
+export interface Game {
   id: ID_Output;
-  occupations: Occupations[];
-  addToOccupations?: String;
+  name: String;
+  tags: Tags[];
 }
 
-export interface GamerRequestPromise
-  extends Promise<GamerRequest>,
-    Fragmentable {
+export interface GamePromise extends Promise<Game>, Fragmentable {
   id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  occupations: () => Promise<Occupations[]>;
-  addToOccupations: () => Promise<String>;
-  socialMedia: <T = SocialMediaPromise>() => T;
+  name: () => Promise<String>;
+  tags: () => Promise<Tags[]>;
+  sessions: <T = FragmentableArray<GamingSession>>(
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface GamerRequestSubscription
-  extends Promise<AsyncIterator<GamerRequest>>,
+export interface GameSubscription
+  extends Promise<AsyncIterator<Game>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  user: <T = UserSubscription>() => T;
-  occupations: () => Promise<AsyncIterator<Occupations[]>>;
-  addToOccupations: () => Promise<AsyncIterator<String>>;
-  socialMedia: <T = SocialMediaSubscription>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+  tags: () => Promise<AsyncIterator<Tags[]>>;
+  sessions: <T = Promise<AsyncIterator<GamingSessionSubscription>>>(
+    args?: {
+      where?: GamingSessionWhereInput;
+      orderBy?: GamingSessionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SocialMediaEdge {
+  node: SocialMedia;
+  cursor: String;
+}
+
+export interface SocialMediaEdgePromise
+  extends Promise<SocialMediaEdge>,
+    Fragmentable {
+  node: <T = SocialMediaPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SocialMediaEdgeSubscription
+  extends Promise<AsyncIterator<SocialMediaEdge>>,
+    Fragmentable {
+  node: <T = SocialMediaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GameSubscriptionPayload {
+  mutation: MutationType;
+  node: Game;
+  updatedFields: String[];
+  previousValues: GamePreviousValues;
+}
+
+export interface GameSubscriptionPayloadPromise
+  extends Promise<GameSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GamePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GamePreviousValuesPromise>() => T;
+}
+
+export interface GameSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GameSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GameSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GamePreviousValuesSubscription>() => T;
+}
+
+export interface AggregateSessionReviewIndex {
+  count: Int;
+}
+
+export interface AggregateSessionReviewIndexPromise
+  extends Promise<AggregateSessionReviewIndex>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSessionReviewIndexSubscription
+  extends Promise<AsyncIterator<AggregateSessionReviewIndex>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GamePreviousValues {
+  id: ID_Output;
+  name: String;
+  tags: Tags[];
+}
+
+export interface GamePreviousValuesPromise
+  extends Promise<GamePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  tags: () => Promise<Tags[]>;
+}
+
+export interface GamePreviousValuesSubscription
+  extends Promise<AsyncIterator<GamePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  tags: () => Promise<AsyncIterator<Tags[]>>;
+}
+
+export interface SessionReviewIndexConnection {
+  pageInfo: PageInfo;
+  edges: SessionReviewIndexEdge[];
+}
+
+export interface SessionReviewIndexConnectionPromise
+  extends Promise<SessionReviewIndexConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SessionReviewIndexEdge>>() => T;
+  aggregate: <T = AggregateSessionReviewIndexPromise>() => T;
+}
+
+export interface SessionReviewIndexConnectionSubscription
+  extends Promise<AsyncIterator<SessionReviewIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<SessionReviewIndexEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateSessionReviewIndexSubscription>() => T;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateSessionReview {
+  count: Int;
+}
+
+export interface AggregateSessionReviewPromise
+  extends Promise<AggregateSessionReview>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSessionReviewSubscription
+  extends Promise<AsyncIterator<AggregateSessionReview>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GameIndexSubscriptionPayload {
+  mutation: MutationType;
+  node: GameIndex;
+  updatedFields: String[];
+  previousValues: GameIndexPreviousValues;
+}
+
+export interface GameIndexSubscriptionPayloadPromise
+  extends Promise<GameIndexSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GameIndexPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GameIndexPreviousValuesPromise>() => T;
+}
+
+export interface GameIndexSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GameIndexSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GameIndexSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GameIndexPreviousValuesSubscription>() => T;
+}
+
+export interface SessionReviewConnection {
+  pageInfo: PageInfo;
+  edges: SessionReviewEdge[];
+}
+
+export interface SessionReviewConnectionPromise
+  extends Promise<SessionReviewConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SessionReviewEdge>>() => T;
+  aggregate: <T = AggregateSessionReviewPromise>() => T;
+}
+
+export interface SessionReviewConnectionSubscription
+  extends Promise<AsyncIterator<SessionReviewConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SessionReviewEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSessionReviewSubscription>() => T;
+}
+
+export interface GameIndexPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GameIndexPreviousValuesPromise
+  extends Promise<GameIndexPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface GameIndexPreviousValuesSubscription
+  extends Promise<AsyncIterator<GameIndexPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GamingSessionIndexEdge {
+  node: GamingSessionIndex;
+  cursor: String;
+}
+
+export interface GamingSessionIndexEdgePromise
+  extends Promise<GamingSessionIndexEdge>,
+    Fragmentable {
+  node: <T = GamingSessionIndexPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GamingSessionIndexEdgeSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexEdge>>,
+    Fragmentable {
+  node: <T = GamingSessionIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GameIndex {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GameIndexPromise extends Promise<GameIndex>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  game: <T = GamePromise>() => T;
+}
+
+export interface GameIndexSubscription
+  extends Promise<AsyncIterator<GameIndex>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  game: <T = GameSubscription>() => T;
 }
 
 export interface UserIndexSubscriptionPayload {
@@ -1202,21 +3083,20 @@ export interface GamerRequestSubscriptionPayloadSubscription
   previousValues: <T = GamerRequestPreviousValuesSubscription>() => T;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface AggregateGamingSession {
+  count: Int;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface AggregateGamingSessionPromise
+  extends Promise<AggregateGamingSession>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGamingSessionSubscription
+  extends Promise<AsyncIterator<AggregateGamingSession>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamerRequestPreviousValues {
@@ -1239,6 +3119,280 @@ export interface GamerRequestPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   occupations: () => Promise<AsyncIterator<Occupations[]>>;
   addToOccupations: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GamingSessionConnection {
+  pageInfo: PageInfo;
+  edges: GamingSessionEdge[];
+}
+
+export interface GamingSessionConnectionPromise
+  extends Promise<GamingSessionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamingSessionEdge>>() => T;
+  aggregate: <T = AggregateGamingSessionPromise>() => T;
+}
+
+export interface GamingSessionConnectionSubscription
+  extends Promise<AsyncIterator<GamingSessionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamingSessionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamingSessionSubscription>() => T;
+}
+
+export interface AggregateGame {
+  count: Int;
+}
+
+export interface AggregateGamePromise
+  extends Promise<AggregateGame>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGameSubscription
+  extends Promise<AsyncIterator<AggregateGame>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GamerRequestEdge {
+  node: GamerRequest;
+  cursor: String;
+}
+
+export interface GamerRequestEdgePromise
+  extends Promise<GamerRequestEdge>,
+    Fragmentable {
+  node: <T = GamerRequestPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GamerRequestEdgeSubscription
+  extends Promise<AsyncIterator<GamerRequestEdge>>,
+    Fragmentable {
+  node: <T = GamerRequestSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GamingSessionSubscriptionPayload {
+  mutation: MutationType;
+  node: GamingSession;
+  updatedFields: String[];
+  previousValues: GamingSessionPreviousValues;
+}
+
+export interface GamingSessionSubscriptionPayloadPromise
+  extends Promise<GamingSessionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GamingSessionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GamingSessionPreviousValuesPromise>() => T;
+}
+
+export interface GamingSessionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GamingSessionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GamingSessionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GamingSessionPreviousValuesSubscription>() => T;
+}
+
+export interface SocialMedia {
+  id: ID_Output;
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface SocialMediaPromise extends Promise<SocialMedia>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  twitter: () => Promise<String>;
+  facebook: () => Promise<String>;
+  youtube: () => Promise<String>;
+  instagram: () => Promise<String>;
+  twitch: () => Promise<String>;
+  snapchat: () => Promise<String>;
+}
+
+export interface SocialMediaSubscription
+  extends Promise<AsyncIterator<SocialMedia>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  twitter: () => Promise<AsyncIterator<String>>;
+  facebook: () => Promise<AsyncIterator<String>>;
+  youtube: () => Promise<AsyncIterator<String>>;
+  instagram: () => Promise<AsyncIterator<String>>;
+  twitch: () => Promise<AsyncIterator<String>>;
+  snapchat: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GamingSessionPreviousValues {
+  id: ID_Output;
+  title: String;
+  length: Int;
+  price: Float;
+}
+
+export interface GamingSessionPreviousValuesPromise
+  extends Promise<GamingSessionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  length: () => Promise<Int>;
+  price: () => Promise<Float>;
+}
+
+export interface GamingSessionPreviousValuesSubscription
+  extends Promise<AsyncIterator<GamingSessionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  length: () => Promise<AsyncIterator<Int>>;
+  price: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GameEdge {
+  node: Game;
+  cursor: String;
+}
+
+export interface GameEdgePromise extends Promise<GameEdge>, Fragmentable {
+  node: <T = GamePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GameEdgeSubscription
+  extends Promise<AsyncIterator<GameEdge>>,
+    Fragmentable {
+  node: <T = GameSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SocialMediaConnection {
+  pageInfo: PageInfo;
+  edges: SocialMediaEdge[];
+}
+
+export interface SocialMediaConnectionPromise
+  extends Promise<SocialMediaConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SocialMediaEdge>>() => T;
+  aggregate: <T = AggregateSocialMediaPromise>() => T;
+}
+
+export interface SocialMediaConnectionSubscription
+  extends Promise<AsyncIterator<SocialMediaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SocialMediaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSocialMediaSubscription>() => T;
+}
+
+export interface GamingSessionIndexSubscriptionPayload {
+  mutation: MutationType;
+  node: GamingSessionIndex;
+  updatedFields: String[];
+  previousValues: GamingSessionIndexPreviousValues;
+}
+
+export interface GamingSessionIndexSubscriptionPayloadPromise
+  extends Promise<GamingSessionIndexSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GamingSessionIndexPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GamingSessionIndexPreviousValuesPromise>() => T;
+}
+
+export interface GamingSessionIndexSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GamingSessionIndexSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GamingSessionIndexPreviousValuesSubscription>() => T;
+}
+
+export interface SessionReviewIndex {
+  id: ID_Output;
+  text: String;
+}
+
+export interface SessionReviewIndexPromise
+  extends Promise<SessionReviewIndex>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  text: () => Promise<String>;
+  sessionReview: <T = SessionReviewPromise>() => T;
+}
+
+export interface SessionReviewIndexSubscription
+  extends Promise<AsyncIterator<SessionReviewIndex>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  text: () => Promise<AsyncIterator<String>>;
+  sessionReview: <T = SessionReviewSubscription>() => T;
+}
+
+export interface GamingSessionIndexPreviousValues {
+  id: ID_Output;
+  title: String;
+}
+
+export interface GamingSessionIndexPreviousValuesPromise
+  extends Promise<GamingSessionIndexPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+}
+
+export interface GamingSessionIndexPreviousValuesSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateGamingSessionIndex {
+  count: Int;
+}
+
+export interface AggregateGamingSessionIndexPromise
+  extends Promise<AggregateGamingSessionIndex>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGamingSessionIndexSubscription
+  extends Promise<AsyncIterator<AggregateGamingSessionIndex>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface PageInfo {
@@ -1264,92 +3418,167 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface User {
+export interface GamingSessionIndex {
   id: ID_Output;
-  email: String;
-  username: String;
-  password: String;
-  isGamer: Boolean;
-  occupations: Occupations[];
-  name: String;
-  aboutMe?: String;
+  title: String;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface GamingSessionIndexPromise
+  extends Promise<GamingSessionIndex>,
+    Fragmentable {
   id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  username: () => Promise<String>;
-  password: () => Promise<String>;
-  isGamer: () => Promise<Boolean>;
-  occupations: () => Promise<Occupations[]>;
-  name: () => Promise<String>;
-  aboutMe: () => Promise<String>;
+  title: () => Promise<String>;
+  gamingSession: <T = GamingSessionPromise>() => T;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface GamingSessionIndexSubscription
+  extends Promise<AsyncIterator<GamingSessionIndex>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  isGamer: () => Promise<AsyncIterator<Boolean>>;
-  occupations: () => Promise<AsyncIterator<Occupations[]>>;
-  name: () => Promise<AsyncIterator<String>>;
-  aboutMe: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  gamingSession: <T = GamingSessionSubscription>() => T;
 }
 
-export interface GamerRequestEdge {
-  node: GamerRequest;
+export interface SessionReviewSubscriptionPayload {
+  mutation: MutationType;
+  node: SessionReview;
+  updatedFields: String[];
+  previousValues: SessionReviewPreviousValues;
+}
+
+export interface SessionReviewSubscriptionPayloadPromise
+  extends Promise<SessionReviewSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SessionReviewPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SessionReviewPreviousValuesPromise>() => T;
+}
+
+export interface SessionReviewSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SessionReviewSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SessionReviewSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SessionReviewPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateGamerRequest {
+  count: Int;
+}
+
+export interface AggregateGamerRequestPromise
+  extends Promise<AggregateGamerRequest>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGamerRequestSubscription
+  extends Promise<AsyncIterator<AggregateGamerRequest>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SessionReviewPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  text: String;
+}
+
+export interface SessionReviewPreviousValuesPromise
+  extends Promise<SessionReviewPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  text: () => Promise<String>;
+}
+
+export interface SessionReviewPreviousValuesSubscription
+  extends Promise<AsyncIterator<SessionReviewPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  text: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface GameConnection {
+  pageInfo: PageInfo;
+  edges: GameEdge[];
+}
+
+export interface GameConnectionPromise
+  extends Promise<GameConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GameEdge>>() => T;
+  aggregate: <T = AggregateGamePromise>() => T;
+}
+
+export interface GameConnectionSubscription
+  extends Promise<AsyncIterator<GameConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GameEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGameSubscription>() => T;
+}
+
+export interface SessionReviewIndexEdge {
+  node: SessionReviewIndex;
   cursor: String;
 }
 
-export interface GamerRequestEdgePromise
-  extends Promise<GamerRequestEdge>,
+export interface SessionReviewIndexEdgePromise
+  extends Promise<SessionReviewIndexEdge>,
     Fragmentable {
-  node: <T = GamerRequestPromise>() => T;
+  node: <T = SessionReviewIndexPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GamerRequestEdgeSubscription
-  extends Promise<AsyncIterator<GamerRequestEdge>>,
+export interface SessionReviewIndexEdgeSubscription
+  extends Promise<AsyncIterator<SessionReviewIndexEdge>>,
     Fragmentable {
-  node: <T = GamerRequestSubscription>() => T;
+  node: <T = SessionReviewIndexSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SocialMediaPreviousValues {
-  id: ID_Output;
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface GamingSessionIndexConnection {
+  pageInfo: PageInfo;
+  edges: GamingSessionIndexEdge[];
 }
 
-export interface SocialMediaPreviousValuesPromise
-  extends Promise<SocialMediaPreviousValues>,
+export interface GamingSessionIndexConnectionPromise
+  extends Promise<GamingSessionIndexConnection>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  twitter: () => Promise<String>;
-  facebook: () => Promise<String>;
-  youtube: () => Promise<String>;
-  instagram: () => Promise<String>;
-  twitch: () => Promise<String>;
-  snapchat: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamingSessionIndexEdge>>() => T;
+  aggregate: <T = AggregateGamingSessionIndexPromise>() => T;
 }
 
-export interface SocialMediaPreviousValuesSubscription
-  extends Promise<AsyncIterator<SocialMediaPreviousValues>>,
+export interface GamingSessionIndexConnectionSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexConnection>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  twitter: () => Promise<AsyncIterator<String>>;
-  facebook: () => Promise<AsyncIterator<String>>;
-  youtube: () => Promise<AsyncIterator<String>>;
-  instagram: () => Promise<AsyncIterator<String>>;
-  twitch: () => Promise<AsyncIterator<String>>;
-  snapchat: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<GamingSessionIndexEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateGamingSessionIndexSubscription>() => T;
 }
 
 export interface SocialMediaSubscriptionPayload {
@@ -1377,98 +3606,172 @@ export interface SocialMediaSubscriptionPayloadSubscription
   previousValues: <T = SocialMediaPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateGamerRequest {
-  count: Int;
+export interface SessionReview {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  text: String;
 }
 
-export interface AggregateGamerRequestPromise
-  extends Promise<AggregateGamerRequest>,
+export interface SessionReviewPromise
+  extends Promise<SessionReview>,
     Fragmentable {
-  count: () => Promise<Int>;
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
+  session: <T = GamingSessionPromise>() => T;
+  text: () => Promise<String>;
 }
 
-export interface AggregateGamerRequestSubscription
-  extends Promise<AsyncIterator<AggregateGamerRequest>>,
+export interface SessionReviewSubscription
+  extends Promise<AsyncIterator<SessionReview>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  user: <T = UserSubscription>() => T;
+  session: <T = GamingSessionSubscription>() => T;
+  text: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BatchPayload {
-  count: Long;
+export interface SessionReviewIndexPreviousValues {
+  id: ID_Output;
+  text: String;
 }
 
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
+export interface SessionReviewIndexPreviousValuesPromise
+  extends Promise<SessionReviewIndexPreviousValues>,
     Fragmentable {
-  count: () => Promise<Long>;
+  id: () => Promise<ID_Output>;
+  text: () => Promise<String>;
 }
 
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
+export interface SessionReviewIndexPreviousValuesSubscription
+  extends Promise<AsyncIterator<SessionReviewIndexPreviousValues>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  text: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserIndexEdge {
-  node: UserIndex;
+export interface SessionReviewIndexSubscriptionPayload {
+  mutation: MutationType;
+  node: SessionReviewIndex;
+  updatedFields: String[];
+  previousValues: SessionReviewIndexPreviousValues;
+}
+
+export interface SessionReviewIndexSubscriptionPayloadPromise
+  extends Promise<SessionReviewIndexSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SessionReviewIndexPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SessionReviewIndexPreviousValuesPromise>() => T;
+}
+
+export interface SessionReviewIndexSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SessionReviewIndexSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SessionReviewIndexSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SessionReviewIndexPreviousValuesSubscription>() => T;
+}
+
+export interface GamingSessionEdge {
+  node: GamingSession;
   cursor: String;
 }
 
-export interface UserIndexEdgePromise
-  extends Promise<UserIndexEdge>,
+export interface GamingSessionEdgePromise
+  extends Promise<GamingSessionEdge>,
     Fragmentable {
-  node: <T = UserIndexPromise>() => T;
+  node: <T = GamingSessionPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface UserIndexEdgeSubscription
-  extends Promise<AsyncIterator<UserIndexEdge>>,
+export interface GamingSessionEdgeSubscription
+  extends Promise<AsyncIterator<GamingSessionEdge>>,
     Fragmentable {
-  node: <T = UserIndexSubscription>() => T;
+  node: <T = GamingSessionSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
+export interface SessionReviewEdge {
+  node: SessionReview;
+  cursor: String;
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface SessionReviewEdgePromise
+  extends Promise<SessionReviewEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  node: <T = SessionReviewPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface SessionReviewEdgeSubscription
+  extends Promise<AsyncIterator<SessionReviewEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  node: <T = SessionReviewSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser {
+export interface AggregateSocialMedia {
   count: Int;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface AggregateSocialMediaPromise
+  extends Promise<AggregateSocialMedia>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
+export interface AggregateSocialMediaSubscription
+  extends Promise<AsyncIterator<AggregateSocialMedia>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface GamerRequestConnection {
+  pageInfo: PageInfo;
+  edges: GamerRequestEdge[];
+}
+
+export interface GamerRequestConnectionPromise
+  extends Promise<GamerRequestConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamerRequestEdge>>() => T;
+  aggregate: <T = AggregateGamerRequestPromise>() => T;
+}
+
+export interface GamerRequestConnectionSubscription
+  extends Promise<AsyncIterator<GamerRequestConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamerRequestEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamerRequestSubscription>() => T;
+}
+
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Int = number;
+export type String = string;
+
+export type Long = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -1476,17 +3779,15 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-export type Long = string;
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
-export type String = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export type Float = number;
 
 /**
  * Model Metadata
@@ -1510,7 +3811,35 @@ export const models: Model[] = [
     embedded: false
   },
   {
+    name: "Game",
+    embedded: false
+  },
+  {
+    name: "GameIndex",
+    embedded: false
+  },
+  {
+    name: "GamingSession",
+    embedded: false
+  },
+  {
+    name: "GamingSessionIndex",
+    embedded: false
+  },
+  {
+    name: "SessionReview",
+    embedded: false
+  },
+  {
+    name: "SessionReviewIndex",
+    embedded: false
+  },
+  {
     name: "Occupations",
+    embedded: false
+  },
+  {
+    name: "Tags",
     embedded: false
   }
 ];

@@ -1,6 +1,11 @@
 endpoint: http://localhost:4466
 datamodel:
-  - datamodel.graphql
+  - user.graphql
+  - gamerrequest.graphql
+  - game.graphql
+  - gamingsession.graphql
+  - sessionreview.graphql
+  - enums.graphql
 
 generate:
   - generator: javascript-client
