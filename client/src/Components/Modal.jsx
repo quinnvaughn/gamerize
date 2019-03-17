@@ -1,5 +1,9 @@
-import React, { Component } from 'react'
+import React, { useRef, useCallback } from 'react'
 import styled, { keyframes, createGlobalStyle } from 'styled-components'
+
+//local imports
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
+import useLockBodyScroll from '../Hooks/useLockBodyScroll'
 
 const show = keyframes`
     0%: {
@@ -64,38 +68,27 @@ const GlobalStyle = createGlobalStyle`
   .navbar {
     z-index: 0;
   }
-  body {
-    overflow: hidden;
-  }
 `
 
-export default class SimpleModal extends Component {
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClick, false)
-  }
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClick, false)
-  }
+export default function SimpleModal(props) {
+  const node = useRef()
 
-  handleClick = e => {
-    if (this.node.contains(e.target)) {
-      return
-    }
-    this.handleClickOutside()
+  const handleClickOutside = () => {
+    props.onRequestClose()
   }
-
-  handleClickOutside = () => {
-    this.props.onRequestClose()
-  }
-  render() {
-    const { children } = this.props
-    return (
-      <Overlay id="modal">
-        <GlobalStyle />
-        <Modal ref={node => (this.node = node)} width={this.props.width}>
-          <ModalContent>{children}</ModalContent>
-        </Modal>
-      </Overlay>
-    )
-  }
+  useLockBodyScroll()
+  useOnOutsideClick(
+    node,
+    useCallback(() => {
+      handleClickOutside()
+    }, [])
+  )
+  return (
+    <Overlay id="modal">
+      <GlobalStyle />
+      <Modal ref={node} width={props.width}>
+        <ModalContent>{props.children}</ModalContent>
+      </Modal>
+    </Overlay>
+  )
 }

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const Input = styled.input`
   border: none;
@@ -25,9 +26,10 @@ const Container = styled.div`
   box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid black;
-  width: 46rem;
+  width: ${props => `${props.width}rem`};
   border: 1px solid #ebebeb;
   transition: box-shadow 200ms ease-in;
+  transition: width 200ms ease-in;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `
 
@@ -39,9 +41,17 @@ const StyledSearch = styled(FaSearch)`
 `
 
 export default function SearchBar(props) {
+  const node = useRef()
   const [search, setSearch] = useState('')
+  const [width, setWidth] = useState(46)
+  useOnOutsideClick(
+    node,
+    useCallback(() => {
+      setWidth(40)
+    }, [])
+  )
   return (
-    <Container>
+    <Container onClick={() => setWidth(60)} width={width} ref={node}>
       <StyledSearch />
       <Input
         type="text"

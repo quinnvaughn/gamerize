@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaSortDown } from 'react-icons/fa'
-import { useStore } from 'react-hookstore'
-
-//local imports
-import sessionAdder from '../Stores/SessionAdderStore'
 
 const Container = styled.div`
   display: flex;
