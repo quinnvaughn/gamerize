@@ -3,7 +3,7 @@
 type Query {
   me: User
   searchGames(search: String!): [Game!]!
-  mySessions: [GamingSession!]!
+  todaySessions: [IndividualGamingSession!]!
 }
 
 type Mutation {
@@ -19,6 +19,9 @@ type Mutation {
   createGamingSession(
     input: CreateGamingSessionInput!
   ): CreateGamingSessionPayload!
+  createIndividualGamingSession(
+    input: CreateIndividualGamingSessionInput!
+  ): CreateIndividualGamingSessionPayload!
 }
 
 type AuthPayload {
@@ -41,12 +44,27 @@ input CreateGamerRequestInput {
   socialMedia: SocialMediaInput!
 }
 
+input CreateIndividualGamingSessionInput {
+  startTime: DateTime!
+  gamingSessionId: String!
+}
+
+type CreateIndividualGamingSessionPayload {
+  created: Boolean!
+  overlap: Boolean
+  individualGamingSession: IndividualGamingSession
+  msg: String
+}
+
 input CreateGamingSessionInput {
   gameName: String!
   gamersIds: [String!]!
   title: String!
   length: Int!
   price: Int!
+  type: TypeOfGame!
+  slots: Int!
+  systems: [System!]!
 }
 
 type CreateGamingSessionPayload {
@@ -95,6 +113,8 @@ type User {
   username: String!
   currentGamerRequest: Boolean!
   isGamer: Boolean!
+  sessions: [GamingSession!]!
+  individualSessions: [IndividualGamingSession!]!
 }
 
 input SignupInput {

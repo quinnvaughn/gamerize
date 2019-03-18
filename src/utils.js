@@ -10,6 +10,8 @@ function getUserId(context) {
 
   throw new AuthError()
 }
+const addMinutes = (date, minutes) =>
+  new Date(new Date(date).getTime() + minutes * 60000)
 
 class AuthError extends Error {
   constructor() {
@@ -20,4 +22,5 @@ class AuthError extends Error {
 module.exports = {
   getUserId,
   AuthError,
+  addMinutes,
 }

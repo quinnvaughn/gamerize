@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Mar 17 2019 00:43:22 GMT-0500 (CDT)
+# timestamp: Sun Mar 17 2019 23:08:29 GMT-0500 (CDT)
 
 type AggregateGame {
   count: Int!
@@ -18,6 +18,10 @@ type AggregateGamingSession {
 }
 
 type AggregateGamingSessionIndex {
+  count: Int!
+}
+
+type AggregateIndividualGamingSession {
   count: Int!
 }
 
@@ -709,6 +713,9 @@ type GamingSession implements Node {
   length: Int!
   price: Float!
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
+  systems: [System!]!
+  type: TypeOfGame!
+  slots: Int!
 }
 
 """A connection to a list of items."""
@@ -725,6 +732,9 @@ input GamingSessionCreateInput {
   title: String!
   length: Int!
   price: Float!
+  type: TypeOfGame!
+  slots: Int!
+  systems: GamingSessionCreatesystemsInput
   gamers: UserCreateManyWithoutSessionsInput
   game: GameCreateOneWithoutSessionsInput!
   reviews: SessionReviewCreateManyWithoutSessionInput
@@ -750,10 +760,17 @@ input GamingSessionCreateOneWithoutReviewsInput {
   connect: GamingSessionWhereUniqueInput
 }
 
+input GamingSessionCreatesystemsInput {
+  set: [System!]
+}
+
 input GamingSessionCreateWithoutGameInput {
   title: String!
   length: Int!
   price: Float!
+  type: TypeOfGame!
+  slots: Int!
+  systems: GamingSessionCreatesystemsInput
   gamers: UserCreateManyWithoutSessionsInput
   reviews: SessionReviewCreateManyWithoutSessionInput
 }
@@ -762,6 +779,9 @@ input GamingSessionCreateWithoutGamersInput {
   title: String!
   length: Int!
   price: Float!
+  type: TypeOfGame!
+  slots: Int!
+  systems: GamingSessionCreatesystemsInput
   game: GameCreateOneWithoutSessionsInput!
   reviews: SessionReviewCreateManyWithoutSessionInput
 }
@@ -770,6 +790,9 @@ input GamingSessionCreateWithoutReviewsInput {
   title: String!
   length: Int!
   price: Float!
+  type: TypeOfGame!
+  slots: Int!
+  systems: GamingSessionCreatesystemsInput
   gamers: UserCreateManyWithoutSessionsInput
   game: GameCreateOneWithoutSessionsInput!
 }
@@ -982,6 +1005,10 @@ enum GamingSessionOrderByInput {
   length_DESC
   price_ASC
   price_DESC
+  type_ASC
+  type_DESC
+  slots_ASC
+  slots_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -993,6 +1020,9 @@ type GamingSessionPreviousValues {
   title: String!
   length: Int!
   price: Float!
+  systems: [System!]!
+  type: TypeOfGame!
+  slots: Int!
 }
 
 input GamingSessionScalarWhereInput {
@@ -1128,6 +1158,38 @@ input GamingSessionScalarWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  type: TypeOfGame
+
+  """All values that are not equal to given value."""
+  type_not: TypeOfGame
+
+  """All values that are contained in given list."""
+  type_in: [TypeOfGame!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [TypeOfGame!]
+  slots: Int
+
+  """All values that are not equal to given value."""
+  slots_not: Int
+
+  """All values that are contained in given list."""
+  slots_in: [Int!]
+
+  """All values that are not contained in given list."""
+  slots_not_in: [Int!]
+
+  """All values less than the given value."""
+  slots_lt: Int
+
+  """All values less than or equal the given value."""
+  slots_lte: Int
+
+  """All values greater than the given value."""
+  slots_gt: Int
+
+  """All values greater than or equal the given value."""
+  slots_gte: Int
 }
 
 type GamingSessionSubscriptionPayload {
@@ -1173,6 +1235,9 @@ input GamingSessionUpdateDataInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
   gamers: UserUpdateManyWithoutSessionsInput
   game: GameUpdateOneRequiredWithoutSessionsInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
@@ -1182,6 +1247,9 @@ input GamingSessionUpdateInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
   gamers: UserUpdateManyWithoutSessionsInput
   game: GameUpdateOneRequiredWithoutSessionsInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
@@ -1191,12 +1259,18 @@ input GamingSessionUpdateManyDataInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
 }
 
 input GamingSessionUpdateManyMutationInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
 }
 
 input GamingSessionUpdateManyWithoutGameInput {
@@ -1242,10 +1316,17 @@ input GamingSessionUpdateOneRequiredWithoutReviewsInput {
   upsert: GamingSessionUpsertWithoutReviewsInput
 }
 
+input GamingSessionUpdatesystemsInput {
+  set: [System!]
+}
+
 input GamingSessionUpdateWithoutGameDataInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
   gamers: UserUpdateManyWithoutSessionsInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
 }
@@ -1254,6 +1335,9 @@ input GamingSessionUpdateWithoutGamersDataInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
   game: GameUpdateOneRequiredWithoutSessionsInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
 }
@@ -1262,6 +1346,9 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   title: String
   length: Int
   price: Float
+  type: TypeOfGame
+  slots: Int
+  systems: GamingSessionUpdatesystemsInput
   gamers: UserUpdateManyWithoutSessionsInput
   game: GameUpdateOneRequiredWithoutSessionsInput
 }
@@ -1431,6 +1518,38 @@ input GamingSessionWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  type: TypeOfGame
+
+  """All values that are not equal to given value."""
+  type_not: TypeOfGame
+
+  """All values that are contained in given list."""
+  type_in: [TypeOfGame!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [TypeOfGame!]
+  slots: Int
+
+  """All values that are not equal to given value."""
+  slots_not: Int
+
+  """All values that are contained in given list."""
+  slots_in: [Int!]
+
+  """All values that are not contained in given list."""
+  slots_not_in: [Int!]
+
+  """All values less than the given value."""
+  slots_lt: Int
+
+  """All values less than or equal the given value."""
+  slots_lte: Int
+
+  """All values greater than the given value."""
+  slots_gt: Int
+
+  """All values greater than or equal the given value."""
+  slots_gte: Int
   gamers_every: UserWhereInput
   gamers_some: UserWhereInput
   gamers_none: UserWhereInput
@@ -1441,6 +1560,408 @@ input GamingSessionWhereInput {
 }
 
 input GamingSessionWhereUniqueInput {
+  id: ID
+}
+
+type IndividualGamingSession implements Node {
+  id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSession!
+  gamers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  players(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+"""A connection to a list of items."""
+type IndividualGamingSessionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [IndividualGamingSessionEdge]!
+  aggregate: AggregateIndividualGamingSession!
+}
+
+input IndividualGamingSessionCreateInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSessionCreateOneInput!
+  gamers: UserCreateManyWithoutIndividualSessionsInput
+  players: UserCreateManyWithoutSessionsBoughtInput
+}
+
+input IndividualGamingSessionCreateManyWithoutGamersInput {
+  create: [IndividualGamingSessionCreateWithoutGamersInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+}
+
+input IndividualGamingSessionCreateManyWithoutPlayersInput {
+  create: [IndividualGamingSessionCreateWithoutPlayersInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+}
+
+input IndividualGamingSessionCreateWithoutGamersInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSessionCreateOneInput!
+  players: UserCreateManyWithoutSessionsBoughtInput
+}
+
+input IndividualGamingSessionCreateWithoutPlayersInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSessionCreateOneInput!
+  gamers: UserCreateManyWithoutIndividualSessionsInput
+}
+
+"""An edge in a connection."""
+type IndividualGamingSessionEdge {
+  """The item at the end of the edge."""
+  node: IndividualGamingSession!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum IndividualGamingSessionOrderByInput {
+  id_ASC
+  id_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type IndividualGamingSessionPreviousValues {
+  id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+}
+
+input IndividualGamingSessionScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [IndividualGamingSessionScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [IndividualGamingSessionScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [IndividualGamingSessionScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  startTime: DateTime
+
+  """All values that are not equal to given value."""
+  startTime_not: DateTime
+
+  """All values that are contained in given list."""
+  startTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startTime_lte: DateTime
+
+  """All values greater than the given value."""
+  startTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startTime_gte: DateTime
+  endTime: DateTime
+
+  """All values that are not equal to given value."""
+  endTime_not: DateTime
+
+  """All values that are contained in given list."""
+  endTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endTime_lte: DateTime
+
+  """All values greater than the given value."""
+  endTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endTime_gte: DateTime
+}
+
+type IndividualGamingSessionSubscriptionPayload {
+  mutation: MutationType!
+  node: IndividualGamingSession
+  updatedFields: [String!]
+  previousValues: IndividualGamingSessionPreviousValues
+}
+
+input IndividualGamingSessionSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [IndividualGamingSessionSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [IndividualGamingSessionSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [IndividualGamingSessionSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: IndividualGamingSessionWhereInput
+}
+
+input IndividualGamingSessionUpdateInput {
+  startTime: DateTime
+  endTime: DateTime
+  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamers: UserUpdateManyWithoutIndividualSessionsInput
+  players: UserUpdateManyWithoutSessionsBoughtInput
+}
+
+input IndividualGamingSessionUpdateManyDataInput {
+  startTime: DateTime
+  endTime: DateTime
+}
+
+input IndividualGamingSessionUpdateManyMutationInput {
+  startTime: DateTime
+  endTime: DateTime
+}
+
+input IndividualGamingSessionUpdateManyWithoutGamersInput {
+  create: [IndividualGamingSessionCreateWithoutGamersInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+  set: [IndividualGamingSessionWhereUniqueInput!]
+  disconnect: [IndividualGamingSessionWhereUniqueInput!]
+  delete: [IndividualGamingSessionWhereUniqueInput!]
+  update: [IndividualGamingSessionUpdateWithWhereUniqueWithoutGamersInput!]
+  updateMany: [IndividualGamingSessionUpdateManyWithWhereNestedInput!]
+  deleteMany: [IndividualGamingSessionScalarWhereInput!]
+  upsert: [IndividualGamingSessionUpsertWithWhereUniqueWithoutGamersInput!]
+}
+
+input IndividualGamingSessionUpdateManyWithoutPlayersInput {
+  create: [IndividualGamingSessionCreateWithoutPlayersInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+  set: [IndividualGamingSessionWhereUniqueInput!]
+  disconnect: [IndividualGamingSessionWhereUniqueInput!]
+  delete: [IndividualGamingSessionWhereUniqueInput!]
+  update: [IndividualGamingSessionUpdateWithWhereUniqueWithoutPlayersInput!]
+  updateMany: [IndividualGamingSessionUpdateManyWithWhereNestedInput!]
+  deleteMany: [IndividualGamingSessionScalarWhereInput!]
+  upsert: [IndividualGamingSessionUpsertWithWhereUniqueWithoutPlayersInput!]
+}
+
+input IndividualGamingSessionUpdateManyWithWhereNestedInput {
+  where: IndividualGamingSessionScalarWhereInput!
+  data: IndividualGamingSessionUpdateManyDataInput!
+}
+
+input IndividualGamingSessionUpdateWithoutGamersDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  gamingSession: GamingSessionUpdateOneRequiredInput
+  players: UserUpdateManyWithoutSessionsBoughtInput
+}
+
+input IndividualGamingSessionUpdateWithoutPlayersDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamers: UserUpdateManyWithoutIndividualSessionsInput
+}
+
+input IndividualGamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  data: IndividualGamingSessionUpdateWithoutGamersDataInput!
+}
+
+input IndividualGamingSessionUpdateWithWhereUniqueWithoutPlayersInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  data: IndividualGamingSessionUpdateWithoutPlayersDataInput!
+}
+
+input IndividualGamingSessionUpsertWithWhereUniqueWithoutGamersInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  update: IndividualGamingSessionUpdateWithoutGamersDataInput!
+  create: IndividualGamingSessionCreateWithoutGamersInput!
+}
+
+input IndividualGamingSessionUpsertWithWhereUniqueWithoutPlayersInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  update: IndividualGamingSessionUpdateWithoutPlayersDataInput!
+  create: IndividualGamingSessionCreateWithoutPlayersInput!
+}
+
+input IndividualGamingSessionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [IndividualGamingSessionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [IndividualGamingSessionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [IndividualGamingSessionWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  startTime: DateTime
+
+  """All values that are not equal to given value."""
+  startTime_not: DateTime
+
+  """All values that are contained in given list."""
+  startTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startTime_lte: DateTime
+
+  """All values greater than the given value."""
+  startTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startTime_gte: DateTime
+  endTime: DateTime
+
+  """All values that are not equal to given value."""
+  endTime_not: DateTime
+
+  """All values that are contained in given list."""
+  endTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endTime_lte: DateTime
+
+  """All values greater than the given value."""
+  endTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endTime_gte: DateTime
+  gamingSession: GamingSessionWhereInput
+  gamers_every: UserWhereInput
+  gamers_some: UserWhereInput
+  gamers_none: UserWhereInput
+  players_every: UserWhereInput
+  players_some: UserWhereInput
+  players_none: UserWhereInput
+}
+
+input IndividualGamingSessionWhereUniqueInput {
   id: ID
 }
 
@@ -1459,6 +1980,7 @@ type Mutation {
   createGameIndex(data: GameIndexCreateInput!): GameIndex!
   createGamingSessionIndex(data: GamingSessionIndexCreateInput!): GamingSessionIndex!
   createSessionReviewIndex(data: SessionReviewIndexCreateInput!): SessionReviewIndex!
+  createIndividualGamingSession(data: IndividualGamingSessionCreateInput!): IndividualGamingSession!
   createGame(data: GameCreateInput!): Game!
   createSessionReview(data: SessionReviewCreateInput!): SessionReview!
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
@@ -1469,6 +1991,7 @@ type Mutation {
   updateGameIndex(data: GameIndexUpdateInput!, where: GameIndexWhereUniqueInput!): GameIndex
   updateGamingSessionIndex(data: GamingSessionIndexUpdateInput!, where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   updateSessionReviewIndex(data: SessionReviewIndexUpdateInput!, where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  updateIndividualGamingSession(data: IndividualGamingSessionUpdateInput!, where: IndividualGamingSessionWhereUniqueInput!): IndividualGamingSession
   updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
   updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
   updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
@@ -1479,6 +2002,7 @@ type Mutation {
   deleteGameIndex(where: GameIndexWhereUniqueInput!): GameIndex
   deleteGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   deleteSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  deleteIndividualGamingSession(where: IndividualGamingSessionWhereUniqueInput!): IndividualGamingSession
   deleteGame(where: GameWhereUniqueInput!): Game
   deleteSessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   deleteSocialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
@@ -1489,6 +2013,7 @@ type Mutation {
   upsertGameIndex(where: GameIndexWhereUniqueInput!, create: GameIndexCreateInput!, update: GameIndexUpdateInput!): GameIndex!
   upsertGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!, create: GamingSessionIndexCreateInput!, update: GamingSessionIndexUpdateInput!): GamingSessionIndex!
   upsertSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!, create: SessionReviewIndexCreateInput!, update: SessionReviewIndexUpdateInput!): SessionReviewIndex!
+  upsertIndividualGamingSession(where: IndividualGamingSessionWhereUniqueInput!, create: IndividualGamingSessionCreateInput!, update: IndividualGamingSessionUpdateInput!): IndividualGamingSession!
   upsertGame(where: GameWhereUniqueInput!, create: GameCreateInput!, update: GameUpdateInput!): Game!
   upsertSessionReview(where: SessionReviewWhereUniqueInput!, create: SessionReviewCreateInput!, update: SessionReviewUpdateInput!): SessionReview!
   upsertSocialMedia(where: SocialMediaWhereUniqueInput!, create: SocialMediaCreateInput!, update: SocialMediaUpdateInput!): SocialMedia!
@@ -1499,6 +2024,7 @@ type Mutation {
   updateManyGameIndexes(data: GameIndexUpdateManyMutationInput!, where: GameIndexWhereInput): BatchPayload!
   updateManyGamingSessionIndexes(data: GamingSessionIndexUpdateManyMutationInput!, where: GamingSessionIndexWhereInput): BatchPayload!
   updateManySessionReviewIndexes(data: SessionReviewIndexUpdateManyMutationInput!, where: SessionReviewIndexWhereInput): BatchPayload!
+  updateManyIndividualGamingSessions(data: IndividualGamingSessionUpdateManyMutationInput!, where: IndividualGamingSessionWhereInput): BatchPayload!
   updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
   updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
   updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
@@ -1509,6 +2035,7 @@ type Mutation {
   deleteManyGameIndexes(where: GameIndexWhereInput): BatchPayload!
   deleteManyGamingSessionIndexes(where: GamingSessionIndexWhereInput): BatchPayload!
   deleteManySessionReviewIndexes(where: SessionReviewIndexWhereInput): BatchPayload!
+  deleteManyIndividualGamingSessions(where: IndividualGamingSessionWhereInput): BatchPayload!
   deleteManyGames(where: GameWhereInput): BatchPayload!
   deleteManySessionReviews(where: SessionReviewWhereInput): BatchPayload!
   deleteManySocialMedias(where: SocialMediaWhereInput): BatchPayload!
@@ -1581,6 +2108,7 @@ type Query {
   gameIndexes(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GameIndex]!
   gamingSessionIndexes(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSessionIndex]!
   sessionReviewIndexes(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReviewIndex]!
+  individualGamingSessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession]!
   games(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game]!
   sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
@@ -1591,6 +2119,7 @@ type Query {
   gameIndex(where: GameIndexWhereUniqueInput!): GameIndex
   gamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   sessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
+  individualGamingSession(where: IndividualGamingSessionWhereUniqueInput!): IndividualGamingSession
   game(where: GameWhereUniqueInput!): Game
   sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
@@ -1601,6 +2130,7 @@ type Query {
   gameIndexesConnection(where: GameIndexWhereInput, orderBy: GameIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameIndexConnection!
   gamingSessionIndexesConnection(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionIndexConnection!
   sessionReviewIndexesConnection(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewIndexConnection!
+  individualGamingSessionsConnection(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): IndividualGamingSessionConnection!
   gamesConnection(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameConnection!
   sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
   socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
@@ -2658,11 +3188,19 @@ type Subscription {
   gameIndex(where: GameIndexSubscriptionWhereInput): GameIndexSubscriptionPayload
   gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
   sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
+  individualGamingSession(where: IndividualGamingSessionSubscriptionWhereInput): IndividualGamingSessionSubscriptionPayload
   game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
   sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
   gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+enum System {
+  XBOX_ONE
+  NINTENDO_SWITCH
+  PC
+  PS4
 }
 
 enum Tags {
@@ -2702,6 +3240,11 @@ enum Tags {
   VISUAL_NOVEL
 }
 
+enum TypeOfGame {
+  CUSTOM
+  MATCHMAKING
+}
+
 type User implements Node {
   id: ID!
   email: String!
@@ -2712,6 +3255,8 @@ type User implements Node {
   name: String!
   aboutMe: String
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+  individualSessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
+  sessionsBought(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
 }
 
 """A connection to a list of items."""
@@ -2733,6 +3278,18 @@ input UserCreateInput {
   aboutMe: String
   occupations: UserCreateoccupationsInput
   sessions: GamingSessionCreateManyWithoutGamersInput
+  individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
+}
+
+input UserCreateManyWithoutIndividualSessionsInput {
+  create: [UserCreateWithoutIndividualSessionsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutSessionsBoughtInput {
+  create: [UserCreateWithoutSessionsBoughtInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutSessionsInput {
@@ -2749,6 +3306,30 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutIndividualSessionsInput {
+  email: String!
+  username: String!
+  password: String!
+  isGamer: Boolean
+  name: String!
+  aboutMe: String
+  occupations: UserCreateoccupationsInput
+  sessions: GamingSessionCreateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
+}
+
+input UserCreateWithoutSessionsBoughtInput {
+  email: String!
+  username: String!
+  password: String!
+  isGamer: Boolean
+  name: String!
+  aboutMe: String
+  occupations: UserCreateoccupationsInput
+  sessions: GamingSessionCreateManyWithoutGamersInput
+  individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
+}
+
 input UserCreateWithoutSessionsInput {
   email: String!
   username: String!
@@ -2757,6 +3338,8 @@ input UserCreateWithoutSessionsInput {
   name: String!
   aboutMe: String
   occupations: UserCreateoccupationsInput
+  individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
 }
 
 """An edge in a connection."""
@@ -3389,6 +3972,8 @@ input UserUpdateDataInput {
   aboutMe: String
   occupations: UserUpdateoccupationsInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
+  individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
 }
 
 input UserUpdateInput {
@@ -3400,6 +3985,8 @@ input UserUpdateInput {
   aboutMe: String
   occupations: UserUpdateoccupationsInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
+  individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
 }
 
 input UserUpdateManyDataInput {
@@ -3420,6 +4007,30 @@ input UserUpdateManyMutationInput {
   name: String
   aboutMe: String
   occupations: UserUpdateoccupationsInput
+}
+
+input UserUpdateManyWithoutIndividualSessionsInput {
+  create: [UserCreateWithoutIndividualSessionsInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutIndividualSessionsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutIndividualSessionsInput!]
+}
+
+input UserUpdateManyWithoutSessionsBoughtInput {
+  create: [UserCreateWithoutSessionsBoughtInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutSessionsBoughtInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutSessionsBoughtInput!]
 }
 
 input UserUpdateManyWithoutSessionsInput {
@@ -3450,6 +4061,30 @@ input UserUpdateOneRequiredInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateWithoutIndividualSessionsDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  name: String
+  aboutMe: String
+  occupations: UserUpdateoccupationsInput
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+}
+
+input UserUpdateWithoutSessionsBoughtDataInput {
+  email: String
+  username: String
+  password: String
+  isGamer: Boolean
+  name: String
+  aboutMe: String
+  occupations: UserUpdateoccupationsInput
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+  individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
+}
+
 input UserUpdateWithoutSessionsDataInput {
   email: String
   username: String
@@ -3458,6 +4093,18 @@ input UserUpdateWithoutSessionsDataInput {
   name: String
   aboutMe: String
   occupations: UserUpdateoccupationsInput
+  individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
+  sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+}
+
+input UserUpdateWithWhereUniqueWithoutIndividualSessionsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutIndividualSessionsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutSessionsBoughtInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutSessionsBoughtDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutSessionsInput {
@@ -3468,6 +4115,18 @@ input UserUpdateWithWhereUniqueWithoutSessionsInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutIndividualSessionsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutIndividualSessionsDataInput!
+  create: UserCreateWithoutIndividualSessionsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutSessionsBoughtInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutSessionsBoughtDataInput!
+  create: UserCreateWithoutSessionsBoughtInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutSessionsInput {
@@ -3732,6 +4391,12 @@ input UserWhereInput {
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput
+  individualSessions_every: IndividualGamingSessionWhereInput
+  individualSessions_some: IndividualGamingSessionWhereInput
+  individualSessions_none: IndividualGamingSessionWhereInput
+  sessionsBought_every: IndividualGamingSessionWhereInput
+  sessionsBought_some: IndividualGamingSessionWhereInput
+  sessionsBought_none: IndividualGamingSessionWhereInput
 }
 
 input UserWhereUniqueInput {
