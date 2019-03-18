@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
 
 //local imports
-import GamerCalendar from '../Components/GamerCalendar'
+import GamerCalendar from '../Components/SmallGamerCalendar'
 import GamerDay from '../Components/GamerDay'
 import GamerSessionCard from '../Components/GamerSessionCard'
-
-//data
-import specificSessions from '../data/specificusersessions'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -45,18 +44,74 @@ const Info = styled.div`
   margin-bottom: 1rem;
 `
 
+const SetButton = styled.button`
+  font-size: 1.4rem;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 1.5rem;
+  font-weight: 600;
+  padding: 1rem 0.8rem;
+  margin-bottom: 2rem;
+  background: #fff;
+  outline: none;
+  border: none;
+  border-bottom: ${props =>
+    props.active ? '2px solid #f10e0e' : '2px solid transparent'};
+`
+
 const MONTH = 'MONTH'
 
 const TODAY = 'TODAY'
 
+const MY_SESSIONS = gql`
+  {
+    me {
+      id
+      sessions {
+        id
+        title
+        game {
+          name
+        }
+        gamers {
+          username
+        }
+        price
+        length
+      }
+    }
+    todaySessions {
+      startTime
+      endTime
+      gamingSession {
+        game {
+          name
+        }
+      }
+    }
+  }
+`
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
+  const { data, loading } = useQuery(MY_SESSIONS)
+  console.log(data)
   return (
     <PageContainer>
       <Content>
         <LeftSide>
-          <button onClick={() => setDayOrMonth(TODAY)}>Today</button>
-          <button onClick={() => setDayOrMonth(MONTH)}>Calendar</button>
+          <SetButton
+            onClick={() => setDayOrMonth(TODAY)}
+            active={dayOrMonth === 'TODAY'}
+          >
+            Today
+          </SetButton>
+          <SetButton
+            onClick={() => setDayOrMonth(MONTH)}
+            active={dayOrMonth === 'MONTH'}
+          >
+            Calendar
+          </SetButton>
           {dayOrMonth === MONTH ? <GamerCalendar /> : <GamerDay />}
         </LeftSide>
         <RightSide>
@@ -65,9 +120,11 @@ export default function GamerDashboardCalendar(props) {
             These are all your sessions. Click on them to get options to add
             them to your calendar. Edit them in the sessions tab.
           </Info>
-          {specificSessions.map(session => (
-            <GamerSessionCard session={session} />
-          ))}
+          {loading
+            ? null
+            : data.me.sessions.map(session => (
+                <GamerSessionCard session={session} key={session.id} />
+              ))}
         </RightSide>
       </Content>
     </PageContainer>

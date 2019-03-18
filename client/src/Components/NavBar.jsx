@@ -87,6 +87,7 @@ const signedInLinks = [
 const GET_ME = gql`
   {
     me {
+      id
       name
       username
       isGamer
