@@ -5,6 +5,7 @@ datamodel:
   - game.graphql
   - gamingsession.graphql
   - sessionreview.graphql
+  - individualgamingsession.graphql
   - enums.graphql
 
 generate:

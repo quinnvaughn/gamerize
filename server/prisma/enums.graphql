@@ -61,3 +61,15 @@ enum Tags {
   SURVIVAL
   VISUAL_NOVEL
 }
+
+enum TypeOfGame {
+  CUSTOM
+  MATCHMAKING
+}
+
+enum System {
+  XBOX_ONE
+  NINTENDO_SWITCH
+  PC
+  PS4
+}

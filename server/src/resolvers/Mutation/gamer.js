@@ -28,7 +28,7 @@ const gamer = {
       where: { id: input.userId },
       data: {
         isGamer: input.decision === 'ACCEPT' ? true : false,
-        occupations: inputs.occupations,
+        occupations: input.occupations,
       },
     })
     // Do delete many for now because of unique issue.

@@ -10,6 +10,9 @@ type User {
   name: String!
   aboutMe: String
   sessions: [GamingSession!]! @relation(name: "MySessions")
+  individualSessions: [IndividualGamingSession!]!
+    @relation(name: "MyIndividualSessions")
+  sessionsBought: [IndividualGamingSession!]! @relation(name: "SessionsBought")
 }
 
 ## Workaround for no case insensitive search in prisma yet.
