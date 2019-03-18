@@ -1,9 +1,18 @@
 const { getUserId } = require('../../utils')
+const dateFns = require('date-fns')
 
 const gamingsession = {
-  async mySessions(parent, _, ctx) {
+  async todaySessions(parent, _, ctx) {
     const userId = getUserId(ctx)
-    return await ctx.prisma.user({ id: userId }).sessions()
+    return await ctx.prisma.individualGamingSessions({
+      where: {
+        AND: [
+          { gamers_some: { id: userId } },
+          { startTime_gte: dateFns.startOfDay(new Date()) },
+          { startTime_lte: dateFns.endOfDay(new Date()) },
+        ],
+      },
+    })
   },
 }
 

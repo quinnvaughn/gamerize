@@ -45,11 +45,23 @@ var models = [
     embedded: false
   },
   {
+    name: "IndividualGamingSession",
+    embedded: false
+  },
+  {
     name: "Occupations",
     embedded: false
   },
   {
     name: "Tags",
+    embedded: false
+  },
+  {
+    name: "TypeOfGame",
+    embedded: false
+  },
+  {
+    name: "System",
     embedded: false
   }
 ];
