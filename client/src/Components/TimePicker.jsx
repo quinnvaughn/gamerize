@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaSortDown } from 'react-icons/fa'
 
+//local imports
+import { setMinutes } from '../utils/Dates'
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -17,7 +20,7 @@ const Container = styled.div`
 `
 
 const Hour = styled.input`
-  width: 1.6rem;
+  width: 2.4rem;
   display: inline;
   border: none;
   font-size: 1.6rem;
@@ -48,7 +51,7 @@ const Period = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
+  cursor: pointer !important;
 `
 
 const Selection = styled.span`
@@ -76,28 +79,78 @@ const Choices = styled.div`
   }
 `
 
-const hoursRegEx = /^(0?[1-9]|1[012])$/
-const minutesRegEx = /^([0-5]?[0-9])$/
+const hoursRegEx = /^([1-9]|1[012])$/
 
 export default function TimePicker({ state, dispatch, type }) {
+  const onKeyDownHour = e => {
+    switch (e.key) {
+      case 'ArrowUp': {
+        dispatch({
+          type,
+          payload: {
+            type: 'hour',
+            value:
+              Number(e.target.value) + 1 === 13
+                ? 1
+                : Number(e.target.value) + 1,
+          },
+        })
+        break
+      }
+      case 'ArrowDown': {
+        dispatch({
+          type,
+          payload: {
+            type: 'hour',
+            value:
+              Number(e.target.value) - 1 === 0
+                ? 12
+                : Number(e.target.value) - 1,
+          },
+        })
+        break
+      }
+      default:
+        return
+    }
+  }
+  const onKeyDownMinutes = e => {
+    switch (e.key) {
+      case 'ArrowUp': {
+        dispatch({
+          type,
+          payload: {
+            type: 'minutes',
+            value:
+              Number(e.target.value) + 1 === 61
+                ? 1
+                : setMinutes(Number(e.target.value) + 1),
+          },
+        })
+        break
+      }
+      case 'ArrowDown': {
+        dispatch({
+          type,
+          payload: {
+            type: 'minutes',
+            value:
+              Number(e.target.value) - 1 === 0
+                ? 60
+                : setMinutes(Number(e.target.value) - 1),
+          },
+        })
+        break
+      }
+      default:
+        return
+    }
+  }
   const [dropdown, setDropdown] = useState(false)
   return (
     <Container>
       <Hour
-        onClick={() =>
-          state.hour === '--' &&
-          dispatch({
-            type,
-            payload: { type: 'hour', value: '' },
-          })
-        }
-        onBlur={() =>
-          state.hour === '' &&
-          dispatch({
-            type,
-            payload: { type: 'minutes', value: '--' },
-          })
-        }
+        onKeyDown={onKeyDownHour}
         onChange={e => {
           if (!hoursRegEx.test(Number(e.target.value)) && e.target.value !== '')
             return
@@ -117,27 +170,8 @@ export default function TimePicker({ state, dispatch, type }) {
       />
       <Colon>:</Colon>
       <Minutes
-        onClick={() =>
-          state.minutes === '--' &&
-          dispatch({
-            type,
-            payload: { type: 'minutes', value: '' },
-          })
-        }
-        onBlur={() =>
-          state.minutes === '' &&
-          dispatch({
-            type,
-            payload: { type: 'minutes', value: '--' },
-          })
-        }
+        onKeyDown={onKeyDownMinutes}
         onChange={e => {
-          if (
-            !minutesRegEx.test(Number(e.target.value)) &&
-            e.target.value !== ''
-          ) {
-            return
-          }
           if (e.target.value === '') {
             dispatch({
               type,
@@ -147,7 +181,10 @@ export default function TimePicker({ state, dispatch, type }) {
           }
           dispatch({
             type,
-            payload: { type: 'minutes', value: Number(e.target.value) },
+            payload: {
+              type: 'minutes',
+              value: setMinutes(Number(e.target.value)),
+            },
           })
         }}
         value={state.minutes}

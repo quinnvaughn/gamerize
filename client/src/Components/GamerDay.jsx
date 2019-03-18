@@ -33,7 +33,6 @@ const Header = styled.div`
   justify-content: space-between;
   max-width: inherit;
   align-items: center;
-  height: 11.75rem;
 `
 
 const Day = styled.span`

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import dateFns from 'date-fns'
@@ -7,9 +7,10 @@ import { withRouter } from 'react-router-dom'
 const Container = styled.div`
   display: block;
   position: relative;
-  width: 100%;
+  width: 140%;
   background: #fff;
   border: 1px solid #dddfe2;
+  border-radius: 2px;
 `
 
 const Header = styled.div`
@@ -17,12 +18,12 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 3rem 2rem 3rem;
+  padding: 1rem 2rem;
   margin: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 3rem;
+  font-size: 1rem;
   font-weight: 700;
   color: black;
   justify-content: space-between;
@@ -33,7 +34,7 @@ const Header = styled.div`
 const ChevronLeft = styled(FaChevronLeft)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 1.8rem;
+  font-size: 1rem;
   color: black;
   :hover {
     transform: scale(1.75);
@@ -45,7 +46,7 @@ const ChevronLeft = styled(FaChevronLeft)`
 const ChevronRight = styled(FaChevronRight)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 1.8rem;
+  font-size: 1rem;
   color: black;
   :hover {
     transform: scale(1.75);
@@ -66,7 +67,7 @@ const CenterColumn = styled.div`
   width: calc(100% / 7);
   justify-content: center;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
 `
 
 const Days = styled.div`
@@ -74,7 +75,7 @@ const Days = styled.div`
   text-transform: uppercase;
   font-weight: 700;
   color: #dddfe2;
-  font-size: 70%;
+  font-size: 1rem;
   padding: 1rem 0;
   border-bottom: 1px solid #dddfe2;
   margin: 0;
@@ -92,30 +93,29 @@ const Cell = styled.div`
   flex-basis: 0;
   max-width: 100%;
   position: relative;
-  height: 9.6rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
   border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
-  background: #fff;
+  background: ${props => (props.current ? '#f10e0e' : '#fff')};
   :last-child {
     border-right: none;
   }
-  color: ${props => (props.disabled ? '#dddfe2' : 'black')};
+  :hover {
+    cursor: pointer;
+  }
+  color: ${props =>
+    props.disabled ? '#dddfe2' : props.current ? 'white' : 'black'};
   pointer-events: ${props => props.disabled && 'none'};
 `
 
 const Number = styled.span`
-  position: absolute;
-  font-size: 1.2rem;
-  width: ${props => props.current && '2.4rem'};
-  line-height: ${props => props.current && '2.4rem'};
-  border-radius: ${props => props.current && '50%'};
-  text-align: ${props => props.current && 'center'};
-  background: ${props => props.current && '#f10e0e'};
-  color: ${props => props.current && 'white'};
-  top: 0.75rem;
-  right: 0.75rem;
   font-weight: 700;
+  cursor: pointer;
 `
 
 const Row = styled.div`
@@ -124,39 +124,34 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  cursor: pointer;
   border-bottom: 1px solid #dddfe2;
   :last-child {
     border-bottom: none;
   }
 `
 
-class GamerCalendar extends Component {
-  state = {
-    currentMonth: new Date(),
-    currentDay: new Date(),
-  }
+function GamerCalendar(props) {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [currentDay] = useState(new Date())
 
-  componentDidMount() {
-    window.scrollTo(0, 0)
-  }
-
-  renderHeader() {
+  const renderHeader = () => {
     const dateFormat = 'MMMM YYYY'
 
     return (
       <Header>
-        <ChevronLeft onClick={this.prevMonth} />
-        <Month>{dateFns.format(this.state.currentMonth, dateFormat)}</Month>
-        <ChevronRight onClick={this.nextMonth} />
+        <ChevronLeft onClick={prevMonth} />
+        <Month>{dateFns.format(currentMonth, dateFormat)}</Month>
+        <ChevronRight onClick={nextMonth} />
       </Header>
     )
   }
 
-  renderDays() {
-    const dateFormat = 'dddd'
+  const renderDays = () => {
+    const dateFormat = 'dd'
     const days = []
 
-    let startDate = dateFns.startOfWeek(this.state.currentMonth)
+    let startDate = dateFns.startOfWeek(currentMonth)
 
     for (let i = 0; i < 7; i++) {
       days.push(
@@ -169,8 +164,7 @@ class GamerCalendar extends Component {
     return <Days>{days}</Days>
   }
 
-  renderCells() {
-    const { currentMonth, currentDay } = this.state
+  const renderCells = () => {
     const monthStart = dateFns.startOfMonth(currentMonth)
     const monthEnd = dateFns.endOfMonth(monthStart)
     const startDate = dateFns.startOfWeek(monthStart)
@@ -189,13 +183,16 @@ class GamerCalendar extends Component {
         const cloneDay = day
         days.push(
           <Cell
-            disabled={!dateFns.isSameMonth(day, monthStart)}
+            disabled={
+              !dateFns.isSameMonth(day, monthStart) ||
+              (dateFns.isBefore(day, currentDay) &&
+                !dateFns.isSameDay(day, currentDay))
+            }
             key={cloneDay}
-            onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+            onClick={() => onDateClick(dateFns.parse(cloneDay))}
+            current={dateFns.isSameDay(day, currentDay)}
           >
-            <Number current={dateFns.isSameDay(day, currentDay)}>
-              {formattedDate}
-            </Number>
+            <Number>{formattedDate}</Number>
           </Cell>
         )
         day = dateFns.addDays(day, 1)
@@ -206,31 +203,29 @@ class GamerCalendar extends Component {
     return <div className="body">{rows}</div>
   }
 
-  onDateClick = day => {
-    this.props.setSelectedDay(day)
+  const onDateClick = inputDay => {
+    const dateFormat = 'MM/DD/YYYY'
+
+    const day = dateFns.format(inputDay, dateFormat)
+    props.setDropdown(false)
+    props.dispatch({ type: 'setDate', payload: day })
   }
 
-  nextMonth = () => {
-    this.setState(prevState => ({
-      currentMonth: dateFns.addMonths(prevState.currentMonth, 1),
-    }))
+  const nextMonth = () => {
+    setCurrentMonth(dateFns.addMonths(currentMonth, 1))
   }
 
-  prevMonth = () => {
-    this.setState(prevState => ({
-      currentMonth: dateFns.subMonths(prevState.currentMonth, 1),
-    }))
+  const prevMonth = () => {
+    setCurrentMonth(dateFns.subMonths(currentMonth, 1))
   }
 
-  render() {
-    return (
-      <Container>
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
-      </Container>
-    )
-  }
+  return (
+    <Container onClick={e => e.stopPropagation()}>
+      {renderHeader()}
+      {renderDays()}
+      {renderCells()}
+    </Container>
+  )
 }
 
 export default withRouter(GamerCalendar)
