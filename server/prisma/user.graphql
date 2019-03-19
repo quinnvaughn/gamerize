@@ -13,6 +13,7 @@ type User {
   individualSessions: [IndividualGamingSession!]!
     @relation(name: "MyIndividualSessions")
   sessionsBought: [IndividualGamingSession!]! @relation(name: "SessionsBought")
+  buffer: Int
 }
 
 ## Workaround for no case insensitive search in prisma yet.

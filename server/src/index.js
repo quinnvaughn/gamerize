@@ -1,10 +1,13 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { importSchema } = require('graphql-import')
-const { prisma } = require('./generated/prisma-client')
+const { Prisma } = require('./generated/prisma-client')
 const resolvers = require('./resolvers')
 
 const typeDefs = gql(importSchema('./src/schema.graphql'))
 
+const prisma = new Prisma({
+  endpoint: 'http://192.168.1.125:4466',
+})
 const server = new ApolloServer({
   typeDefs,
   resolvers,

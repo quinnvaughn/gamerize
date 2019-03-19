@@ -12,5 +12,6 @@ type Game {
 type GameIndex {
   id: ID! @unique
   name: String!
+  tags: [String!]!
   game: Game!
 }

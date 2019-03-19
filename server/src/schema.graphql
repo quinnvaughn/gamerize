@@ -22,6 +22,9 @@ type Mutation {
   createIndividualGamingSession(
     input: CreateIndividualGamingSessionInput!
   ): CreateIndividualGamingSessionPayload!
+  createBulkSessions(
+    input: CreateBulkSessionsInput!
+  ): CreateBulkSessionsPayload!
 }
 
 type AuthPayload {
@@ -36,6 +39,19 @@ input SocialMediaInput {
   instagram: String
   twitch: String
   snapchat: String
+}
+
+input CreateBulkSessionsInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSessionId: String!
+}
+
+type CreateBulkSessionsPayload {
+  created: Boolean!
+  overlaps: [IndividualGamingSession!]!
+  sessions: [IndividualGamingSession!]!
+  msg: String
 }
 
 input CreateGamerRequestInput {
@@ -65,6 +81,18 @@ input CreateGamingSessionInput {
   type: TypeOfGame!
   slots: Int!
   systems: [System!]!
+  requirements: [RequirementInput!]!
+  discounts: [DiscountInput!]!
+}
+
+input RequirementInput {
+  msg: String!
+}
+
+input DiscountInput {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
 }
 
 type CreateGamingSessionPayload {
@@ -106,6 +134,18 @@ type RespondToGamerRequestPayload {
   msg: String
 }
 
+input SignupInput {
+  email: String!
+  password: String!
+  name: String!
+  username: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type User {
   id: ID!
   email: String!
@@ -117,14 +157,33 @@ type User {
   individualSessions: [IndividualGamingSession!]!
 }
 
-input SignupInput {
-  email: String!
-  password: String!
-  name: String!
-  username: String!
+type GamingSession {
+  id: ID!
+  gamers: [User!]!
+  game: Game!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: [SessionReview!]!
+  systems: [System!]!
+  type: TypeOfGame!
+  slots: Int!
+  requirements: [Requirement!]!
+  discounts: [Discount!]!
+  sessions: [IndividualGamingSession!]!
+  slotsLeftToday: Int!
 }
 
-input LoginInput {
-  email: String!
-  password: String!
+type IndividualGamingSession {
+  id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSession!
+  ## gaming session also has this info, but this way the user doesn't have to go through that
+  ## to get to this info.
+  gamers: [User!]!
+  players: [User!]!
+  slots: Int!
+  finished: Boolean!
+  full: Boolean!
 }

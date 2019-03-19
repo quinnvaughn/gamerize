@@ -10,4 +10,5 @@ type IndividualGamingSession {
   ## to get to this info.
   gamers: [User!]! @relation(name: "MyIndividualSessions")
   players: [User!]! @relation(name: "SessionsBought")
+  slots: Int!
 }

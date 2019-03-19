@@ -17,3 +17,22 @@ export const addMore = (cutoff, start) =>
   new Date().getMinutes() >= cutoff
     ? set12Hours(new Date().getHours() + start + 1)
     : set12Hours(new Date().getHours() + start)
+
+export const convertTo24Hours = time12h => {
+  const [time, modifier] = time12h.split(' ')
+  let [hours, minutes] = time.split(':')
+  if (hours === '12') {
+    hours = '00'
+  }
+
+  if (modifier === 'p.m.') {
+    hours = parseInt(hours, 10) + 12
+  }
+  let seconds = '00'
+  return [hours, minutes, seconds]
+}
+
+export const convertToDay = inputDay => {
+  const [month, day, year] = inputDay.split('/')
+  return [year, month - 1, day]
+}
