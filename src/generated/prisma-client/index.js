@@ -37,6 +37,14 @@ var models = [
     embedded: false
   },
   {
+    name: "Requirement",
+    embedded: false
+  },
+  {
+    name: "Discount",
+    embedded: false
+  },
+  {
     name: "SessionReview",
     embedded: false
   },
@@ -62,6 +70,10 @@ var models = [
   },
   {
     name: "System",
+    embedded: false
+  },
+  {
+    name: "PlayerOrSession",
     embedded: false
   }
 ];

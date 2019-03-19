@@ -6,6 +6,7 @@ const { game: gameQuery } = require('./Query/game')
 const { gamingsession } = require('./Mutation/gamingsession')
 const { gamingsession: gamingSessionQuery } = require('./Query/gamingsession')
 const { GamingSession } = require('./Type/GamingSession')
+const { IndividualGamingSession } = require('./Type/IndividualGamingsession')
 const { User } = require('./Type/User')
 const { Node } = require('./Type/Node')
 
@@ -24,4 +25,5 @@ module.exports = {
   User,
   Node,
   GamingSession,
+  IndividualGamingSession,
 }
