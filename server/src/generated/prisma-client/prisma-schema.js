@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateGame {
+/* GraphQL */ `type AggregateDiscount {
+  count: Int!
+}
+
+type AggregateGame {
   count: Int!
 }
 
@@ -24,6 +28,10 @@ type AggregateGamingSessionIndex {
 }
 
 type AggregateIndividualGamingSession {
+  count: Int!
+}
+
+type AggregateRequirement {
   count: Int!
 }
 
@@ -52,6 +60,147 @@ type BatchPayload {
 }
 
 scalar DateTime
+
+type Discount {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
+}
+
+type DiscountConnection {
+  pageInfo: PageInfo!
+  edges: [DiscountEdge]!
+  aggregate: AggregateDiscount!
+}
+
+input DiscountCreateInput {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
+}
+
+input DiscountCreateManyInput {
+  create: [DiscountCreateInput!]
+}
+
+type DiscountEdge {
+  node: Discount!
+  cursor: String!
+}
+
+enum DiscountOrderByInput {
+  percentage_ASC
+  percentage_DESC
+  threshold_ASC
+  threshold_DESC
+  playerOrSession_ASC
+  playerOrSession_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type DiscountPreviousValues {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
+}
+
+input DiscountScalarWhereInput {
+  percentage: Int
+  percentage_not: Int
+  percentage_in: [Int!]
+  percentage_not_in: [Int!]
+  percentage_lt: Int
+  percentage_lte: Int
+  percentage_gt: Int
+  percentage_gte: Int
+  threshold: Int
+  threshold_not: Int
+  threshold_in: [Int!]
+  threshold_not_in: [Int!]
+  threshold_lt: Int
+  threshold_lte: Int
+  threshold_gt: Int
+  threshold_gte: Int
+  playerOrSession: PlayerOrSession
+  playerOrSession_not: PlayerOrSession
+  playerOrSession_in: [PlayerOrSession!]
+  playerOrSession_not_in: [PlayerOrSession!]
+  AND: [DiscountScalarWhereInput!]
+  OR: [DiscountScalarWhereInput!]
+  NOT: [DiscountScalarWhereInput!]
+}
+
+type DiscountSubscriptionPayload {
+  mutation: MutationType!
+  node: Discount
+  updatedFields: [String!]
+  previousValues: DiscountPreviousValues
+}
+
+input DiscountSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DiscountWhereInput
+  AND: [DiscountSubscriptionWhereInput!]
+  OR: [DiscountSubscriptionWhereInput!]
+  NOT: [DiscountSubscriptionWhereInput!]
+}
+
+input DiscountUpdateManyDataInput {
+  percentage: Int
+  threshold: Int
+  playerOrSession: PlayerOrSession
+}
+
+input DiscountUpdateManyInput {
+  create: [DiscountCreateInput!]
+  deleteMany: [DiscountScalarWhereInput!]
+  updateMany: [DiscountUpdateManyWithWhereNestedInput!]
+}
+
+input DiscountUpdateManyMutationInput {
+  percentage: Int
+  threshold: Int
+  playerOrSession: PlayerOrSession
+}
+
+input DiscountUpdateManyWithWhereNestedInput {
+  where: DiscountScalarWhereInput!
+  data: DiscountUpdateManyDataInput!
+}
+
+input DiscountWhereInput {
+  percentage: Int
+  percentage_not: Int
+  percentage_in: [Int!]
+  percentage_not_in: [Int!]
+  percentage_lt: Int
+  percentage_lte: Int
+  percentage_gt: Int
+  percentage_gte: Int
+  threshold: Int
+  threshold_not: Int
+  threshold_in: [Int!]
+  threshold_not_in: [Int!]
+  threshold_lt: Int
+  threshold_lte: Int
+  threshold_gt: Int
+  threshold_gte: Int
+  playerOrSession: PlayerOrSession
+  playerOrSession_not: PlayerOrSession
+  playerOrSession_in: [PlayerOrSession!]
+  playerOrSession_not_in: [PlayerOrSession!]
+  AND: [DiscountWhereInput!]
+  OR: [DiscountWhereInput!]
+  NOT: [DiscountWhereInput!]
+}
 
 type Game {
   id: ID!
@@ -99,6 +248,7 @@ type GameEdge {
 type GameIndex {
   id: ID!
   name: String!
+  tags: [String!]!
   game: Game!
 }
 
@@ -110,7 +260,12 @@ type GameIndexConnection {
 
 input GameIndexCreateInput {
   name: String!
+  tags: GameIndexCreatetagsInput
   game: GameCreateOneInput!
+}
+
+input GameIndexCreatetagsInput {
+  set: [String!]
 }
 
 type GameIndexEdge {
@@ -132,6 +287,7 @@ enum GameIndexOrderByInput {
 type GameIndexPreviousValues {
   id: ID!
   name: String!
+  tags: [String!]!
 }
 
 type GameIndexSubscriptionPayload {
@@ -154,11 +310,17 @@ input GameIndexSubscriptionWhereInput {
 
 input GameIndexUpdateInput {
   name: String
+  tags: GameIndexUpdatetagsInput
   game: GameUpdateOneRequiredInput
 }
 
 input GameIndexUpdateManyMutationInput {
   name: String
+  tags: GameIndexUpdatetagsInput
+}
+
+input GameIndexUpdatetagsInput {
+  set: [String!]
 }
 
 input GameIndexWhereInput {
@@ -459,6 +621,9 @@ type GamingSession {
   systems: [System!]!
   type: TypeOfGame!
   slots: Int!
+  requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement!]
+  discounts(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Discount!]
+  sessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
 }
 
 type GamingSessionConnection {
@@ -477,6 +642,9 @@ input GamingSessionCreateInput {
   systems: GamingSessionCreatesystemsInput
   type: TypeOfGame!
   slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
+  sessions: IndividualGamingSessionCreateManyWithoutGamingSessionInput
 }
 
 input GamingSessionCreateManyWithoutGameInput {
@@ -499,6 +667,11 @@ input GamingSessionCreateOneWithoutReviewsInput {
   connect: GamingSessionWhereUniqueInput
 }
 
+input GamingSessionCreateOneWithoutSessionsInput {
+  create: GamingSessionCreateWithoutSessionsInput
+  connect: GamingSessionWhereUniqueInput
+}
+
 input GamingSessionCreatesystemsInput {
   set: [System!]
 }
@@ -512,6 +685,9 @@ input GamingSessionCreateWithoutGameInput {
   systems: GamingSessionCreatesystemsInput
   type: TypeOfGame!
   slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
+  sessions: IndividualGamingSessionCreateManyWithoutGamingSessionInput
 }
 
 input GamingSessionCreateWithoutGamersInput {
@@ -523,6 +699,9 @@ input GamingSessionCreateWithoutGamersInput {
   systems: GamingSessionCreatesystemsInput
   type: TypeOfGame!
   slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
+  sessions: IndividualGamingSessionCreateManyWithoutGamingSessionInput
 }
 
 input GamingSessionCreateWithoutReviewsInput {
@@ -534,6 +713,23 @@ input GamingSessionCreateWithoutReviewsInput {
   systems: GamingSessionCreatesystemsInput
   type: TypeOfGame!
   slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
+  sessions: IndividualGamingSessionCreateManyWithoutGamingSessionInput
+}
+
+input GamingSessionCreateWithoutSessionsInput {
+  gamers: UserCreateManyWithoutSessionsInput
+  game: GameCreateOneWithoutSessionsInput!
+  title: String!
+  length: Int!
+  price: Float!
+  reviews: SessionReviewCreateManyWithoutSessionInput
+  systems: GamingSessionCreatesystemsInput
+  type: TypeOfGame!
+  slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
 }
 
 type GamingSessionEdge {
@@ -764,6 +960,9 @@ input GamingSessionUpdateDataInput {
   systems: GamingSessionUpdatesystemsInput
   type: TypeOfGame
   slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  sessions: IndividualGamingSessionUpdateManyWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateInput {
@@ -776,6 +975,9 @@ input GamingSessionUpdateInput {
   systems: GamingSessionUpdatesystemsInput
   type: TypeOfGame
   slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  sessions: IndividualGamingSessionUpdateManyWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateManyDataInput {
@@ -839,6 +1041,13 @@ input GamingSessionUpdateOneRequiredWithoutReviewsInput {
   connect: GamingSessionWhereUniqueInput
 }
 
+input GamingSessionUpdateOneRequiredWithoutSessionsInput {
+  create: GamingSessionCreateWithoutSessionsInput
+  update: GamingSessionUpdateWithoutSessionsDataInput
+  upsert: GamingSessionUpsertWithoutSessionsInput
+  connect: GamingSessionWhereUniqueInput
+}
+
 input GamingSessionUpdatesystemsInput {
   set: [System!]
 }
@@ -852,6 +1061,9 @@ input GamingSessionUpdateWithoutGameDataInput {
   systems: GamingSessionUpdatesystemsInput
   type: TypeOfGame
   slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  sessions: IndividualGamingSessionUpdateManyWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateWithoutGamersDataInput {
@@ -863,6 +1075,9 @@ input GamingSessionUpdateWithoutGamersDataInput {
   systems: GamingSessionUpdatesystemsInput
   type: TypeOfGame
   slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  sessions: IndividualGamingSessionUpdateManyWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateWithoutReviewsDataInput {
@@ -874,6 +1089,23 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   systems: GamingSessionUpdatesystemsInput
   type: TypeOfGame
   slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  sessions: IndividualGamingSessionUpdateManyWithoutGamingSessionInput
+}
+
+input GamingSessionUpdateWithoutSessionsDataInput {
+  gamers: UserUpdateManyWithoutSessionsInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+  systems: GamingSessionUpdatesystemsInput
+  type: TypeOfGame
+  slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
 }
 
 input GamingSessionUpdateWithWhereUniqueWithoutGameInput {
@@ -894,6 +1126,11 @@ input GamingSessionUpsertNestedInput {
 input GamingSessionUpsertWithoutReviewsInput {
   update: GamingSessionUpdateWithoutReviewsDataInput!
   create: GamingSessionCreateWithoutReviewsInput!
+}
+
+input GamingSessionUpsertWithoutSessionsInput {
+  update: GamingSessionUpdateWithoutSessionsDataInput!
+  create: GamingSessionCreateWithoutSessionsInput!
 }
 
 input GamingSessionUpsertWithWhereUniqueWithoutGameInput {
@@ -972,6 +1209,15 @@ input GamingSessionWhereInput {
   slots_lte: Int
   slots_gt: Int
   slots_gte: Int
+  requirements_every: RequirementWhereInput
+  requirements_some: RequirementWhereInput
+  requirements_none: RequirementWhereInput
+  discounts_every: DiscountWhereInput
+  discounts_some: DiscountWhereInput
+  discounts_none: DiscountWhereInput
+  sessions_every: IndividualGamingSessionWhereInput
+  sessions_some: IndividualGamingSessionWhereInput
+  sessions_none: IndividualGamingSessionWhereInput
   AND: [GamingSessionWhereInput!]
   OR: [GamingSessionWhereInput!]
   NOT: [GamingSessionWhereInput!]
@@ -988,6 +1234,7 @@ type IndividualGamingSession {
   gamingSession: GamingSession!
   gamers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   players(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  slots: Int!
 }
 
 type IndividualGamingSessionConnection {
@@ -999,13 +1246,19 @@ type IndividualGamingSessionConnection {
 input IndividualGamingSessionCreateInput {
   startTime: DateTime!
   endTime: DateTime!
-  gamingSession: GamingSessionCreateOneInput!
+  gamingSession: GamingSessionCreateOneWithoutSessionsInput!
   gamers: UserCreateManyWithoutIndividualSessionsInput
   players: UserCreateManyWithoutSessionsBoughtInput
+  slots: Int!
 }
 
 input IndividualGamingSessionCreateManyWithoutGamersInput {
   create: [IndividualGamingSessionCreateWithoutGamersInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+}
+
+input IndividualGamingSessionCreateManyWithoutGamingSessionInput {
+  create: [IndividualGamingSessionCreateWithoutGamingSessionInput!]
   connect: [IndividualGamingSessionWhereUniqueInput!]
 }
 
@@ -1017,15 +1270,25 @@ input IndividualGamingSessionCreateManyWithoutPlayersInput {
 input IndividualGamingSessionCreateWithoutGamersInput {
   startTime: DateTime!
   endTime: DateTime!
-  gamingSession: GamingSessionCreateOneInput!
+  gamingSession: GamingSessionCreateOneWithoutSessionsInput!
   players: UserCreateManyWithoutSessionsBoughtInput
+  slots: Int!
+}
+
+input IndividualGamingSessionCreateWithoutGamingSessionInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  gamers: UserCreateManyWithoutIndividualSessionsInput
+  players: UserCreateManyWithoutSessionsBoughtInput
+  slots: Int!
 }
 
 input IndividualGamingSessionCreateWithoutPlayersInput {
   startTime: DateTime!
   endTime: DateTime!
-  gamingSession: GamingSessionCreateOneInput!
+  gamingSession: GamingSessionCreateOneWithoutSessionsInput!
   gamers: UserCreateManyWithoutIndividualSessionsInput
+  slots: Int!
 }
 
 type IndividualGamingSessionEdge {
@@ -1040,6 +1303,8 @@ enum IndividualGamingSessionOrderByInput {
   startTime_DESC
   endTime_ASC
   endTime_DESC
+  slots_ASC
+  slots_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1050,6 +1315,7 @@ type IndividualGamingSessionPreviousValues {
   id: ID!
   startTime: DateTime!
   endTime: DateTime!
+  slots: Int!
 }
 
 input IndividualGamingSessionScalarWhereInput {
@@ -1083,6 +1349,14 @@ input IndividualGamingSessionScalarWhereInput {
   endTime_lte: DateTime
   endTime_gt: DateTime
   endTime_gte: DateTime
+  slots: Int
+  slots_not: Int
+  slots_in: [Int!]
+  slots_not_in: [Int!]
+  slots_lt: Int
+  slots_lte: Int
+  slots_gt: Int
+  slots_gte: Int
   AND: [IndividualGamingSessionScalarWhereInput!]
   OR: [IndividualGamingSessionScalarWhereInput!]
   NOT: [IndividualGamingSessionScalarWhereInput!]
@@ -1109,19 +1383,22 @@ input IndividualGamingSessionSubscriptionWhereInput {
 input IndividualGamingSessionUpdateInput {
   startTime: DateTime
   endTime: DateTime
-  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamingSession: GamingSessionUpdateOneRequiredWithoutSessionsInput
   gamers: UserUpdateManyWithoutIndividualSessionsInput
   players: UserUpdateManyWithoutSessionsBoughtInput
+  slots: Int
 }
 
 input IndividualGamingSessionUpdateManyDataInput {
   startTime: DateTime
   endTime: DateTime
+  slots: Int
 }
 
 input IndividualGamingSessionUpdateManyMutationInput {
   startTime: DateTime
   endTime: DateTime
+  slots: Int
 }
 
 input IndividualGamingSessionUpdateManyWithoutGamersInput {
@@ -1132,6 +1409,18 @@ input IndividualGamingSessionUpdateManyWithoutGamersInput {
   disconnect: [IndividualGamingSessionWhereUniqueInput!]
   update: [IndividualGamingSessionUpdateWithWhereUniqueWithoutGamersInput!]
   upsert: [IndividualGamingSessionUpsertWithWhereUniqueWithoutGamersInput!]
+  deleteMany: [IndividualGamingSessionScalarWhereInput!]
+  updateMany: [IndividualGamingSessionUpdateManyWithWhereNestedInput!]
+}
+
+input IndividualGamingSessionUpdateManyWithoutGamingSessionInput {
+  create: [IndividualGamingSessionCreateWithoutGamingSessionInput!]
+  delete: [IndividualGamingSessionWhereUniqueInput!]
+  connect: [IndividualGamingSessionWhereUniqueInput!]
+  set: [IndividualGamingSessionWhereUniqueInput!]
+  disconnect: [IndividualGamingSessionWhereUniqueInput!]
+  update: [IndividualGamingSessionUpdateWithWhereUniqueWithoutGamingSessionInput!]
+  upsert: [IndividualGamingSessionUpsertWithWhereUniqueWithoutGamingSessionInput!]
   deleteMany: [IndividualGamingSessionScalarWhereInput!]
   updateMany: [IndividualGamingSessionUpdateManyWithWhereNestedInput!]
 }
@@ -1156,20 +1445,35 @@ input IndividualGamingSessionUpdateManyWithWhereNestedInput {
 input IndividualGamingSessionUpdateWithoutGamersDataInput {
   startTime: DateTime
   endTime: DateTime
-  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamingSession: GamingSessionUpdateOneRequiredWithoutSessionsInput
   players: UserUpdateManyWithoutSessionsBoughtInput
+  slots: Int
+}
+
+input IndividualGamingSessionUpdateWithoutGamingSessionDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  gamers: UserUpdateManyWithoutIndividualSessionsInput
+  players: UserUpdateManyWithoutSessionsBoughtInput
+  slots: Int
 }
 
 input IndividualGamingSessionUpdateWithoutPlayersDataInput {
   startTime: DateTime
   endTime: DateTime
-  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamingSession: GamingSessionUpdateOneRequiredWithoutSessionsInput
   gamers: UserUpdateManyWithoutIndividualSessionsInput
+  slots: Int
 }
 
 input IndividualGamingSessionUpdateWithWhereUniqueWithoutGamersInput {
   where: IndividualGamingSessionWhereUniqueInput!
   data: IndividualGamingSessionUpdateWithoutGamersDataInput!
+}
+
+input IndividualGamingSessionUpdateWithWhereUniqueWithoutGamingSessionInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  data: IndividualGamingSessionUpdateWithoutGamingSessionDataInput!
 }
 
 input IndividualGamingSessionUpdateWithWhereUniqueWithoutPlayersInput {
@@ -1181,6 +1485,12 @@ input IndividualGamingSessionUpsertWithWhereUniqueWithoutGamersInput {
   where: IndividualGamingSessionWhereUniqueInput!
   update: IndividualGamingSessionUpdateWithoutGamersDataInput!
   create: IndividualGamingSessionCreateWithoutGamersInput!
+}
+
+input IndividualGamingSessionUpsertWithWhereUniqueWithoutGamingSessionInput {
+  where: IndividualGamingSessionWhereUniqueInput!
+  update: IndividualGamingSessionUpdateWithoutGamingSessionDataInput!
+  create: IndividualGamingSessionCreateWithoutGamingSessionInput!
 }
 
 input IndividualGamingSessionUpsertWithWhereUniqueWithoutPlayersInput {
@@ -1227,6 +1537,14 @@ input IndividualGamingSessionWhereInput {
   players_every: UserWhereInput
   players_some: UserWhereInput
   players_none: UserWhereInput
+  slots: Int
+  slots_not: Int
+  slots_in: [Int!]
+  slots_not_in: [Int!]
+  slots_lt: Int
+  slots_lte: Int
+  slots_gt: Int
+  slots_gte: Int
   AND: [IndividualGamingSessionWhereInput!]
   OR: [IndividualGamingSessionWhereInput!]
   NOT: [IndividualGamingSessionWhereInput!]
@@ -1239,6 +1557,9 @@ input IndividualGamingSessionWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createDiscount(data: DiscountCreateInput!): Discount!
+  updateManyDiscounts(data: DiscountUpdateManyMutationInput!, where: DiscountWhereInput): BatchPayload!
+  deleteManyDiscounts(where: DiscountWhereInput): BatchPayload!
   createGame(data: GameCreateInput!): Game!
   updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
   updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
@@ -1275,6 +1596,9 @@ type Mutation {
   upsertIndividualGamingSession(where: IndividualGamingSessionWhereUniqueInput!, create: IndividualGamingSessionCreateInput!, update: IndividualGamingSessionUpdateInput!): IndividualGamingSession!
   deleteIndividualGamingSession(where: IndividualGamingSessionWhereUniqueInput!): IndividualGamingSession
   deleteManyIndividualGamingSessions(where: IndividualGamingSessionWhereInput): BatchPayload!
+  createRequirement(data: RequirementCreateInput!): Requirement!
+  updateManyRequirements(data: RequirementUpdateManyMutationInput!, where: RequirementWhereInput): BatchPayload!
+  deleteManyRequirements(where: RequirementWhereInput): BatchPayload!
   createSessionReview(data: SessionReviewCreateInput!): SessionReview!
   updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
   updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
@@ -1351,7 +1675,14 @@ type PageInfo {
   endCursor: String
 }
 
+enum PlayerOrSession {
+  PLAYER
+  SESSION
+}
+
 type Query {
+  discounts(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Discount]!
+  discountsConnection(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DiscountConnection!
   game(where: GameWhereUniqueInput!): Game
   games(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game]!
   gamesConnection(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameConnection!
@@ -1370,6 +1701,8 @@ type Query {
   individualGamingSession(where: IndividualGamingSessionWhereUniqueInput!): IndividualGamingSession
   individualGamingSessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession]!
   individualGamingSessionsConnection(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): IndividualGamingSessionConnection!
+  requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement]!
+  requirementsConnection(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RequirementConnection!
   sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
   sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
@@ -1386,6 +1719,121 @@ type Query {
   userIndexes(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserIndex]!
   userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   node(id: ID!): Node
+}
+
+type Requirement {
+  msg: String!
+}
+
+type RequirementConnection {
+  pageInfo: PageInfo!
+  edges: [RequirementEdge]!
+  aggregate: AggregateRequirement!
+}
+
+input RequirementCreateInput {
+  msg: String!
+}
+
+input RequirementCreateManyInput {
+  create: [RequirementCreateInput!]
+}
+
+type RequirementEdge {
+  node: Requirement!
+  cursor: String!
+}
+
+enum RequirementOrderByInput {
+  msg_ASC
+  msg_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type RequirementPreviousValues {
+  msg: String!
+}
+
+input RequirementScalarWhereInput {
+  msg: String
+  msg_not: String
+  msg_in: [String!]
+  msg_not_in: [String!]
+  msg_lt: String
+  msg_lte: String
+  msg_gt: String
+  msg_gte: String
+  msg_contains: String
+  msg_not_contains: String
+  msg_starts_with: String
+  msg_not_starts_with: String
+  msg_ends_with: String
+  msg_not_ends_with: String
+  AND: [RequirementScalarWhereInput!]
+  OR: [RequirementScalarWhereInput!]
+  NOT: [RequirementScalarWhereInput!]
+}
+
+type RequirementSubscriptionPayload {
+  mutation: MutationType!
+  node: Requirement
+  updatedFields: [String!]
+  previousValues: RequirementPreviousValues
+}
+
+input RequirementSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RequirementWhereInput
+  AND: [RequirementSubscriptionWhereInput!]
+  OR: [RequirementSubscriptionWhereInput!]
+  NOT: [RequirementSubscriptionWhereInput!]
+}
+
+input RequirementUpdateManyDataInput {
+  msg: String
+}
+
+input RequirementUpdateManyInput {
+  create: [RequirementCreateInput!]
+  deleteMany: [RequirementScalarWhereInput!]
+  updateMany: [RequirementUpdateManyWithWhereNestedInput!]
+}
+
+input RequirementUpdateManyMutationInput {
+  msg: String
+}
+
+input RequirementUpdateManyWithWhereNestedInput {
+  where: RequirementScalarWhereInput!
+  data: RequirementUpdateManyDataInput!
+}
+
+input RequirementWhereInput {
+  msg: String
+  msg_not: String
+  msg_in: [String!]
+  msg_not_in: [String!]
+  msg_lt: String
+  msg_lte: String
+  msg_gt: String
+  msg_gte: String
+  msg_contains: String
+  msg_not_contains: String
+  msg_starts_with: String
+  msg_not_starts_with: String
+  msg_ends_with: String
+  msg_not_ends_with: String
+  AND: [RequirementWhereInput!]
+  OR: [RequirementWhereInput!]
+  NOT: [RequirementWhereInput!]
 }
 
 type SessionReview {
@@ -1954,12 +2402,14 @@ input SocialMediaWhereUniqueInput {
 }
 
 type Subscription {
+  discount(where: DiscountSubscriptionWhereInput): DiscountSubscriptionPayload
   game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
   gameIndex(where: GameIndexSubscriptionWhereInput): GameIndexSubscriptionPayload
   gamerRequest(where: GamerRequestSubscriptionWhereInput): GamerRequestSubscriptionPayload
   gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
   gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
   individualGamingSession(where: IndividualGamingSessionSubscriptionWhereInput): IndividualGamingSessionSubscriptionPayload
+  requirement(where: RequirementSubscriptionWhereInput): RequirementSubscriptionPayload
   sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
@@ -2028,6 +2478,7 @@ type User {
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   individualSessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
   sessionsBought(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
+  buffer: Int
 }
 
 type UserConnection {
@@ -2047,6 +2498,7 @@ input UserCreateInput {
   sessions: GamingSessionCreateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserCreateManyWithoutIndividualSessionsInput {
@@ -2083,6 +2535,7 @@ input UserCreateWithoutIndividualSessionsInput {
   aboutMe: String
   sessions: GamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserCreateWithoutSessionsBoughtInput {
@@ -2095,6 +2548,7 @@ input UserCreateWithoutSessionsBoughtInput {
   aboutMe: String
   sessions: GamingSessionCreateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
+  buffer: Int
 }
 
 input UserCreateWithoutSessionsInput {
@@ -2107,6 +2561,7 @@ input UserCreateWithoutSessionsInput {
   aboutMe: String
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
+  buffer: Int
 }
 
 type UserEdge {
@@ -2277,6 +2732,8 @@ enum UserOrderByInput {
   name_DESC
   aboutMe_ASC
   aboutMe_DESC
+  buffer_ASC
+  buffer_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2292,6 +2749,7 @@ type UserPreviousValues {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+  buffer: Int
 }
 
 input UserScalarWhereInput {
@@ -2381,6 +2839,14 @@ input UserScalarWhereInput {
   aboutMe_not_starts_with: String
   aboutMe_ends_with: String
   aboutMe_not_ends_with: String
+  buffer: Int
+  buffer_not: Int
+  buffer_in: [Int!]
+  buffer_not_in: [Int!]
+  buffer_lt: Int
+  buffer_lte: Int
+  buffer_gt: Int
+  buffer_gte: Int
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -2415,6 +2881,7 @@ input UserUpdateDataInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserUpdateInput {
@@ -2428,6 +2895,7 @@ input UserUpdateInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserUpdateManyDataInput {
@@ -2438,6 +2906,7 @@ input UserUpdateManyDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  buffer: Int
 }
 
 input UserUpdateManyMutationInput {
@@ -2448,6 +2917,7 @@ input UserUpdateManyMutationInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  buffer: Int
 }
 
 input UserUpdateManyWithoutIndividualSessionsInput {
@@ -2512,6 +2982,7 @@ input UserUpdateWithoutIndividualSessionsDataInput {
   aboutMe: String
   sessions: GamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserUpdateWithoutSessionsBoughtDataInput {
@@ -2524,6 +2995,7 @@ input UserUpdateWithoutSessionsBoughtDataInput {
   aboutMe: String
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
+  buffer: Int
 }
 
 input UserUpdateWithoutSessionsDataInput {
@@ -2536,6 +3008,7 @@ input UserUpdateWithoutSessionsDataInput {
   aboutMe: String
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
+  buffer: Int
 }
 
 input UserUpdateWithWhereUniqueWithoutIndividualSessionsInput {
@@ -2672,6 +3145,14 @@ input UserWhereInput {
   sessionsBought_every: IndividualGamingSessionWhereInput
   sessionsBought_some: IndividualGamingSessionWhereInput
   sessionsBought_none: IndividualGamingSessionWhereInput
+  buffer: Int
+  buffer_not: Int
+  buffer_in: [Int!]
+  buffer_not_in: [Int!]
+  buffer_lt: Int
+  buffer_lte: Int
+  buffer_gt: Int
+  buffer_gte: Int
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

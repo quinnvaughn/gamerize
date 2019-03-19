@@ -75,7 +75,7 @@ function reducer(state, action) {
 
 export default function GamerDashboardSessions(props) {
   const { data, loading } = useQuery(GET_SESSIONS)
-  const [state, dispatch] = useReducer(initialState, reducer)
+  const [state, dispatch] = useReducer(reducer, initialState)
   return loading ? null : (
     <PageContainer>
       {data.me.sessions.map(session => (
@@ -93,6 +93,13 @@ export default function GamerDashboardSessions(props) {
           <div>{session.type}</div>
         </Fragment>
       ))}
+
+      <input type="text" value={state.gameName} />
+      <input type="text" value={state.title} />
+      <input type="text" value={state.length} />
+      <input type="text" value={state.price} />
+      <input type="text" value={state.type} />
+      <input type="text" value={state.slots} />
     </PageContainer>
   )
 }

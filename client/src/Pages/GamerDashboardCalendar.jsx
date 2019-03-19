@@ -95,7 +95,6 @@ const MY_SESSIONS = gql`
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
   const { data, loading } = useQuery(MY_SESSIONS)
-  console.log(data)
   return (
     <PageContainer>
       <Content>
@@ -122,7 +121,8 @@ export default function GamerDashboardCalendar(props) {
           </Info>
           {loading
             ? null
-            : data.me.sessions.map(session => (
+            : data.me &&
+              data.me.sessions.map(session => (
                 <GamerSessionCard session={session} key={session.id} />
               ))}
         </RightSide>

@@ -1,5 +1,6 @@
 const game = {
   async createGame(parent, { input }, { prisma }) {
+    const lowercaseTags = input.tags.map(tag => tag.toLowerCase())
     const game = await prisma.createGame({
       name: input.name,
       tags: { set: input.tags },
@@ -7,6 +8,7 @@ const game = {
     await prisma.createGameIndex({
       name: input.name,
       game: { connect: { id: game.id } },
+      tags: { set: lowercaseTags },
     })
     return game
       ? { game, created: true }

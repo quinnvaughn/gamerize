@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import * as moment from 'moment'
 import { useMutation } from 'react-apollo-hooks'
+import dateFns from 'date-fns'
 import gql from 'graphql-tag'
 
 //local imports
 import TimePicker from './TimePicker'
 import SelectDayForSession from './SelectDayForSession'
+import { convertTo24Hours, convertToDay } from '../utils/Dates'
 
 const Card = styled.div`
   background: #fff;
@@ -162,8 +164,27 @@ const CREATE_INDIVIDUAL_SESSION = gql`
   }
 `
 
+const CREATE_BULK_SESSIONS = gql`
+  mutation($input: CreateBulkSessionsInput!) {
+    createBulkSessions(input: $input) {
+      created
+      msg
+      overlaps {
+        startTime
+        endTime
+      }
+      sessions {
+        startTime
+        endTime
+      }
+    }
+  }
+`
+
+//TODO: Tons of logic on changing dates. Also needs to show added sessions/ overlapped sessions.
 export default function GamerSessionCardBack({ state, session, dispatch }) {
   const createSession = useMutation(CREATE_INDIVIDUAL_SESSION)
+  const createBulkSessions = useMutation(CREATE_BULK_SESSIONS)
   return (
     <Card back>
       {state.addState === null && (
@@ -229,14 +250,18 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
             <Add
               disabled={state.loading}
               onClick={async () => {
-                const { month, day, year } = state.addDay
+                const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
                 const { hour, minutes, period } = state.addOne
-                const result = moment(
-                  `${year}-${month}-${day} ${hour}:${minutes} ${period}`,
-                  'YYYY-MM-DD hh:mm a'
+                const [hours, _, seconds] = convertTo24Hours(
+                  `${hour}:${minutes} ${period}`
                 )
-                const startTime = new Date(result)
+                const [year, month, day] = convertToDay(state.day)
+                const startTime = dateFns.format(
+                  new Date(year, month, day, hours, minutes, seconds),
+                  dateFormat
+                )
                 const input = { startTime, gamingSessionId: session.id }
+                console.log(input)
                 dispatch({ type: 'loading', payload: true })
                 const { data } = await createSession({
                   variables: { input },
@@ -294,7 +319,43 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
               <CancelArrow />
               <CancelText>Cancel</CancelText>
             </Cancel>
-            <Add>Add Session</Add>
+            <Add
+              onClick={async () => {
+                const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
+                const { hour, minutes, period } = state.addBulk.start
+                const {
+                  hour: hourEnd,
+                  minutes: minutesEnd,
+                  period: periodEnd,
+                } = state.addBulk.end
+                const [hours, _, seconds] = convertTo24Hours(
+                  `${hour}:${minutes} ${period}`
+                )
+                const [hoursEnd, __, secondsEnd] = convertTo24Hours(
+                  `${hourEnd}:${minutesEnd} ${periodEnd}`
+                )
+                const [year, month, day] = convertToDay(state.day)
+                const startTime = dateFns.format(
+                  new Date(year, month, day, hours, minutes, seconds),
+                  dateFormat
+                )
+                const endTime = dateFns.format(
+                  new Date(year, month, day, hoursEnd, minutesEnd, secondsEnd),
+                  dateFormat
+                )
+                const input = {
+                  startTime,
+                  endTime,
+                  gamingSessionId: session.id,
+                }
+                const { data } = await createBulkSessions({
+                  variables: { input },
+                })
+                console.log(data)
+              }}
+            >
+              Add Sessions
+            </Add>
           </SelectionButtons>
         </BulkAdd>
       )}

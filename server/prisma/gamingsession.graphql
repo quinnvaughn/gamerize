@@ -1,7 +1,8 @@
 #import User from './user.graphql'
 #import Game from './game.graphql'
 #import SessionReview from './sessionreview.graphql'
-#import TypeOfGame, System from './enums.graphql'
+#import TypeOfGame, System, PlayerOrSession from './enums.graphql'
+#import IndividualGamingSession from './individualgamingsession.graphql'
 
 type GamingSession {
   id: ID! @unique
@@ -14,6 +15,9 @@ type GamingSession {
   systems: [System!]!
   type: TypeOfGame!
   slots: Int!
+  requirements: [Requirement!]!
+  discounts: [Discount!]!
+  sessions: [IndividualGamingSession!]!
 }
 
 ## Workaround for no case insensitive search in prisma yet.
@@ -21,4 +25,14 @@ type GamingSessionIndex {
   id: ID! @unique
   title: String!
   gamingSession: GamingSession!
+}
+
+type Requirement {
+  msg: String!
+}
+
+type Discount {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
 }
