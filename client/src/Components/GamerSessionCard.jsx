@@ -7,9 +7,12 @@ import dateFns from 'date-fns'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import GamerSessionCardFront from './GamerSessionCardFront'
 import GamerSessionCardBack from './GamerSessionCardBack'
-import { setAMPM, setMinutes, addMinutes, addMore } from '../utils/Dates'
+import { setAMPM, setMinutes, addMinutes, set12Hours } from '../utils/Dates'
 
-const Container = styled.div``
+const Container = styled.div`
+  position: relative;
+  z-index: ${props => props.over && 3};
+`
 
 const dateFormat = 'MM/DD/YYYY'
 
@@ -19,22 +22,24 @@ const initialState = {
   flip: false,
   addState: null,
   loading: false,
-  msg: null,
+  successMsg: null,
+  errorMsg: null,
+  dropdown: false,
   addOne: {
-    hour: addMore(45, 0),
-    minutes: setMinutes(addMinutes(new Date(), 15)),
-    period: setAMPM(new Date().getHours()),
+    hour: set12Hours(dateFns.getHours(new Date())),
+    minutes: dateFns.getMinutes(dateFns.addMinutes(new Date(), 15)),
+    period: setAMPM(dateFns.getHours(new Date())),
   },
   addBulk: {
     start: {
-      hour: addMore(45, 0),
+      hour: set12Hours(dateFns.getHours(dateFns.addMinutes(new Date(), 15))),
       minutes: setMinutes(addMinutes(new Date(), 15)),
       period: setAMPM(new Date().getHours()),
     },
     end: {
-      hour: addMore(45, 1),
-      minutes: setMinutes(addMinutes(new Date(), 15)),
-      period: setAMPM(new Date().getHours()),
+      hour: set12Hours(dateFns.getHours(dateFns.addMinutes(new Date(), 75))),
+      minutes: dateFns.getMinutes(dateFns.addMinutes(new Date(), 75)),
+      period: setAMPM(dateFns.addMinutes(new Date(), 75).getHours()),
     },
   },
   day,
@@ -46,8 +51,12 @@ function reducer(state, action) {
       return { ...state, flip: action.payload }
     case 'loading':
       return { ...state, loading: action.payload }
-    case 'setMsg':
-      return { ...state, msg: action.payload }
+    case 'setErrorMsg':
+      return { ...state, errorMsg: action.payload }
+    case 'setSuccessMsg':
+      return { ...state, successMsg: action.payload }
+    case 'setDropdown':
+      return { ...state, dropdown: action.payload }
     case 'addState':
       return { ...state, addState: action.payload }
     case 'clearState':
@@ -115,7 +124,7 @@ export default function GamerSessionCard({ session }) {
     }, [])
   )
   return (
-    <Container ref={node}>
+    <Container ref={node} over={state.dropdown}>
       <ReactCardFlip isFlipped={state.flip} flipDirection="horizontal">
         <GamerSessionCardFront
           session={session}

@@ -25,6 +25,18 @@ type Mutation {
   createBulkSessions(
     input: CreateBulkSessionsInput!
   ): CreateBulkSessionsPayload!
+  addMinutesToSession(
+    input: AddMinutesToSessionInput!
+  ): AddMinutesToSessionPayload!
+}
+
+input AddMinutesToSessionInput {
+  sessionId: String!
+  minutes: Int!
+}
+
+type AddMinutesToSessionPayload {
+  updatedSession: IndividualGamingSession!
 }
 
 type AuthPayload {
@@ -51,7 +63,8 @@ type CreateBulkSessionsPayload {
   created: Boolean!
   overlaps: [IndividualGamingSession!]!
   sessions: [IndividualGamingSession!]!
-  msg: String
+  successMsg: String
+  errorMsg: String
 }
 
 input CreateGamerRequestInput {
@@ -69,7 +82,8 @@ type CreateIndividualGamingSessionPayload {
   created: Boolean!
   overlap: Boolean
   individualGamingSession: IndividualGamingSession
-  msg: String
+  successMsg: String
+  errorMsg: String
 }
 
 input CreateGamingSessionInput {
@@ -155,6 +169,12 @@ type User {
   isGamer: Boolean!
   sessions: [GamingSession!]!
   individualSessions: [IndividualGamingSession!]!
+  sessionIsGoingOn: SessionIsGoingOn
+}
+
+type SessionIsGoingOn {
+  goingOn: Boolean!
+  session: IndividualGamingSession
 }
 
 type GamingSession {

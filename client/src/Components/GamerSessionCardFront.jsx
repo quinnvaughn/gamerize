@@ -11,7 +11,6 @@ const Card = styled.div`
   padding: 2rem;
   width: 100%;
   margin-bottom: 1rem;
-  z-index: 0;
   min-height: 100%;
   :hover {
     background: ${props => !props.back && '#ededed'};

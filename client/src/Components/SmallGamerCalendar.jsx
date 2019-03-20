@@ -11,6 +11,7 @@ const Container = styled.div`
   background: #fff;
   border: 1px solid #dddfe2;
   border-radius: 2px;
+  z-index: 100 !important;
 `
 
 const Header = styled.div`
@@ -207,7 +208,7 @@ function GamerCalendar(props) {
     const dateFormat = 'MM/DD/YYYY'
 
     const day = dateFns.format(inputDay, dateFormat)
-    props.setDropdown(false)
+    props.dispatch({ type: 'setDropdown', payload: false })
     props.dispatch({ type: 'setDate', payload: day })
   }
 

@@ -11,6 +11,11 @@ const gamingsession = {
       gamers: {
         connect: [{ id: userId }],
       },
+      type: input.type,
+      slots: input.slots,
+      systems: { set: input.systems },
+      requirements: { create: input.requirements },
+      discounts: { create: input.discounts },
     })
     await ctx.prisma.createGamingSessionIndex({
       title: input.title,
@@ -25,8 +30,12 @@ const gamingsession = {
         }
   },
   async createIndividualGamingSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
     const query = `
     {
+      user(where: {id: "${userId}"}) {
+        buffer
+      }
           gamingSession(where: {id: "${input.gamingSessionId}"}) {
               length
               slots
@@ -38,27 +47,39 @@ const gamingsession = {
     `
     const result = await ctx.prisma.$graphql(query)
     const sessions = result.gamingSession
-    const endTime = addMinutes(input.startTime, sessions.length)
+    const buffer = result.user.buffer
+    const sessionLength = sessions.length + buff
+    const endTime = addMinutes(input.startTime, sessionLength)
     const gamers = sessions.gamers
     if (!gamers) {
       return {
         created: false,
-        msg: 'You cannot add an individual session to not your own session',
+        errorMsg:
+          'You cannot add an individual session to not your own session',
+      }
+    }
+    const currentTime = new Date()
+    if (dateFns.compareAsc(input.startTime, currentTime) === -1) {
+      return {
+        created: false,
+        errorMsg: 'You cannot add a timeslot that has already passed.',
       }
     }
     const overlap = await ctx.prisma.individualGamingSessions({
       where: {
+        gamers_some: { id: userId },
         AND: [
           {
-            endTime_gte: input.startTime,
+            endTime_gt: input.startTime,
           },
           {
-            startTime_lte: endTime,
+            startTime_lt: endTime,
           },
         ],
       },
     })
     if (overlap.length === 0) {
+      const dateFormat = 'h:mm aa'
       const individualGamingSession = await ctx.prisma.createIndividualGamingSession(
         {
           startTime: input.startTime,
@@ -68,13 +89,20 @@ const gamingsession = {
           slots: sessions.slots,
         }
       )
-      return { created: true, individualGamingSession }
+      return {
+        created: true,
+        individualGamingSession,
+        successMsg: `Successfully added session from ${dateFns.format(
+          individualGamingSession.startTime,
+          dateFormat
+        )}-${dateFns.format(endTime, dateFormat)}`,
+      }
     } else {
       const dateFormat = 'h:mm aa'
       return {
         created: false,
         overlap: true,
-        msg: `Session overlaps session from ${dateFns.format(
+        errorMsg: `Time overlaps session from ${dateFns.format(
           overlap[0].startTime,
           dateFormat
         )}-${dateFns.format(overlap[0].endTime, dateFormat)}`,
@@ -123,6 +151,7 @@ const gamingsession = {
     for (let i = 0; i < numTimes; i++) {
       const overlap = await ctx.prisma.individualGamingSessions({
         where: {
+          gamers_some: { id: userId },
           AND: [
             {
               endTime_gt: counterStart,
@@ -151,15 +180,35 @@ const gamingsession = {
       }
     }
     if (sessions.length > 0) {
-      return { created: true, overlaps, sessions }
+      let successMsg
+      console.log(sessions)
+      // sessions.map(
+      //   session =>
+      //     (successMsg =
+      //       successMsg + `Session added from ${session.start}-${session.end}\n`)
+      // )
+      return { created: true, overlaps, sessions, successMsg }
     } else {
       return {
         created: false,
-        msg: 'Unable to add any sessions. Please try different times.',
+        errorMsg: 'Unable to add any times. Please try again',
         overlaps,
         sessions,
       }
     }
+  },
+  async addMinutesToSession(parent, { input }, ctx) {
+    const session = await ctx.prisma.individualGamingSession({
+      id: input.sessionId,
+    })
+    const newEnd = addMinutes(session.endTime, input.minutes)
+    const updatedSession = await ctx.prisma.updateIndividualGamingSession({
+      where: { id: session.id },
+      data: {
+        endTime: newEnd,
+      },
+    })
+    return { updatedSession }
   },
 }
 

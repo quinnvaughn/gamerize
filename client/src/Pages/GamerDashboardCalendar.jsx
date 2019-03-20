@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
 import GamerCalendar from '../Components/SmallGamerCalendar'
 import GamerDay from '../Components/GamerDay'
 import GamerSessionCard from '../Components/GamerSessionCard'
+import useInterval from '../Hooks/useInterval'
+import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -68,6 +70,18 @@ const MY_SESSIONS = gql`
   {
     me {
       id
+      sessionIsGoingOn {
+        session {
+          startTime
+          endTime
+          gamingSession {
+            game {
+              name
+            }
+          }
+        }
+        goingOn
+      }
       sessions {
         id
         title
@@ -94,7 +108,8 @@ const MY_SESSIONS = gql`
 `
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
-  const { data, loading } = useQuery(MY_SESSIONS)
+  const { data, loading, refetch } = useQuery(MY_SESSIONS)
+  useInterval(() => refetch(), 120000)
   return (
     <PageContainer>
       <Content>
@@ -119,9 +134,18 @@ export default function GamerDashboardCalendar(props) {
             These are all your sessions. Click on them to get options to add
             them to your calendar. Edit them in the sessions tab.
           </Info>
+
+          {loading
+            ? null
+            : data.me.sessionIsGoingOn.goingOn === true && (
+                <SessionsIsGoingOn
+                  currentSession={data.me.sessionIsGoingOn.session}
+                />
+              )}
           {loading
             ? null
             : data.me &&
+              data.me.sessions &&
               data.me.sessions.map(session => (
                 <GamerSessionCard session={session} key={session.id} />
               ))}
