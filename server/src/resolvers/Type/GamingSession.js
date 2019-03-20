@@ -7,9 +7,12 @@ const GamingSession = {
   reviews: async (parent, _, { prisma }) =>
     await prisma.gamingSession({ id: parent.id }).reviews(),
   slotsLeftToday: async (parent, _, { prisma }) => {
-    const currentTime = moment().format('YYYY-MM-DDTHH:mm:ss')
+    const currentTime = moment()
+      .utc()
+      .format('YYYY-MM-DDTHH:mm:ss')
     const endOfDay = moment()
       .endOf('day')
+      .utc()
       .format('YYYY-MM-DDTHH:mm:ss')
     const query = `
         {

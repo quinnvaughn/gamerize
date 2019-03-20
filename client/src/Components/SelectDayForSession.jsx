@@ -24,6 +24,7 @@ const Container = styled.div`
 const Dropdown = styled.div`
   position: absolute;
   top: 4.4rem;
+  z-index: 3;
   left: 0;
 `
 
@@ -37,13 +38,12 @@ const Date = styled.input`
   }
 `
 export default function SelectDayForSession({ dispatch, state, type }) {
-  const [dropdown, setDropdown] = useState(false)
   return (
-    <Container onClick={() => setDropdown(true)}>
+    <Container onClick={() => dispatch({ type: 'setDropdown', payload: true })}>
       <Date value={state.day} readOnly />
-      {dropdown && (
+      {state.dropdown && (
         <Dropdown>
-          <GamerCalendar dispatch={dispatch} setDropdown={setDropdown} />
+          <GamerCalendar dispatch={dispatch} />
         </Dropdown>
       )}
     </Container>

@@ -18,7 +18,6 @@ const Card = styled.div`
   padding: 2rem;
   width: 100%;
   margin-bottom: 1rem;
-  z-index: 0;
   min-height: 100%;
   :hover {
     background: ${props => !props.back && '#ededed'};
@@ -155,11 +154,25 @@ const BackArrow = styled(FaChevronLeft)`
   margin-right: 0.5rem;
 `
 
+const ErrorMessage = styled.div`
+  font-size: 1.6rem;
+  color: #f10e0e;
+  font-weight: 700;
+  margin-top: 1rem;
+`
+
+const SuccessMessage = styled.div`
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 1rem;
+`
+
 const CREATE_INDIVIDUAL_SESSION = gql`
   mutation($input: CreateIndividualGamingSessionInput!) {
     createIndividualGamingSession(input: $input) {
       created
-      msg
+      errorMsg
+      successMsg
     }
   }
 `
@@ -168,7 +181,8 @@ const CREATE_BULK_SESSIONS = gql`
   mutation($input: CreateBulkSessionsInput!) {
     createBulkSessions(input: $input) {
       created
-      msg
+      errorMsg
+      successMsg
       overlaps {
         startTime
         endTime
@@ -192,7 +206,6 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
           <Buttons>
             <AddOne
               onClick={e => {
-                e.stopPropagation()
                 dispatch({ type: 'addState', payload: 'one' })
               }}
             >
@@ -200,7 +213,6 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
             </AddOne>
             <AddBulk
               onClick={e => {
-                e.stopPropagation()
                 dispatch({ type: 'addState', payload: 'bulk' })
               }}
             >
@@ -237,7 +249,10 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
               />
             </LabelAndPicker>
           </AddOneTop>
-          {state.msg && <div>{state.msg}</div>}
+          {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
+          {state.successMsg && (
+            <SuccessMessage>{state.successMsg}</SuccessMessage>
+          )}
           <SelectionButtons>
             <Cancel
               onClick={() => {
@@ -250,6 +265,8 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
             <Add
               disabled={state.loading}
               onClick={async () => {
+                dispatch({ type: 'setSuccessMsg', payload: null })
+                dispatch({ type: 'setErrorMsg', payload: null })
                 const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
                 const { hour, minutes, period } = state.addOne
                 const [hours, _, seconds] = convertTo24Hours(
@@ -261,19 +278,20 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                   dateFormat
                 )
                 const input = { startTime, gamingSessionId: session.id }
-                console.log(input)
                 dispatch({ type: 'loading', payload: true })
                 const { data } = await createSession({
                   variables: { input },
                 })
-                if (data.createIndividualGamingSession.created) {
-                  dispatch({ type: 'loading', payload: false })
-                  dispatch({ type: 'flip', payload: false })
-                }
-                data.createIndividualGamingSession.msg &&
+                dispatch({ type: 'loading', payload: false })
+                data.createIndividualGamingSession.successMsg &&
                   dispatch({
-                    type: 'setMsg',
-                    payload: data.createIndividualGamingSession.msg,
+                    type: 'setSuccessMsg',
+                    payload: data.createIndividualGamingSession.successMsg,
+                  })
+                data.createIndividualGamingSession.errorMsg &&
+                  dispatch({
+                    type: 'setErrorMsg',
+                    payload: data.createIndividualGamingSession.errorMsg,
                   })
               }}
             >
@@ -309,6 +327,10 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                 state={state.addBulk.end}
               />
             </LabelAndPicker>
+            {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
+            {state.successMsg && (
+              <SuccessMessage>{state.successMsg}</SuccessMessage>
+            )}
           </BulkAddTop>
           <SelectionButtons>
             <Cancel
@@ -348,9 +370,21 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                   endTime,
                   gamingSessionId: session.id,
                 }
+                dispatch({ type: 'loading', payload: true })
                 const { data } = await createBulkSessions({
                   variables: { input },
                 })
+                dispatch({ type: 'loading', payload: false })
+                data.createIndividualGamingSession.successMsg &&
+                  dispatch({
+                    type: 'setSuccessMsg',
+                    payload: data.createIndividualGamingSession.successMsg,
+                  })
+                data.createIndividualGamingSession.errorMsg &&
+                  dispatch({
+                    type: 'setErrorMsg',
+                    payload: data.createIndividualGamingSession.errorMsg,
+                  })
                 console.log(data)
               }}
             >
