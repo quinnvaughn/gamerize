@@ -18,6 +18,7 @@ const dateFormat = 'MM/DD/YYYY'
 
 const day = dateFns.format(new Date(), dateFormat)
 
+// Still need to fix this shit.
 const initialState = {
   flip: false,
   addState: null,
@@ -26,19 +27,21 @@ const initialState = {
   errorMsg: null,
   dropdown: false,
   addOne: {
-    hour: set12Hours(dateFns.getHours(new Date())),
-    minutes: dateFns.getMinutes(dateFns.addMinutes(new Date(), 15)),
+    hour: set12Hours(dateFns.getHours(dateFns.addMinutes(new Date(), 15))),
+    minutes: setMinutes(dateFns.getMinutes(dateFns.addMinutes(new Date(), 15))),
     period: setAMPM(dateFns.getHours(new Date())),
   },
   addBulk: {
     start: {
       hour: set12Hours(dateFns.getHours(dateFns.addMinutes(new Date(), 15))),
       minutes: setMinutes(addMinutes(new Date(), 15)),
-      period: setAMPM(new Date().getHours()),
+      period: setAMPM(dateFns.getHours(new Date())),
     },
     end: {
       hour: set12Hours(dateFns.getHours(dateFns.addMinutes(new Date(), 75))),
-      minutes: dateFns.getMinutes(dateFns.addMinutes(new Date(), 75)),
+      minutes: setMinutes(
+        dateFns.getMinutes(dateFns.addMinutes(new Date(), 75))
+      ),
       period: setAMPM(dateFns.addMinutes(new Date(), 75).getHours()),
     },
   },
@@ -109,7 +112,7 @@ function reducer(state, action) {
   }
 }
 
-export default function GamerSessionCard({ session }) {
+export default function GamerSessionCard({ session, buffer }) {
   const node = useRef()
   const [state, dispatch] = useReducer(reducer, initialState)
   const clearAndFlip = () => {
@@ -129,6 +132,7 @@ export default function GamerSessionCard({ session }) {
         <GamerSessionCardFront
           session={session}
           dispatch={dispatch}
+          buffer={buffer}
           key="front"
         />
         <GamerSessionCardBack

@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 
 //local imports
-import GamerCalendar from '../Components/SmallGamerCalendar'
 import GamerDay from '../Components/GamerDay'
 import GamerSessionCard from '../Components/GamerSessionCard'
 import useInterval from '../Hooks/useInterval'
 import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
+import BigGamerCalendar from '../Components/BigGamerCalendar'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -19,7 +19,7 @@ const Content = styled.div`
   margin: 0 auto;
   padding-left: 8rem;
   padding-right: 8rem;
-  padding-top: 7rem;
+  padding-top: 1rem;
   margin-bottom: 9rem;
   display: flex;
 `
@@ -70,8 +70,10 @@ const MY_SESSIONS = gql`
   {
     me {
       id
+      buffer
       sessionIsGoingOn {
         session {
+          id
           startTime
           endTime
           gamingSession {
@@ -98,7 +100,12 @@ const MY_SESSIONS = gql`
     todaySessions {
       startTime
       endTime
+      slots
+      players {
+        id
+      }
       gamingSession {
+        length
         game {
           name
         }
@@ -109,7 +116,7 @@ const MY_SESSIONS = gql`
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
   const { data, loading, refetch } = useQuery(MY_SESSIONS)
-  useInterval(() => refetch(), 120000)
+  useInterval(() => refetch(), 60000)
   return (
     <PageContainer>
       <Content>
@@ -126,7 +133,18 @@ export default function GamerDashboardCalendar(props) {
           >
             Calendar
           </SetButton>
-          {dayOrMonth === MONTH ? <GamerCalendar /> : <GamerDay />}
+          {dayOrMonth === MONTH ? (
+            <BigGamerCalendar />
+          ) : loading ? null : (
+            data.me &&
+            data.me.buffer &&
+            data.todaySessions && (
+              <GamerDay
+                todaySessions={data.todaySessions}
+                buffer={data.me.buffer}
+              />
+            )
+          )}
         </LeftSide>
         <RightSide>
           <YourSessions>Your sessions</YourSessions>
@@ -137,8 +155,10 @@ export default function GamerDashboardCalendar(props) {
 
           {loading
             ? null
-            : data.me.sessionIsGoingOn.goingOn === true && (
+            : data.me &&
+              data.me.sessionIsGoingOn.goingOn === true && (
                 <SessionsIsGoingOn
+                  refetch={refetch}
                   currentSession={data.me.sessionIsGoingOn.session}
                 />
               )}
@@ -146,8 +166,13 @@ export default function GamerDashboardCalendar(props) {
             ? null
             : data.me &&
               data.me.sessions &&
+              data.me.buffer &&
               data.me.sessions.map(session => (
-                <GamerSessionCard session={session} key={session.id} />
+                <GamerSessionCard
+                  session={session}
+                  key={session.id}
+                  buffer={data.me.buffer}
+                />
               ))}
         </RightSide>
       </Content>
