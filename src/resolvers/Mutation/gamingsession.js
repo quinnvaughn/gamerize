@@ -180,13 +180,14 @@ const gamingsession = {
       }
     }
     if (sessions.length > 0) {
-      let successMsg = ''
+      let successMsg = []
       for (const session in sessions) {
-        successMsg =
-          successMsg +
-          `Session added from ${sessions[session].start}-${
-            sessions[session].end
-          }\n`
+        successMsg = [
+          ...successMsg,
+          `Session added from ${sessions[session].startTime}-${
+            sessions[session].endTime
+          }`,
+        ]
       }
       return { created: true, overlaps, sessions, successMsg }
     } else {
@@ -217,11 +218,16 @@ const gamingsession = {
         ],
       },
     })
+    let pushedEnd = session.endTime
     let counter = overlaps.length
     while (counter > 0) {
       for (const session in overlaps) {
-        startTime = addMinutes(overlaps[session].startTime, input.minutes)
-        endTime = addMinutes(overlaps[session].endTime, input.minutes)
+        let timeAdded =
+          input.minutes -
+          dateFns.differenceInMinutes(overlaps[session].startTime, pushedEnd)
+        startTime = addMinutes(overlaps[session].startTime, timeAdded)
+        endTime = addMinutes(overlaps[session].endTime, timeAdded)
+        pushedEnd = overlaps[session].endTime
         await ctx.prisma.updateIndividualGamingSession({
           where: { id: overlaps[session].id },
           data: {
