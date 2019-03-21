@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 //local imports
@@ -37,7 +37,7 @@ const Date = styled.input`
     outline: none;
   }
 `
-export default function SelectDayForSession({ dispatch, state, type }) {
+export default function SelectDayForSession({ dispatch, state }) {
   return (
     <Container onClick={() => dispatch({ type: 'setDropdown', payload: true })}>
       <Date value={state.day} readOnly />

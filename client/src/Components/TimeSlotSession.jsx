@@ -247,7 +247,7 @@ export default function TimeSlotSession(props) {
               {currentUser}
             </Slot>
           )
-        : slots.push(<Slot value={counter}>Empty</Slot>)
+        : slots.push(<Slot value={counter}>Available</Slot>)
       counter++
     }
     return (
