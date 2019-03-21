@@ -170,6 +170,7 @@ type User {
   sessions: [GamingSession!]!
   individualSessions: [IndividualGamingSession!]!
   sessionIsGoingOn: SessionIsGoingOn
+  buffer: Int
 }
 
 type SessionIsGoingOn {
