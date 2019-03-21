@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
-import * as moment from 'moment'
 import { useMutation } from 'react-apollo-hooks'
 import dateFns from 'date-fns'
 import gql from 'graphql-tag'
@@ -167,6 +166,10 @@ const SuccessMessage = styled.div`
   margin-top: 1rem;
 `
 
+const MessageContainer = styled.div`
+  width: 100%;
+`
+
 const CREATE_INDIVIDUAL_SESSION = gql`
   mutation($input: CreateIndividualGamingSessionInput!) {
     createIndividualGamingSession(input: $input) {
@@ -196,7 +199,12 @@ const CREATE_BULK_SESSIONS = gql`
 `
 
 //TODO: Still need to fix time changing. Need to fix messages on bulk add.
-export default function GamerSessionCardBack({ state, session, dispatch }) {
+export default function GamerSessionCardBack({
+  state,
+  session,
+  dispatch,
+  refetch,
+}) {
   const createSession = useMutation(CREATE_INDIVIDUAL_SESSION)
   const createBulkSessions = useMutation(CREATE_BULK_SESSIONS)
   return (
@@ -249,10 +257,12 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
               />
             </LabelAndPicker>
           </AddOneTop>
-          {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
-          {state.successMsg && state.successMsg.map(msg => (
-            <SuccessMessage>{msg}</SuccessMessage>
-          ))}
+          <MessageContainer>
+            {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
+            {state.successMsg && (
+              <SuccessMessage>{state.successMsg}</SuccessMessage>
+            )}
+          </MessageContainer>
           <SelectionButtons>
             <Cancel
               onClick={() => {
@@ -293,6 +303,7 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                     type: 'setErrorMsg',
                     payload: data.createIndividualGamingSession.errorMsg,
                   })
+                refetch()
               }}
             >
               Add Session
@@ -327,10 +338,13 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                 state={state.addBulk.end}
               />
             </LabelAndPicker>
-            {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
-            {state.successMsg && (
-              <SuccessMessage>{state.successMsg}</SuccessMessage>
-            )}
+            <MessageContainer>
+              {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
+              {state.successMsg &&
+                state.successMsg.map(msg => (
+                  <SuccessMessage>{msg}</SuccessMessage>
+                ))}
+            </MessageContainer>
           </BulkAddTop>
           <SelectionButtons>
             <Cancel
@@ -387,6 +401,7 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                     type: 'setErrorMsg',
                     payload: data.createBulkSessions.errorMsg,
                   })
+                refetch()
               }}
             >
               Add Sessions

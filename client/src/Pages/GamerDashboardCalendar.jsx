@@ -12,6 +12,7 @@ import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
 import BigGamerCalendar from '../Components/BigGamerCalendar'
 import GamerSelectedSession from '../Components/GamerSelectedSession'
 import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
+import NextSession from '../Components/NextSession'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -41,6 +42,11 @@ const YourSessions = styled.div`
   font-weight: 800;
   margin-bottom: 0.5rem;
 `
+const SessionInfo = styled.div`
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+`
 
 const Info = styled.div`
   font-weight: 400;
@@ -64,6 +70,12 @@ const SetButton = styled.button`
   border-bottom: ${props =>
     props.active ? '2px solid #f10e0e' : '2px solid transparent'};
 `
+
+const Top = styled.div`
+  margin-bottom: 2rem;
+`
+
+const Bottom = styled.div``
 
 const MONTH = 'MONTH'
 
@@ -104,8 +116,9 @@ const MY_SESSIONS = gql`
       startTime
       endTime
       slots
+      finished
       players {
-        id
+        username
       }
       gamingSession {
         length
@@ -148,12 +161,8 @@ export default function GamerDashboardCalendar(props) {
           )}
         </LeftSide>
         <RightSide>
-          <YourSessions>Your sessions</YourSessions>
-          <Info>
-            These are all your sessions. Click on them to get options to add
-            them to your calendar. Edit them in the sessions tab.
-          </Info>
-
+          <Top>
+          <SessionInfo>Sessions Info</SessionInfo>
           {loading
             ? null
             : data.me &&
@@ -163,18 +172,28 @@ export default function GamerDashboardCalendar(props) {
                   currentSession={data.me.sessionIsGoingOn.session}
                 />
               )}
-          {loading
-            ? null
-            : data.me &&
-              data.me.sessions &&
-              data.me.buffer &&
-              data.me.sessions.map(session => (
-                <GamerSessionCard
-                  session={session}
-                  key={session.id}
-                  buffer={data.me.buffer}
-                />
-              ))}
+          <NextSession />
+          </Top>
+          <Bottom>
+            <YourSessions>Your sessions</YourSessions>
+            <Info>
+              These are all your sessions. Click on them to get options to add
+              them to your calendar. Edit them in the sessions tab.
+            </Info>
+            {loading
+              ? null
+              : data.me &&
+                data.me.sessions &&
+                data.me.buffer &&
+                data.me.sessions.map(session => (
+                  <GamerSessionCard
+                    session={session}
+                    key={session.id}
+                    buffer={data.me.buffer}
+                    refetch={refetch}
+                  />
+                ))}
+            </Bottom>
         </RightSide>
       </Content>
       {state.selectedSession && <GamerSelectedSession />}

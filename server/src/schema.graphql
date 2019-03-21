@@ -5,6 +5,7 @@ type Query {
   searchGames(search: String!): [Game!]!
   todaySessions: [IndividualGamingSession!]!
   thatDaySessions(day: DateTime!): [IndividualGamingSession!]!
+  nextSession: IndividualGamingSession!
 }
 
 type Mutation {
@@ -29,6 +30,15 @@ type Mutation {
   addMinutesToSession(
     input: AddMinutesToSessionInput!
   ): AddMinutesToSessionPayload!
+  cancelSession(input: CancelSessionInput!): CancelSessionPayload!
+}
+
+input CancelSessionInput {
+  sessionId: String!
+}
+
+type CancelSessionPayload {
+  cancelled: Boolean!
 }
 
 input AddMinutesToSessionInput {
