@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import dateFns from 'date-fns'
 import { withRouter } from 'react-router-dom'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
+
+//local imports
+import GamerDay from './GamerDay'
 
 const Container = styled.div`
   display: block;
@@ -19,12 +24,12 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 1rem 2rem;
+  padding: 3rem 2rem 3rem;
   margin: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 1rem;
+  font-size: 3rem;
   font-weight: 700;
   color: black;
   justify-content: space-between;
@@ -35,10 +40,9 @@ const Header = styled.div`
 const ChevronLeft = styled(FaChevronLeft)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 1rem;
+  font-size: 1.8rem;
   color: black;
   :hover {
-    transform: scale(1.75);
     transition: 0.25s ease-out;
     color: #f10e0e;
   }
@@ -47,10 +51,9 @@ const ChevronLeft = styled(FaChevronLeft)`
 const ChevronRight = styled(FaChevronRight)`
   cursor: pointer;
   transition: 0.15s ease-out;
-  font-size: 1rem;
+  font-size: 1.8rem;
   color: black;
   :hover {
-    transform: scale(1.75);
     transition: 0.25s ease-out;
     color: #f10e0e;
   }
@@ -68,7 +71,7 @@ const CenterColumn = styled.div`
   width: calc(100% / 7);
   justify-content: center;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
 `
 
 const Days = styled.div`
@@ -94,11 +97,11 @@ const Cell = styled.div`
   flex-basis: 0;
   max-width: 100%;
   position: relative;
-  font-size: 1rem;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
+  height: 6rem;
   border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
@@ -132,9 +135,36 @@ const Row = styled.div`
   }
 `
 
+const THAT_DAY_SESSIONS = gql`
+  query($day: DateTime!) {
+    thatDaySessions(day: $day) {
+      startTime
+      endTime
+      slots
+      players {
+        id
+      }
+      gamingSession {
+        length
+        game {
+          name
+        }
+      }
+    }
+  }
+`
+
 function BigGamerCalendar(props) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [currentDay] = useState(new Date())
+  const [selectedDay, setSelectedDay] = useState(null)
+  const { data, loading } = useQuery(THAT_DAY_SESSIONS, {
+    skip: !selectedDay,
+    variables: {
+      day: selectedDay,
+    },
+  })
+  console.log(data)
 
   const renderHeader = () => {
     const dateFormat = 'MMMM YYYY'
@@ -149,7 +179,7 @@ function BigGamerCalendar(props) {
   }
 
   const renderDays = () => {
-    const dateFormat = 'dd'
+    const dateFormat = 'dddd'
     const days = []
 
     let startDate = dateFns.startOfWeek(currentMonth)
@@ -208,8 +238,7 @@ function BigGamerCalendar(props) {
     const dateFormat = 'MM/DD/YYYY'
 
     const day = dateFns.format(inputDay, dateFormat)
-    props.dispatch({ type: 'setDropdown', payload: false })
-    props.dispatch({ type: 'setDate', payload: day })
+    setSelectedDay(day)
   }
 
   const nextMonth = () => {
@@ -222,9 +251,19 @@ function BigGamerCalendar(props) {
 
   return (
     <Container onClick={e => e.stopPropagation()}>
-      {renderHeader()}
-      {renderDays()}
-      {renderCells()}
+      {selectedDay === null ? (
+        <Fragment>
+          {renderHeader()}
+          {renderDays()}
+          {renderCells()}
+        </Fragment>
+      ) : loading ? null : (
+        <GamerDay
+          todaySessions={data.thatDaySessions}
+          day={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+      )}
     </Container>
   )
 }

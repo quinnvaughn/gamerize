@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
-import { Subscribe } from 'unstated'
+import { useStore } from 'react-hookstore'
 
-import SessionsContainer from '../Containers/SessionsContainer'
 import useInterval from '../Hooks/useInterval'
+import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
 
 const Container = styled.div`
   display: block;
@@ -50,10 +51,30 @@ const Header = styled.div`
 const Day = styled.span`
   font-size: 3rem;
   cursor: default;
+  margin-left: ${props => props.day && '-4rem'};
 `
 
 //For formatting.
 const Empty = styled.div``
+
+const Back = styled.div`
+  display: flex;
+  align-items: center;
+  :hover {
+    cursor: pointer;
+    color: #f10e0e;
+  }
+`
+
+const BackText = styled.span`
+  font-size: 1.8rem;
+  margin-left: 0.5rem;
+`
+
+const ChevronLeft = styled(FaChevronLeft)`
+  cursor: pointer;
+  font-size: 1.8rem;
+`
 
 const Row = styled.div`
   margin: 0;
@@ -134,18 +155,22 @@ const Hours = styled.div`
 
 const SpotsAndGame = styled.div`
   margin-bottom: 0.5rem;
+  cursor: pointer;
 `
 
-const TimeOfGame = styled.div``
+const TimeOfGame = styled.div`
+  cursor: pointer;
+`
 
 export default function GamerDay(props) {
-  const [time, setTime] = useState(new Date())
+  const [time, setTime] = useState(props.day ? new Date(props.day) : new Date())
+  const [state, dispatch] = useStore(gamerSessionSelection)
   useInterval(() => {
-    setTime(new Date())
+    props.day ? setTime(new Date(props.day)) : setTime(new Date())
   }, 60000)
   useEffect(() => {
     const element = document.getElementById('current')
-    element.scrollIntoView()
+    element && element.scrollIntoView()
     window.parent.scrollTo(0, 0)
   }, {})
   const renderHeader = () => {
@@ -153,8 +178,15 @@ export default function GamerDay(props) {
 
     return (
       <Header>
-        <Empty />
-        <Day>{dateFns.format(time, dateFormat)}</Day>
+        {props.day ? (
+          <Back onClick={() => props.setSelectedDay(null)}>
+            <ChevronLeft />
+            <BackText>Back</BackText>
+          </Back>
+        ) : (
+          <Empty />
+        )}
+        <Day day={props.day}>{dateFns.format(time, dateFormat)}</Day>
         <Empty />
       </Header>
     )
@@ -217,42 +249,36 @@ export default function GamerDay(props) {
           >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
-          <Subscribe to={[SessionsContainer]}>
-            {container => (
-              <Sessions>
-                {sessions.map(session => (
-                  <Session
-                    key={session.timeStart}
-                    height={dateFns.differenceInMinutes(
-                      session.endTime,
-                      session.startTime
-                    )}
-                    full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.startTime)}
-                    onClick={() => {
-                      container.setSelectedSession(session)
-                    }}
-                    disabled={
-                      dateFns.compareAsc(new Date(), session.endTime) === 1
-                    }
-                  >
-                    <SpotsAndGame>{`${session.slots - session.players.length} ${
-                      session.slots - session.players.length === 1
-                        ? 'spot'
-                        : 'spots'
-                    } left - ${session.gamingSession.game.name}`}</SpotsAndGame>
-                    <TimeOfGame>{`${dateFns.format(
-                      session.startTime,
-                      sessionFormat
-                    )} - ${dateFns.format(
-                      session.endTime,
-                      sessionFormat
-                    )}`}</TimeOfGame>
-                  </Session>
-                ))}
-              </Sessions>
-            )}
-          </Subscribe>
+          <Sessions>
+            {sessions.map(session => (
+              <Session
+                key={session.timeStart}
+                height={dateFns.differenceInMinutes(
+                  session.endTime,
+                  session.startTime
+                )}
+                full={session.players.length === session.slots}
+                startTime={dateFns.getMinutes(session.startTime)}
+                onClick={() => {
+                  dispatch({ type: 'setSelectedSession', payload: session })
+                }}
+                disabled={dateFns.compareAsc(new Date(), session.endTime) === 1}
+              >
+                <SpotsAndGame>{`${session.slots - session.players.length} ${
+                  session.slots - session.players.length === 1
+                    ? 'spot'
+                    : 'spots'
+                } left - ${session.gamingSession.game.name}`}</SpotsAndGame>
+                <TimeOfGame>{`${dateFns.format(
+                  session.startTime,
+                  sessionFormat
+                )} - ${dateFns.format(
+                  session.endTime,
+                  sessionFormat
+                )}`}</TimeOfGame>
+              </Session>
+            ))}
+          </Sessions>
         </Row>
       )
     }
