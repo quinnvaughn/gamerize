@@ -1,20 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { Subscribe } from 'unstated'
-import { MdClose } from 'react-icons/md'
 
-import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
+import useInterval from '../Hooks/useInterval'
 
 const Container = styled.div`
   display: block;
   position: relative;
   width: 100%;
-  max-width: 108rem;
+  max-height: 60rem;
+  overflow-y: scroll;
   background: #fff;
   border: 1px solid #dddfe2;
   border-radius: 4px;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `
 
 const Header = styled.div`
@@ -71,8 +83,6 @@ const Hour = styled.div`
   position: absolute;
   color: ${props => (props.current ? '#f10e0e' : 'black')};
   font-weight: 600;
-  padding-top: 14.75rem;
-  margin-top: -14.75rem;
 `
 
 const Sessions = styled.div`
@@ -80,7 +90,6 @@ const Sessions = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 0;
   font-size: 1.6rem;
   margin-left: 5rem;
   margin-right: 4rem;
@@ -89,13 +98,17 @@ const Sessions = styled.div`
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full
+    props.full || props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
+  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#f10e0e')};
   border: ${props =>
-    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
+    props.full
+      ? '2px solid rgb(255, 255, 255)'
+      : props.disabled
+      ? 'none'
+      : '1px solid #f10e0e'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
@@ -104,6 +117,7 @@ const Session = styled.div`
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
   pointer-events: ${props => (props.full || props.disabled) && 'none'};
@@ -115,34 +129,23 @@ const Session = styled.div`
 const Hours = styled.div`
   font-size: 1.2rem;
   padding-top: 1rem;
+  overflow-y: hidden;
 `
 
-const Exit = styled(MdClose)`
-  font-size: 3rem;
-  cursor: pointer;
-  z-index: 1000;
-  color: black;
-  :hover {
-    color: #f10e0e;
-  }
+const SpotsAndGame = styled.div`
+  margin-bottom: 0.5rem;
 `
 
-const ExitContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 1rem;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  background: #fff;
-  height: 3rem;
-`
+const TimeOfGame = styled.div``
 
 export default function GamerDay(props) {
+  const [time, setTime] = useState(new Date())
+  useInterval(() => {
+    setTime(new Date())
+  }, 60000)
   useEffect(() => {
-    const element = document.getElementById('currentCalendar')
-    element && element.scrollIntoView()
+    const element = document.getElementById('current')
+    element.scrollIntoView()
     window.parent.scrollTo(0, 0)
   }, {})
   const renderHeader = () => {
@@ -151,7 +154,7 @@ export default function GamerDay(props) {
     return (
       <Header>
         <Empty />
-        <Day>{dateFns.format(new Date(), dateFormat)}</Day>
+        <Day>{dateFns.format(time, dateFormat)}</Day>
         <Empty />
       </Header>
     )
@@ -159,12 +162,13 @@ export default function GamerDay(props) {
 
   const renderHours = () => {
     const dateFormat = 'ha'
+    const sessionFormat = 'h:mm a'
     const hours = []
-    let selectedDate = dateFns.startOfDay(props.day)
+    let selectedDate = dateFns.startOfDay(time)
 
     for (let i = 0; i < 24; i++) {
-      const sessions = exampleSessions.filter(
-        session => dateFns.getHours(session.timeStart) === i
+      const sessions = props.todaySessions.filter(
+        session => dateFns.getHours(session.startTime) === i
       )
 
       hours.push(
@@ -200,9 +204,7 @@ export default function GamerDay(props) {
                   selectedDate.getDate(),
                   i
                 )
-              ) &&
-              dateFns.isToday(new Date(selectedDate)) &&
-              'currentCalendar'
+              ) && 'current'
             }
             current={dateFns.isThisHour(
               new Date(
@@ -221,21 +223,31 @@ export default function GamerDay(props) {
                 {sessions.map(session => (
                   <Session
                     key={session.timeStart}
-                    height={session.length}
+                    height={dateFns.differenceInMinutes(
+                      session.endTime,
+                      session.startTime
+                    )}
                     full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.timeStart)}
+                    startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
                       container.setSelectedSession(session)
                     }}
                     disabled={
-                      dateFns.compareAsc(new Date(), session.timeStart) === 1
+                      dateFns.compareAsc(new Date(), session.endTime) === 1
                     }
                   >
-                    {`${session.slots - session.players.length} ${
+                    <SpotsAndGame>{`${session.slots - session.players.length} ${
                       session.slots - session.players.length === 1
                         ? 'spot'
                         : 'spots'
-                    } left`}
+                    } left - ${session.gamingSession.game.name}`}</SpotsAndGame>
+                    <TimeOfGame>{`${dateFns.format(
+                      session.startTime,
+                      sessionFormat
+                    )} - ${dateFns.format(
+                      session.endTime,
+                      sessionFormat
+                    )}`}</TimeOfGame>
                   </Session>
                 ))}
               </Sessions>
@@ -250,7 +262,7 @@ export default function GamerDay(props) {
   return (
     <Container>
       {renderHeader()}
-      {/* {renderHours()} */}
+      {renderHours()}
     </Container>
   )
 }

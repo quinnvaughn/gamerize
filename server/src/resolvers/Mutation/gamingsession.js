@@ -48,7 +48,7 @@ const gamingsession = {
     const result = await ctx.prisma.$graphql(query)
     const sessions = result.gamingSession
     const buffer = result.user.buffer
-    const sessionLength = sessions.length + buff
+    const sessionLength = sessions.length + buffer
     const endTime = addMinutes(input.startTime, sessionLength)
     const gamers = sessions.gamers
     if (!gamers) {
@@ -180,13 +180,14 @@ const gamingsession = {
       }
     }
     if (sessions.length > 0) {
-      let successMsg
-      console.log(sessions)
-      // sessions.map(
-      //   session =>
-      //     (successMsg =
-      //       successMsg + `Session added from ${session.start}-${session.end}\n`)
-      // )
+      let successMsg = ''
+      for (const session in sessions) {
+        successMsg =
+          successMsg +
+          `Session added from ${sessions[session].start}-${
+            sessions[session].end
+          }\n`
+      }
       return { created: true, overlaps, sessions, successMsg }
     } else {
       return {
@@ -198,10 +199,53 @@ const gamingsession = {
     }
   },
   async addMinutesToSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
     const session = await ctx.prisma.individualGamingSession({
       id: input.sessionId,
     })
     const newEnd = addMinutes(session.endTime, input.minutes)
+    let overlaps = await ctx.prisma.individualGamingSessions({
+      where: {
+        gamers_some: { id: userId },
+        AND: [
+          {
+            endTime_gt: newEnd,
+          },
+          {
+            startTime_lt: newEnd,
+          },
+        ],
+      },
+    })
+    let counter = overlaps.length
+    while (counter > 0) {
+      for (const session in overlaps) {
+        startTime = addMinutes(overlaps[session].startTime, input.minutes)
+        endTime = addMinutes(overlaps[session].endTime, input.minutes)
+        await ctx.prisma.updateIndividualGamingSession({
+          where: { id: overlaps[session].id },
+          data: {
+            startTime,
+            endTime,
+          },
+        })
+      }
+      let newOverlaps = await ctx.prisma.individualGamingSessions({
+        where: {
+          gamers_some: { id: userId },
+          AND: [
+            {
+              endTime_gt: endTime,
+            },
+            {
+              startTime_lt: endTime,
+            },
+          ],
+        },
+      })
+      counter = newOverlaps.length > 0 ? newOverlaps.length : 0
+      overlaps = newOverlaps
+    }
     const updatedSession = await ctx.prisma.updateIndividualGamingSession({
       where: { id: session.id },
       data: {

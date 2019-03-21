@@ -52,7 +52,7 @@ const Length = styled.div`
   font-weight: 400;
 `
 
-export default function GamerSessionCardFront({ session, dispatch }) {
+export default function GamerSessionCardFront({ session, dispatch, buffer }) {
   return (
     <Card onClick={() => dispatch({ type: 'flip', payload: true })}>
       <SessionTitle>{session.title}</SessionTitle>
@@ -68,7 +68,7 @@ export default function GamerSessionCardFront({ session, dispatch }) {
           })
         )}
       </Gamers>
-      <Length>{`${session.length} minutes`}</Length>
+      <Length>{`${session.length + buffer} minutes`}</Length>
       {/* Will be names of gamers when I'm actually getting from db. Will be mapped.*/}
     </Card>
   )

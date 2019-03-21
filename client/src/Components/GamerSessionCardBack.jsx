@@ -195,7 +195,7 @@ const CREATE_BULK_SESSIONS = gql`
   }
 `
 
-//TODO: Tons of logic on changing dates. Also needs to show added sessions/ overlapped sessions.
+//TODO: Still need to fix time changing. Need to fix messages on bulk add.
 export default function GamerSessionCardBack({ state, session, dispatch }) {
   const createSession = useMutation(CREATE_INDIVIDUAL_SESSION)
   const createBulkSessions = useMutation(CREATE_BULK_SESSIONS)
@@ -343,6 +343,8 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
             </Cancel>
             <Add
               onClick={async () => {
+                dispatch({ type: 'setSuccessMsg', payload: null })
+                dispatch({ type: 'setErrorMsg', payload: null })
                 const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
                 const { hour, minutes, period } = state.addBulk.start
                 const {
@@ -375,17 +377,16 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
                   variables: { input },
                 })
                 dispatch({ type: 'loading', payload: false })
-                data.createIndividualGamingSession.successMsg &&
+                data.createBulkSessions.successMsg &&
                   dispatch({
                     type: 'setSuccessMsg',
-                    payload: data.createIndividualGamingSession.successMsg,
+                    payload: data.createBulkSessions.successMsg,
                   })
-                data.createIndividualGamingSession.errorMsg &&
+                data.createBulkSessions.errorMsg &&
                   dispatch({
                     type: 'setErrorMsg',
-                    payload: data.createIndividualGamingSession.errorMsg,
+                    payload: data.createBulkSessions.errorMsg,
                   })
-                console.log(data)
               }}
             >
               Add Sessions
