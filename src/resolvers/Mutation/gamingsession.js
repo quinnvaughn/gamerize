@@ -181,12 +181,14 @@ const gamingsession = {
     }
     if (sessions.length > 0) {
       let successMsg = []
+      const dateFormat = 'h:mm aa'
       for (const session in sessions) {
         successMsg = [
           ...successMsg,
-          `Session added from ${sessions[session].startTime}-${
-            sessions[session].endTime
-          }`,
+          `Session added from ${dateFns.format(
+            sessions[session].startTime,
+            dateFormat
+          )}-${dateFns.format(sessions[session].endTime, dateFormat)}`,
         ]
       }
       return { created: true, overlaps, sessions, successMsg }

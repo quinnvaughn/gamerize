@@ -26,6 +26,16 @@ const gamingsession = {
       },
     })
   },
+  async nextSession(parent, _, ctx) {
+    const userId = getUserId(ctx)
+    const sessions = await ctx.prisma.individualGamingSessions({
+      where: {
+        AND: [{ gamers_some: { id: userId } }, { startTime_gte: new Date() }],
+      },
+      orderBy: 'startTime_ASC',
+    })
+    return sessions[0]
+  },
 }
 
 module.exports = { gamingsession }
