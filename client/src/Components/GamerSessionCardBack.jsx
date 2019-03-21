@@ -250,9 +250,9 @@ export default function GamerSessionCardBack({ state, session, dispatch }) {
             </LabelAndPicker>
           </AddOneTop>
           {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
-          {state.successMsg && (
-            <SuccessMessage>{state.successMsg}</SuccessMessage>
-          )}
+          {state.successMsg && state.successMsg.map(msg => (
+            <SuccessMessage>{msg}</SuccessMessage>
+          ))}
           <SelectionButtons>
             <Cancel
               onClick={() => {

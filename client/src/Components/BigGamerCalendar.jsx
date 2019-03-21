@@ -108,6 +108,7 @@ const Cell = styled.div`
   }
   :hover {
     cursor: pointer;
+    background: ${props => !props.current && !props.disabled && '#dddfe2'};
   }
   color: ${props =>
     props.disabled ? '#dddfe2' : props.current ? 'white' : 'black'};
@@ -125,7 +126,6 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  cursor: pointer;
   border-bottom: 1px solid #dddfe2;
   :last-child {
     border-bottom: none;

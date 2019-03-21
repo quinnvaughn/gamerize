@@ -63,7 +63,7 @@ type CreateBulkSessionsPayload {
   created: Boolean!
   overlaps: [IndividualGamingSession!]!
   sessions: [IndividualGamingSession!]!
-  successMsg: String
+  successMsg: [String!]!
   errorMsg: String
 }
 
