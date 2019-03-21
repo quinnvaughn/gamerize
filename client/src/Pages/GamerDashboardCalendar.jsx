@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
+import { useStore } from 'react-hookstore'
 import gql from 'graphql-tag'
 
 //local imports
@@ -9,6 +10,8 @@ import GamerSessionCard from '../Components/GamerSessionCard'
 import useInterval from '../Hooks/useInterval'
 import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
 import BigGamerCalendar from '../Components/BigGamerCalendar'
+import GamerSelectedSession from '../Components/GamerSelectedSession'
+import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -116,6 +119,7 @@ const MY_SESSIONS = gql`
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
   const { data, loading, refetch } = useQuery(MY_SESSIONS)
+  const [state] = useStore(gamerSessionSelection)
   useInterval(() => refetch(), 60000)
   return (
     <PageContainer>
@@ -139,10 +143,7 @@ export default function GamerDashboardCalendar(props) {
             data.me &&
             data.me.buffer &&
             data.todaySessions && (
-              <GamerDay
-                todaySessions={data.todaySessions}
-                buffer={data.me.buffer}
-              />
+              <GamerDay todaySessions={data.todaySessions} />
             )
           )}
         </LeftSide>
@@ -176,6 +177,7 @@ export default function GamerDashboardCalendar(props) {
               ))}
         </RightSide>
       </Content>
+      {state.selectedSession && <GamerSelectedSession />}
     </PageContainer>
   )
 }

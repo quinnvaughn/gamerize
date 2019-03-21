@@ -4,6 +4,7 @@ type Query {
   me: User
   searchGames(search: String!): [Game!]!
   todaySessions: [IndividualGamingSession!]!
+  thatDaySessions(day: DateTime!): [IndividualGamingSession!]!
 }
 
 type Mutation {
