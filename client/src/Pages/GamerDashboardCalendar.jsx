@@ -162,17 +162,17 @@ export default function GamerDashboardCalendar(props) {
         </LeftSide>
         <RightSide>
           <Top>
-          <SessionInfo>Sessions Info</SessionInfo>
-          {loading
-            ? null
-            : data.me &&
-              data.me.sessionIsGoingOn.goingOn === true && (
-                <SessionsIsGoingOn
-                  refetch={refetch}
-                  currentSession={data.me.sessionIsGoingOn.session}
-                />
-              )}
-          <NextSession />
+            <SessionInfo>Sessions Info</SessionInfo>
+            {loading
+              ? null
+              : data.me &&
+                data.me.sessionIsGoingOn.goingOn === true && (
+                  <SessionsIsGoingOn
+                    refetch={refetch}
+                    currentSession={data.me.sessionIsGoingOn.session}
+                  />
+                )}
+            <NextSession />
           </Top>
           <Bottom>
             <YourSessions>Your sessions</YourSessions>
@@ -193,10 +193,10 @@ export default function GamerDashboardCalendar(props) {
                     refetch={refetch}
                   />
                 ))}
-            </Bottom>
+          </Bottom>
         </RightSide>
       </Content>
-      {state.selectedSession && <GamerSelectedSession />}
+      {state.selectedSession && <GamerSelectedSession refetch={refetch} />}
     </PageContainer>
   )
 }

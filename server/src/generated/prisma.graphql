@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Mar 18 2019 21:22:03 GMT-0500 (CDT)
+# timestamp: Fri Mar 22 2019 12:50:21 GMT-0500 (CDT)
 
 type AggregateDiscount {
   count: Int!
@@ -313,6 +313,7 @@ type Game implements Node {
   name: String!
   tags: [Tags!]!
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+  numSessions: Int!
 }
 
 """A connection to a list of items."""
@@ -327,6 +328,7 @@ type GameConnection {
 
 input GameCreateInput {
   name: String!
+  numSessions: Int
   tags: GameCreatetagsInput
   sessions: GamingSessionCreateManyWithoutGameInput
 }
@@ -347,6 +349,7 @@ input GameCreatetagsInput {
 
 input GameCreateWithoutSessionsInput {
   name: String!
+  numSessions: Int
   tags: GameCreatetagsInput
 }
 
@@ -567,6 +570,8 @@ enum GameOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  numSessions_ASC
+  numSessions_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -577,6 +582,7 @@ type GamePreviousValues {
   id: ID!
   name: String!
   tags: [Tags!]!
+  numSessions: Int!
 }
 
 type GamerRequest implements Node {
@@ -827,18 +833,21 @@ input GameSubscriptionWhereInput {
 
 input GameUpdateDataInput {
   name: String
+  numSessions: Int
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
 }
 
 input GameUpdateInput {
   name: String
+  numSessions: Int
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
 }
 
 input GameUpdateManyMutationInput {
   name: String
+  numSessions: Int
   tags: GameUpdatetagsInput
 }
 
@@ -862,6 +871,7 @@ input GameUpdatetagsInput {
 
 input GameUpdateWithoutSessionsDataInput {
   name: String
+  numSessions: Int
   tags: GameUpdatetagsInput
 }
 
@@ -964,6 +974,28 @@ input GameWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  numSessions: Int
+
+  """All values that are not equal to given value."""
+  numSessions_not: Int
+
+  """All values that are contained in given list."""
+  numSessions_in: [Int!]
+
+  """All values that are not contained in given list."""
+  numSessions_not_in: [Int!]
+
+  """All values less than the given value."""
+  numSessions_lt: Int
+
+  """All values less than or equal the given value."""
+  numSessions_lte: Int
+
+  """All values greater than the given value."""
+  numSessions_gt: Int
+
+  """All values greater than or equal the given value."""
+  numSessions_gte: Int
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput

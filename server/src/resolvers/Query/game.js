@@ -1,8 +1,6 @@
 const game = {
-  async searchGames(parent, { search }, { prisma }) {
-    const games = await prisma.gameIndexes({}).game()
-    const newGames = games.map(game => game.game)
-    return newGames
+  async allGames(parent, { search }, { prisma }) {
+    return await prisma.games()
   },
 }
 

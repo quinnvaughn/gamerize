@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useMutation } from 'react-apollo-hooks'
 import { useStore } from 'react-hookstore'
 import { MdClose } from 'react-icons/md'
 import dateFns from 'date-fns'
+import gql from 'graphql-tag'
 
 //local imports
 import Modal from './Modal'
@@ -102,8 +104,17 @@ const CancelContainer = styled.div`
   justify-content: flex-end;
 `
 
+const CANCEL_SESSION = gql`
+  mutation($input: CancelSessionInput!) {
+    cancelSession(input: $input) {
+      cancelled
+    }
+  }
+`
+
 export default function GamerSelectedSession(props) {
   const [state, dispatch] = useStore(gamerSessionSelection)
+  const cancelSession = useMutation(CANCEL_SESSION)
   const monthFormat = 'MMMM Do, YYYY'
   const dateFormat = 'h:mm A'
   const renderSlots = () => {
@@ -153,6 +164,12 @@ export default function GamerSelectedSession(props) {
                   new Date()
                 ) === -1
               }
+              onClick={async () => {
+                const input = { sessionId: state.selectedSession.id }
+                const data = await cancelSession({ variables: { input } })
+                props.refetch()
+                console.log(data)
+              }}
             >
               Cancel Session
             </Cancel>

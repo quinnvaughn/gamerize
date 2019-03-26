@@ -138,6 +138,7 @@ const Row = styled.div`
 const THAT_DAY_SESSIONS = gql`
   query($day: DateTime!) {
     thatDaySessions(day: $day) {
+      id
       startTime
       endTime
       slots

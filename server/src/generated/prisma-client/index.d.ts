@@ -691,6 +691,8 @@ export type GameOrderByInput =
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "numSessions_ASC"
+  | "numSessions_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1421,6 +1423,7 @@ export interface GameUpdateInput {
   name?: String;
   tags?: GameUpdatetagsInput;
   sessions?: GamingSessionUpdateManyWithoutGameInput;
+  numSessions?: Int;
 }
 
 export type GamingSessionWhereUniqueInput = AtLeastOne<{
@@ -1727,6 +1730,7 @@ export interface GamingSessionUpdateDataInput {
 export interface GameUpdateWithoutSessionsDataInput {
   name?: String;
   tags?: GameUpdatetagsInput;
+  numSessions?: Int;
 }
 
 export interface GamingSessionUpdateOneRequiredInput {
@@ -1974,6 +1978,14 @@ export interface GameWhereInput {
   sessions_every?: GamingSessionWhereInput;
   sessions_some?: GamingSessionWhereInput;
   sessions_none?: GamingSessionWhereInput;
+  numSessions?: Int;
+  numSessions_not?: Int;
+  numSessions_in?: Int[] | Int;
+  numSessions_not_in?: Int[] | Int;
+  numSessions_lt?: Int;
+  numSessions_lte?: Int;
+  numSessions_gt?: Int;
+  numSessions_gte?: Int;
   AND?: GameWhereInput[] | GameWhereInput;
   OR?: GameWhereInput[] | GameWhereInput;
   NOT?: GameWhereInput[] | GameWhereInput;
@@ -1983,6 +1995,7 @@ export interface GameCreateInput {
   name: String;
   tags?: GameCreatetagsInput;
   sessions?: GamingSessionCreateManyWithoutGameInput;
+  numSessions?: Int;
 }
 
 export interface GamerRequestCreateInput {
@@ -2096,6 +2109,7 @@ export interface DiscountScalarWhereInput {
 export interface GameCreateWithoutSessionsInput {
   name: String;
   tags?: GameCreatetagsInput;
+  numSessions?: Int;
 }
 
 export interface DiscountUpdateManyWithWhereNestedInput {
@@ -3220,6 +3234,7 @@ export type GamerRequestWhereUniqueInput = AtLeastOne<{
 export interface GameUpdateManyMutationInput {
   name?: String;
   tags?: GameUpdatetagsInput;
+  numSessions?: Int;
 }
 
 export interface SessionReviewIndexUpdateInput {
@@ -3301,6 +3316,7 @@ export interface GameUpdateDataInput {
   name?: String;
   tags?: GameUpdatetagsInput;
   sessions?: GamingSessionUpdateManyWithoutGameInput;
+  numSessions?: Int;
 }
 
 export interface GameUpdateOneRequiredInput {
@@ -4135,6 +4151,7 @@ export interface GamePreviousValues {
   id: ID_Output;
   name: String;
   tags: Tags[];
+  numSessions: Int;
 }
 
 export interface GamePreviousValuesPromise
@@ -4143,6 +4160,7 @@ export interface GamePreviousValuesPromise
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
   tags: () => Promise<Tags[]>;
+  numSessions: () => Promise<Int>;
 }
 
 export interface GamePreviousValuesSubscription
@@ -4151,6 +4169,7 @@ export interface GamePreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
   tags: () => Promise<AsyncIterator<Tags[]>>;
+  numSessions: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface SessionReviewEdge {
@@ -5087,6 +5106,7 @@ export interface Game {
   id: ID_Output;
   name: String;
   tags: Tags[];
+  numSessions: Int;
 }
 
 export interface GamePromise extends Promise<Game>, Fragmentable {
@@ -5104,6 +5124,7 @@ export interface GamePromise extends Promise<Game>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  numSessions: () => Promise<Int>;
 }
 
 export interface GameSubscription
@@ -5123,6 +5144,7 @@ export interface GameSubscription
       last?: Int;
     }
   ) => T;
+  numSessions: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface UserIndexSubscriptionPayload {

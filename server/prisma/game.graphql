@@ -6,6 +6,7 @@ type Game {
   name: String! @unique
   tags: [Tags!]!
   sessions: [GamingSession!]!
+  numSessions: Int! @default(value: 0)
 }
 
 ## until Prisma gets case insensitive search

@@ -119,11 +119,11 @@ const Availability = styled.div`
 `
 
 const GamerAvailability = React.memo(function(props) {
+  const element = document.getElementById('current')
   useEffect(() => {
-    const element = document.getElementById('current')
     element.scrollIntoView()
     window.parent.scrollTo(0, 0)
-  }, {})
+  }, [element])
   const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
