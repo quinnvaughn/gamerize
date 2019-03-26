@@ -1,4 +1,4 @@
-const { getUserId, addMinutes } = require('../../utils')
+const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
 const gamingsession = {
   async createGamingSession(parent, { input }, ctx) {
@@ -261,6 +261,45 @@ const gamingsession = {
       },
     })
     return { updatedSession }
+  },
+  async cancelSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    const gamers = await ctx.prisma
+      .individualGamingSession({ id: input.sessionId })
+      .gamers({ where: { id: userId } })
+    if (gamers.length === 0) {
+      throw AuthError()
+    } else {
+      const deletedSession = await ctx.prisma.deleteIndividualGamingSession({
+        id: input.sessionId,
+      })
+      return { cancelled: deletedSession ? true : false }
+    }
+  },
+  async updateSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    const gamers = await ctx.prisma
+      .gamingSession({ id: input.sessionId })
+      .gamers({ where: { id: userId } })
+    if (gamers.length === 0) {
+      throw AuthError()
+    } else {
+      const updatedSession = await ctx.prisma.updateGamingSession({
+        where: {
+          id: input.sessionId,
+        },
+        data: {
+          title: input.title,
+          price: input.price,
+          game: { connect: { name: input.game } },
+          length: input.length,
+          systems: { set: input.systems },
+          slots: input.slots,
+          type: input.type,
+        },
+      })
+      return { updatedSession }
+    }
   },
 }
 
