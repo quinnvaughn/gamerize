@@ -1,6 +1,9 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { importSchema } = require('graphql-import')
 const { Prisma } = require('./generated/prisma-client')
+const cron = require('node-cron')
+
+//local data
 const resolvers = require('./resolvers')
 
 const typeDefs = gql(importSchema('./src/schema.graphql'))
@@ -18,6 +21,30 @@ const server = new ApolloServer({
     }
   },
 })
+
+const numSessions = cron.schedule('* */10 * * * *', async () => {
+  const query = `
+    {
+      games {
+        id
+        numSessions
+        sessions {
+          id
+        }
+      }
+    }
+  `
+  const result = await prisma.$graphql(query)
+  result.games.forEach(async game => {
+    if (game.numSessions !== game.sessions.length) {
+      await prisma.updateGame({
+        where: { id: game.id },
+        data: { numSessions: game.sessions.length },
+      })
+    }
+  })
+})
+numSessions.start()
 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`)

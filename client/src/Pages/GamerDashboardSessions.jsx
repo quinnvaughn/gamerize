@@ -1,9 +1,10 @@
-import React, { Fragment, useReducer } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
-import { useQuery, useMutation } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 //local imports
+import CreatedSessionCard from '../Components/CreatedSessionCard'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -11,17 +12,39 @@ const PageContainer = styled.div`
   height: 100vh;
 `
 
+const Content = styled.div`
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding-left: 8rem;
+  padding-right: 8rem;
+  padding-top: 1rem;
+  margin-bottom: 9rem;
+  display: flex;
+`
+
+const LeftSide = styled.div`
+  flex: 30%;
+  margin-right: 4rem;
+`
+
+const RightSide = styled.div`
+  flex: 40%;
+`
+
 const GET_SESSIONS = gql`
   {
     me {
       id
+      buffer
       sessions {
+        id
         title
-        gamers {
-          username
-        }
         game {
           name
+        }
+        gamers {
+          username
         }
         price
         length
@@ -33,73 +56,23 @@ const GET_SESSIONS = gql`
   }
 `
 
-const initialState = {
-  gameName: '',
-  title: '',
-  length: '',
-  price: '',
-  type: '',
-  systems: [],
-  slots: '',
-}
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'setGame':
-      return { ...state, gameName: action.payload }
-    case 'setTitle':
-      return { ...state, title: action.payload }
-    case 'setLength':
-      return { ...state, length: action.payload }
-    case 'setType':
-      return { ...state, type: action.payload }
-    case 'setSystems':
-      const index = state.systems.indexOf(action.payload)
-      if (index === -1) {
-        return {
-          ...state,
-          systems: [...state.systems, action.payload],
-        }
-      } else {
-        return {
-          ...state,
-          systems: state.systems.filter(system => system !== action.payload),
-        }
-      }
-    case 'setSlots':
-      return { ...state, slots: action.payload }
-    default:
-      return { ...state }
-  }
-}
-
 export default function GamerDashboardSessions(props) {
-  const { data, loading } = useQuery(GET_SESSIONS)
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const { data, loading, refetch } = useQuery(GET_SESSIONS)
   return loading ? null : (
     <PageContainer>
-      {data.me.sessions.map(session => (
-        <Fragment>
-          <div>{session.title}</div>
-          <div>{session.game.name}</div>
-          <div>{session.price}</div>
-          <div>{session.length}</div>
-          <div>
-            {session.systems.map(system => (
-              <span>{system}</span>
-            ))}
-          </div>
-          <div>{session.slots}</div>
-          <div>{session.type}</div>
-        </Fragment>
-      ))}
-
-      <input type="text" value={state.gameName} />
-      <input type="text" value={state.title} />
-      <input type="text" value={state.length} />
-      <input type="text" value={state.price} />
-      <input type="text" value={state.type} />
-      <input type="text" value={state.slots} />
+      <Content>
+        <LeftSide>
+          {data.me.sessions.map(session => (
+            <CreatedSessionCard
+              session={session}
+              refetch={refetch}
+              buffer={data.me.buffer}
+              key={session.title + session.game}
+            />
+          ))}
+        </LeftSide>
+        <RightSide />
+      </Content>
     </PageContainer>
   )
 }

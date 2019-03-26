@@ -207,6 +207,7 @@ type Game {
   name: String!
   tags: [Tags!]!
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+  numSessions: Int!
 }
 
 type GameConnection {
@@ -219,6 +220,7 @@ input GameCreateInput {
   name: String!
   tags: GameCreatetagsInput
   sessions: GamingSessionCreateManyWithoutGameInput
+  numSessions: Int
 }
 
 input GameCreateOneInput {
@@ -238,6 +240,7 @@ input GameCreatetagsInput {
 input GameCreateWithoutSessionsInput {
   name: String!
   tags: GameCreatetagsInput
+  numSessions: Int
 }
 
 type GameEdge {
@@ -367,6 +370,8 @@ enum GameOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  numSessions_ASC
+  numSessions_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -377,6 +382,7 @@ type GamePreviousValues {
   id: ID!
   name: String!
   tags: [Tags!]!
+  numSessions: Int!
 }
 
 type GamerRequest {
@@ -522,17 +528,20 @@ input GameUpdateDataInput {
   name: String
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
+  numSessions: Int
 }
 
 input GameUpdateInput {
   name: String
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
+  numSessions: Int
 }
 
 input GameUpdateManyMutationInput {
   name: String
   tags: GameUpdatetagsInput
+  numSessions: Int
 }
 
 input GameUpdateOneRequiredInput {
@@ -556,6 +565,7 @@ input GameUpdatetagsInput {
 input GameUpdateWithoutSessionsDataInput {
   name: String
   tags: GameUpdatetagsInput
+  numSessions: Int
 }
 
 input GameUpsertNestedInput {
@@ -600,6 +610,14 @@ input GameWhereInput {
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput
+  numSessions: Int
+  numSessions_not: Int
+  numSessions_in: [Int!]
+  numSessions_not_in: [Int!]
+  numSessions_lt: Int
+  numSessions_lte: Int
+  numSessions_gt: Int
+  numSessions_gte: Int
   AND: [GameWhereInput!]
   OR: [GameWhereInput!]
   NOT: [GameWhereInput!]
