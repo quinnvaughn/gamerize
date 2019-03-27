@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Media from 'react-media'
 import { FaChevronRight } from 'react-icons/fa'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 
 //local imports
 import Game from './Game'
@@ -146,61 +148,88 @@ const games = [
   },
 ]
 // will do this different way with graphql but just to show 'Show All' do it this way for now.
-const gamesLength = games.length
 
-const map = (games, display) => {
+const map = (games, first, setFirst) => {
+  setFirst(first)
   return games.map((game, index) => {
     return (
-      index <= display - 1 && (
+      index <= first - 1 && (
         <Game
           name={game.name}
           key={game.name}
           tags={game.tags}
           full
-          sessions={game.sessions}
+          numSessions={game.numSessions}
         />
       )
     )
   })
 }
 
+const GET_GAMES = gql`
+  query($first: Int, $orderBy: String) {
+    allGames(first: $first, orderBy: $orderBy) {
+      name
+      tags
+      numSessions
+    }
+  }
+`
+
 export default function GamesRow(props) {
-  const [displayed, setDisplayed] = useState(0)
+  const [first, setFirst] = useState(4)
+  const { data, loading } = useQuery(GET_GAMES, {
+    variables: { first, orderBy: 'numSessions_DESC' },
+  })
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      <Media query={{ maxWidth: 969 }}>
-        {matches =>
-          matches && <AllTheGames>{map(games, 4, setDisplayed)}</AllTheGames>
-        }
-      </Media>
-      <Media query={{ minWidth: 970, maxWidth: 1239 }}>
-        {matches =>
-          matches && <AllTheGames>{map(games, 6, setDisplayed)}</AllTheGames>
-        }
-      </Media>
-      <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
-        {matches =>
-          matches && <AllTheGames>{map(games, 8, setDisplayed)}</AllTheGames>
-        }
-      </Media>
-      <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
-        {matches =>
-          matches && <AllTheGames>{map(games, 5, setDisplayed)}</AllTheGames>
-        }
-      </Media>
-      <Media query={{ minWidth: 1780 }}>
-        {matches =>
-          matches && <AllTheGames>{map(games, 6, setDisplayed)}</AllTheGames>
-        }
-      </Media>
-      {displayed < gamesLength && (
+      {loading ? null : (
+        <Fragment>
+          <Media query={{ maxWidth: 969 }}>
+            {matches =>
+              matches && (
+                <AllTheGames>{map(data.allGames, 4, setFirst)}</AllTheGames>
+              )
+            }
+          </Media>
+          <Media query={{ minWidth: 970, maxWidth: 1239 }}>
+            {matches =>
+              matches && (
+                <AllTheGames>{map(data.allGames, 6, setFirst)}</AllTheGames>
+              )
+            }
+          </Media>
+          <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
+            {matches =>
+              matches && (
+                <AllTheGames>{map(data.allGames, 8, setFirst)}</AllTheGames>
+              )
+            }
+          </Media>
+          <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
+            {matches =>
+              matches && (
+                <AllTheGames>{map(data.allGames, 5, setFirst)}</AllTheGames>
+              )
+            }
+          </Media>
+          <Media query={{ minWidth: 1780 }}>
+            {matches =>
+              matches && (
+                <AllTheGames>{map(data.allGames, 6, setFirst)}</AllTheGames>
+              )
+            }
+          </Media>{' '}
+        </Fragment>
+      )}
+      {/* {displayed < gamesLength && (
         <ShowAllContainer>
           <ShowAll to={`/games`}>
             {`Show All Games (${gamesLength})`} <ShowAllRight />
           </ShowAll>
         </ShowAllContainer>
-      )}
+      )} */}
     </Container>
   )
 }

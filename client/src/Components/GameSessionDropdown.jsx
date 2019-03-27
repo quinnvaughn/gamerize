@@ -103,7 +103,6 @@ const SEARCH_GAMES = gql`
 export default function GameSessionDropdown(props) {
   const [open, setOpen] = useState(false)
   const { data, loading } = useQuery(SEARCH_GAMES)
-  //Figure out fucking flickering.
   return (
     <Container>
       <Label>{props.label}</Label>

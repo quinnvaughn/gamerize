@@ -66,7 +66,7 @@ export default function Game(props) {
         <DynamicImage src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
         {props.full && (
-          <Sessions>{`${props.sessions} sessions available`}</Sessions>
+          <Sessions>{`${props.numSessions} sessions available`}</Sessions>
         )}
       </StyledLink>
     </Container>

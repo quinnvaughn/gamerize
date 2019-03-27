@@ -1,28 +1,16 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 //local imports
 import GameSessionDropdown from './GameSessionDropdown'
-import TypeSessionDropdown from './TypeSessionDropdown'
 import SystemsSessionDropdown from './SystemsSessionDropdown'
+import TypeSessionDropdown from './TypeSessionDropdown'
 
-const Card = styled.div`
-  background: #fff;
-  border: 1px solid #dddfe2;
-  border-radius: 4px;
-  padding: 2rem;
+const Container = styled.div`
   width: 100%;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  :hover {
-    box-shadow: ${props =>
-      !props.back &&
-      '0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08)'};
-    cursor: ${props => !props.back && 'pointer'};
-  }
+  padding: 2rem;
 `
 
 const TitleContainer = styled.div`
@@ -101,6 +89,14 @@ const Buffer = styled.span`
   margin-left: 0.5rem;
 `
 
+const Minutes = styled.span`
+  font-size: 1.2rem;
+`
+
+const USD = styled.span`
+  font-size: 1.2rem;
+`
+
 const SlotsContainer = styled.div`
   margin-bottom: 0.5rem;
 `
@@ -125,7 +121,7 @@ const SessionSlots = styled.input`
   }
 `
 
-const EditSession = styled.button`
+const CreateSessionButton = styled.button`
   background: #f10e0e;
   padding: 1rem 1.4rem;
   color: #fff;
@@ -138,25 +134,69 @@ const EditSession = styled.button`
   margin-top: 1rem;
 `
 
-const UPDATE_SESSION = gql`
-  mutation($input: UpdateSessionInput!) {
-    updateSession(input: $input) {
-      updatedSession {
+const initialState = {
+  flip: false,
+  game: '',
+  title: '',
+  length: '',
+  price: '',
+  type: '',
+  systems: [],
+  slots: '',
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'flip':
+      return { ...state, flip: action.payload }
+    case 'setGame':
+      return { ...state, game: action.payload }
+    case 'setTitle':
+      return { ...state, title: action.payload }
+    case 'setPrice':
+      return { ...state, price: action.payload }
+    case 'setLength':
+      return { ...state, length: action.payload }
+    case 'setType':
+      return { ...state, type: action.payload }
+    case 'setSystems':
+      const index = state.systems.indexOf(action.payload)
+      if (index === -1) {
+        return {
+          ...state,
+          systems: [...state.systems, action.payload],
+        }
+      } else {
+        return {
+          ...state,
+          systems: state.systems.filter(system => system !== action.payload),
+        }
+      }
+    case 'setSlots':
+      return { ...state, slots: action.payload }
+    case 'clearState':
+      return { ...initialState }
+    default:
+      return { ...state }
+  }
+}
+
+const CREATE_SESSION = gql`
+  mutation($input: CreateGamingSessionInput!) {
+    createGamingSession(input: $input) {
+      gamingSession {
         id
       }
+      created
     }
   }
 `
 
-export default function CreatedSessionCardBack({
-  session,
-  dispatch,
-  state,
-  refetch,
-}) {
-  const updateSession = useMutation(UPDATE_SESSION)
+export default function CreateSession(props) {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const createSession = useMutation(CREATE_SESSION)
   return (
-    <Card back>
+    <Container>
       <TitleContainer>
         <Title>Title: </Title>
         <SessionTitle
@@ -172,7 +212,9 @@ export default function CreatedSessionCardBack({
         title={state.game}
       />
       <PriceContainer>
-        <Price>Price: </Price>
+        <Price>
+          Price<USD> (USD) </USD>:{' '}
+        </Price>
         <SessionPrice
           onChange={e => {
             dispatch({
@@ -184,7 +226,9 @@ export default function CreatedSessionCardBack({
         />
       </PriceContainer>
       <LengthContainer>
-        <Length>Length:</Length>
+        <Length>
+          Length<Minutes> (minutes) </Minutes>:{' '}
+        </Length>
         <SessionLength
           onChange={e => {
             dispatch({
@@ -202,7 +246,7 @@ export default function CreatedSessionCardBack({
         title={state.systems}
       />
       <SlotsContainer>
-        <Slots>Slots:</Slots>
+        <Slots>Slots: </Slots>
         <SessionSlots
           onChange={e => {
             dispatch({
@@ -218,10 +262,9 @@ export default function CreatedSessionCardBack({
         dispatch={dispatch}
         title={state.type}
       />
-      <EditSession
+      <CreateSessionButton
         onClick={async () => {
           const input = {
-            sessionId: session.id,
             title: state.title,
             game: state.game,
             price: state.price,
@@ -230,13 +273,13 @@ export default function CreatedSessionCardBack({
             slots: state.slots,
             type: state.type,
           }
-          const data = await updateSession({ variables: { input } })
-          await refetch()
-          dispatch({ type: 'flip', payload: false })
+          const data = await createSession({ variables: { input } })
+          await props.refetch()
+          props.setOpen(false)
         }}
       >
-        Update Session
-      </EditSession>
-    </Card>
+        Create new session
+      </CreateSessionButton>
+    </Container>
   )
 }
