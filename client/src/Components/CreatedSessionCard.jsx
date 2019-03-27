@@ -10,6 +10,8 @@ import CreatedSessionCardBack from './CreatedSessionCardBack'
 const Container = styled.div`
   position: relative;
   z-index: ${props => props.over && 3};
+  width: calc(50% - 1rem);
+  margin-right: 1rem;
 `
 
 const initialState = {
@@ -52,6 +54,8 @@ function reducer(state, action) {
       }
     case 'setSlots':
       return { ...state, slots: action.payload }
+    case 'clearState':
+      return { ...initialState }
     default:
       return { ...state }
   }

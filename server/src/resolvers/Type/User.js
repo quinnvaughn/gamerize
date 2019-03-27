@@ -25,6 +25,9 @@ const User = {
       ? { session: session[0], goingOn: true }
       : { goingOn: false }
   },
+  favoriteGames: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).favoriteGames()
+  },
 }
 
 module.exports = {

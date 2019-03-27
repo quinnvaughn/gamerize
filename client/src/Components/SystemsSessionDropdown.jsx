@@ -98,7 +98,6 @@ const systems = ['PC', 'XBOX_ONE', 'PS4', 'NINTENDO_SWITCH']
 export default function SystemsSessionDropdown(props) {
   const [open, setOpen] = useState(false)
   const value = formatSystems(props.title)
-  console.log(props.title)
   return (
     <Container>
       <Label>{props.label}</Label>

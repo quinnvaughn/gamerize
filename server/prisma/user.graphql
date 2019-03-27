@@ -1,4 +1,5 @@
 #import * from './enums.graphql'
+# import Game from './game.graphql'
 
 type User {
   id: ID! @unique
@@ -9,6 +10,7 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+  favoriteGames: [Game!]!
   sessions: [GamingSession!]! @relation(name: "MySessions")
   individualSessions: [IndividualGamingSession!]!
     @relation(name: "MyIndividualSessions")

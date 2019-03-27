@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
-import { noSpaces } from '../utils/Strings'
+import { noSpaces, capitalize } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -43,13 +43,13 @@ const Occupations = styled.p`
 `
 
 const FavoriteGames = styled.p`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: black;
 `
 
 const FavoriteGame = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 400;
   color: black;
 `
@@ -67,7 +67,7 @@ const StyledLink = styled(Link)`
 `
 
 const Occupation = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: black;
 `
@@ -97,7 +97,11 @@ export default function Gamer(props) {
         <Name>{props.name}</Name>
         <Occupations>
           {props.occupations.map((occupation, index) =>
-            formatCommasOccupations(props.occupations, occupation, index)
+            formatCommasOccupations(
+              props.occupations,
+              capitalize(occupation),
+              index
+            )
           )}
         </Occupations>
         <FavoriteGames>
