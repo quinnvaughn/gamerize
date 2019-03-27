@@ -22,7 +22,7 @@ const server = new ApolloServer({
   },
 })
 
-const numSessions = cron.schedule('* */10 * * * *', async () => {
+const numSessions = cron.schedule('*/30 * * * * *', async () => {
   const query = `
     {
       games {

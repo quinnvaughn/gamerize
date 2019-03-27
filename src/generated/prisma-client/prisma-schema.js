@@ -223,6 +223,11 @@ input GameCreateInput {
   numSessions: Int
 }
 
+input GameCreateManyInput {
+  create: [GameCreateInput!]
+  connect: [GameWhereUniqueInput!]
+}
+
 input GameCreateOneInput {
   create: GameCreateInput
   connect: GameWhereUniqueInput
@@ -506,6 +511,48 @@ input GamerRequestWhereUniqueInput {
   id: ID
 }
 
+input GameScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  numSessions: Int
+  numSessions_not: Int
+  numSessions_in: [Int!]
+  numSessions_not_in: [Int!]
+  numSessions_lt: Int
+  numSessions_lte: Int
+  numSessions_gt: Int
+  numSessions_gte: Int
+  AND: [GameScalarWhereInput!]
+  OR: [GameScalarWhereInput!]
+  NOT: [GameScalarWhereInput!]
+}
+
 type GameSubscriptionPayload {
   mutation: MutationType!
   node: Game
@@ -538,10 +585,33 @@ input GameUpdateInput {
   numSessions: Int
 }
 
+input GameUpdateManyDataInput {
+  name: String
+  tags: GameUpdatetagsInput
+  numSessions: Int
+}
+
+input GameUpdateManyInput {
+  create: [GameCreateInput!]
+  update: [GameUpdateWithWhereUniqueNestedInput!]
+  upsert: [GameUpsertWithWhereUniqueNestedInput!]
+  delete: [GameWhereUniqueInput!]
+  connect: [GameWhereUniqueInput!]
+  set: [GameWhereUniqueInput!]
+  disconnect: [GameWhereUniqueInput!]
+  deleteMany: [GameScalarWhereInput!]
+  updateMany: [GameUpdateManyWithWhereNestedInput!]
+}
+
 input GameUpdateManyMutationInput {
   name: String
   tags: GameUpdatetagsInput
   numSessions: Int
+}
+
+input GameUpdateManyWithWhereNestedInput {
+  where: GameScalarWhereInput!
+  data: GameUpdateManyDataInput!
 }
 
 input GameUpdateOneRequiredInput {
@@ -568,6 +638,11 @@ input GameUpdateWithoutSessionsDataInput {
   numSessions: Int
 }
 
+input GameUpdateWithWhereUniqueNestedInput {
+  where: GameWhereUniqueInput!
+  data: GameUpdateDataInput!
+}
+
 input GameUpsertNestedInput {
   update: GameUpdateDataInput!
   create: GameCreateInput!
@@ -576,6 +651,12 @@ input GameUpsertNestedInput {
 input GameUpsertWithoutSessionsInput {
   update: GameUpdateWithoutSessionsDataInput!
   create: GameCreateWithoutSessionsInput!
+}
+
+input GameUpsertWithWhereUniqueNestedInput {
+  where: GameWhereUniqueInput!
+  update: GameUpdateDataInput!
+  create: GameCreateInput!
 }
 
 input GameWhereInput {
@@ -2493,6 +2574,7 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
+  favoriteGames(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game!]
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   individualSessions(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
   sessionsBought(where: IndividualGamingSessionWhereInput, orderBy: IndividualGamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IndividualGamingSession!]
@@ -2513,6 +2595,7 @@ input UserCreateInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
+  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
@@ -2551,6 +2634,7 @@ input UserCreateWithoutIndividualSessionsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
+  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
   buffer: Int
@@ -2564,6 +2648,7 @@ input UserCreateWithoutSessionsBoughtInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
+  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
   buffer: Int
@@ -2577,6 +2662,7 @@ input UserCreateWithoutSessionsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
+  favoriteGames: GameCreateManyInput
   individualSessions: IndividualGamingSessionCreateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionCreateManyWithoutPlayersInput
   buffer: Int
@@ -2896,6 +2982,7 @@ input UserUpdateDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
@@ -2910,6 +2997,7 @@ input UserUpdateInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
@@ -2998,6 +3086,7 @@ input UserUpdateWithoutIndividualSessionsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
   buffer: Int
@@ -3011,6 +3100,7 @@ input UserUpdateWithoutSessionsBoughtDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   buffer: Int
@@ -3024,6 +3114,7 @@ input UserUpdateWithoutSessionsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
+  favoriteGames: GameUpdateManyInput
   individualSessions: IndividualGamingSessionUpdateManyWithoutGamersInput
   sessionsBought: IndividualGamingSessionUpdateManyWithoutPlayersInput
   buffer: Int
@@ -3154,6 +3245,9 @@ input UserWhereInput {
   aboutMe_not_starts_with: String
   aboutMe_ends_with: String
   aboutMe_not_ends_with: String
+  favoriteGames_every: GameWhereInput
+  favoriteGames_some: GameWhereInput
+  favoriteGames_none: GameWhereInput
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput

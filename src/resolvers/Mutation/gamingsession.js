@@ -4,7 +4,7 @@ const gamingsession = {
   async createGamingSession(parent, { input }, ctx) {
     const userId = getUserId(ctx)
     const gamingSession = await ctx.prisma.createGamingSession({
-      game: { connect: { name: input.gameName } },
+      game: { connect: { name: input.game } },
       title: input.title,
       length: input.length,
       price: input.price,
@@ -14,8 +14,8 @@ const gamingsession = {
       type: input.type,
       slots: input.slots,
       systems: { set: input.systems },
-      requirements: { create: input.requirements },
-      discounts: { create: input.discounts },
+      requirements: { create: [] },
+      discounts: { create: [] },
     })
     await ctx.prisma.createGamingSessionIndex({
       title: input.title,

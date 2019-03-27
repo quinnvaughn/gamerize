@@ -31,8 +31,6 @@ const gamer = {
         occupations: input.occupations,
       },
     })
-    // Do delete many for now because of unique issue.
-    let request
     if (user) {
       request = await prisma.deleteGamerRequest({
         id: input.gamerRequestId,

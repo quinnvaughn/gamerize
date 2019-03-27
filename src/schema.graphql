@@ -2,10 +2,11 @@
 
 type Query {
   me: User
-  allGames: [Game!]!
+  allGames(first: Int, orderBy: String): [Game!]!
   todaySessions: [IndividualGamingSession!]!
   thatDaySessions(day: DateTime!): [IndividualGamingSession!]!
   nextSession: IndividualGamingSession!
+  getGamers(first: Int): [User!]!
 }
 
 type Mutation {
@@ -114,16 +115,13 @@ type CreateIndividualGamingSessionPayload {
 }
 
 input CreateGamingSessionInput {
-  gameName: String!
-  gamersIds: [String!]!
+  game: String!
   title: String!
   length: Int!
   price: Int!
   type: TypeOfGame!
   slots: Int!
   systems: [System!]!
-  requirements: [RequirementInput!]!
-  discounts: [DiscountInput!]!
 }
 
 input RequirementInput {
@@ -198,6 +196,9 @@ type User {
   individualSessions: [IndividualGamingSession!]!
   sessionIsGoingOn: SessionIsGoingOn
   buffer: Int
+  favoriteGames: [Game!]!
+  occupations: [Occupations!]!
+  aboutMe: String
 }
 
 type SessionIsGoingOn {
