@@ -59,96 +59,6 @@ const ShowAllRight = styled(FaChevronRight)`
   margin-left: 0.1rem;
 `
 
-//replace with actual data eventually
-const games = [
-  {
-    name: 'Fortnite',
-    tags: ['Shooter'],
-    sessions: 500,
-  },
-  {
-    name: 'Counter-Strike: Global Offensive',
-    tags: ['FPS', 'Shooter'],
-    sessions: 480,
-  },
-  {
-    name: 'Apex Legends',
-    tags: ['FPS', 'Shooter'],
-    sessions: 475,
-  },
-  {
-    name: 'Rocket League',
-    tags: ['Action', 'Sports', 'Driving/Racing Game'],
-    sessions: 460,
-  },
-  {
-    name: 'Anthem',
-    tags: ['Shooter'],
-    sessions: 415,
-  },
-  {
-    name: 'Call of Duty: Black Ops 4',
-    tags: ['FPS', 'Shooter'],
-    sessions: 400,
-  },
-  {
-    name: 'Grand Theft Auto V',
-    tags: ['Action', 'Adventure', 'Driving/Racing Game'],
-    sessions: 385,
-  },
-  {
-    name: 'DOTA 2',
-    tags: ['MOBA'],
-    sessions: 346,
-  },
-  {
-    name: 'League of Legends',
-    tags: ['MOBA'],
-    sessions: 314,
-  },
-  {
-    name: "Tom Clancy's Rainbow Six Siege",
-    tags: ['FPS', 'Shooter'],
-    sessions: 304,
-  },
-  {
-    name: 'World of Warcraft',
-    tags: ['MMORPG'],
-    sessions: 300,
-  },
-  {
-    name: "Player's Unknown Battleground",
-    tags: ['FPS', 'Shooter'],
-    sessions: 275,
-  },
-  {
-    name: 'FIFA 19',
-    tags: ['Sports'],
-    sessions: 234,
-  },
-  {
-    name: 'Minecraft',
-    tags: ['Action', 'Adventure', 'Open World'],
-    sessions: 200,
-  },
-  {
-    name: 'Super Smash Bros. Ultimate',
-    tags: ['Fighting', 'Platformer'],
-    sessions: 175,
-  },
-  {
-    name: 'Overwatch',
-    tags: ['FPS', 'Shooter'],
-    sessions: 150,
-  },
-  {
-    name: 'Dead By Daylight',
-    tags: ['Action', 'Horror'],
-    sessions: 125,
-  },
-]
-// will do this different way with graphql but just to show 'Show All' do it this way for now.
-
 const map = (games, first, setFirst) => {
   setFirst(first)
   return games.map((game, index) => {
@@ -173,6 +83,7 @@ const GET_GAMES = gql`
       tags
       numSessions
     }
+    totalGames
   }
 `
 
@@ -181,6 +92,7 @@ export default function GamesRow(props) {
   const { data, loading } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
+  console.log(data)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
@@ -223,13 +135,15 @@ export default function GamesRow(props) {
           </Media>{' '}
         </Fragment>
       )}
-      {/* {displayed < gamesLength && (
-        <ShowAllContainer>
-          <ShowAll to={`/games`}>
-            {`Show All Games (${gamesLength})`} <ShowAllRight />
-          </ShowAll>
-        </ShowAllContainer>
-      )} */}
+      {loading
+        ? null
+        : first < data.totalGames && (
+            <ShowAllContainer>
+              <ShowAll to={`/games`}>
+                {`Show All Games (${data.totalGames})`} <ShowAllRight />
+              </ShowAll>
+            </ShowAllContainer>
+          )}
     </Container>
   )
 }

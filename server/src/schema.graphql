@@ -3,9 +3,14 @@
 type Query {
   me: User
   allGames(first: Int, orderBy: String): [Game!]!
-  todaySessions: [IndividualGamingSession!]!
-  thatDaySessions(day: DateTime!): [IndividualGamingSession!]!
-  nextSession: IndividualGamingSession!
+  getUser(username: String!): User!
+  totalGames: Int!
+  totalGamers: Int!
+  getSpecificSession(sessionId: String!): GamingSession!
+  mySlotsToday: [GamingTimeSlot!]!
+  specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
+  thatDaySessions(day: DateTime!): [GamingTimeSlot!]!
+  nextTimeSlot: GamingTimeSlot
   getGamers(first: Int): [User!]!
 }
 
@@ -22,17 +27,33 @@ type Mutation {
   createGamingSession(
     input: CreateGamingSessionInput!
   ): CreateGamingSessionPayload!
-  createIndividualGamingSession(
-    input: CreateIndividualGamingSessionInput!
-  ): CreateIndividualGamingSessionPayload!
-  createBulkSessions(
-    input: CreateBulkSessionsInput!
-  ): CreateBulkSessionsPayload!
-  addMinutesToSession(
-    input: AddMinutesToSessionInput!
-  ): AddMinutesToSessionPayload!
-  cancelSession(input: CancelSessionInput!): CancelSessionPayload!
+  createGamingTimeSlot(
+    input: CreateGamingTimeSlotInput!
+  ): CreateGamingTimeSlotPayload!
+  createBulkGamingTimeSlots(
+    input: CreateBulkGamingTimeSlotsInput!
+  ): CreateBulkGamingTimeSlotsPayload!
+  addMinutesToTimeSlot(
+    input: AddMinutesToTimeSlotInput!
+  ): AddMinutesToGamingTimeSlotPayload!
+  cancelTimeSlot(input: CancelTimeSlotInput!): CancelTimeSlotPayload!
   updateSession(input: UpdateSessionInput!): UpdateSessionPayload!
+  bookTimeSlots(input: BookTimeSlotsInput!): BookTimeSlotsPayload!
+}
+
+input BookTimeSlotsInput {
+  timeSlots: [GamingTimeSlotInput!]!
+}
+
+input GamingTimeSlotInput {
+  slots: Int!
+  players: Int!
+  timeSlotId: String!
+  total: Float!
+}
+
+type BookTimeSlotsPayload {
+  booked: Boolean!
 }
 
 input UpdateSessionInput {
@@ -50,21 +71,21 @@ type UpdateSessionPayload {
   updatedSession: GamingSession!
 }
 
-input CancelSessionInput {
+input CancelTimeSlotInput {
   sessionId: String!
 }
 
-type CancelSessionPayload {
+type CancelTimeSlotPayload {
   cancelled: Boolean!
 }
 
-input AddMinutesToSessionInput {
+input AddMinutesToTimeSlotInput {
   sessionId: String!
   minutes: Int!
 }
 
-type AddMinutesToSessionPayload {
-  updatedSession: IndividualGamingSession!
+type AddMinutesToGamingTimeSlotPayload {
+  updatedSession: GamingTimeSlot!
 }
 
 type AuthPayload {
@@ -81,16 +102,16 @@ input SocialMediaInput {
   snapchat: String
 }
 
-input CreateBulkSessionsInput {
+input CreateBulkGamingTimeSlotsInput {
   startTime: DateTime!
   endTime: DateTime!
   gamingSessionId: String!
 }
 
-type CreateBulkSessionsPayload {
+type CreateBulkGamingTimeSlotsPayload {
   created: Boolean!
-  overlaps: [IndividualGamingSession!]!
-  sessions: [IndividualGamingSession!]!
+  overlaps: [GamingTimeSlot!]!
+  sessions: [GamingTimeSlot!]!
   successMsg: [String!]!
   errorMsg: String
 }
@@ -101,15 +122,15 @@ input CreateGamerRequestInput {
   socialMedia: SocialMediaInput!
 }
 
-input CreateIndividualGamingSessionInput {
+input CreateGamingTimeSlotInput {
   startTime: DateTime!
   gamingSessionId: String!
 }
 
-type CreateIndividualGamingSessionPayload {
+type CreateGamingTimeSlotPayload {
   created: Boolean!
   overlap: Boolean
-  individualGamingSession: IndividualGamingSession
+  GamingTimeSlot: GamingTimeSlot
   successMsg: String
   errorMsg: String
 }
@@ -193,17 +214,20 @@ type User {
   currentGamerRequest: Boolean!
   isGamer: Boolean!
   sessions: [GamingSession!]!
-  individualSessions: [IndividualGamingSession!]!
+  timeSlots: [GamingTimeSlot!]!
   sessionIsGoingOn: SessionIsGoingOn
   buffer: Int
   favoriteGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String
+  numReviews: Int!
+  reviews: [SessionReview!]!
+  reviewRating: Float!
 }
 
 type SessionIsGoingOn {
   goingOn: Boolean!
-  session: IndividualGamingSession
+  session: GamingTimeSlot
 }
 
 type GamingSession {
@@ -219,11 +243,13 @@ type GamingSession {
   slots: Int!
   requirements: [Requirement!]!
   discounts: [Discount!]!
-  sessions: [IndividualGamingSession!]!
+  timeSlots: [GamingTimeSlot!]!
+  numReviews: Int!
+  reviewRating: Float!
   slotsLeftToday: Int!
 }
 
-type IndividualGamingSession {
+type GamingTimeSlot {
   id: ID!
   startTime: DateTime!
   endTime: DateTime!
@@ -233,6 +259,7 @@ type IndividualGamingSession {
   gamers: [User!]!
   players: [User!]!
   slots: Int!
-  finished: Boolean!
+  passed: Boolean!
   full: Boolean!
+  length: Int!
 }

@@ -51,13 +51,13 @@ export default function ExploreGame(props) {
       <StyledLink
         to={{
           pathname: `/games/${noSpaces(props.name)}`,
-          state: { tags: props.tags, sessions: props.sessions },
+          state: { tags: props.tags, numSessions: props.numSessions },
         }}
       >
         <DynamicImage src={DefaultAvatar} alt="Avatar" />
         <Name>{props.name}</Name>
         {props.full && (
-          <Sessions>{`${props.sessions} sessions available`}</Sessions>
+          <Sessions>{`${props.numSessions} sessions available`}</Sessions>
         )}
       </StyledLink>
     </Container>

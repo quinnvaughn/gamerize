@@ -6,6 +6,7 @@ import dateFns from 'date-fns'
 
 //local imports
 import useInterval from '../Hooks/useInterval'
+import { objectIsEmpty } from '../utils/Objects'
 
 const Container = styled.div`
   background: #fff;
@@ -61,7 +62,7 @@ const NoUpcoming = styled.div`
 
 const NEXT_SESSION = gql`
   {
-    nextSession {
+    nextTimeSlot {
       slots
       startTime
       gamingSession {
@@ -85,10 +86,12 @@ export default function NextSession(props) {
   const renderUsernames = () => {
     let usernames = []
     let counter = 0
-    let end = data.nextSession.slots
+    let end = data.nextTimeSlot.slots
     while (counter < end) {
-      let username = data.nextSession.players[counter]
-      usernames.push(<Username>{username ? username : 'Empty Slot'}</Username>)
+      let username = data.nextTimeSlot.players[counter]
+        ? data.nextTimeSlot.players[counter].username
+        : 'Empty Slot'
+      usernames.push(<Username>{username}</Username>)
       counter++
     }
     return (
@@ -103,20 +106,20 @@ export default function NextSession(props) {
   return (
     <Container>
       <Title>Next Session:</Title>
-      {loading ? null : !data ? (
+      {loading ? null : data.nextTimeSlot === null ? (
         <NoUpcoming>
-          You have no upcoming sessions! Be sure to add some!
-          </NoUpcoming>
+          You have no upcoming time slots! Be sure to add some!
+        </NoUpcoming>
       ) : (
         <Content>
           <FlexHalf>
-            <Game>{data.nextSession.gamingSession.game.name}</Game>
-            <Day>{dateFns.format(data.nextSession.startTime, dayFormat)}</Day>
+            <Game>{data.nextTimeSlot.gamingSession.game.name}</Game>
+            <Day>{dateFns.format(data.nextTimeSlot.startTime, dayFormat)}</Day>
             <Times>
               {`${dateFns.format(
-                data.nextSession.startTime,
+                data.nextTimeSlot.startTime,
                 dateFormat
-              )} - ${dateFns.format(data.nextSession.endTime, dateFormat)}`}
+              )} - ${dateFns.format(data.nextTimeSlot.endTime, dateFormat)}`}
             </Times>
           </FlexHalf>
           {renderUsernames()}

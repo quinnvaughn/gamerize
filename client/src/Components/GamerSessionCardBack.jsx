@@ -170,9 +170,9 @@ const MessageContainer = styled.div`
   width: 100%;
 `
 
-const CREATE_INDIVIDUAL_SESSION = gql`
-  mutation($input: CreateIndividualGamingSessionInput!) {
-    createIndividualGamingSession(input: $input) {
+const CREATE_GAMING_TIME_SLOT = gql`
+  mutation($input: CreateGamingTimeSlotInput!) {
+    createGamingTimeSlot(input: $input) {
       created
       errorMsg
       successMsg
@@ -180,9 +180,9 @@ const CREATE_INDIVIDUAL_SESSION = gql`
   }
 `
 
-const CREATE_BULK_SESSIONS = gql`
-  mutation($input: CreateBulkSessionsInput!) {
-    createBulkSessions(input: $input) {
+const CREATE_BULK_GAMING_TIME_SLOTS = gql`
+  mutation($input: CreateBulkGamingTimeSlotsInput!) {
+    createBulkGamingTimeSlots(input: $input) {
       created
       errorMsg
       successMsg
@@ -205,8 +205,8 @@ export default function GamerSessionCardBack({
   dispatch,
   refetch,
 }) {
-  const createSession = useMutation(CREATE_INDIVIDUAL_SESSION)
-  const createBulkSessions = useMutation(CREATE_BULK_SESSIONS)
+  const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
+  const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
   return (
     <Card back>
       {state.addState === null && (
@@ -289,19 +289,19 @@ export default function GamerSessionCardBack({
                 )
                 const input = { startTime, gamingSessionId: session.id }
                 dispatch({ type: 'loading', payload: true })
-                const { data } = await createSession({
+                const { data } = await createGamingSlot({
                   variables: { input },
                 })
                 dispatch({ type: 'loading', payload: false })
-                data.createIndividualGamingSession.successMsg &&
+                data.createGamingTimeSlot.successMsg &&
                   dispatch({
                     type: 'setSuccessMsg',
-                    payload: data.createIndividualGamingSession.successMsg,
+                    payload: data.createGamingTimeSlot.successMsg,
                   })
-                data.createIndividualGamingSession.errorMsg &&
+                data.createGamingTimeSlot.errorMsg &&
                   dispatch({
                     type: 'setErrorMsg',
-                    payload: data.createIndividualGamingSession.errorMsg,
+                    payload: data.createGamingTimeSlot.errorMsg,
                   })
                 refetch()
               }}
@@ -387,19 +387,19 @@ export default function GamerSessionCardBack({
                   gamingSessionId: session.id,
                 }
                 dispatch({ type: 'loading', payload: true })
-                const { data } = await createBulkSessions({
+                const { data } = await createBulkGamingSlots({
                   variables: { input },
                 })
                 dispatch({ type: 'loading', payload: false })
-                data.createBulkSessions.successMsg &&
+                data.createBulkGamingSlots.successMsg &&
                   dispatch({
                     type: 'setSuccessMsg',
-                    payload: data.createBulkSessions.successMsg,
+                    payload: data.createBulkGamingSlots.successMsg,
                   })
-                data.createBulkSessions.errorMsg &&
+                data.createBulkGamingSlots.errorMsg &&
                   dispatch({
                     type: 'setErrorMsg',
-                    payload: data.createBulkSessions.errorMsg,
+                    payload: data.createBulkGamingSlots.errorMsg,
                   })
                 refetch()
               }}

@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-import { Link } from 'react-router-dom'
+import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
+import gql from 'graphql-tag'
 import Media from 'react-media'
 import StarRatings from 'react-star-ratings'
 
@@ -12,14 +13,9 @@ import SmallSession from '../Components/SmallSession'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
 import DefaultBanner from '../default-banner.png'
-import { noSpaces } from '../utils/Strings'
+import { noSpaces, capitalize } from '../utils/Strings'
 import FavoriteGame from '../Components/FavoriteGame'
 import useTitle from '../Hooks/useTitle'
-
-//data
-import specificSessions from '../data/specificusersessions'
-import gamers from '../data/gamers'
-import reviews from '../data/reviews'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -235,13 +231,45 @@ const SmallRight = styled.div`
   flex: 20%;
 `
 
+const GET_USER = gql`
+  query($username: String!) {
+    getUser(username: $username) {
+      name
+      aboutMe
+      username
+      numReviews
+      reviewRating
+      occupations
+      reviews {
+        text
+      }
+      favoriteGames {
+        name
+      }
+      sessions {
+        id
+        title
+        game {
+          name
+        }
+        systems
+        price
+        reviews {
+          text
+        }
+        reviewRating
+        numReviews
+      }
+    }
+  }
+`
+
 export default function UserProfile(props) {
-  //will be done with Prisma with backend.
-  const user = _.find(gamers, {
-    username: noSpaces(props.match.params.user),
+  const { data, loading } = useQuery(GET_USER, {
+    variables: { username: props.match.params.user },
   })
-  useTitle(`${user.name} - Gamerize`)
-  return (
+  useTitle(`User Profile - Gamerize`)
+  return loading ? null : (
     <PageContainer>
       <NavBar />
       <GlobalStyle />
@@ -258,17 +286,21 @@ export default function UserProfile(props) {
                     <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
                   </ProfilePictureContainer>
                   <ReviewsContainer>
-                    <NumReviews>{`${user.numReviews} reviews`}</NumReviews>
+                    <NumReviews>{`${
+                      data.getUser.numReviews
+                    } reviews`}</NumReviews>
                     <ReviewRatingContainer>
                       <StarRatings
-                        rating={user.reviews}
+                        rating={data.getUser.reviewRating}
                         starRatedColor="#f10e0e"
                         numberOfStars={5}
                         name="rating"
                         starDimension="14px"
                         starSpacing="1px"
                       />
-                      <ReviewRating>{`(${user.reviews})`}</ReviewRating>
+                      <ReviewRating>{`(${
+                        data.getUser.reviewRating
+                      })`}</ReviewRating>
                     </ReviewRatingContainer>
                   </ReviewsContainer>
                 </ProfileInfoContainer>
@@ -282,11 +314,11 @@ export default function UserProfile(props) {
               matches ? (
                 <SmallContainer>
                   <SmallLeft>
-                    <Name>{user.name}</Name>
-                    <Username>@{user.username}</Username>
+                    <Name>{data.getUser.name}</Name>
+                    <Username>@{data.getUser.username}</Username>
                     <Occupations>
-                      {user.occupations.map(job => (
-                        <Occupation>{job}</Occupation>
+                      {data.getUser.occupations.map(job => (
+                        <Occupation>{capitalize(job)}</Occupation>
                       ))}
                     </Occupations>
                   </SmallLeft>
@@ -296,11 +328,11 @@ export default function UserProfile(props) {
                 </SmallContainer>
               ) : (
                 <Fragment>
-                  <Name>{user.name}</Name>
-                  <Username>@{user.username}</Username>
+                  <Name>{data.getUser.name}</Name>
+                  <Username>@{data.getUser.username}</Username>
                   <Occupations>
-                    {user.occupations.map(job => (
-                      <Occupation>{job}</Occupation>
+                    {data.getUser.occupations.map(job => (
+                      <Occupation>{capitalize(job)}</Occupation>
                     ))}
                   </Occupations>
                 </Fragment>
@@ -308,12 +340,12 @@ export default function UserProfile(props) {
             }
           </Media>
           <AboutMe>About me</AboutMe>
-          <AboutMeParagraph>{user.aboutMe}</AboutMeParagraph>
+          <AboutMeParagraph>{data.getUser.aboutMe}</AboutMeParagraph>
           <FavoriteGames>
             <FavoriteGamesTitle>Favorite games</FavoriteGamesTitle>
             <FavoriteGameContainer>
-              {_.map(user.favoriteGames, game => (
-                <FavoriteGame game={game} />
+              {_.map(data.getUser.favoriteGames, game => (
+                <FavoriteGame game={game.name} />
               ))}
             </FavoriteGameContainer>
           </FavoriteGames>
@@ -321,34 +353,38 @@ export default function UserProfile(props) {
             <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
             <NegativeMargins>
               <SessionsMapped>
-                {_.map(specificSessions, session => (
+                {_.map(data.getUser.sessions, session => (
                   <SmallSession
+                    id={session.id}
                     title={session.title}
                     key={session.game}
-                    username={user.username}
-                    game={session.game}
-                    name={session.name}
+                    username={data.getUser.username}
+                    game={noSpaces(session.game.name)}
+                    name={session.game.name}
                     systems={session.systems}
                     price={session.price}
-                    reviews={session.reviews}
+                    reviewRating={session.reviewRating}
                     numReviews={session.numReviews}
                   />
                 ))}
               </SessionsMapped>
             </NegativeMargins>
           </Sessions>
-          <GamerAvailability
-            day={new Date()}
-            name={user.name}
-            username={user.username}
-          />
-          <UserProfileReviews
-            reviews={reviews}
-            name={user.name}
-            username={user.username}
-          />
         </RightSide>
       </Content>
     </PageContainer>
   )
+}
+
+{
+  /* <GamerAvailability
+            day={new Date()}
+            name={data.getUser.name}
+            username={data.getUser.username}
+          />
+          <UserProfileReviews
+            reviews={data.getUser.reviews}
+            name={data.getUser.name}
+            username={data.getUser.username}
+          /> */
 }

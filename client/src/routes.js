@@ -33,7 +33,7 @@ const routes = [
     component: GamersPage,
   },
   {
-    path: '/users/:user/:game',
+    path: '/users/:user/:game/:id',
     component: SpecificSessionPage,
   },
   {

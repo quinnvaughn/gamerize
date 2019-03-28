@@ -76,13 +76,15 @@ const Sessions = styled.div`
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full
+    props.full || props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full ? '#dddfe2' : '#f10e0e')};
+  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#f10e0e')};
   border: ${props =>
-    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
+    props.full || props.disabled
+      ? '2px solid rgb(255, 255, 255)'
+      : '1px solid #f10e0e'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
@@ -128,8 +130,8 @@ export default function TodayAvailability(props) {
     let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
-      const sessions = exampleSessions.filter(
-        session => dateFns.getHours(session.timeStart) === i
+      const sessions = props.sessions.filter(
+        session => dateFns.getHours(session.startTime) === i
       )
 
       hours.push(
@@ -183,17 +185,15 @@ export default function TodayAvailability(props) {
               <Sessions>
                 {sessions.map(session => (
                   <Session
-                    key={session.timeStart}
+                    key={session.startTime}
                     height={session.length}
                     full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.timeStart)}
+                    startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
                       container.setSelectedSession(session)
                       container.setShowModal(true)
                     }}
-                    disabled={
-                      dateFns.compareAsc(new Date(), session.timeStart) === 1
-                    }
+                    disabled={session.passed}
                   >
                     {`${session.slots -
                       session.players.length} ${singleOrPlural(

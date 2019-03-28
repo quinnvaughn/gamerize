@@ -5,6 +5,9 @@ const user = {
     const id = getUserId(ctx)
     return await ctx.prisma.user({ id })
   },
+  async getUser(parent, { username }, { prisma }) {
+    return await prisma.user({ username })
+  },
 }
 
 module.exports = { user }

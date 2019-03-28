@@ -262,7 +262,7 @@ export default function GamerDay(props) {
                 onClick={() => {
                   dispatch({ type: 'setSelectedSession', payload: session })
                 }}
-                disabled={dateFns.compareAsc(new Date(), session.endTime) === 1}
+                disabled={session.passed}
               >
                 <SpotsAndGame>{`${session.slots - session.players.length} ${
                   session.slots - session.players.length === 1

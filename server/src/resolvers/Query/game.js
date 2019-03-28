@@ -5,6 +5,12 @@ const game = {
       first,
     })
   },
+  async totalGames(parent, _, { prisma }) {
+    return await prisma
+      .gamesConnection()
+      .aggregate()
+      .count()
+  },
 }
 
 module.exports = { game }

@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Subscribe } from 'unstated'
+import gql from 'graphql-tag'
+import { useMutation } from 'react-apollo-hooks'
 
 import SessionsContainer from '../Containers/SessionsContainer'
 
@@ -101,7 +103,16 @@ const totalReducer = (acc, cur) => acc + cur.slots * cur.price
 
 const numSessionsReducer = (acc, cur) => acc + cur.slots
 
+const BOOK_TIME_SLOTS = gql`
+  mutation($input: BookTimeSlotsInput!) {
+    bookTimeSlots(input: $input) {
+      booked
+    }
+  }
+`
+
 export default function Totals(props) {
+  const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
   return (
     <Container>
       <Subscribe to={[SessionsContainer]}>
@@ -119,7 +130,7 @@ export default function Totals(props) {
           const discount = 0
 
           const totalMinusDiscounts = total - discount
-          const showTotals = container.state.sessions.length >= 1
+          const showTotals = sessions.length >= 1
           const content = showTotals ? (
             <TotalsContainer>
               <NumberSlots>
@@ -144,7 +155,25 @@ export default function Totals(props) {
           return (
             <Fragment>
               {content}
-              <Book>Book</Book>
+              <Book
+                onClick={async () => {
+                  const timeSlots = sessions.map(timeSlot => {
+                    return {
+                      timeSlotId: timeSlot.id,
+                      slots: timeSlot.slots,
+                      players: timeSlot.players,
+                      total: totalMinusDiscounts,
+                    }
+                  })
+                  const input = { timeSlots }
+                  console.log(input)
+                  await bookTimeSlots({
+                    variables: { input },
+                  })
+                }}
+              >
+                Book
+              </Book>
               <NotCharged>
                 <NotChargedYet>You will not be charged yet</NotChargedYet>
               </NotCharged>

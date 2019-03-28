@@ -48,8 +48,8 @@ const AddButton = styled.button`
 `
 
 const ADD_MINUTES_TO_SESSION = gql`
-  mutation($input: AddMinutesToSessionInput!) {
-    addMinutesToSession(input: $input) {
+  mutation($input: AddMinutesToTimeSlotInput!) {
+    addMinutesToTimeSlot(input: $input) {
       updatedSession {
         startTime
         endTime

@@ -11,8 +11,6 @@ import Totals from './Totals'
 
 //data
 
-import sessions from '../data/sessions'
-
 const Container = styled.div`
   flex: 40%;
   display: flex;
@@ -61,15 +59,6 @@ const HowManySlots = styled.div`
   margin-bottom: 1rem;
 `
 
-// Will have to fix to do only ones still available for today with filtering.
-const slotsReducer = (acc, cur) => {
-  if (dateFns.compareAsc(new Date(), cur.timeStart) === 1) {
-    return acc
-  } else return acc + (cur.slots - cur.players.length)
-}
-
-const slotsLeft = sessions.reduce(slotsReducer, 0)
-
 export default function SelectionOptions({
   price,
   reviews,
@@ -77,6 +66,7 @@ export default function SelectionOptions({
   systems,
   gamer,
   game,
+  slotsLeftToday,
 }) {
   return (
     <Container>
@@ -99,7 +89,7 @@ export default function SelectionOptions({
       <Subscribe to={[SessionsContainer]}>
         {session => (
           <Fragment>
-            <HowManySlots>{`${slotsLeft} slots left today`}</HowManySlots>
+            <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
             <SystemPicker systems={systems} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
             <Totals price={price} />

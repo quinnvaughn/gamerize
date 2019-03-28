@@ -7,7 +7,6 @@ import gql from 'graphql-tag'
 //local imports
 import GamerDay from '../Components/GamerDay'
 import GamerSessionCard from '../Components/GamerSessionCard'
-import useInterval from '../Hooks/useInterval'
 import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
 import BigGamerCalendar from '../Components/BigGamerCalendar'
 import GamerSelectedSession from '../Components/GamerSelectedSession'
@@ -112,11 +111,11 @@ const MY_SESSIONS = gql`
         length
       }
     }
-    todaySessions {
+    mySlotsToday {
       startTime
       endTime
       slots
-      finished
+      passed
       players {
         username
       }
@@ -131,9 +130,10 @@ const MY_SESSIONS = gql`
 `
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
-  const { data, loading, refetch } = useQuery(MY_SESSIONS)
+  const { data, loading, refetch } = useQuery(MY_SESSIONS, {
+    pollInterval: 5000,
+  })
   const [state] = useStore(gamerSessionSelection)
-  useInterval(() => refetch(), 60000)
   return (
     <PageContainer>
       <Content>
@@ -155,14 +155,12 @@ export default function GamerDashboardCalendar(props) {
           ) : loading ? null : (
             data.me &&
             data.me.buffer &&
-            data.todaySessions && (
-              <GamerDay todaySessions={data.todaySessions} />
-            )
+            data.mySlotsToday && <GamerDay todaySessions={data.mySlotsToday} />
           )}
         </LeftSide>
         <RightSide>
           <Top>
-            <SessionInfo>Sessions Info</SessionInfo>
+            <SessionInfo>Time Slots Info</SessionInfo>
             {loading
               ? null
               : data.me &&
