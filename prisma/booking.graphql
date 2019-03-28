@@ -1,0 +1,7 @@
+type Booking {
+  numSlots: Int!
+  numPlayers: Int!
+  players: [User!]!
+  total: Float!
+  timeslot: GamingTimeSlot!
+}

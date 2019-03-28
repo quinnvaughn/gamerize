@@ -5,8 +5,9 @@ datamodel:
   - game.graphql
   - gamingsession.graphql
   - sessionreview.graphql
-  - individualgamingsession.graphql
+  - gamingtimeslot.graphql
   - enums.graphql
+  - booking.graphql
 
 generate:
   - generator: javascript-client

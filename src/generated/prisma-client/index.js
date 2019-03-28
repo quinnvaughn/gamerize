@@ -53,7 +53,7 @@ var models = [
     embedded: false
   },
   {
-    name: "IndividualGamingSession",
+    name: "GamingTimeSlot",
     embedded: false
   },
   {
@@ -74,6 +74,10 @@ var models = [
   },
   {
     name: "PlayerOrSession",
+    embedded: false
+  },
+  {
+    name: "Booking",
     embedded: false
   }
 ];

@@ -1,14 +1,15 @@
 #import GamingSession from './gamingsession.graphql'
 #import User from './user.graphql'
 
-type IndividualGamingSession {
+type GamingTimeSlot {
   id: ID! @unique
   startTime: DateTime!
   endTime: DateTime!
   gamingSession: GamingSession!
   ## gaming session also has this info, but this way the user doesn't have to go through that
   ## to get to this info.
-  gamers: [User!]! @relation(name: "MyIndividualSessions")
-  players: [User!]! @relation(name: "SessionsBought")
+  gamers: [User!]! @relation(name: "MyGamingTimeSlots")
+  players: [User!]! @relation(name: "TimeSlotsBought")
+  length: Int!
   slots: Int!
 }
