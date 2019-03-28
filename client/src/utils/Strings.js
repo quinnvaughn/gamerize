@@ -33,3 +33,14 @@ export const formatSystems = systems => {
   })
   return str
 }
+
+export const formatGamers = gamers => {
+  let str = ''
+  gamers.forEach((gamer, index) => {
+    str += capitalize(noUnderscores(gamer.username))
+    if (index !== gamers.length - 1) {
+      str += ', '
+    }
+  })
+  return str
+}

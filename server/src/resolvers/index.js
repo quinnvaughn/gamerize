@@ -4,10 +4,12 @@ const { gamer } = require('./Mutation/gamer')
 const { game } = require('./Mutation/game')
 const { game: gameQuery } = require('./Query/game')
 const { gamingsession } = require('./Mutation/gamingsession')
+const { timeslot: timeSlotQuery } = require('./Query/timeslot')
+const { timeslot } = require('./Mutation/timeslot')
 const { gamer: gamerQuery } = require('./Query/gamer')
 const { gamingsession: gamingSessionQuery } = require('./Query/gamingsession')
 const { GamingSession } = require('./Type/GamingSession')
-const { IndividualGamingSession } = require('./Type/IndividualGamingsession')
+const { GamingTimeSlot } = require('./Type/GamingTimeSlot')
 const { User } = require('./Type/User')
 const { Node } = require('./Type/Node')
 
@@ -17,8 +19,10 @@ module.exports = {
     ...gamerQuery,
     ...gameQuery,
     ...gamingSessionQuery,
+    ...timeSlotQuery,
   },
   Mutation: {
+    ...timeslot,
     ...auth,
     ...gamer,
     ...game,
@@ -27,5 +31,5 @@ module.exports = {
   User,
   Node,
   GamingSession,
-  IndividualGamingSession,
+  GamingTimeSlot,
 }

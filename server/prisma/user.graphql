@@ -1,5 +1,6 @@
 #import * from './enums.graphql'
 # import Game from './game.graphql'
+# import SessionReview from './sessionreview.graphql'
 
 type User {
   id: ID! @unique
@@ -12,10 +13,10 @@ type User {
   aboutMe: String
   favoriteGames: [Game!]!
   sessions: [GamingSession!]! @relation(name: "MySessions")
-  individualSessions: [IndividualGamingSession!]!
-    @relation(name: "MyIndividualSessions")
-  sessionsBought: [IndividualGamingSession!]! @relation(name: "SessionsBought")
+  timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
+  timeSlotsBought: [Booking!]!
   buffer: Int
+  reviews: [SessionReview!]!
 }
 
 ## Workaround for no case insensitive search in prisma yet.

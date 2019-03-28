@@ -90,6 +90,7 @@ const GET_GAMERS = gql`
         name
       }
     }
+    totalGamers
   }
 `
 

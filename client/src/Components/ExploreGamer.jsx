@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
-import { noSpaces } from '../utils/Strings'
+import { noSpaces, capitalize } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -69,9 +69,9 @@ const Occupation = styled.span`
 // pulled function out and named it to make it more obvious and clean up return
 const formatCommasGames = (favoriteGames, game, index) => {
   if (index < favoriteGames.length - 1) {
-    return <FavoriteGame key={game}>{`${game}, `}</FavoriteGame>
+    return <FavoriteGame key={game}>{`${game.name}, `}</FavoriteGame>
   } else {
-    return <FavoriteGame key={game}>{`${game}`}</FavoriteGame>
+    return <FavoriteGame key={game}>{`${game.name}`}</FavoriteGame>
   }
 }
 
@@ -91,7 +91,11 @@ export default function ExploreGamer(props) {
         <Name>{props.name}</Name>
         <Occupations>
           {props.occupations.map((occupation, index) =>
-            formatCommasOccupations(props.occupations, occupation, index)
+            formatCommasOccupations(
+              props.occupations,
+              capitalize(occupation),
+              index
+            )
           )}
         </Occupations>
         <FavoriteGames>

@@ -123,7 +123,9 @@ export default function GamerSelectedSession(props) {
     let end = state.selectedSession.slots
     while (counter < end) {
       let username = state.selectedSession.players[counter]
-      slots.push(<Slot>{username ? username : 'Available'}</Slot>)
+        ? state.selectedSession.players[counter].username
+        : 'Available'
+      slots.push(<Slot taken={username !== 'Available'}>{username}</Slot>)
       counter++
     }
     return <Slots>{slots}</Slots>

@@ -207,23 +207,23 @@ export default function TimeSlotSession(props) {
   }, {})
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
-    const endTime = 'h:mm:ss a'
+    const endTime = 'h:mm a'
     return (
       <Header>
         <ChevronLeft onClick={props.goBack} />
         <Center>
-          <Title>{`${props.gamer.name} - ${noUnderscores(props.game)}`}</Title>
+          <Title>{`${props.gamer} - ${noUnderscores(props.game)}`}</Title>
           {/* Add system when have that data. */}
           <Date>
-            {dateFns.format(props.selectedSession.timeStart, dateFormat)}
+            {dateFns.format(props.selectedSession.startTime, dateFormat)}
           </Date>
           <Time>
             {`${dateFns.format(
-              props.selectedSession.timeStart,
+              props.selectedSession.startTime,
               endTime
             )} - ${dateFns.format(
               dateFns.addMinutes(
-                props.selectedSession.timeStart,
+                props.selectedSession.startTime,
                 props.selectedSession.length
               ),
               endTime
@@ -240,7 +240,10 @@ export default function TimeSlotSession(props) {
     let counter = 0
     let end = session.state.selectedSession.slots
     while (counter < end) {
+      console.log(session.state.selectedSession.players[counter])
       const currentUser = session.state.selectedSession.players[counter]
+        ? session.state.selectedSession.players[counter].username
+        : null
       currentUser
         ? slots.push(
             <Slot taken value={counter}>

@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 
 //local imports
 import ExploreGamer from './ExploreGamer'
-
-//data
-import gamers from '../data/gamers'
 
 const Container = styled.div`
   min-height: 20rem;
@@ -22,19 +21,36 @@ const AllTheGames = styled.div`
   margin-right: -0.8rem;
 `
 
+const GET_GAMERS = gql`
+  {
+    getGamers {
+      name
+      username
+      occupations
+      favoriteGames {
+        name
+      }
+    }
+    totalGamers
+  }
+`
+
 export default function DisplayGames(props) {
+  const { data, loading } = useQuery(GET_GAMERS)
   return (
     <Container>
       <AllTheGames>
-        {gamers.map(gamer => (
-          <ExploreGamer
-            name={gamer.name}
-            occupations={gamer.occupations}
-            favoriteGames={gamer.favoriteGames}
-            username={gamer.username}
-            key={gamer.username}
-          />
-        ))}
+        {loading
+          ? null
+          : data.getGamers.map(gamer => (
+              <ExploreGamer
+                name={gamer.name}
+                occupations={gamer.occupations}
+                favoriteGames={gamer.favoriteGames}
+                username={gamer.username}
+                key={gamer.username}
+              />
+            ))}
       </AllTheGames>
     </Container>
   )

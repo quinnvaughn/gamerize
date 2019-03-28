@@ -125,7 +125,7 @@ const formatCommas = (systems, system, index, username) => {
 export default function SmallSession(props) {
   return (
     <Container width={props.width}>
-      <StyledLink to={`/users/${props.username}/${props.game}`}>
+      <StyledLink to={`/users/${props.username}/${props.game}/${props.id}`}>
         <DynamicImage src={DefaultAvatar} />
         <TitleContainer>
           <Title>{props.title}</Title>
@@ -138,9 +138,8 @@ export default function SmallSession(props) {
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
         <Bottom>
-          <Reviews>{props.reviews}</Reviews>
           <StarRatings
-            rating={props.reviews}
+            rating={props.reviewRating}
             starRatedColor="#f10e0e"
             numberOfStars={5}
             name="rating"

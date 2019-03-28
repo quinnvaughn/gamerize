@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
+import gql from 'graphql-tag'
 import Media from 'react-media'
 
 import DefaultBanner from '../default-banner.png'
@@ -13,9 +15,9 @@ import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
 import { noUnderscores, capitalize, singleOrPlural } from '../utils/Strings'
+import { formatGamers } from '../utils/Strings'
 
 //data
-import gamers from '../data/gamers'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -185,11 +187,6 @@ const Length = styled.span`
   font-weight: 400;
 `
 
-const SnapTo = styled.div`
-  position: absolute;
-  top: -70px;
-  left: 0;
-`
 const GamerInfo = styled.div`
   width: 100%;
 `
@@ -236,12 +233,58 @@ const formatCommas = (systems, system, index) => {
   }
 }
 
+const GET_SPECIFIC_SESSION = gql`
+  query($sessionId: String!) {
+    getSpecificSession(sessionId: $sessionId) {
+      title
+      length
+      type
+      slots
+      price
+      slotsLeftToday
+      reviewRating
+      numReviews
+      systems
+      game {
+        name
+      }
+      gamers {
+        occupations
+        username
+        name
+      }
+    }
+  }
+`
+
+const GET_SLOTS_TODAY = gql`
+  query($sessionId: String!) {
+    specificSessionSlotsToday(sessionId: $sessionId) {
+      startTime
+      length
+      slots
+      id
+      passed
+      players {
+        username
+      }
+    }
+  }
+`
+
 export default function SpecificSessionPage(props) {
-  const { user, game } = props.match.params
-  // won't need to do when getting data from db.
-  const gamer = _.find(gamers, { username: user })
-  console.log(user, game, gamer)
-  return (
+  const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
+    variables: { sessionId: props.match.params.id },
+    pollInterval: 5000,
+  })
+  const { data: secondData, loading: secondLoading } = useQuery(
+    GET_SLOTS_TODAY,
+    {
+      variables: { sessionId: props.match.params.id },
+      pollInterval: 5000,
+    }
+  )
+  return loading || secondLoading ? null : (
     <PageContainer>
       <NavBarWithScroll
       // visibleSection={currentSection}
@@ -251,8 +294,116 @@ export default function SpecificSessionPage(props) {
         <Banner src={DefaultBanner} alt="Banner" />
       </BannerContainer>
       <Content>
-        <SnapTo id="gamer" />
         <LeftSide>
+          <GamerInfo>
+            <TopContainer>
+              <TitleContainer>
+                <Title>{data.getSpecificSession.title}</Title>
+              </TitleContainer>
+              {/* <GamerContainer>
+                <GamerLink to={`/users/${gamer.username}`}>
+                  <Avatar src={DefaultAvatar} alt="Avatar" />
+                  <Gamer>{`${gamer.name}`}</Gamer>
+                </GamerLink>
+                <Occupations>
+                  {gamer.occupations.map(occupation => (
+                    <Occupation key={occupation}>{occupation}</Occupation>
+                  ))}
+                </Occupations>
+              </GamerContainer> */}
+            </TopContainer>
+            <MiddleContainer>
+              <FlexHalf>
+                <Flex>
+                  <TypeOfContent>Game</TypeOfContent>
+                  <Game>{`${noUnderscores(
+                    data.getSpecificSession.game.name
+                  )}`}</Game>
+                </Flex>
+                <Flex>
+                  <TypeOfContent>{`${singleOrPlural(
+                    data.getSpecificSession.systems,
+                    'System'
+                  )}`}</TypeOfContent>
+                  {data.getSpecificSession.systems.map((system, index) =>
+                    formatCommas(data.getSpecificSession.systems, system, index)
+                  )}
+                </Flex>
+                <Flex>
+                  <TypeOfContent>Length</TypeOfContent>
+                  <Length>{`${data.getSpecificSession.length} minutes`}</Length>
+                </Flex>
+              </FlexHalf>
+              <FlexHalf>
+                <Flex>
+                  <TypeOfContent>Type of game</TypeOfContent>
+                  <TypeOfGame>
+                    {capitalize(data.getSpecificSession.type)}
+                  </TypeOfGame>
+                </Flex>
+                <Flex>
+                  <TypeOfContent>Slots per session</TypeOfContent>
+                  <Slots>{`${data.getSpecificSession.slots}`}</Slots>
+                </Flex>
+              </FlexHalf>
+            </MiddleContainer>
+            {/* <RequirementsAndDiscountsContainer>
+              <InnerContainer>
+                <TypeOfContent>Requirements</TypeOfContent>
+                {gamer.requirements.map(requirement => (
+                  <Requirement key={requirement}>{requirement}</Requirement>
+                ))}
+              </InnerContainer>
+              <InnerContainer>
+                <TypeOfContent>Discounts</TypeOfContent>
+                {gamer.discounts.map(discount => (
+                  <Discount key={discount}>{discount}</Discount>
+                ))}
+              </InnerContainer>
+            </RequirementsAndDiscountsContainer> */}
+          </GamerInfo>
+          <TodayAvailability
+            day={new Date()}
+            sessions={secondData.specificSessionSlotsToday}
+          />
+          {/*<Reviews reviews={gamer.reviews} numReviews={gamer.numReviews} /> */}
+        </LeftSide>
+        <Media query="(max-width: 1127px)">
+          {matches =>
+            matches ? (
+              <FixedSelectionOptions
+                gamer={formatGamers(data.getSpecificSession.gamers)}
+                game={data.getSpecificSession.game.name}
+                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
+                slots={data.getSpecificSession.slots}
+                price={data.getSpecificSession.price}
+                numReviews={data.getSpecificSession.numReviews}
+                reviewRating={data.getSpecificSession.reviewRating}
+                systems={data.getSpecificSession.systems}
+              />
+            ) : (
+              <SelectionOptions
+                gamer={formatGamers(data.getSpecificSession.gamers)}
+                game={data.getSpecificSession.game.name}
+                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
+                slots={data.getSpecificSession.slots}
+                price={data.getSpecificSession.price}
+                numReviews={data.getSpecificSession.numReviews}
+                reviewRating={data.getSpecificSession.reviewRating}
+                systems={data.getSpecificSession.systems}
+              />
+            )
+          }
+        </Media>
+      </Content>
+
+      <Footer />
+    </PageContainer>
+  )
+}
+
+{
+  /* <LeftSide>
           <GamerInfo>
             <TopContainer>
               <TitleContainer>
@@ -294,9 +445,7 @@ export default function SpecificSessionPage(props) {
                 <Flex>
                   <TypeOfContent>Type of game</TypeOfContent>
                   <TypeOfGame>
-                    {gamer.typeOfGame === 'CUSTOM'
-                      ? `${capitalize(gamer.typeOfGame)}`
-                      : capitalize(gamer.typeOfGame)}
+                    {capitalize(game.type)}
                   </TypeOfGame>
                 </Flex>
                 <Flex>
@@ -332,7 +481,7 @@ export default function SpecificSessionPage(props) {
                 slots={gamer.slots}
                 price={gamer.price}
                 numReviews={gamer.numReviews}
-                reviews={gamer.reviews}
+                reviewRating={gamer.reviewRating}
                 systems={gamer.systems}
               />
             ) : (
@@ -342,14 +491,10 @@ export default function SpecificSessionPage(props) {
                 slots={gamer.slots}
                 price={gamer.price}
                 numReviews={gamer.numReviews}
-                reviews={gamer.reviews}
+                reviewRating={gamer.reviewRating}
                 systems={gamer.systems}
               />
             )
           }
-        </Media>
-      </Content>
-      <Footer />
-    </PageContainer>
-  )
+        </Media> */
 }
