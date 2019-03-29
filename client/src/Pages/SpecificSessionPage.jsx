@@ -266,7 +266,9 @@ const GET_SLOTS_TODAY = gql`
       id
       passed
       players {
-        username
+        player {
+          username
+        }
       }
     }
   }

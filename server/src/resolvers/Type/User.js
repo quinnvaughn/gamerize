@@ -11,6 +11,9 @@ const User = {
   timeSlots: async (parent, _, ctx) => {
     return await ctx.prisma.user({ id: parent.id }).timeSlots()
   },
+  timeSlotsBooked: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).timeSlotsBooked()
+  },
   sessionIsGoingOn: async (parent, _, ctx) => {
     const currentTime = new Date()
     const session = await ctx.prisma.user({ id: parent.id }).timeSlots({

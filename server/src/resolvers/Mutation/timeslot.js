@@ -1,5 +1,6 @@
 const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
+const _ = require('lodash')
 const timeslot = {
   async createGamingTimeSlot(parent, { input }, ctx) {
     const userId = getUserId(ctx)
@@ -250,8 +251,6 @@ const timeslot = {
   },
   async bookTimeSlots(parent, { input }, ctx) {
     const userId = getUserId(ctx)
-    let sessionsBought = []
-    let updatedSlots = []
     for (const timeslot in input.timeSlots) {
       const sessionBought = await ctx.prisma.createBooking({
         total: input.timeSlots[timeslot].total,
@@ -268,22 +267,45 @@ const timeslot = {
           },
         },
       })
-      const updateGamingTimeSlot = await ctx.prisma.updateGamingTimeSlot({
-        data: {
-          players: {
-            connect: {
-              id: userId,
+      let counter = 0
+      let end = input.timeSlots[timeslot].slots
+      while (counter < end) {
+        await ctx.prisma.updateGamingTimeSlot({
+          data: {
+            players: {
+              create: {
+                player: { connect: { id: userId } },
+              },
             },
           },
-        },
-        where: {
-          id: input.timeSlots[timeslot].timeSlotId,
-        },
-      })
-      sessionsBought.push(sessionBought)
-      updatedSlots.push(updateGamingTimeSlot)
+          where: {
+            id: input.timeSlots[timeslot].timeSlotId,
+          },
+        })
+        counter++
+      }
+      if (input.timeSlots[timeslot].players > 1) {
+        let counter = 0
+        // The number of players you can send an invite to. Doesn't include you.
+        let end = input.timeSlots[timeslot].players - 1
+        while (counter < end) {
+          await ctx.prisma.createBookingInvite({
+            booking: {
+              connect: {
+                id: sessionBought.id,
+              },
+            },
+            from: {
+              connect: {
+                id: userId,
+              },
+            },
+            sent: false,
+          })
+          counter++
+        }
+      }
     }
-    console.log(sessionsBought, updatedSlots)
   },
 }
 

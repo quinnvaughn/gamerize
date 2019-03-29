@@ -72,7 +72,9 @@ const NEXT_SESSION = gql`
       }
       endTime
       players {
-        username
+        player {
+          username
+        }
       }
     }
   }
@@ -88,9 +90,11 @@ export default function NextSession(props) {
     let counter = 0
     let end = data.nextTimeSlot.slots
     while (counter < end) {
-      let username = data.nextTimeSlot.players[counter]
-        ? data.nextTimeSlot.players[counter].username
-        : 'Empty Slot'
+      let username =
+        data.nextTimeSlot.players.length > 0 &&
+        data.nextTimeSlot.players[counter]
+          ? data.nextTimeSlot.players[counter].player.username
+          : 'Empty Slot'
       usernames.push(<Username>{username}</Username>)
       counter++
     }

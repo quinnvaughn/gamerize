@@ -117,7 +117,9 @@ const MY_SESSIONS = gql`
       slots
       passed
       players {
-        username
+        player {
+          username
+        }
       }
       gamingSession {
         length
@@ -133,6 +135,7 @@ export default function GamerDashboardCalendar(props) {
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
     pollInterval: 5000,
   })
+  console.log(data)
   const [state] = useStore(gamerSessionSelection)
   return (
     <PageContainer>
@@ -164,6 +167,7 @@ export default function GamerDashboardCalendar(props) {
             {loading
               ? null
               : data.me &&
+                data.me.sessionIsGoingOn &&
                 data.me.sessionIsGoingOn.goingOn === true && (
                   <SessionsIsGoingOn
                     refetch={refetch}

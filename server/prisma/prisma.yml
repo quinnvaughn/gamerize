@@ -8,6 +8,7 @@ datamodel:
   - gamingtimeslot.graphql
   - enums.graphql
   - booking.graphql
+  - bookinginvite.graphql
 
 generate:
   - generator: javascript-client
