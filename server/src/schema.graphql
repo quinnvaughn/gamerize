@@ -215,6 +215,7 @@ type User {
   isGamer: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
+  timeSlotsBooked: [Booking!]!
   sessionIsGoingOn: SessionIsGoingOn
   buffer: Int
   favoriteGames: [Game!]!
@@ -223,6 +224,8 @@ type User {
   numReviews: Int!
   reviews: [SessionReview!]!
   reviewRating: Float!
+  invites: [BookingInvite!]!
+  invitesReceived: [BookingInvite!]!
 }
 
 type SessionIsGoingOn {
@@ -257,7 +260,7 @@ type GamingTimeSlot {
   ## gaming session also has this info, but this way the user doesn't have to go through that
   ## to get to this info.
   gamers: [User!]!
-  players: [User!]!
+  players: [BookedPlayer!]!
   slots: Int!
   passed: Boolean!
   full: Boolean!

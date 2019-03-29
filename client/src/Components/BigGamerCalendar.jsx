@@ -143,7 +143,9 @@ const THAT_DAY_SESSIONS = gql`
       endTime
       slots
       players {
-        id
+        player {
+          id
+        }
       }
       gamingSession {
         length

@@ -13,6 +13,10 @@ var models = [
     embedded: false
   },
   {
+    name: "BookedPlayer",
+    embedded: false
+  },
+  {
     name: "GamerRequest",
     embedded: false
   },
@@ -78,6 +82,10 @@ var models = [
   },
   {
     name: "Booking",
+    embedded: false
+  },
+  {
+    name: "BookingInvite",
     embedded: false
   }
 ];

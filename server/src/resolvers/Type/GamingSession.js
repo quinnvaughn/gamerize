@@ -30,7 +30,9 @@ const GamingSession = {
               endTime
               slots
               players {
-                id
+                player {
+                  id
+                }
               }
             }
           }

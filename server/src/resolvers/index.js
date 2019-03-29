@@ -12,6 +12,7 @@ const { GamingSession } = require('./Type/GamingSession')
 const { GamingTimeSlot } = require('./Type/GamingTimeSlot')
 const { User } = require('./Type/User')
 const { Node } = require('./Type/Node')
+const { BookedPlayer } = require('./Type/BookedPlayer')
 
 module.exports = {
   Query: {
@@ -32,4 +33,5 @@ module.exports = {
   Node,
   GamingSession,
   GamingTimeSlot,
+  BookedPlayer,
 }
