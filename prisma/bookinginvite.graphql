@@ -1,0 +1,6 @@
+type BookingInvite {
+  booking: Booking!
+  to: User @relation(name: "InvitesReceived")
+  from: User! @relation(name: "InvitesFromMe")
+  sent: Boolean!
+}

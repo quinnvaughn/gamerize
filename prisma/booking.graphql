@@ -1,4 +1,5 @@
 type Booking {
+  id: ID! @unique
   numSlots: Int!
   numPlayers: Int!
   players: [User!]!
