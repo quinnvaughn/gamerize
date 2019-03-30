@@ -305,16 +305,17 @@ const timeslot = {
                 id: userId,
               },
             },
+            startTime: input.timeSlots[timeslot].startTime,
             sent: false,
           })
           counter++
         }
       }
-      if (sessionsBought.length > 0) {
-        return { booked: true }
-      }
-      return { booked: false }
     }
+    if (sessionsBought.length > 0) {
+      return { booked: true }
+    }
+    return { booked: false }
   },
 }
 
