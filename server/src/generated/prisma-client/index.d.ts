@@ -101,6 +101,7 @@ export interface Prisma {
       last?: Int;
     }
   ) => BookingConnectionPromise;
+  bookingInvite: (where: BookingInviteWhereUniqueInput) => BookingInvitePromise;
   bookingInvites: (
     args?: {
       where?: BookingInviteWhereInput;
@@ -466,12 +467,28 @@ export interface Prisma {
   deleteBooking: (where: BookingWhereUniqueInput) => BookingPromise;
   deleteManyBookings: (where?: BookingWhereInput) => BatchPayloadPromise;
   createBookingInvite: (data: BookingInviteCreateInput) => BookingInvitePromise;
+  updateBookingInvite: (
+    args: {
+      data: BookingInviteUpdateInput;
+      where: BookingInviteWhereUniqueInput;
+    }
+  ) => BookingInvitePromise;
   updateManyBookingInvites: (
     args: {
       data: BookingInviteUpdateManyMutationInput;
       where?: BookingInviteWhereInput;
     }
   ) => BatchPayloadPromise;
+  upsertBookingInvite: (
+    args: {
+      where: BookingInviteWhereUniqueInput;
+      create: BookingInviteCreateInput;
+      update: BookingInviteUpdateInput;
+    }
+  ) => BookingInvitePromise;
+  deleteBookingInvite: (
+    where: BookingInviteWhereUniqueInput
+  ) => BookingInvitePromise;
   deleteManyBookingInvites: (
     where?: BookingInviteWhereInput
   ) => BatchPayloadPromise;
@@ -815,41 +832,17 @@ export type BookedPlayerOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type Tags =
-  | "ACTION"
-  | "ADVENTURE_GAME"
-  | "CARD_AND_BOARD_GAME"
-  | "COMPILATION"
-  | "DRIVING_SLASH_RACING_GAME"
-  | "EDUCATIONAL_GAME"
-  | "FIGHTING"
-  | "FLIGHT_SIMULATOR"
-  | "FPS"
-  | "GAMBLING_GAME"
-  | "HIDDEN_OBJECTS"
-  | "HORROR"
-  | "INDIE_GAME"
-  | "METROIDVANIA"
-  | "MMORPG"
-  | "MOBA"
-  | "OPEN_WORLD"
-  | "PINBALL"
-  | "PLATFORMER"
-  | "POINT_AND_CLICK"
-  | "PUZZLE"
-  | "RHYTHM_AND_MUSIC_GAME"
-  | "ROGUELIKE"
-  | "RPG"
-  | "RTS"
-  | "SERIES_COLON_SOULS"
-  | "SHOOT_HYPHEN_EM_UP"
-  | "SHOOTER"
-  | "SIMULATION"
-  | "SPORTS_GAME"
-  | "STEALTH"
-  | "STRATEGY"
-  | "SURVIVAL"
-  | "VISUAL_NOVEL";
+export type GameOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "numSessions_ASC"
+  | "numSessions_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type GamingTimeSlotOrderByInput =
   | "id_ASC"
@@ -925,18 +918,6 @@ export type GamingSessionIndexOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type System = "XBOX_ONE" | "NINTENDO_SWITCH" | "PC" | "PS4";
-
-export type GameIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export type SessionReviewOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -949,69 +930,11 @@ export type SessionReviewOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type BookingOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "numSlots_ASC"
-  | "numSlots_DESC"
-  | "numPlayers_ASC"
-  | "numPlayers_DESC"
-  | "total_ASC"
-  | "total_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type TypeOfGame = "CUSTOM" | "MATCHMAKING";
-
-export type SocialMediaOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "twitter_ASC"
-  | "twitter_DESC"
-  | "facebook_ASC"
-  | "facebook_DESC"
-  | "youtube_ASC"
-  | "youtube_DESC"
-  | "instagram_ASC"
-  | "instagram_DESC"
-  | "twitch_ASC"
-  | "twitch_DESC"
-  | "snapchat_ASC"
-  | "snapchat_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type GameOrderByInput =
+export type GameIndexOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
-  | "numSessions_ASC"
-  | "numSessions_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type PlayerOrSession = "PLAYER" | "SESSION";
-
-export type GamingSessionOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "title_ASC"
-  | "title_DESC"
-  | "length_ASC"
-  | "length_DESC"
-  | "price_ASC"
-  | "price_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "slots_ASC"
-  | "slots_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1038,6 +961,102 @@ export type UserOrderByInput =
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type BookingOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "numSlots_ASC"
+  | "numSlots_DESC"
+  | "numPlayers_ASC"
+  | "numPlayers_DESC"
+  | "total_ASC"
+  | "total_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type System = "XBOX_ONE" | "NINTENDO_SWITCH" | "PC" | "PS4";
+
+export type SocialMediaOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "twitter_ASC"
+  | "twitter_DESC"
+  | "facebook_ASC"
+  | "facebook_DESC"
+  | "youtube_ASC"
+  | "youtube_DESC"
+  | "instagram_ASC"
+  | "instagram_DESC"
+  | "twitch_ASC"
+  | "twitch_DESC"
+  | "snapchat_ASC"
+  | "snapchat_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type PlayerOrSession = "PLAYER" | "SESSION";
+
+export type Tags =
+  | "ACTION"
+  | "ADVENTURE_GAME"
+  | "CARD_AND_BOARD_GAME"
+  | "COMPILATION"
+  | "DRIVING_SLASH_RACING_GAME"
+  | "EDUCATIONAL_GAME"
+  | "FIGHTING"
+  | "FLIGHT_SIMULATOR"
+  | "FPS"
+  | "GAMBLING_GAME"
+  | "HIDDEN_OBJECTS"
+  | "HORROR"
+  | "INDIE_GAME"
+  | "METROIDVANIA"
+  | "MMORPG"
+  | "MOBA"
+  | "OPEN_WORLD"
+  | "PINBALL"
+  | "PLATFORMER"
+  | "POINT_AND_CLICK"
+  | "PUZZLE"
+  | "RHYTHM_AND_MUSIC_GAME"
+  | "ROGUELIKE"
+  | "RPG"
+  | "RTS"
+  | "SERIES_COLON_SOULS"
+  | "SHOOT_HYPHEN_EM_UP"
+  | "SHOOTER"
+  | "SIMULATION"
+  | "SPORTS_GAME"
+  | "STEALTH"
+  | "STRATEGY"
+  | "SURVIVAL"
+  | "VISUAL_NOVEL";
+
+export type GamingSessionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "length_ASC"
+  | "length_DESC"
+  | "price_ASC"
+  | "price_DESC"
+  | "system_ASC"
+  | "system_DESC"
+  | "type_ASC"
+  | "type_DESC"
+  | "slots_ASC"
+  | "slots_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type TypeOfGame = "CUSTOM" | "MATCHMAKING";
 
 export type Occupations =
   | "CELEBRITY"
@@ -1068,10 +1087,10 @@ export type Occupations =
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type BookingInviteOrderByInput =
-  | "sent_ASC"
-  | "sent_DESC"
   | "id_ASC"
   | "id_DESC"
+  | "sent_ASC"
+  | "sent_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1087,111 +1106,96 @@ export type GamerRequestOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface GamingTimeSlotUpdateWithoutGamersDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  players?: BookedPlayerUpdateManyInput;
-  length?: Int;
-  slots?: Int;
+export interface SessionReviewUpdateWithoutSessionDataInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
 }
 
 export type BookedPlayerWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface UserCreateManyWithoutTimeSlotsInput {
-  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutTimeSlotsBookedDataInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  favoriteGames?: GameUpdateManyInput;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-}
-
-export interface UserCreateWithoutTimeSlotsInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-}
-
-export interface GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
-  where: GamingSessionWhereUniqueInput;
-  data: GamingSessionUpdateWithoutGamersDataInput;
-}
-
-export interface BookingCreateManyWithoutPlayersInput {
+export interface BookingInviteCreateManyWithoutFromInput {
   create?:
-    | BookingCreateWithoutPlayersInput[]
-    | BookingCreateWithoutPlayersInput;
-  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+    | BookingInviteCreateWithoutFromInput[]
+    | BookingInviteCreateWithoutFromInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
 }
 
-export interface RequirementWhereInput {
-  msg?: String;
-  msg_not?: String;
-  msg_in?: String[] | String;
-  msg_not_in?: String[] | String;
-  msg_lt?: String;
-  msg_lte?: String;
-  msg_gt?: String;
-  msg_gte?: String;
-  msg_contains?: String;
-  msg_not_contains?: String;
-  msg_starts_with?: String;
-  msg_not_starts_with?: String;
-  msg_ends_with?: String;
-  msg_not_ends_with?: String;
-  AND?: RequirementWhereInput[] | RequirementWhereInput;
-  OR?: RequirementWhereInput[] | RequirementWhereInput;
-  NOT?: RequirementWhereInput[] | RequirementWhereInput;
+export interface BookingUpdateInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  players?: UserUpdateManyWithoutTimeSlotsBookedInput;
+  total?: Float;
+  timeslot?: GamingTimeSlotUpdateOneRequiredInput;
 }
 
-export interface BookingCreateWithoutPlayersInput {
-  numSlots: Int;
-  numPlayers: Int;
-  total: Float;
-  timeslot: GamingTimeSlotCreateOneInput;
+export interface BookingInviteCreateWithoutFromInput {
+  booking: BookingCreateOneInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  sent: Boolean;
 }
 
-export interface UserSubscriptionWhereInput {
+export interface DiscountUpdateManyWithWhereNestedInput {
+  where: DiscountScalarWhereInput;
+  data: DiscountUpdateManyDataInput;
+}
+
+export interface BookingCreateOneInput {
+  create?: BookingCreateInput;
+  connect?: BookingWhereUniqueInput;
+}
+
+export interface UserIndexSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  node?: UserIndexWhereInput;
+  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
+  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
 }
 
-export interface GamingTimeSlotCreateOneInput {
-  create?: GamingTimeSlotCreateInput;
-  connect?: GamingTimeSlotWhereUniqueInput;
+export interface BookingCreateInput {
+  numSlots: Int;
+  numPlayers: Int;
+  players?: UserCreateManyWithoutTimeSlotsBookedInput;
+  total: Float;
+  timeslot: GamingTimeSlotCreateOneInput;
+}
+
+export interface BookingInviteWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  booking?: BookingWhereInput;
+  to?: UserWhereInput;
+  from?: UserWhereInput;
+  sent?: Boolean;
+  sent_not?: Boolean;
+  AND?: BookingInviteWhereInput[] | BookingInviteWhereInput;
+  OR?: BookingInviteWhereInput[] | BookingInviteWhereInput;
+  NOT?: BookingInviteWhereInput[] | BookingInviteWhereInput;
+}
+
+export interface UserCreateManyWithoutTimeSlotsBookedInput {
+  create?:
+    | UserCreateWithoutTimeSlotsBookedInput[]
+    | UserCreateWithoutTimeSlotsBookedInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface SocialMediaSubscriptionWhereInput {
@@ -1205,14 +1209,21 @@ export interface SocialMediaSubscriptionWhereInput {
   NOT?: SocialMediaSubscriptionWhereInput[] | SocialMediaSubscriptionWhereInput;
 }
 
-export interface GamingTimeSlotCreateInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
-  gamers?: UserCreateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerCreateManyInput;
-  length: Int;
-  slots: Int;
+export interface UserCreateWithoutTimeSlotsBookedInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
 }
 
 export interface BookingWhereInput {
@@ -1263,9 +1274,11 @@ export interface BookingWhereInput {
   NOT?: BookingWhereInput[] | BookingWhereInput;
 }
 
-export interface BookedPlayerCreateManyInput {
-  create?: BookedPlayerCreateInput[] | BookedPlayerCreateInput;
-  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+export interface BookingInviteCreateManyWithoutToInput {
+  create?:
+    | BookingInviteCreateWithoutToInput[]
+    | BookingInviteCreateWithoutToInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
 }
 
 export interface RequirementSubscriptionWhereInput {
@@ -1279,10 +1292,10 @@ export interface RequirementSubscriptionWhereInput {
   NOT?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
 }
 
-export interface BookingInviteCreateManyWithoutFromInput {
-  create?:
-    | BookingInviteCreateWithoutFromInput[]
-    | BookingInviteCreateWithoutFromInput;
+export interface BookingInviteCreateWithoutToInput {
+  booking: BookingCreateOneInput;
+  from: UserCreateOneWithoutInvitesInput;
+  sent: Boolean;
 }
 
 export interface BookedPlayerWhereInput {
@@ -1306,10 +1319,9 @@ export interface BookedPlayerWhereInput {
   NOT?: BookedPlayerWhereInput[] | BookedPlayerWhereInput;
 }
 
-export interface BookingInviteCreateWithoutFromInput {
-  booking: BookingCreateOneInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  sent: Boolean;
+export interface UserCreateOneWithoutInvitesInput {
+  create?: UserCreateWithoutInvitesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface GamingSessionSubscriptionWhereInput {
@@ -1329,9 +1341,21 @@ export interface GamingSessionSubscriptionWhereInput {
     | GamingSessionSubscriptionWhereInput;
 }
 
-export interface BookingCreateOneInput {
-  create?: BookingCreateInput;
-  connect?: BookingWhereUniqueInput;
+export interface UserCreateWithoutInvitesInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
 }
 
 export interface GamerRequestSubscriptionWhereInput {
@@ -1351,12 +1375,11 @@ export interface GamerRequestSubscriptionWhereInput {
     | GamerRequestSubscriptionWhereInput;
 }
 
-export interface BookingCreateInput {
-  numSlots: Int;
-  numPlayers: Int;
-  players?: UserCreateManyWithoutTimeSlotsBookedInput;
-  total: Float;
-  timeslot: GamingTimeSlotCreateOneInput;
+export interface SessionReviewCreateManyWithoutUserInput {
+  create?:
+    | SessionReviewCreateWithoutUserInput[]
+    | SessionReviewCreateWithoutUserInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
 }
 
 export interface GameSubscriptionWhereInput {
@@ -1370,11 +1393,10 @@ export interface GameSubscriptionWhereInput {
   NOT?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
 }
 
-export interface UserCreateManyWithoutTimeSlotsBookedInput {
-  create?:
-    | UserCreateWithoutTimeSlotsBookedInput[]
-    | UserCreateWithoutTimeSlotsBookedInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface SessionReviewCreateWithoutUserInput {
+  session: GamingSessionCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
 }
 
 export interface BookingInviteSubscriptionWhereInput {
@@ -1394,21 +1416,9 @@ export interface BookingInviteSubscriptionWhereInput {
     | BookingInviteSubscriptionWhereInput;
 }
 
-export interface UserCreateWithoutTimeSlotsBookedInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
+export interface GamingSessionCreateOneWithoutReviewsInput {
+  create?: GamingSessionCreateWithoutReviewsInput;
+  connect?: GamingSessionWhereUniqueInput;
 }
 
 export interface BookingSubscriptionWhereInput {
@@ -1422,10 +1432,19 @@ export interface BookingSubscriptionWhereInput {
   NOT?: BookingSubscriptionWhereInput[] | BookingSubscriptionWhereInput;
 }
 
-export interface BookingInviteCreateManyWithoutToInput {
-  create?:
-    | BookingInviteCreateWithoutToInput[]
-    | BookingInviteCreateWithoutToInput;
+export interface GamingSessionCreateWithoutReviewsInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
 }
 
 export interface UserIndexUpdateManyMutationInput {
@@ -1434,22 +1453,1445 @@ export interface UserIndexUpdateManyMutationInput {
   name?: String;
 }
 
-export interface BookingInviteCreateWithoutToInput {
-  booking: BookingCreateOneInput;
-  from: UserCreateOneWithoutInvitesInput;
-  sent: Boolean;
+export interface UserCreateOneWithoutInvitesReceivedInput {
+  create?: UserCreateWithoutInvitesReceivedInput;
+  connect?: UserWhereUniqueInput;
 }
 
-export interface UserIndexCreateInput {
+export interface UserIndexUpdateInput {
+  email?: String;
+  username?: String;
+  name?: String;
+  user?: UserUpdateOneRequiredInput;
+}
+
+export interface UserCreateWithoutInvitesReceivedInput {
   email: String;
   username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
   name: String;
-  user: UserCreateOneInput;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
 }
 
-export interface UserCreateOneWithoutInvitesInput {
-  create?: UserCreateWithoutInvitesInput;
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  buffer?: Int;
+}
+
+export interface BookedPlayerUpdateInput {
+  player?: UserUpdateOneRequiredInput;
+}
+
+export interface SocialMediaUpdateManyMutationInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
   connect?: UserWhereUniqueInput;
+}
+
+export type GameWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface UserUpdateDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  favoriteGames?: GameUpdateManyInput;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+}
+
+export interface SessionReviewUpsertNestedInput {
+  update: SessionReviewUpdateDataInput;
+  create: SessionReviewCreateInput;
+}
+
+export interface UserUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export type GameIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GameUpdateManyInput {
+  create?: GameCreateInput[] | GameCreateInput;
+  update?:
+    | GameUpdateWithWhereUniqueNestedInput[]
+    | GameUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | GameUpsertWithWhereUniqueNestedInput[]
+    | GameUpsertWithWhereUniqueNestedInput;
+  delete?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+  connect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+  set?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+  disconnect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+  deleteMany?: GameScalarWhereInput[] | GameScalarWhereInput;
+  updateMany?:
+    | GameUpdateManyWithWhereNestedInput[]
+    | GameUpdateManyWithWhereNestedInput;
+}
+
+export interface GameIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  game?: GameWhereInput;
+  AND?: GameIndexWhereInput[] | GameIndexWhereInput;
+  OR?: GameIndexWhereInput[] | GameIndexWhereInput;
+  NOT?: GameIndexWhereInput[] | GameIndexWhereInput;
+}
+
+export interface GameUpdateWithWhereUniqueNestedInput {
+  where: GameWhereUniqueInput;
+  data: GameUpdateDataInput;
+}
+
+export interface SessionReviewIndexUpdateInput {
+  text?: String;
+  sessionReview?: SessionReviewUpdateOneRequiredInput;
+}
+
+export interface GameUpdateDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+  numSessions?: Int;
+}
+
+export interface SessionReviewIndexCreateInput {
+  text: String;
+  sessionReview: SessionReviewCreateOneInput;
+}
+
+export interface GameUpdatetagsInput {
+  set?: Tags[] | Tags;
+}
+
+export interface SessionReviewUpdateManyMutationInput {
+  text?: String;
+  rating?: Int;
+}
+
+export interface GamingSessionUpdateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface GamerRequestWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  addToOccupations?: String;
+  addToOccupations_not?: String;
+  addToOccupations_in?: String[] | String;
+  addToOccupations_not_in?: String[] | String;
+  addToOccupations_lt?: String;
+  addToOccupations_lte?: String;
+  addToOccupations_gt?: String;
+  addToOccupations_gte?: String;
+  addToOccupations_contains?: String;
+  addToOccupations_not_contains?: String;
+  addToOccupations_starts_with?: String;
+  addToOccupations_not_starts_with?: String;
+  addToOccupations_ends_with?: String;
+  addToOccupations_not_ends_with?: String;
+  socialMedia?: SocialMediaWhereInput;
+  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGameDataInput;
+}
+
+export interface GamingSessionWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  gamers_every?: UserWhereInput;
+  gamers_some?: UserWhereInput;
+  gamers_none?: UserWhereInput;
+  creator?: UserWhereInput;
+  game?: GameWhereInput;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  reviews_every?: SessionReviewWhereInput;
+  reviews_some?: SessionReviewWhereInput;
+  reviews_none?: SessionReviewWhereInput;
+  system?: System;
+  system_not?: System;
+  system_in?: System[] | System;
+  system_not_in?: System[] | System;
+  type?: TypeOfGame;
+  type_not?: TypeOfGame;
+  type_in?: TypeOfGame[] | TypeOfGame;
+  type_not_in?: TypeOfGame[] | TypeOfGame;
+  slots?: Int;
+  slots_not?: Int;
+  slots_in?: Int[] | Int;
+  slots_not_in?: Int[] | Int;
+  slots_lt?: Int;
+  slots_lte?: Int;
+  slots_gt?: Int;
+  slots_gte?: Int;
+  requirements_every?: RequirementWhereInput;
+  requirements_some?: RequirementWhereInput;
+  requirements_none?: RequirementWhereInput;
+  discounts_every?: DiscountWhereInput;
+  discounts_some?: DiscountWhereInput;
+  discounts_none?: DiscountWhereInput;
+  timeslots_every?: GamingTimeSlotWhereInput;
+  timeslots_some?: GamingTimeSlotWhereInput;
+  timeslots_none?: GamingTimeSlotWhereInput;
+  AND?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+  OR?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+  NOT?: GamingSessionWhereInput[] | GamingSessionWhereInput;
+}
+
+export interface GamingSessionUpdateWithoutGameDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+}
+
+export interface RequirementUpdateManyMutationInput {
+  msg?: String;
+}
+
+export interface UserUpdateManyWithoutSessionsInput {
+  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutSessionsInput[]
+    | UserUpdateWithWhereUniqueWithoutSessionsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutSessionsInput[]
+    | UserUpsertWithWhereUniqueWithoutSessionsInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export type GamingSessionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutSessionsDataInput;
+}
+
+export interface GamingSessionIndexUpdateManyMutationInput {
+  title?: String;
+}
+
+export interface UserUpdateWithoutSessionsDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  favoriteGames?: GameUpdateManyInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+}
+
+export type GamingSessionIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GamingTimeSlotUpdateManyWithoutGamersInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamersInput[]
+    | GamingTimeSlotCreateWithoutGamersInput;
+  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  disconnect?:
+    | GamingTimeSlotWhereUniqueInput[]
+    | GamingTimeSlotWhereUniqueInput;
+  update?:
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput[]
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput;
+  upsert?:
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput[]
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput;
+  deleteMany?:
+    | GamingTimeSlotScalarWhereInput[]
+    | GamingTimeSlotScalarWhereInput;
+  updateMany?:
+    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
+    | GamingTimeSlotUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  gamingSession?: GamingSessionWhereInput;
+  AND?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
+  OR?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
+  NOT?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
+}
+
+export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  data: GamingTimeSlotUpdateWithoutGamersDataInput;
+}
+
+export interface GamingSessionUpdateOneRequiredInput {
+  create?: GamingSessionCreateInput;
+  update?: GamingSessionUpdateDataInput;
+  upsert?: GamingSessionUpsertNestedInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface GamingTimeSlotUpdateWithoutGamersDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  players?: BookedPlayerUpdateManyInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface GamingSessionCreateOneInput {
+  create?: GamingSessionCreateInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateOneRequiredWithoutTimeslotsInput {
+  create?: GamingSessionCreateWithoutTimeslotsInput;
+  update?: GamingSessionUpdateWithoutTimeslotsDataInput;
+  upsert?: GamingSessionUpsertWithoutTimeslotsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface GamingSessionIndexCreateInput {
+  title: String;
+  gamingSession: GamingSessionCreateOneInput;
+}
+
+export interface GamingSessionUpdateWithoutTimeslotsDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+}
+
+export interface GamingSessionUpdateInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+}
+
+export interface GameUpdateOneRequiredWithoutSessionsInput {
+  create?: GameCreateWithoutSessionsInput;
+  update?: GameUpdateWithoutSessionsDataInput;
+  upsert?: GameUpsertWithoutSessionsInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface GamerRequestUpdateManyMutationInput {
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+}
+
+export interface GameUpdateWithoutSessionsDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  numSessions?: Int;
+}
+
+export type SessionReviewWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GameUpsertWithoutSessionsInput {
+  update: GameUpdateWithoutSessionsDataInput;
+  create: GameCreateWithoutSessionsInput;
+}
+
+export interface SocialMediaUpdateOneRequiredInput {
+  create?: SocialMediaCreateInput;
+  update?: SocialMediaUpdateDataInput;
+  upsert?: SocialMediaUpsertNestedInput;
+  connect?: SocialMediaWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyWithoutSessionInput {
+  create?:
+    | SessionReviewCreateWithoutSessionInput[]
+    | SessionReviewCreateWithoutSessionInput;
+  delete?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  set?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  disconnect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  update?:
+    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput[]
+    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput;
+  upsert?:
+    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput[]
+    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput;
+  deleteMany?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  updateMany?:
+    | SessionReviewUpdateManyWithWhereNestedInput[]
+    | SessionReviewUpdateManyWithWhereNestedInput;
+}
+
+export type SessionReviewIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput;
+  data: SessionReviewUpdateWithoutSessionDataInput;
+}
+
+export interface SessionReviewIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  sessionReview?: SessionReviewWhereInput;
+  AND?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+  OR?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+  NOT?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
+}
+
+export interface BookingInviteUpdateInput {
+  booking?: BookingUpdateOneRequiredInput;
+  to?: UserUpdateOneWithoutInvitesReceivedInput;
+  from?: UserUpdateOneRequiredWithoutInvitesInput;
+  sent?: Boolean;
+}
+
+export interface SocialMediaCreateOneInput {
+  create?: SocialMediaCreateInput;
+  connect?: SocialMediaWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutReviewsInput {
+  create?: UserCreateWithoutReviewsInput;
+  update?: UserUpdateWithoutReviewsDataInput;
+  upsert?: UserUpsertWithoutReviewsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface GamerRequestCreateInput {
+  user: UserCreateOneInput;
+  occupations?: GamerRequestCreateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia: SocialMediaCreateOneInput;
+}
+
+export interface UserUpdateWithoutReviewsDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  favoriteGames?: GameUpdateManyInput;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  buffer?: Int;
+}
+
+export interface GameIndexUpdateManyMutationInput {
+  name?: String;
+  tags?: GameIndexUpdatetagsInput;
+}
+
+export interface GamingSessionUpdateManyWithoutGamersInput {
+  create?:
+    | GamingSessionCreateWithoutGamersInput[]
+    | GamingSessionCreateWithoutGamersInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface GameUpdateOneRequiredInput {
+  create?: GameCreateInput;
+  update?: GameUpdateDataInput;
+  upsert?: GameUpsertNestedInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGamersDataInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface GamingSessionUpdateWithoutGamersDataInput {
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+}
+
+export interface GameCreateOneInput {
+  create?: GameCreateInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface RequirementUpdateManyInput {
+  create?: RequirementCreateInput[] | RequirementCreateInput;
+  deleteMany?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
+  updateMany?:
+    | RequirementUpdateManyWithWhereNestedInput[]
+    | RequirementUpdateManyWithWhereNestedInput;
+}
+
+export type UserIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface RequirementScalarWhereInput {
+  msg?: String;
+  msg_not?: String;
+  msg_in?: String[] | String;
+  msg_not_in?: String[] | String;
+  msg_lt?: String;
+  msg_lte?: String;
+  msg_gt?: String;
+  msg_gte?: String;
+  msg_contains?: String;
+  msg_not_contains?: String;
+  msg_starts_with?: String;
+  msg_not_starts_with?: String;
+  msg_ends_with?: String;
+  msg_not_ends_with?: String;
+  AND?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
+  OR?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
+  NOT?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
+}
+
+export interface UserIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  user?: UserWhereInput;
+  AND?: UserIndexWhereInput[] | UserIndexWhereInput;
+  OR?: UserIndexWhereInput[] | UserIndexWhereInput;
+  NOT?: UserIndexWhereInput[] | UserIndexWhereInput;
+}
+
+export interface RequirementUpdateManyWithWhereNestedInput {
+  where: RequirementScalarWhereInput;
+  data: RequirementUpdateManyDataInput;
+}
+
+export interface GameUpdateInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+  numSessions?: Int;
+}
+
+export interface RequirementUpdateManyDataInput {
+  msg?: String;
+}
+
+export interface BookingInviteUpdateManyMutationInput {
+  sent?: Boolean;
+}
+
+export interface DiscountUpdateManyInput {
+  create?: DiscountCreateInput[] | DiscountCreateInput;
+  deleteMany?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+  updateMany?:
+    | DiscountUpdateManyWithWhereNestedInput[]
+    | DiscountUpdateManyWithWhereNestedInput;
+}
+
+export interface BookedPlayerCreateInput {
+  player: UserCreateOneInput;
+}
+
+export interface DiscountScalarWhereInput {
+  percentage?: Int;
+  percentage_not?: Int;
+  percentage_in?: Int[] | Int;
+  percentage_not_in?: Int[] | Int;
+  percentage_lt?: Int;
+  percentage_lte?: Int;
+  percentage_gt?: Int;
+  percentage_gte?: Int;
+  threshold?: Int;
+  threshold_not?: Int;
+  threshold_in?: Int[] | Int;
+  threshold_not_in?: Int[] | Int;
+  threshold_lt?: Int;
+  threshold_lte?: Int;
+  threshold_gt?: Int;
+  threshold_gte?: Int;
+  playerOrSession?: PlayerOrSession;
+  playerOrSession_not?: PlayerOrSession;
+  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
+  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
+  AND?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+  OR?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+  NOT?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+}
+
+export interface UserCreateInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+}
+
+export interface DiscountWhereInput {
+  percentage?: Int;
+  percentage_not?: Int;
+  percentage_in?: Int[] | Int;
+  percentage_not_in?: Int[] | Int;
+  percentage_lt?: Int;
+  percentage_lte?: Int;
+  percentage_gt?: Int;
+  percentage_gte?: Int;
+  threshold?: Int;
+  threshold_not?: Int;
+  threshold_in?: Int[] | Int;
+  threshold_not_in?: Int[] | Int;
+  threshold_lt?: Int;
+  threshold_lte?: Int;
+  threshold_gt?: Int;
+  threshold_gte?: Int;
+  playerOrSession?: PlayerOrSession;
+  playerOrSession_not?: PlayerOrSession;
+  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
+  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
+  AND?: DiscountWhereInput[] | DiscountWhereInput;
+  OR?: DiscountWhereInput[] | DiscountWhereInput;
+  NOT?: DiscountWhereInput[] | DiscountWhereInput;
+}
+
+export interface GameCreateManyInput {
+  create?: GameCreateInput[] | GameCreateInput;
+  connect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+}
+
+export interface DiscountUpdateManyDataInput {
+  percentage?: Int;
+  threshold?: Int;
+  playerOrSession?: PlayerOrSession;
+}
+
+export interface GameCreatetagsInput {
+  set?: Tags[] | Tags;
+}
+
+export interface GamingTimeSlotUpdateManyWithoutGamingSessionInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamingSessionInput[]
+    | GamingTimeSlotCreateWithoutGamingSessionInput;
+  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  disconnect?:
+    | GamingTimeSlotWhereUniqueInput[]
+    | GamingTimeSlotWhereUniqueInput;
+  update?:
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput[]
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput;
+  upsert?:
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput[]
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput;
+  deleteMany?:
+    | GamingTimeSlotScalarWhereInput[]
+    | GamingTimeSlotScalarWhereInput;
+  updateMany?:
+    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
+    | GamingTimeSlotUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionCreateWithoutGameInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+}
+
+export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  data: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
+}
+
+export interface UserCreateWithoutSessionsInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+}
+
+export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamers?: UserUpdateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerUpdateManyInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface GamingTimeSlotCreateWithoutGamersInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
+  players?: BookedPlayerCreateManyInput;
+  length: Int;
+  slots: Int;
+}
+
+export interface UserUpdateManyWithoutTimeSlotsInput {
+  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutTimeSlotsInput[]
+    | UserUpdateWithWhereUniqueWithoutTimeSlotsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutTimeSlotsInput[]
+    | UserUpsertWithWhereUniqueWithoutTimeSlotsInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionCreateWithoutTimeslotsInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutTimeSlotsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTimeSlotsDataInput;
+}
+
+export interface GameCreateWithoutSessionsInput {
+  name: String;
+  tags?: GameCreatetagsInput;
+  numSessions?: Int;
+}
+
+export interface UserUpdateWithoutTimeSlotsDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  favoriteGames?: GameUpdateManyInput;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+}
+
+export interface SessionReviewCreateWithoutSessionInput {
+  user: UserCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
+}
+
+export interface BookingUpdateManyWithoutPlayersInput {
+  create?:
+    | BookingCreateWithoutPlayersInput[]
+    | BookingCreateWithoutPlayersInput;
+  delete?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+  set?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+  disconnect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+  update?:
+    | BookingUpdateWithWhereUniqueWithoutPlayersInput[]
+    | BookingUpdateWithWhereUniqueWithoutPlayersInput;
+  upsert?:
+    | BookingUpsertWithWhereUniqueWithoutPlayersInput[]
+    | BookingUpsertWithWhereUniqueWithoutPlayersInput;
+  deleteMany?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+  updateMany?:
+    | BookingUpdateManyWithWhereNestedInput[]
+    | BookingUpdateManyWithWhereNestedInput;
+}
+
+export interface UserCreateWithoutReviewsInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+}
+
+export interface BookingUpdateWithWhereUniqueWithoutPlayersInput {
+  where: BookingWhereUniqueInput;
+  data: BookingUpdateWithoutPlayersDataInput;
+}
+
+export interface GamingSessionCreateWithoutGamersInput {
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+}
+
+export interface BookingUpdateWithoutPlayersDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  total?: Float;
+  timeslot?: GamingTimeSlotUpdateOneRequiredInput;
+}
+
+export interface RequirementCreateInput {
+  msg: String;
+}
+
+export interface GamingTimeSlotUpdateOneRequiredInput {
+  create?: GamingTimeSlotCreateInput;
+  update?: GamingTimeSlotUpdateDataInput;
+  upsert?: GamingTimeSlotUpsertNestedInput;
+  connect?: GamingTimeSlotWhereUniqueInput;
+}
+
+export interface DiscountCreateInput {
+  percentage: Int;
+  threshold: Int;
+  playerOrSession: PlayerOrSession;
+}
+
+export interface GamingTimeSlotUpdateDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  gamers?: UserUpdateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerUpdateManyInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface GamingTimeSlotCreateWithoutGamingSessionInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamers?: UserCreateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerCreateManyInput;
+  length: Int;
+  slots: Int;
+}
+
+export interface BookedPlayerUpdateManyInput {
+  create?: BookedPlayerCreateInput[] | BookedPlayerCreateInput;
+  update?:
+    | BookedPlayerUpdateWithWhereUniqueNestedInput[]
+    | BookedPlayerUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | BookedPlayerUpsertWithWhereUniqueNestedInput[]
+    | BookedPlayerUpsertWithWhereUniqueNestedInput;
+  delete?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  set?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  disconnect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  deleteMany?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+}
+
+export interface UserCreateWithoutTimeSlotsInput {
+  email: String;
+  username: String;
+  password: String;
+  isGamer?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  favoriteGames?: GameCreateManyInput;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+}
+
+export interface BookedPlayerUpdateWithWhereUniqueNestedInput {
+  where: BookedPlayerWhereUniqueInput;
+  data: BookedPlayerUpdateDataInput;
+}
+
+export interface BookingCreateWithoutPlayersInput {
+  numSlots: Int;
+  numPlayers: Int;
+  total: Float;
+  timeslot: GamingTimeSlotCreateOneInput;
+}
+
+export interface BookedPlayerUpdateDataInput {
+  player?: UserUpdateOneRequiredInput;
+}
+
+export interface GamingTimeSlotCreateInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
+  gamers?: UserCreateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerCreateManyInput;
+  length: Int;
+  slots: Int;
+}
+
+export interface BookedPlayerUpsertWithWhereUniqueNestedInput {
+  where: BookedPlayerWhereUniqueInput;
+  update: BookedPlayerUpdateDataInput;
+  create: BookedPlayerCreateInput;
+}
+
+export interface RequirementWhereInput {
+  msg?: String;
+  msg_not?: String;
+  msg_in?: String[] | String;
+  msg_not_in?: String[] | String;
+  msg_lt?: String;
+  msg_lte?: String;
+  msg_gt?: String;
+  msg_gte?: String;
+  msg_contains?: String;
+  msg_not_contains?: String;
+  msg_starts_with?: String;
+  msg_not_starts_with?: String;
+  msg_ends_with?: String;
+  msg_not_ends_with?: String;
+  AND?: RequirementWhereInput[] | RequirementWhereInput;
+  OR?: RequirementWhereInput[] | RequirementWhereInput;
+  NOT?: RequirementWhereInput[] | RequirementWhereInput;
+}
+
+export interface BookedPlayerScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  AND?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+  OR?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+  NOT?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface GamingTimeSlotUpsertNestedInput {
+  update: GamingTimeSlotUpdateDataInput;
+  create: GamingTimeSlotCreateInput;
+}
+
+export interface SessionReviewSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SessionReviewWhereInput;
+  AND?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+  OR?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+  NOT?:
+    | SessionReviewSubscriptionWhereInput[]
+    | SessionReviewSubscriptionWhereInput;
+}
+
+export interface BookingUpsertWithWhereUniqueWithoutPlayersInput {
+  where: BookingWhereUniqueInput;
+  update: BookingUpdateWithoutPlayersDataInput;
+  create: BookingCreateWithoutPlayersInput;
+}
+
+export interface GamingSessionIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamingSessionIndexWhereInput;
+  AND?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  OR?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  NOT?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+}
+
+export interface BookingScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  numSlots?: Int;
+  numSlots_not?: Int;
+  numSlots_in?: Int[] | Int;
+  numSlots_not_in?: Int[] | Int;
+  numSlots_lt?: Int;
+  numSlots_lte?: Int;
+  numSlots_gt?: Int;
+  numSlots_gte?: Int;
+  numPlayers?: Int;
+  numPlayers_not?: Int;
+  numPlayers_in?: Int[] | Int;
+  numPlayers_not_in?: Int[] | Int;
+  numPlayers_lt?: Int;
+  numPlayers_lte?: Int;
+  numPlayers_gt?: Int;
+  numPlayers_gte?: Int;
+  total?: Float;
+  total_not?: Float;
+  total_in?: Float[] | Float;
+  total_not_in?: Float[] | Float;
+  total_lt?: Float;
+  total_lte?: Float;
+  total_gt?: Float;
+  total_gte?: Float;
+  AND?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+  OR?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+  NOT?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+}
+
+export interface GameIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GameIndexWhereInput;
+  AND?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  OR?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  NOT?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+}
+
+export interface BookingUpdateManyWithWhereNestedInput {
+  where: BookingScalarWhereInput;
+  data: BookingUpdateManyDataInput;
+}
+
+export type BookingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface BookingUpdateManyDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  total?: Float;
+}
+
+export type BookingInviteWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface BookingInviteUpdateManyWithoutFromInput {
+  create?:
+    | BookingInviteCreateWithoutFromInput[]
+    | BookingInviteCreateWithoutFromInput;
+  delete?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  set?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  disconnect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  update?:
+    | BookingInviteUpdateWithWhereUniqueWithoutFromInput[]
+    | BookingInviteUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | BookingInviteUpsertWithWhereUniqueWithoutFromInput[]
+    | BookingInviteUpsertWithWhereUniqueWithoutFromInput;
+  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  updateMany?:
+    | BookingInviteUpdateManyWithWhereNestedInput[]
+    | BookingInviteUpdateManyWithWhereNestedInput;
 }
 
 export interface UserUpdateInput {
@@ -1470,21 +2912,649 @@ export interface UserUpdateInput {
   reviews?: SessionReviewUpdateManyWithoutUserInput;
 }
 
-export interface UserCreateWithoutInvitesInput {
-  email: String;
-  username: String;
-  password: String;
+export interface BookingInviteUpdateWithWhereUniqueWithoutFromInput {
+  where: BookingInviteWhereUniqueInput;
+  data: BookingInviteUpdateWithoutFromDataInput;
+}
+
+export interface SessionReviewIndexUpdateManyMutationInput {
+  text?: String;
+}
+
+export interface BookingInviteUpdateWithoutFromDataInput {
+  booking?: BookingUpdateOneRequiredInput;
+  to?: UserUpdateOneWithoutInvitesReceivedInput;
+  sent?: Boolean;
+}
+
+export interface SessionReviewUpdateOneRequiredInput {
+  create?: SessionReviewCreateInput;
+  update?: SessionReviewUpdateDataInput;
+  upsert?: SessionReviewUpsertNestedInput;
+  connect?: SessionReviewWhereUniqueInput;
+}
+
+export interface BookingUpdateOneRequiredInput {
+  create?: BookingCreateInput;
+  update?: BookingUpdateDataInput;
+  upsert?: BookingUpsertNestedInput;
+  connect?: BookingWhereUniqueInput;
+}
+
+export interface SessionReviewCreateOneInput {
+  create?: SessionReviewCreateInput;
+  connect?: SessionReviewWhereUniqueInput;
+}
+
+export interface BookingUpdateDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  players?: UserUpdateManyWithoutTimeSlotsBookedInput;
+  total?: Float;
+  timeslot?: GamingTimeSlotUpdateOneRequiredInput;
+}
+
+export interface SessionReviewUpdateInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
+}
+
+export interface UserUpdateManyWithoutTimeSlotsBookedInput {
+  create?:
+    | UserCreateWithoutTimeSlotsBookedInput[]
+    | UserCreateWithoutTimeSlotsBookedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput[]
+    | UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput[]
+    | UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface SessionReviewCreateInput {
+  user: UserCreateOneWithoutReviewsInput;
+  session: GamingSessionCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTimeSlotsBookedDataInput;
+}
+
+export interface GamingTimeSlotUpdateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  gamers?: UserUpdateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerUpdateManyInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface UserUpdateWithoutTimeSlotsBookedDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
   isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
   aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  favoriteGames?: GameUpdateManyInput;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
   buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+}
+
+export interface GamingSessionUpdateDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+}
+
+export interface BookingInviteUpdateManyWithoutToInput {
+  create?:
+    | BookingInviteCreateWithoutToInput[]
+    | BookingInviteCreateWithoutToInput;
+  delete?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  set?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  disconnect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  update?:
+    | BookingInviteUpdateWithWhereUniqueWithoutToInput[]
+    | BookingInviteUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | BookingInviteUpsertWithWhereUniqueWithoutToInput[]
+    | BookingInviteUpsertWithWhereUniqueWithoutToInput;
+  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  updateMany?:
+    | BookingInviteUpdateManyWithWhereNestedInput[]
+    | BookingInviteUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionIndexUpdateInput {
+  title?: String;
+  gamingSession?: GamingSessionUpdateOneRequiredInput;
+}
+
+export interface BookingInviteUpdateWithWhereUniqueWithoutToInput {
+  where: BookingInviteWhereUniqueInput;
+  data: BookingInviteUpdateWithoutToDataInput;
+}
+
+export interface GamingSessionUpdateManyMutationInput {
+  title?: String;
+  length?: Int;
+  price?: Float;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+}
+
+export interface BookingInviteUpdateWithoutToDataInput {
+  booking?: BookingUpdateOneRequiredInput;
+  from?: UserUpdateOneRequiredWithoutInvitesInput;
+  sent?: Boolean;
+}
+
+export interface SocialMediaUpsertNestedInput {
+  update: SocialMediaUpdateDataInput;
+  create: SocialMediaCreateInput;
+}
+
+export interface UserUpdateOneRequiredWithoutInvitesInput {
+  create?: UserCreateWithoutInvitesInput;
+  update?: UserUpdateWithoutInvitesDataInput;
+  upsert?: UserUpsertWithoutInvitesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface GamerRequestUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface UserUpdateWithoutInvitesDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
+  isGamer?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  favoriteGames?: GameUpdateManyInput;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  buffer?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+}
+
+export interface SocialMediaCreateInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface SessionReviewUpdateManyWithoutUserInput {
+  create?:
+    | SessionReviewCreateWithoutUserInput[]
+    | SessionReviewCreateWithoutUserInput;
+  delete?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  set?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  disconnect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+  update?:
+    | SessionReviewUpdateWithWhereUniqueWithoutUserInput[]
+    | SessionReviewUpdateWithWhereUniqueWithoutUserInput;
+  upsert?:
+    | SessionReviewUpsertWithWhereUniqueWithoutUserInput[]
+    | SessionReviewUpsertWithWhereUniqueWithoutUserInput;
+  deleteMany?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  updateMany?:
+    | SessionReviewUpdateManyWithWhereNestedInput[]
+    | SessionReviewUpdateManyWithWhereNestedInput;
+}
+
+export type SocialMediaWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SessionReviewUpdateWithWhereUniqueWithoutUserInput {
+  where: SessionReviewWhereUniqueInput;
+  data: SessionReviewUpdateWithoutUserDataInput;
+}
+
+export interface GameIndexUpdatetagsInput {
+  set?: String[] | String;
+}
+
+export interface SessionReviewUpdateWithoutUserDataInput {
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
+}
+
+export interface GameIndexCreatetagsInput {
+  set?: String[] | String;
+}
+
+export interface GamingSessionUpdateOneRequiredWithoutReviewsInput {
+  create?: GamingSessionCreateWithoutReviewsInput;
+  update?: GamingSessionUpdateWithoutReviewsDataInput;
+  upsert?: GamingSessionUpsertWithoutReviewsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface GameUpdateManyMutationInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  numSessions?: Int;
+}
+
+export interface GamingSessionUpdateWithoutReviewsDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+}
+
+export interface UserCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface GamingSessionUpsertWithoutReviewsInput {
+  update: GamingSessionUpdateWithoutReviewsDataInput;
+  create: GamingSessionCreateWithoutReviewsInput;
+}
+
+export interface GamingSessionCreateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+}
+
+export interface SessionReviewUpsertWithWhereUniqueWithoutUserInput {
+  where: SessionReviewWhereUniqueInput;
+  update: SessionReviewUpdateWithoutUserDataInput;
+  create: SessionReviewCreateWithoutUserInput;
+}
+
+export interface GamingTimeSlotCreateManyWithoutGamersInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamersInput[]
+    | GamingTimeSlotCreateWithoutGamersInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+}
+
+export interface SessionReviewScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  rating?: Int;
+  rating_not?: Int;
+  rating_in?: Int[] | Int;
+  rating_not_in?: Int[] | Int;
+  rating_lt?: Int;
+  rating_lte?: Int;
+  rating_gt?: Int;
+  rating_gte?: Int;
+  AND?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  OR?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  NOT?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+}
+
+export interface GameCreateOneWithoutSessionsInput {
+  create?: GameCreateWithoutSessionsInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyWithWhereNestedInput {
+  where: SessionReviewScalarWhereInput;
+  data: SessionReviewUpdateManyDataInput;
+}
+
+export interface UserCreateOneWithoutReviewsInput {
+  create?: UserCreateWithoutReviewsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyDataInput {
+  text?: String;
+  rating?: Int;
+}
+
+export interface RequirementCreateManyInput {
+  create?: RequirementCreateInput[] | RequirementCreateInput;
+}
+
+export interface UserUpsertWithoutInvitesInput {
+  update: UserUpdateWithoutInvitesDataInput;
+  create: UserCreateWithoutInvitesInput;
+}
+
+export interface GamingTimeSlotCreateManyWithoutGamingSessionInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamingSessionInput[]
+    | GamingTimeSlotCreateWithoutGamingSessionInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+}
+
+export interface BookingInviteUpsertWithWhereUniqueWithoutToInput {
+  where: BookingInviteWhereUniqueInput;
+  update: BookingInviteUpdateWithoutToDataInput;
+  create: BookingInviteCreateWithoutToInput;
+}
+
+export interface BookingCreateManyWithoutPlayersInput {
+  create?:
+    | BookingCreateWithoutPlayersInput[]
+    | BookingCreateWithoutPlayersInput;
+  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+}
+
+export interface BookingInviteScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  sent?: Boolean;
+  sent_not?: Boolean;
+  AND?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  OR?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  NOT?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+}
+
+export interface BookedPlayerCreateManyInput {
+  create?: BookedPlayerCreateInput[] | BookedPlayerCreateInput;
+  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+}
+
+export interface BookingInviteUpdateManyWithWhereNestedInput {
+  where: BookingInviteScalarWhereInput;
+  data: BookingInviteUpdateManyDataInput;
+}
+
+export interface SessionReviewIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SessionReviewIndexWhereInput;
+  AND?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  OR?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  NOT?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+}
+
+export interface BookingInviteUpdateManyDataInput {
+  sent?: Boolean;
+}
+
+export interface GamingTimeSlotWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  endTime?: DateTimeInput;
+  endTime_not?: DateTimeInput;
+  endTime_in?: DateTimeInput[] | DateTimeInput;
+  endTime_not_in?: DateTimeInput[] | DateTimeInput;
+  endTime_lt?: DateTimeInput;
+  endTime_lte?: DateTimeInput;
+  endTime_gt?: DateTimeInput;
+  endTime_gte?: DateTimeInput;
+  gamingSession?: GamingSessionWhereInput;
+  gamers_every?: UserWhereInput;
+  gamers_some?: UserWhereInput;
+  gamers_none?: UserWhereInput;
+  players_every?: BookedPlayerWhereInput;
+  players_some?: BookedPlayerWhereInput;
+  players_none?: BookedPlayerWhereInput;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  slots?: Int;
+  slots_not?: Int;
+  slots_in?: Int[] | Int;
+  slots_not_in?: Int[] | Int;
+  slots_lt?: Int;
+  slots_lte?: Int;
+  slots_gt?: Int;
+  slots_gte?: Int;
+  AND?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+  OR?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+  NOT?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTimeSlotsBookedDataInput;
+  create: UserCreateWithoutTimeSlotsBookedInput;
+}
+
+export interface BookedPlayerSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BookedPlayerWhereInput;
+  AND?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+  OR?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+  NOT?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+}
+
+export interface UserScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  isGamer?: Boolean;
+  isGamer_not?: Boolean;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  aboutMe?: String;
+  aboutMe_not?: String;
+  aboutMe_in?: String[] | String;
+  aboutMe_not_in?: String[] | String;
+  aboutMe_lt?: String;
+  aboutMe_lte?: String;
+  aboutMe_gt?: String;
+  aboutMe_gte?: String;
+  aboutMe_contains?: String;
+  aboutMe_not_contains?: String;
+  aboutMe_starts_with?: String;
+  aboutMe_not_starts_with?: String;
+  aboutMe_ends_with?: String;
+  aboutMe_not_ends_with?: String;
+  buffer?: Int;
+  buffer_not?: Int;
+  buffer_in?: Int[] | Int;
+  buffer_not_in?: Int[] | Int;
+  buffer_lt?: Int;
+  buffer_lte?: Int;
+  buffer_gt?: Int;
+  buffer_gte?: Int;
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
 }
 
 export interface SocialMediaUpdateInput {
@@ -1496,54 +3566,9 @@ export interface SocialMediaUpdateInput {
   snapchat?: String;
 }
 
-export interface SessionReviewCreateManyWithoutUserInput {
-  create?:
-    | SessionReviewCreateWithoutUserInput[]
-    | SessionReviewCreateWithoutUserInput;
-  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-}
-
-export interface SessionReviewIndexUpdateManyMutationInput {
-  text?: String;
-}
-
-export interface SessionReviewCreateWithoutUserInput {
-  session: GamingSessionCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
-}
-
-export interface SessionReviewUpdateDataInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
-
-export interface GamingSessionCreateOneWithoutReviewsInput {
-  create?: GamingSessionCreateWithoutReviewsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface SessionReviewUpdateOneRequiredInput {
-  create?: SessionReviewCreateInput;
-  update?: SessionReviewUpdateDataInput;
-  upsert?: SessionReviewUpsertNestedInput;
-  connect?: SessionReviewWhereUniqueInput;
-}
-
-export interface GamingSessionCreateWithoutReviewsInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  systems?: GamingSessionCreatesystemsInput;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
 }
 
 export interface UserWhereInput {
@@ -1667,53 +3692,15 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface UserCreateOneWithoutInvitesReceivedInput {
-  create?: UserCreateWithoutInvitesReceivedInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface SessionReviewCreateOneInput {
-  create?: SessionReviewCreateInput;
-  connect?: SessionReviewWhereUniqueInput;
-}
-
-export interface UserCreateWithoutInvitesReceivedInput {
-  email: String;
-  username: String;
-  password: String;
+export interface UserUpdateManyDataInput {
+  email?: String;
+  username?: String;
+  password?: String;
   isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
   aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
   buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-}
-
-export type GamerRequestWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface BookedPlayerUpdateInput {
-  player?: UserUpdateOneRequiredInput;
-}
-
-export interface SessionReviewUpdateInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
-
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
 }
 
 export interface SocialMediaWhereInput {
@@ -1820,7 +3807,30 @@ export interface SocialMediaWhereInput {
   NOT?: SocialMediaWhereInput[] | SocialMediaWhereInput;
 }
 
-export interface UserUpdateDataInput {
+export interface BookingUpsertNestedInput {
+  update: BookingUpdateDataInput;
+  create: BookingCreateInput;
+}
+
+export interface GamingSessionUpsertNestedInput {
+  update: GamingSessionUpdateDataInput;
+  create: GamingSessionCreateInput;
+}
+
+export interface UserUpdateOneWithoutInvitesReceivedInput {
+  create?: UserCreateWithoutInvitesReceivedInput;
+  update?: UserUpdateWithoutInvitesReceivedDataInput;
+  upsert?: UserUpsertWithoutInvitesReceivedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export type GamingTimeSlotWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithoutInvitesReceivedDataInput {
   email?: String;
   username?: String;
   password?: String;
@@ -1833,251 +3843,6 @@ export interface UserUpdateDataInput {
   timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
   timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
   invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-}
-
-export interface SessionReviewCreateInput {
-  user: UserCreateOneWithoutReviewsInput;
-  session: GamingSessionCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
-}
-
-export interface UserUpdateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface GamingTimeSlotUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export interface GameUpdateManyInput {
-  create?: GameCreateInput[] | GameCreateInput;
-  update?:
-    | GameUpdateWithWhereUniqueNestedInput[]
-    | GameUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | GameUpsertWithWhereUniqueNestedInput[]
-    | GameUpsertWithWhereUniqueNestedInput;
-  delete?: GameWhereUniqueInput[] | GameWhereUniqueInput;
-  connect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
-  set?: GameWhereUniqueInput[] | GameWhereUniqueInput;
-  disconnect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
-  deleteMany?: GameScalarWhereInput[] | GameScalarWhereInput;
-  updateMany?:
-    | GameUpdateManyWithWhereNestedInput[]
-    | GameUpdateManyWithWhereNestedInput;
-}
-
-export interface GamingTimeSlotUpdateInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  gamers?: UserUpdateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerUpdateManyInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export interface GameUpdateWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput;
-  data: GameUpdateDataInput;
-}
-
-export interface GamingSessionUpsertNestedInput {
-  update: GamingSessionUpdateDataInput;
-  create: GamingSessionCreateInput;
-}
-
-export interface GameUpdateDataInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  sessions?: GamingSessionUpdateManyWithoutGameInput;
-  numSessions?: Int;
-}
-
-export interface GamingSessionUpdateDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-}
-
-export interface GameUpdatetagsInput {
-  set?: Tags[] | Tags;
-}
-
-export interface GameWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  sessions_every?: GamingSessionWhereInput;
-  sessions_some?: GamingSessionWhereInput;
-  sessions_none?: GamingSessionWhereInput;
-  numSessions?: Int;
-  numSessions_not?: Int;
-  numSessions_in?: Int[] | Int;
-  numSessions_not_in?: Int[] | Int;
-  numSessions_lt?: Int;
-  numSessions_lte?: Int;
-  numSessions_gt?: Int;
-  numSessions_gte?: Int;
-  AND?: GameWhereInput[] | GameWhereInput;
-  OR?: GameWhereInput[] | GameWhereInput;
-  NOT?: GameWhereInput[] | GameWhereInput;
-}
-
-export interface GamingSessionUpdateManyWithoutGameInput {
-  create?:
-    | GamingSessionCreateWithoutGameInput[]
-    | GamingSessionCreateWithoutGameInput;
-  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  update?:
-    | GamingSessionUpdateWithWhereUniqueWithoutGameInput[]
-    | GamingSessionUpdateWithWhereUniqueWithoutGameInput;
-  upsert?:
-    | GamingSessionUpsertWithWhereUniqueWithoutGameInput[]
-    | GamingSessionUpsertWithWhereUniqueWithoutGameInput;
-  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  updateMany?:
-    | GamingSessionUpdateManyWithWhereNestedInput[]
-    | GamingSessionUpdateManyWithWhereNestedInput;
-}
-
-export interface GamingSessionIndexUpdateInput {
-  title?: String;
-  gamingSession?: GamingSessionUpdateOneRequiredInput;
-}
-
-export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
-  where: GamingSessionWhereUniqueInput;
-  data: GamingSessionUpdateWithoutGameDataInput;
-}
-
-export type GamingTimeSlotWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingSessionUpdateWithoutGameDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-}
-
-export interface GamingSessionUpdateManyMutationInput {
-  title?: String;
-  length?: Int;
-  price?: Float;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-}
-
-export interface UserUpdateManyWithoutSessionsInput {
-  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutSessionsInput[]
-    | UserUpdateWithWhereUniqueWithoutSessionsInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutSessionsInput[]
-    | UserUpsertWithWhereUniqueWithoutSessionsInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface GamingSessionCreateInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  systems?: GamingSessionCreatesystemsInput;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutSessionsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutSessionsDataInput;
-}
-
-export interface SocialMediaUpsertNestedInput {
-  update: SocialMediaUpdateDataInput;
-  create: SocialMediaCreateInput;
-}
-
-export interface UserUpdateWithoutSessionsDataInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  favoriteGames?: GameUpdateManyInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
   buffer?: Int;
   reviews?: SessionReviewUpdateManyWithoutUserInput;
 }
@@ -2091,116 +3856,19 @@ export interface SocialMediaUpdateDataInput {
   snapchat?: String;
 }
 
-export interface GamingTimeSlotUpdateManyWithoutGamersInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamersInput[]
-    | GamingTimeSlotCreateWithoutGamersInput;
-  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  disconnect?:
-    | GamingTimeSlotWhereUniqueInput[]
-    | GamingTimeSlotWhereUniqueInput;
-  update?:
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput[]
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput;
-  upsert?:
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput[]
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput;
-  deleteMany?:
-    | GamingTimeSlotScalarWhereInput[]
-    | GamingTimeSlotScalarWhereInput;
-  updateMany?:
-    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
-    | GamingTimeSlotUpdateManyWithWhereNestedInput;
-}
-
-export interface GamerRequestUpdateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  data: GamingTimeSlotUpdateWithoutGamersDataInput;
-}
-
-export interface GamerRequestUpdateInput {
-  user?: UserUpdateOneRequiredInput;
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
-  socialMedia?: SocialMediaUpdateOneRequiredInput;
-}
-
-export interface BookingInviteCreateInput {
-  booking: BookingCreateOneInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  from: UserCreateOneWithoutInvitesInput;
-  sent: Boolean;
-}
-
-export interface SocialMediaCreateInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
-}
-
-export interface GamingSessionUpdateOneRequiredWithoutTimeslotsInput {
-  create?: GamingSessionCreateWithoutTimeslotsInput;
-  update?: GamingSessionUpdateWithoutTimeslotsDataInput;
-  upsert?: GamingSessionUpsertWithoutTimeslotsInput;
-  connect?: GamingSessionWhereUniqueInput;
+export interface UserUpsertWithoutInvitesReceivedInput {
+  update: UserUpdateWithoutInvitesReceivedDataInput;
+  create: UserCreateWithoutInvitesReceivedInput;
 }
 
 export interface GamerRequestCreateoccupationsInput {
   set?: Occupations[] | Occupations;
 }
 
-export interface GamingSessionUpdateWithoutTimeslotsDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-}
-
-export type SocialMediaWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GameUpdateOneRequiredWithoutSessionsInput {
-  create?: GameCreateWithoutSessionsInput;
-  update?: GameUpdateWithoutSessionsDataInput;
-  upsert?: GameUpsertWithoutSessionsInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface GameUpsertNestedInput {
-  update: GameUpdateDataInput;
-  create: GameCreateInput;
-}
-
-export interface GameUpdateWithoutSessionsDataInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  numSessions?: Int;
-}
-
-export interface GameIndexUpdatetagsInput {
-  set?: String[] | String;
-}
-
-export interface GameUpsertWithoutSessionsInput {
-  update: GameUpdateWithoutSessionsDataInput;
-  create: GameCreateWithoutSessionsInput;
+export interface BookingInviteUpsertWithWhereUniqueWithoutFromInput {
+  where: BookingInviteWhereUniqueInput;
+  update: BookingInviteUpdateWithoutFromDataInput;
+  create: BookingInviteCreateWithoutFromInput;
 }
 
 export interface GameIndexUpdateInput {
@@ -2209,58 +3877,10 @@ export interface GameIndexUpdateInput {
   game?: GameUpdateOneRequiredInput;
 }
 
-export interface SessionReviewUpdateManyWithoutSessionInput {
-  create?:
-    | SessionReviewCreateWithoutSessionInput[]
-    | SessionReviewCreateWithoutSessionInput;
-  delete?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  set?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  disconnect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  update?:
-    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput[]
-    | SessionReviewUpdateWithWhereUniqueWithoutSessionInput;
-  upsert?:
-    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput[]
-    | SessionReviewUpsertWithWhereUniqueWithoutSessionInput;
-  deleteMany?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  updateMany?:
-    | SessionReviewUpdateManyWithWhereNestedInput[]
-    | SessionReviewUpdateManyWithWhereNestedInput;
-}
-
-export interface GameIndexCreatetagsInput {
-  set?: String[] | String;
-}
-
-export interface SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
-  where: SessionReviewWhereUniqueInput;
-  data: SessionReviewUpdateWithoutSessionDataInput;
-}
-
-export interface GameIndexCreateInput {
-  name: String;
-  tags?: GameIndexCreatetagsInput;
-  game: GameCreateOneInput;
-}
-
-export interface SessionReviewUpdateWithoutSessionDataInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
-
-export interface GameUpdateManyMutationInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  numSessions?: Int;
-}
-
-export interface UserUpdateOneRequiredWithoutReviewsInput {
-  create?: UserCreateWithoutReviewsInput;
-  update?: UserUpdateWithoutReviewsDataInput;
-  upsert?: UserUpsertWithoutReviewsInput;
-  connect?: UserWhereUniqueInput;
+export interface UserUpsertWithWhereUniqueWithoutTimeSlotsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTimeSlotsDataInput;
+  create: UserCreateWithoutTimeSlotsInput;
 }
 
 export interface DiscountUpdateManyMutationInput {
@@ -2269,76 +3889,10 @@ export interface DiscountUpdateManyMutationInput {
   playerOrSession?: PlayerOrSession;
 }
 
-export interface UserUpdateWithoutReviewsDataInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  favoriteGames?: GameUpdateManyInput;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  buffer?: Int;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GamingSessionUpdateManyWithoutGamersInput {
-  create?:
-    | GamingSessionCreateWithoutGamersInput[]
-    | GamingSessionCreateWithoutGamersInput;
-  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  update?:
-    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput[]
-    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput;
-  upsert?:
-    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput[]
-    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput;
-  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  updateMany?:
-    | GamingSessionUpdateManyWithWhereNestedInput[]
-    | GamingSessionUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface DiscountWhereInput {
-  percentage?: Int;
-  percentage_not?: Int;
-  percentage_in?: Int[] | Int;
-  percentage_not_in?: Int[] | Int;
-  percentage_lt?: Int;
-  percentage_lte?: Int;
-  percentage_gt?: Int;
-  percentage_gte?: Int;
-  threshold?: Int;
-  threshold_not?: Int;
-  threshold_in?: Int[] | Int;
-  threshold_not_in?: Int[] | Int;
-  threshold_lt?: Int;
-  threshold_lte?: Int;
-  threshold_gt?: Int;
-  threshold_gte?: Int;
-  playerOrSession?: PlayerOrSession;
-  playerOrSession_not?: PlayerOrSession;
-  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
-  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
-  AND?: DiscountWhereInput[] | DiscountWhereInput;
-  OR?: DiscountWhereInput[] | DiscountWhereInput;
-  NOT?: DiscountWhereInput[] | DiscountWhereInput;
+export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  update: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
+  create: GamingTimeSlotCreateWithoutGamingSessionInput;
 }
 
 export interface GameCreateInput {
@@ -2346,1314 +3900,6 @@ export interface GameCreateInput {
   tags?: GameCreatetagsInput;
   sessions?: GamingSessionCreateManyWithoutGameInput;
   numSessions?: Int;
-}
-
-export interface GamingSessionUpdateWithoutGamersDataInput {
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-}
-
-export interface GamingSessionCreateManyWithoutGameInput {
-  create?:
-    | GamingSessionCreateWithoutGameInput[]
-    | GamingSessionCreateWithoutGameInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-}
-
-export interface GamingSessionUpdatesystemsInput {
-  set?: System[] | System;
-}
-
-export interface UserCreateManyWithoutSessionsInput {
-  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface RequirementUpdateManyInput {
-  create?: RequirementCreateInput[] | RequirementCreateInput;
-  deleteMany?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
-  updateMany?:
-    | RequirementUpdateManyWithWhereNestedInput[]
-    | RequirementUpdateManyWithWhereNestedInput;
-}
-
-export interface GamingTimeSlotCreateManyWithoutGamersInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamersInput[]
-    | GamingTimeSlotCreateWithoutGamersInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-}
-
-export interface RequirementScalarWhereInput {
-  msg?: String;
-  msg_not?: String;
-  msg_in?: String[] | String;
-  msg_not_in?: String[] | String;
-  msg_lt?: String;
-  msg_lte?: String;
-  msg_gt?: String;
-  msg_gte?: String;
-  msg_contains?: String;
-  msg_not_contains?: String;
-  msg_starts_with?: String;
-  msg_not_starts_with?: String;
-  msg_ends_with?: String;
-  msg_not_ends_with?: String;
-  AND?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
-  OR?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
-  NOT?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
-}
-
-export interface GamingSessionCreateOneWithoutTimeslotsInput {
-  create?: GamingSessionCreateWithoutTimeslotsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface RequirementUpdateManyWithWhereNestedInput {
-  where: RequirementScalarWhereInput;
-  data: RequirementUpdateManyDataInput;
-}
-
-export interface GameCreateOneWithoutSessionsInput {
-  create?: GameCreateWithoutSessionsInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface RequirementUpdateManyDataInput {
-  msg?: String;
-}
-
-export interface SessionReviewCreateManyWithoutSessionInput {
-  create?:
-    | SessionReviewCreateWithoutSessionInput[]
-    | SessionReviewCreateWithoutSessionInput;
-  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-}
-
-export interface DiscountUpdateManyInput {
-  create?: DiscountCreateInput[] | DiscountCreateInput;
-  deleteMany?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-  updateMany?:
-    | DiscountUpdateManyWithWhereNestedInput[]
-    | DiscountUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateOneWithoutReviewsInput {
-  create?: UserCreateWithoutReviewsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface DiscountScalarWhereInput {
-  percentage?: Int;
-  percentage_not?: Int;
-  percentage_in?: Int[] | Int;
-  percentage_not_in?: Int[] | Int;
-  percentage_lt?: Int;
-  percentage_lte?: Int;
-  percentage_gt?: Int;
-  percentage_gte?: Int;
-  threshold?: Int;
-  threshold_not?: Int;
-  threshold_in?: Int[] | Int;
-  threshold_not_in?: Int[] | Int;
-  threshold_lt?: Int;
-  threshold_lte?: Int;
-  threshold_gt?: Int;
-  threshold_gte?: Int;
-  playerOrSession?: PlayerOrSession;
-  playerOrSession_not?: PlayerOrSession;
-  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
-  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
-  AND?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-  OR?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-  NOT?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-}
-
-export interface GamingSessionCreateManyWithoutGamersInput {
-  create?:
-    | GamingSessionCreateWithoutGamersInput[]
-    | GamingSessionCreateWithoutGamersInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-}
-
-export interface DiscountUpdateManyWithWhereNestedInput {
-  where: DiscountScalarWhereInput;
-  data: DiscountUpdateManyDataInput;
-}
-
-export interface GamingSessionCreatesystemsInput {
-  set?: System[] | System;
-}
-
-export interface DiscountUpdateManyDataInput {
-  percentage?: Int;
-  threshold?: Int;
-  playerOrSession?: PlayerOrSession;
-}
-
-export interface RequirementCreateInput {
-  msg: String;
-}
-
-export interface GamingTimeSlotUpdateManyWithoutGamingSessionInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamingSessionInput[]
-    | GamingTimeSlotCreateWithoutGamingSessionInput;
-  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  disconnect?:
-    | GamingTimeSlotWhereUniqueInput[]
-    | GamingTimeSlotWhereUniqueInput;
-  update?:
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput[]
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput;
-  upsert?:
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput[]
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput;
-  deleteMany?:
-    | GamingTimeSlotScalarWhereInput[]
-    | GamingTimeSlotScalarWhereInput;
-  updateMany?:
-    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
-    | GamingTimeSlotUpdateManyWithWhereNestedInput;
-}
-
-export interface DiscountCreateInput {
-  percentage: Int;
-  threshold: Int;
-  playerOrSession: PlayerOrSession;
-}
-
-export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  data: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
-}
-
-export interface GamingTimeSlotCreateWithoutGamingSessionInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamers?: UserCreateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerCreateManyInput;
-  length: Int;
-  slots: Int;
-}
-
-export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamers?: UserUpdateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerUpdateManyInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export interface SessionReviewWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  user?: UserWhereInput;
-  session?: GamingSessionWhereInput;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  rating?: Int;
-  rating_not?: Int;
-  rating_in?: Int[] | Int;
-  rating_not_in?: Int[] | Int;
-  rating_lt?: Int;
-  rating_lte?: Int;
-  rating_gt?: Int;
-  rating_gte?: Int;
-  AND?: SessionReviewWhereInput[] | SessionReviewWhereInput;
-  OR?: SessionReviewWhereInput[] | SessionReviewWhereInput;
-  NOT?: SessionReviewWhereInput[] | SessionReviewWhereInput;
-}
-
-export interface UserUpdateManyWithoutTimeSlotsInput {
-  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutTimeSlotsInput[]
-    | UserUpdateWithWhereUniqueWithoutTimeSlotsInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutTimeSlotsInput[]
-    | UserUpsertWithWhereUniqueWithoutTimeSlotsInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface SessionReviewIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SessionReviewIndexWhereInput;
-  AND?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-  OR?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-  NOT?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutTimeSlotsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutTimeSlotsDataInput;
-}
-
-export interface GamingTimeSlotSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GamingTimeSlotWhereInput;
-  AND?:
-    | GamingTimeSlotSubscriptionWhereInput[]
-    | GamingTimeSlotSubscriptionWhereInput;
-  OR?:
-    | GamingTimeSlotSubscriptionWhereInput[]
-    | GamingTimeSlotSubscriptionWhereInput;
-  NOT?:
-    | GamingTimeSlotSubscriptionWhereInput[]
-    | GamingTimeSlotSubscriptionWhereInput;
-}
-
-export interface UserUpdateWithoutTimeSlotsDataInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  favoriteGames?: GameUpdateManyInput;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingUpdateManyWithoutPlayersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-}
-
-export interface GamingTimeSlotWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  endTime?: DateTimeInput;
-  endTime_not?: DateTimeInput;
-  endTime_in?: DateTimeInput[] | DateTimeInput;
-  endTime_not_in?: DateTimeInput[] | DateTimeInput;
-  endTime_lt?: DateTimeInput;
-  endTime_lte?: DateTimeInput;
-  endTime_gt?: DateTimeInput;
-  endTime_gte?: DateTimeInput;
-  gamingSession?: GamingSessionWhereInput;
-  gamers_every?: UserWhereInput;
-  gamers_some?: UserWhereInput;
-  gamers_none?: UserWhereInput;
-  players_every?: BookedPlayerWhereInput;
-  players_some?: BookedPlayerWhereInput;
-  players_none?: BookedPlayerWhereInput;
-  length?: Int;
-  length_not?: Int;
-  length_in?: Int[] | Int;
-  length_not_in?: Int[] | Int;
-  length_lt?: Int;
-  length_lte?: Int;
-  length_gt?: Int;
-  length_gte?: Int;
-  slots?: Int;
-  slots_not?: Int;
-  slots_in?: Int[] | Int;
-  slots_not_in?: Int[] | Int;
-  slots_lt?: Int;
-  slots_lte?: Int;
-  slots_gt?: Int;
-  slots_gte?: Int;
-  AND?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
-  OR?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
-  NOT?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
-}
-
-export interface BookingUpdateManyWithoutPlayersInput {
-  create?:
-    | BookingCreateWithoutPlayersInput[]
-    | BookingCreateWithoutPlayersInput;
-  delete?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
-  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
-  set?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
-  disconnect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
-  update?:
-    | BookingUpdateWithWhereUniqueWithoutPlayersInput[]
-    | BookingUpdateWithWhereUniqueWithoutPlayersInput;
-  upsert?:
-    | BookingUpsertWithWhereUniqueWithoutPlayersInput[]
-    | BookingUpsertWithWhereUniqueWithoutPlayersInput;
-  deleteMany?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-  updateMany?:
-    | BookingUpdateManyWithWhereNestedInput[]
-    | BookingUpdateManyWithWhereNestedInput;
-}
-
-export interface DiscountSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DiscountWhereInput;
-  AND?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
-  OR?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
-  NOT?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
-}
-
-export interface BookingUpdateWithWhereUniqueWithoutPlayersInput {
-  where: BookingWhereUniqueInput;
-  data: BookingUpdateWithoutPlayersDataInput;
-}
-
-export interface BookedPlayerSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BookedPlayerWhereInput;
-  AND?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-  OR?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-  NOT?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-}
-
-export interface BookingUpdateWithoutPlayersDataInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  total?: Float;
-  timeslot?: GamingTimeSlotUpdateOneRequiredInput;
-}
-
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  buffer?: Int;
-}
-
-export interface GamingTimeSlotUpdateOneRequiredInput {
-  create?: GamingTimeSlotCreateInput;
-  update?: GamingTimeSlotUpdateDataInput;
-  upsert?: GamingTimeSlotUpsertNestedInput;
-  connect?: GamingTimeSlotWhereUniqueInput;
-}
-
-export type GameWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface GamingTimeSlotUpdateDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  gamers?: UserUpdateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerUpdateManyInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export type GameIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface BookedPlayerUpdateManyInput {
-  create?: BookedPlayerCreateInput[] | BookedPlayerCreateInput;
-  update?:
-    | BookedPlayerUpdateWithWhereUniqueNestedInput[]
-    | BookedPlayerUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | BookedPlayerUpsertWithWhereUniqueNestedInput[]
-    | BookedPlayerUpsertWithWhereUniqueNestedInput;
-  delete?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  set?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  disconnect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  deleteMany?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-}
-
-export interface SessionReviewIndexUpdateInput {
-  text?: String;
-  sessionReview?: SessionReviewUpdateOneRequiredInput;
-}
-
-export interface BookedPlayerUpdateWithWhereUniqueNestedInput {
-  where: BookedPlayerWhereUniqueInput;
-  data: BookedPlayerUpdateDataInput;
-}
-
-export interface SessionReviewUpdateManyMutationInput {
-  text?: String;
-  rating?: Int;
-}
-
-export interface BookedPlayerUpdateDataInput {
-  player?: UserUpdateOneRequiredInput;
-}
-
-export interface GamingSessionWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  gamers_every?: UserWhereInput;
-  gamers_some?: UserWhereInput;
-  gamers_none?: UserWhereInput;
-  game?: GameWhereInput;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  length?: Int;
-  length_not?: Int;
-  length_in?: Int[] | Int;
-  length_not_in?: Int[] | Int;
-  length_lt?: Int;
-  length_lte?: Int;
-  length_gt?: Int;
-  length_gte?: Int;
-  price?: Float;
-  price_not?: Float;
-  price_in?: Float[] | Float;
-  price_not_in?: Float[] | Float;
-  price_lt?: Float;
-  price_lte?: Float;
-  price_gt?: Float;
-  price_gte?: Float;
-  reviews_every?: SessionReviewWhereInput;
-  reviews_some?: SessionReviewWhereInput;
-  reviews_none?: SessionReviewWhereInput;
-  type?: TypeOfGame;
-  type_not?: TypeOfGame;
-  type_in?: TypeOfGame[] | TypeOfGame;
-  type_not_in?: TypeOfGame[] | TypeOfGame;
-  slots?: Int;
-  slots_not?: Int;
-  slots_in?: Int[] | Int;
-  slots_not_in?: Int[] | Int;
-  slots_lt?: Int;
-  slots_lte?: Int;
-  slots_gt?: Int;
-  slots_gte?: Int;
-  requirements_every?: RequirementWhereInput;
-  requirements_some?: RequirementWhereInput;
-  requirements_none?: RequirementWhereInput;
-  discounts_every?: DiscountWhereInput;
-  discounts_some?: DiscountWhereInput;
-  discounts_none?: DiscountWhereInput;
-  timeslots_every?: GamingTimeSlotWhereInput;
-  timeslots_some?: GamingTimeSlotWhereInput;
-  timeslots_none?: GamingTimeSlotWhereInput;
-  AND?: GamingSessionWhereInput[] | GamingSessionWhereInput;
-  OR?: GamingSessionWhereInput[] | GamingSessionWhereInput;
-  NOT?: GamingSessionWhereInput[] | GamingSessionWhereInput;
-}
-
-export interface BookedPlayerUpsertWithWhereUniqueNestedInput {
-  where: BookedPlayerWhereUniqueInput;
-  update: BookedPlayerUpdateDataInput;
-  create: BookedPlayerCreateInput;
-}
-
-export type GamingSessionWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface BookedPlayerScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  AND?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-  OR?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-  NOT?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-}
-
-export type GamingSessionIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingTimeSlotUpsertNestedInput {
-  update: GamingTimeSlotUpdateDataInput;
-  create: GamingTimeSlotCreateInput;
-}
-
-export interface GamingSessionUpdateOneRequiredInput {
-  create?: GamingSessionCreateInput;
-  update?: GamingSessionUpdateDataInput;
-  upsert?: GamingSessionUpsertNestedInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface BookingUpsertWithWhereUniqueWithoutPlayersInput {
-  where: BookingWhereUniqueInput;
-  update: BookingUpdateWithoutPlayersDataInput;
-  create: BookingCreateWithoutPlayersInput;
-}
-
-export interface GamingSessionIndexCreateInput {
-  title: String;
-  gamingSession: GamingSessionCreateOneInput;
-}
-
-export interface BookingScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  numSlots?: Int;
-  numSlots_not?: Int;
-  numSlots_in?: Int[] | Int;
-  numSlots_not_in?: Int[] | Int;
-  numSlots_lt?: Int;
-  numSlots_lte?: Int;
-  numSlots_gt?: Int;
-  numSlots_gte?: Int;
-  numPlayers?: Int;
-  numPlayers_not?: Int;
-  numPlayers_in?: Int[] | Int;
-  numPlayers_not_in?: Int[] | Int;
-  numPlayers_lt?: Int;
-  numPlayers_lte?: Int;
-  numPlayers_gt?: Int;
-  numPlayers_gte?: Int;
-  total?: Float;
-  total_not?: Float;
-  total_in?: Float[] | Float;
-  total_not_in?: Float[] | Float;
-  total_lt?: Float;
-  total_lte?: Float;
-  total_gt?: Float;
-  total_gte?: Float;
-  AND?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-  OR?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-  NOT?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-}
-
-export interface GamerRequestUpdateManyMutationInput {
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
-}
-
-export interface BookingUpdateManyWithWhereNestedInput {
-  where: BookingScalarWhereInput;
-  data: BookingUpdateManyDataInput;
-}
-
-export interface SocialMediaUpdateOneRequiredInput {
-  create?: SocialMediaCreateInput;
-  update?: SocialMediaUpdateDataInput;
-  upsert?: SocialMediaUpsertNestedInput;
-  connect?: SocialMediaWhereUniqueInput;
-}
-
-export interface BookingUpdateManyDataInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  total?: Float;
-}
-
-export interface SessionReviewIndexWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  sessionReview?: SessionReviewWhereInput;
-  AND?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
-  OR?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
-  NOT?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
-}
-
-export interface BookingInviteUpdateManyWithoutFromInput {
-  create?:
-    | BookingInviteCreateWithoutFromInput[]
-    | BookingInviteCreateWithoutFromInput;
-  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  updateMany?:
-    | BookingInviteUpdateManyWithWhereNestedInput[]
-    | BookingInviteUpdateManyWithWhereNestedInput;
-}
-
-export interface GamerRequestCreateInput {
-  user: UserCreateOneInput;
-  occupations?: GamerRequestCreateoccupationsInput;
-  addToOccupations?: String;
-  socialMedia: SocialMediaCreateOneInput;
-}
-
-export interface BookingInviteScalarWhereInput {
-  sent?: Boolean;
-  sent_not?: Boolean;
-  AND?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  OR?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  NOT?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-}
-
-export interface GameUpdateOneRequiredInput {
-  create?: GameCreateInput;
-  update?: GameUpdateDataInput;
-  upsert?: GameUpsertNestedInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface BookingInviteUpdateManyWithWhereNestedInput {
-  where: BookingInviteScalarWhereInput;
-  data: BookingInviteUpdateManyDataInput;
-}
-
-export interface GameCreateOneInput {
-  create?: GameCreateInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface BookingInviteUpdateManyDataInput {
-  sent?: Boolean;
-}
-
-export interface UserIndexWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  username?: String;
-  username_not?: String;
-  username_in?: String[] | String;
-  username_not_in?: String[] | String;
-  username_lt?: String;
-  username_lte?: String;
-  username_gt?: String;
-  username_gte?: String;
-  username_contains?: String;
-  username_not_contains?: String;
-  username_starts_with?: String;
-  username_not_starts_with?: String;
-  username_ends_with?: String;
-  username_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  user?: UserWhereInput;
-  AND?: UserIndexWhereInput[] | UserIndexWhereInput;
-  OR?: UserIndexWhereInput[] | UserIndexWhereInput;
-  NOT?: UserIndexWhereInput[] | UserIndexWhereInput;
-}
-
-export interface BookingInviteUpdateManyWithoutToInput {
-  create?:
-    | BookingInviteCreateWithoutToInput[]
-    | BookingInviteCreateWithoutToInput;
-  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  updateMany?:
-    | BookingInviteUpdateManyWithWhereNestedInput[]
-    | BookingInviteUpdateManyWithWhereNestedInput;
-}
-
-export interface BookingInviteUpdateManyMutationInput {
-  sent?: Boolean;
-}
-
-export interface SessionReviewUpdateManyWithoutUserInput {
-  create?:
-    | SessionReviewCreateWithoutUserInput[]
-    | SessionReviewCreateWithoutUserInput;
-  delete?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  set?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  disconnect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-  update?:
-    | SessionReviewUpdateWithWhereUniqueWithoutUserInput[]
-    | SessionReviewUpdateWithWhereUniqueWithoutUserInput;
-  upsert?:
-    | SessionReviewUpsertWithWhereUniqueWithoutUserInput[]
-    | SessionReviewUpsertWithWhereUniqueWithoutUserInput;
-  deleteMany?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  updateMany?:
-    | SessionReviewUpdateManyWithWhereNestedInput[]
-    | SessionReviewUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-}
-
-export interface SessionReviewUpdateWithWhereUniqueWithoutUserInput {
-  where: SessionReviewWhereUniqueInput;
-  data: SessionReviewUpdateWithoutUserDataInput;
-}
-
-export interface GameCreatetagsInput {
-  set?: Tags[] | Tags;
-}
-
-export interface SessionReviewUpdateWithoutUserDataInput {
-  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
-
-export interface UserCreateWithoutSessionsInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  buffer?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-}
-
-export interface GamingSessionUpdateOneRequiredWithoutReviewsInput {
-  create?: GamingSessionCreateWithoutReviewsInput;
-  update?: GamingSessionUpdateWithoutReviewsDataInput;
-  upsert?: GamingSessionUpsertWithoutReviewsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface GamingSessionCreateWithoutTimeslotsInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  systems?: GamingSessionCreatesystemsInput;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-}
-
-export interface GamingSessionUpdateWithoutReviewsDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-}
-
-export interface SessionReviewCreateWithoutSessionInput {
-  user: UserCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
-}
-
-export interface GamingSessionUpsertWithoutReviewsInput {
-  update: GamingSessionUpdateWithoutReviewsDataInput;
-  create: GamingSessionCreateWithoutReviewsInput;
-}
-
-export interface GamingSessionCreateWithoutGamersInput {
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  systems?: GamingSessionCreatesystemsInput;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
-}
-
-export interface SessionReviewUpsertWithWhereUniqueWithoutUserInput {
-  where: SessionReviewWhereUniqueInput;
-  update: SessionReviewUpdateWithoutUserDataInput;
-  create: SessionReviewCreateWithoutUserInput;
-}
-
-export interface DiscountCreateManyInput {
-  create?: DiscountCreateInput[] | DiscountCreateInput;
-}
-
-export interface SessionReviewScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  rating?: Int;
-  rating_not?: Int;
-  rating_in?: Int[] | Int;
-  rating_not_in?: Int[] | Int;
-  rating_lt?: Int;
-  rating_lte?: Int;
-  rating_gt?: Int;
-  rating_gte?: Int;
-  AND?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  OR?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  NOT?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-}
-
-export interface UserIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserIndexWhereInput;
-  AND?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  OR?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-  NOT?: UserIndexSubscriptionWhereInput[] | UserIndexSubscriptionWhereInput;
-}
-
-export interface SessionReviewUpdateManyWithWhereNestedInput {
-  where: SessionReviewScalarWhereInput;
-  data: SessionReviewUpdateManyDataInput;
-}
-
-export interface SessionReviewSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SessionReviewWhereInput;
-  AND?:
-    | SessionReviewSubscriptionWhereInput[]
-    | SessionReviewSubscriptionWhereInput;
-  OR?:
-    | SessionReviewSubscriptionWhereInput[]
-    | SessionReviewSubscriptionWhereInput;
-  NOT?:
-    | SessionReviewSubscriptionWhereInput[]
-    | SessionReviewSubscriptionWhereInput;
-}
-
-export interface SessionReviewUpdateManyDataInput {
-  text?: String;
-  rating?: Int;
-}
-
-export interface GameIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GameIndexWhereInput;
-  AND?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-  OR?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-  NOT?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutTimeSlotsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutTimeSlotsDataInput;
-  create: UserCreateWithoutTimeSlotsInput;
-}
-
-export interface UserIndexUpdateInput {
-  email?: String;
-  username?: String;
-  name?: String;
-  user?: UserUpdateOneRequiredInput;
-}
-
-export interface UserScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  username?: String;
-  username_not?: String;
-  username_in?: String[] | String;
-  username_not_in?: String[] | String;
-  username_lt?: String;
-  username_lte?: String;
-  username_gt?: String;
-  username_gte?: String;
-  username_contains?: String;
-  username_not_contains?: String;
-  username_starts_with?: String;
-  username_not_starts_with?: String;
-  username_ends_with?: String;
-  username_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  isGamer?: Boolean;
-  isGamer_not?: Boolean;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  aboutMe?: String;
-  aboutMe_not?: String;
-  aboutMe_in?: String[] | String;
-  aboutMe_not_in?: String[] | String;
-  aboutMe_lt?: String;
-  aboutMe_lte?: String;
-  aboutMe_gt?: String;
-  aboutMe_gte?: String;
-  aboutMe_contains?: String;
-  aboutMe_not_contains?: String;
-  aboutMe_starts_with?: String;
-  aboutMe_not_starts_with?: String;
-  aboutMe_ends_with?: String;
-  aboutMe_not_ends_with?: String;
-  buffer?: Int;
-  buffer_not?: Int;
-  buffer_in?: Int[] | Int;
-  buffer_not_in?: Int[] | Int;
-  buffer_lt?: Int;
-  buffer_lte?: Int;
-  buffer_gt?: Int;
-  buffer_gte?: Int;
-  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
-  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
-  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
-}
-
-export interface SessionReviewUpsertNestedInput {
-  update: SessionReviewUpdateDataInput;
-  create: SessionReviewCreateInput;
-}
-
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
-}
-
-export interface SessionReviewIndexCreateInput {
-  text: String;
-  sessionReview: SessionReviewCreateOneInput;
-}
-
-export interface UserUpdateManyDataInput {
-  email?: String;
-  username?: String;
-  password?: String;
-  isGamer?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  buffer?: Int;
-}
-
-export interface RequirementUpdateManyMutationInput {
-  msg?: String;
-}
-
-export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  update: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
-  create: GamingTimeSlotCreateWithoutGamingSessionInput;
-}
-
-export interface GamingSessionIndexWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  gamingSession?: GamingSessionWhereInput;
-  AND?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
-  OR?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
-  NOT?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
 }
 
 export interface GamingTimeSlotScalarWhereInput {
@@ -3708,19 +3954,9 @@ export interface GamingTimeSlotScalarWhereInput {
   NOT?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
 }
 
-export interface GamingSessionUpdateInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  systems?: GamingSessionUpdatesystemsInput;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+export interface GamingSessionCreateOneWithoutTimeslotsInput {
+  create?: GamingSessionCreateWithoutTimeslotsInput;
+  connect?: GamingSessionWhereUniqueInput;
 }
 
 export interface GamingTimeSlotUpdateManyWithWhereNestedInput {
@@ -3728,9 +3964,12 @@ export interface GamingTimeSlotUpdateManyWithWhereNestedInput {
   data: GamingTimeSlotUpdateManyDataInput;
 }
 
-export type SessionReviewIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface GamingSessionCreateManyWithoutGamersInput {
+  create?:
+    | GamingSessionCreateWithoutGamersInput[]
+    | GamingSessionCreateWithoutGamersInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+}
 
 export interface GamingTimeSlotUpdateManyDataInput {
   startTime?: DateTimeInput;
@@ -3739,9 +3978,9 @@ export interface GamingTimeSlotUpdateManyDataInput {
   slots?: Int;
 }
 
-export interface GameIndexUpdateManyMutationInput {
-  name?: String;
-  tags?: GameIndexUpdatetagsInput;
+export interface UserCreateManyWithoutTimeSlotsInput {
+  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
@@ -3750,11 +3989,57 @@ export interface GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
   create: GamingSessionCreateWithoutGamersInput;
 }
 
-export type UserIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  username?: String;
-}>;
+export interface SessionReviewWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  user?: UserWhereInput;
+  session?: GamingSessionWhereInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  rating?: Int;
+  rating_not?: Int;
+  rating_in?: Int[] | Int;
+  rating_not_in?: Int[] | Int;
+  rating_lt?: Int;
+  rating_lte?: Int;
+  rating_gt?: Int;
+  rating_gte?: Int;
+  AND?: SessionReviewWhereInput[] | SessionReviewWhereInput;
+  OR?: SessionReviewWhereInput[] | SessionReviewWhereInput;
+  NOT?: SessionReviewWhereInput[] | SessionReviewWhereInput;
+}
 
 export interface GamingSessionScalarWhereInput {
   id?: ID_Input;
@@ -3801,6 +4086,10 @@ export interface GamingSessionScalarWhereInput {
   price_lte?: Float;
   price_gt?: Float;
   price_gte?: Float;
+  system?: System;
+  system_not?: System;
+  system_in?: System[] | System;
+  system_not_in?: System[] | System;
   type?: TypeOfGame;
   type_not?: TypeOfGame;
   type_in?: TypeOfGame[] | TypeOfGame;
@@ -3818,8 +4107,15 @@ export interface GamingSessionScalarWhereInput {
   NOT?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
 }
 
-export interface BookedPlayerCreateInput {
-  player: UserCreateOneInput;
+export interface DiscountSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DiscountWhereInput;
+  AND?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+  OR?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+  NOT?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
 }
 
 export interface GamingSessionUpdateManyWithWhereNestedInput {
@@ -3827,33 +4123,27 @@ export interface GamingSessionUpdateManyWithWhereNestedInput {
   data: GamingSessionUpdateManyDataInput;
 }
 
-export interface GamingSessionCreateWithoutGameInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  systems?: GamingSessionCreatesystemsInput;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+export interface SessionReviewUpdateDataInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
 }
 
 export interface GamingSessionUpdateManyDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  systems?: GamingSessionUpdatesystemsInput;
+  system?: System;
   type?: TypeOfGame;
   slots?: Int;
 }
 
-export interface GameCreateWithoutSessionsInput {
-  name: String;
-  tags?: GameCreatetagsInput;
-  numSessions?: Int;
+export interface GamingTimeSlotUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  length?: Int;
+  slots?: Int;
 }
 
 export interface UserUpsertWithoutReviewsInput {
@@ -3861,8 +4151,20 @@ export interface UserUpsertWithoutReviewsInput {
   create: UserCreateWithoutReviewsInput;
 }
 
-export interface RequirementCreateManyInput {
-  create?: RequirementCreateInput[] | RequirementCreateInput;
+export interface GamingSessionCreateInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
 }
 
 export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
@@ -3871,15 +4173,9 @@ export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
   create: SessionReviewCreateWithoutSessionInput;
 }
 
-export interface BookingInviteWhereInput {
-  booking?: BookingWhereInput;
-  to?: UserWhereInput;
-  from?: UserWhereInput;
-  sent?: Boolean;
-  sent_not?: Boolean;
-  AND?: BookingInviteWhereInput[] | BookingInviteWhereInput;
-  OR?: BookingInviteWhereInput[] | BookingInviteWhereInput;
-  NOT?: BookingInviteWhereInput[] | BookingInviteWhereInput;
+export interface GameUpsertNestedInput {
+  update: GameUpdateDataInput;
+  create: GameCreateInput;
 }
 
 export interface GamingSessionUpsertWithoutTimeslotsInput {
@@ -3887,9 +4183,10 @@ export interface GamingSessionUpsertWithoutTimeslotsInput {
   create: GamingSessionCreateWithoutTimeslotsInput;
 }
 
-export type BookingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
 
 export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput {
   where: GamingTimeSlotWhereUniqueInput;
@@ -3897,7 +4194,44 @@ export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput {
   create: GamingTimeSlotCreateWithoutGamersInput;
 }
 
-export interface GameIndexWhereInput {
+export interface SessionReviewCreateManyWithoutSessionInput {
+  create?:
+    | SessionReviewCreateWithoutSessionInput[]
+    | SessionReviewCreateWithoutSessionInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutSessionsDataInput;
+  create: UserCreateWithoutSessionsInput;
+}
+
+export interface GamingTimeSlotCreateOneInput {
+  create?: GamingTimeSlotCreateInput;
+  connect?: GamingTimeSlotWhereUniqueInput;
+}
+
+export interface GamingSessionUpsertWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  update: GamingSessionUpdateWithoutGameDataInput;
+  create: GamingSessionCreateWithoutGameInput;
+}
+
+export interface UserIndexCreateInput {
+  email: String;
+  username: String;
+  name: String;
+  user: UserCreateOneInput;
+}
+
+export interface GameUpsertWithWhereUniqueNestedInput {
+  where: GameWhereUniqueInput;
+  update: GameUpdateDataInput;
+  create: GameCreateInput;
+}
+
+export interface GameWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -3926,43 +4260,21 @@ export interface GameIndexWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  game?: GameWhereInput;
-  AND?: GameIndexWhereInput[] | GameIndexWhereInput;
-  OR?: GameIndexWhereInput[] | GameIndexWhereInput;
-  NOT?: GameIndexWhereInput[] | GameIndexWhereInput;
+  sessions_every?: GamingSessionWhereInput;
+  sessions_some?: GamingSessionWhereInput;
+  sessions_none?: GamingSessionWhereInput;
+  numSessions?: Int;
+  numSessions_not?: Int;
+  numSessions_in?: Int[] | Int;
+  numSessions_not_in?: Int[] | Int;
+  numSessions_lt?: Int;
+  numSessions_lte?: Int;
+  numSessions_gt?: Int;
+  numSessions_gte?: Int;
+  AND?: GameWhereInput[] | GameWhereInput;
+  OR?: GameWhereInput[] | GameWhereInput;
+  NOT?: GameWhereInput[] | GameWhereInput;
 }
-
-export interface UserUpsertWithWhereUniqueWithoutSessionsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutSessionsDataInput;
-  create: UserCreateWithoutSessionsInput;
-}
-
-export interface GamingSessionIndexUpdateManyMutationInput {
-  title?: String;
-}
-
-export interface GamingSessionUpsertWithWhereUniqueWithoutGameInput {
-  where: GamingSessionWhereUniqueInput;
-  update: GamingSessionUpdateWithoutGameDataInput;
-  create: GamingSessionCreateWithoutGameInput;
-}
-
-export type SessionReviewWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GameUpsertWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput;
-  update: GameUpdateDataInput;
-  create: GameCreateInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  username?: String;
-}>;
 
 export interface GameScalarWhereInput {
   id?: ID_Input;
@@ -4006,9 +4318,10 @@ export interface GameScalarWhereInput {
   NOT?: GameScalarWhereInput[] | GameScalarWhereInput;
 }
 
-export interface GameCreateManyInput {
-  create?: GameCreateInput[] | GameCreateInput;
-  connect?: GameWhereUniqueInput[] | GameWhereUniqueInput;
+export interface GameIndexCreateInput {
+  name: String;
+  tags?: GameIndexCreatetagsInput;
+  game: GameCreateOneInput;
 }
 
 export interface GameUpdateManyWithWhereNestedInput {
@@ -4016,85 +4329,8 @@ export interface GameUpdateManyWithWhereNestedInput {
   data: GameUpdateManyDataInput;
 }
 
-export interface UserCreateWithoutReviewsInput {
-  email: String;
-  username: String;
-  password: String;
-  isGamer?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  favoriteGames?: GameCreateManyInput;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  timeSlotsBooked?: BookingCreateManyWithoutPlayersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  buffer?: Int;
-}
-
-export interface GameUpdateManyDataInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  numSessions?: Int;
-}
-
-export interface GamingSessionIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GamingSessionIndexWhereInput;
-  AND?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-  OR?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-  NOT?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface GamerRequestWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  user?: UserWhereInput;
-  addToOccupations?: String;
-  addToOccupations_not?: String;
-  addToOccupations_in?: String[] | String;
-  addToOccupations_not_in?: String[] | String;
-  addToOccupations_lt?: String;
-  addToOccupations_lte?: String;
-  addToOccupations_gt?: String;
-  addToOccupations_gte?: String;
-  addToOccupations_contains?: String;
-  addToOccupations_not_contains?: String;
-  addToOccupations_starts_with?: String;
-  addToOccupations_not_starts_with?: String;
-  addToOccupations_ends_with?: String;
-  addToOccupations_not_ends_with?: String;
-  socialMedia?: SocialMediaWhereInput;
-  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+export interface DiscountCreateManyInput {
+  create?: DiscountCreateInput[] | DiscountCreateInput;
 }
 
 export interface BookingUpdateManyMutationInput {
@@ -4103,86 +4339,56 @@ export interface BookingUpdateManyMutationInput {
   total?: Float;
 }
 
-export interface SocialMediaCreateOneInput {
-  create?: SocialMediaCreateInput;
-  connect?: SocialMediaWhereUniqueInput;
+export interface BookingInviteCreateInput {
+  booking: BookingCreateOneInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  from: UserCreateOneWithoutInvitesInput;
+  sent: Boolean;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutTimeSlotsBookedDataInput;
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
-export interface UserUpdateManyWithoutTimeSlotsBookedInput {
-  create?:
-    | UserCreateWithoutTimeSlotsBookedInput[]
-    | UserCreateWithoutTimeSlotsBookedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput[]
-    | UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput[]
-    | UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface BookingUpdateInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  players?: UserUpdateManyWithoutTimeSlotsBookedInput;
-  total?: Float;
-  timeslot?: GamingTimeSlotUpdateOneRequiredInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutTimeSlotsBookedDataInput;
-  create: UserCreateWithoutTimeSlotsBookedInput;
-}
-
-export interface GameUpdateInput {
+export interface GameUpdateManyDataInput {
   name?: String;
   tags?: GameUpdatetagsInput;
-  sessions?: GamingSessionUpdateManyWithoutGameInput;
   numSessions?: Int;
 }
 
-export interface GamingSessionCreateOneInput {
-  create?: GamingSessionCreateInput;
-  connect?: GamingSessionWhereUniqueInput;
+export interface GamingTimeSlotSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamingTimeSlotWhereInput;
+  AND?:
+    | GamingTimeSlotSubscriptionWhereInput[]
+    | GamingTimeSlotSubscriptionWhereInput;
+  OR?:
+    | GamingTimeSlotSubscriptionWhereInput[]
+    | GamingTimeSlotSubscriptionWhereInput;
+  NOT?:
+    | GamingTimeSlotSubscriptionWhereInput[]
+    | GamingTimeSlotSubscriptionWhereInput;
 }
 
-export interface SocialMediaUpdateManyMutationInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface UserCreateManyWithoutSessionsInput {
+  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface GamingTimeSlotCreateManyWithoutGamingSessionInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamingSessionInput[]
-    | GamingTimeSlotCreateWithoutGamingSessionInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+export interface GamerRequestUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia?: SocialMediaUpdateOneRequiredInput;
 }
 
-export interface GamingTimeSlotCreateWithoutGamersInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
-  players?: BookedPlayerCreateManyInput;
-  length: Int;
-  slots: Int;
-}
+export type GamerRequestWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface NodeNode {
   id: ID_Output;
@@ -4841,18 +5047,21 @@ export interface GamingTimeSlotEdgeSubscription
 }
 
 export interface BookingInvitePreviousValues {
+  id: ID_Output;
   sent: Boolean;
 }
 
 export interface BookingInvitePreviousValuesPromise
   extends Promise<BookingInvitePreviousValues>,
     Fragmentable {
+  id: () => Promise<ID_Output>;
   sent: () => Promise<Boolean>;
 }
 
 export interface BookingInvitePreviousValuesSubscription
   extends Promise<AsyncIterator<BookingInvitePreviousValues>>,
     Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
   sent: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -5265,12 +5474,14 @@ export interface GameConnectionSubscription
 }
 
 export interface BookingInvite {
+  id: ID_Output;
   sent: Boolean;
 }
 
 export interface BookingInvitePromise
   extends Promise<BookingInvite>,
     Fragmentable {
+  id: () => Promise<ID_Output>;
   booking: <T = BookingPromise>() => T;
   to: <T = UserPromise>() => T;
   from: <T = UserPromise>() => T;
@@ -5280,6 +5491,7 @@ export interface BookingInvitePromise
 export interface BookingInviteSubscription
   extends Promise<AsyncIterator<BookingInvite>>,
     Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
   booking: <T = BookingSubscription>() => T;
   to: <T = UserSubscription>() => T;
   from: <T = UserSubscription>() => T;
@@ -5667,7 +5879,7 @@ export interface GamingSession {
   title: String;
   length: Int;
   price: Float;
-  systems: System[];
+  system: System;
   type: TypeOfGame;
   slots: Int;
 }
@@ -5687,6 +5899,7 @@ export interface GamingSessionPromise
       last?: Int;
     }
   ) => T;
+  creator: <T = UserPromise>() => T;
   game: <T = GamePromise>() => T;
   title: () => Promise<String>;
   length: () => Promise<Int>;
@@ -5702,7 +5915,7 @@ export interface GamingSessionPromise
       last?: Int;
     }
   ) => T;
-  systems: () => Promise<System[]>;
+  system: () => Promise<System>;
   type: () => Promise<TypeOfGame>;
   slots: () => Promise<Int>;
   requirements: <T = FragmentableArray<Requirement>>(
@@ -5755,6 +5968,7 @@ export interface GamingSessionSubscription
       last?: Int;
     }
   ) => T;
+  creator: <T = UserSubscription>() => T;
   game: <T = GameSubscription>() => T;
   title: () => Promise<AsyncIterator<String>>;
   length: () => Promise<AsyncIterator<Int>>;
@@ -5770,7 +5984,7 @@ export interface GamingSessionSubscription
       last?: Int;
     }
   ) => T;
-  systems: () => Promise<AsyncIterator<System[]>>;
+  system: () => Promise<AsyncIterator<System>>;
   type: () => Promise<AsyncIterator<TypeOfGame>>;
   slots: () => Promise<AsyncIterator<Int>>;
   requirements: <T = Promise<AsyncIterator<RequirementSubscription>>>(
@@ -5813,7 +6027,7 @@ export interface GamingSessionPreviousValues {
   title: String;
   length: Int;
   price: Float;
-  systems: System[];
+  system: System;
   type: TypeOfGame;
   slots: Int;
 }
@@ -5825,7 +6039,7 @@ export interface GamingSessionPreviousValuesPromise
   title: () => Promise<String>;
   length: () => Promise<Int>;
   price: () => Promise<Float>;
-  systems: () => Promise<System[]>;
+  system: () => Promise<System>;
   type: () => Promise<TypeOfGame>;
   slots: () => Promise<Int>;
 }
@@ -5837,7 +6051,7 @@ export interface GamingSessionPreviousValuesSubscription
   title: () => Promise<AsyncIterator<String>>;
   length: () => Promise<AsyncIterator<Int>>;
   price: () => Promise<AsyncIterator<Float>>;
-  systems: () => Promise<AsyncIterator<System[]>>;
+  system: () => Promise<AsyncIterator<System>>;
   type: () => Promise<AsyncIterator<TypeOfGame>>;
   slots: () => Promise<AsyncIterator<Int>>;
 }

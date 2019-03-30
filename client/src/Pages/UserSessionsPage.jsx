@@ -2,13 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import dateFns from 'date-fns'
+import gql from 'graphql-tag'
+import { useQuery } from 'react-apollo-hooks'
 
 //local imports
-import MySession from '../Components/MySession'
+import MyTimeSlot from '../Components/MyTimeSlot'
 import NavBar from '../Components/NavBar'
-
-//data
-import yoursessions from '../data/yoursessions'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -87,23 +86,59 @@ const PreviousContent = styled.div`
   width: 100%;
 `
 
+const MY_SESSIONS = gql`
+  {
+    me {
+      id
+      timeSlotsBooked {
+        timeslot {
+          gamingSession {
+            id
+            gamers {
+              name
+            }
+            game {
+              name
+            }
+            creator {
+              username
+            }
+          }
+          startTime
+        }
+      }
+    }
+  }
+`
+
 export default function UserSessionsPage(props) {
-  const data = _(yoursessions)
-    .groupBy(session => dateFns.isAfter(session.timeStart, new Date()))
-    .value()
-  let upcoming = data.true
-  let previous = data.false
-  upcoming = upcoming.sort((a, b) => {
-    const firstDate = new Date(a.timeStart)
-    const secondDate = new Date(b.timeStart)
-    return firstDate - secondDate
-  })
-  previous = previous.sort((a, b) => {
-    const firstDate = new Date(a.timeStart)
-    const secondDate = new Date(b.timeStart)
-    return secondDate - firstDate
-  })
-  return (
+  const { data, loading } = useQuery(MY_SESSIONS)
+  const sessions =
+    !loading &&
+    _(data.me.timeSlotsBooked)
+      .groupBy(timeslot =>
+        dateFns.isAfter(timeslot.timeslot.startTime, new Date())
+      )
+      .value()
+  let upcoming = !loading && sessions.true
+  let previous = !loading && sessions.false
+  if (!loading && upcoming) {
+    upcoming = upcoming.sort((a, b) => {
+      const firstDate = new Date(a.timeslot.startTime)
+      const secondDate = new Date(b.timeslot.startTime)
+      return firstDate - secondDate
+    })
+  }
+  if (!loading && previous) {
+    previous = previous.sort((a, b) => {
+      console.log(a, b)
+      const firstDate = new Date(a.timeslot.startTime)
+      const secondDate = new Date(b.timeslot.startTime)
+      return secondDate - firstDate
+    })
+  }
+  console.log(previous)
+  return loading ? null : (
     <PageContainer>
       <NavBar />
       <Content>
@@ -111,8 +146,8 @@ export default function UserSessionsPage(props) {
           <UpcomingSessions>Upcoming sessions</UpcomingSessions>
           <NegativeMargin>
             <UpcomingContent>
-              {_.map(upcoming, session => (
-                <MySession session={session} />
+              {_.map(upcoming, timeslot => (
+                <MyTimeSlot timeslot={timeslot.timeslot} />
               ))}
             </UpcomingContent>
           </NegativeMargin>
@@ -121,8 +156,8 @@ export default function UserSessionsPage(props) {
           <PreviousSessions>Sessions you've played</PreviousSessions>
           <NegativeMargin>
             <PreviousContent>
-              {_.map(previous, session => (
-                <MySession session={session} />
+              {_.map(previous, timeslot => (
+                <MyTimeSlot timeslot={timeslot.timeslot} />
               ))}
             </PreviousContent>
           </NegativeMargin>

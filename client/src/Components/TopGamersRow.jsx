@@ -8,7 +8,6 @@ import gql from 'graphql-tag'
 
 // local imports
 import Gamer from './Gamer'
-import gamers from '../data/gamers'
 
 const RowTitle = styled.h3`
   font-size: 3rem;
@@ -97,6 +96,7 @@ const GET_GAMERS = gql`
 export default function GamerRow(props) {
   const [first, setFirst] = useState(4)
   const { data, loading } = useQuery(GET_GAMERS, { variables: { first } })
+  console.log(data)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>

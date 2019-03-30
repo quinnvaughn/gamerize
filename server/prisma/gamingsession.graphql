@@ -7,12 +7,13 @@
 type GamingSession {
   id: ID! @unique
   gamers: [User!]! @relation(name: "MySessions")
+  creator: User! @relation(name: "GameSessionCreator")
   game: Game!
   title: String!
   length: Int!
   price: Float!
   reviews: [SessionReview!]!
-  systems: [System!]!
+  system: System!
   type: TypeOfGame!
   slots: Int!
   requirements: [Requirement!]!

@@ -79,9 +79,8 @@ const SystemChoice = styled.div`
 `
 
 export default function SystemPicker(props) {
-  const [open, setOpen] = useState(false)
   useEffect(() => {
-    props.setSystem(props.systems[0])
+    props.setSystem(props.system)
   }, {})
   return (
     <Container>
@@ -91,30 +90,10 @@ export default function SystemPicker(props) {
       <Subscribe to={[SessionsContainer]}>
         {session => (
           <SelectionContainer>
-            <SelectionButton
-              onClick={() => props.systems.length >= 1 && setOpen(!open)}
-              disabled={props.systems.length <= 1}
-            >
+            <SelectionButton disabled={true}>
               <SelectedChoice>
                 {session.state.system === null ? '' : session.state.system}
               </SelectedChoice>
-              {open ? (
-                <ChevronUp />
-              ) : (
-                <ChevronDown disabled={props.systems.length <= 1} />
-              )}
-              {open && (
-                <SystemChoices>
-                  {props.systems.map(system => (
-                    <SystemChoice
-                      onClick={() => session.setSystem(system)}
-                      key={system}
-                    >
-                      {system}
-                    </SystemChoice>
-                  ))}
-                </SystemChoices>
-              )}
             </SelectionButton>
           </SelectionContainer>
         )}

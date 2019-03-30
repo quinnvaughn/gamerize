@@ -10,6 +10,11 @@ const gamingsession = {
       gamers: {
         connect: [{ id: userId }],
       },
+      creator: {
+        connect: {
+          id: userId,
+        },
+      },
       type: input.type,
       slots: input.slots,
       systems: { set: input.systems },

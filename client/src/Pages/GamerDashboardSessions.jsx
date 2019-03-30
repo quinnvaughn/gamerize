@@ -74,7 +74,7 @@ const GET_SESSIONS = gql`
         }
         price
         length
-        systems
+        system
         slots
         type
       }

@@ -1,4 +1,5 @@
 type BookingInvite {
+  id: ID! @unique
   booking: Booking!
   to: User @relation(name: "InvitesReceived")
   from: User! @relation(name: "InvitesFromMe")

@@ -113,16 +113,6 @@ const Bottom = styled.div`
   cursor: pointer;
 `
 
-// pulled function out and named it to make it more obvious and clean up return
-
-const formatCommas = (systems, system, index, username) => {
-  if (index < systems.length - 1) {
-    return <System key={`${username} ${system}`}>{`${system}, `}</System>
-  } else {
-    return <System key={`${username} ${system}`}>{system}</System>
-  }
-}
-
 export default function Session(props) {
   return (
     <Container>
@@ -133,9 +123,7 @@ export default function Session(props) {
         </TitleContainer>
         <Name>{props.name}</Name>
         <Systems>
-          {props.systems.map((system, index) =>
-            formatCommas(props.systems, system, index, props.username)
-          )}
+          <System>{props.system}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
         <Bottom>

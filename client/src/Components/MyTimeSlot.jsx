@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import dateFns from 'date-fns'
 
 import DefaultSessionPicture from '../default-game.gif'
-import { noUnderscores } from '../utils/Strings'
+import { noUnderscores, noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -99,11 +99,15 @@ const SessionGame = styled.span`
   font-weight: 400;
 `
 
-export default function MySession({ session }) {
+export default function MyTimeSlot({ timeslot }) {
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
   return (
     <Container>
-      <StyledLink to={`/users/${session.username}/${session.game}`}>
+      <StyledLink
+        to={`/users/${timeslot.gamingSession.creator.username}/${noSpaces(
+          timeslot.gamingSession.game.name
+        )}/${timeslot.gamingSession.id}`}
+      >
         <SessionPictureContainer src={DefaultSessionPicture}>
           <SessionPictureSecond>
             <SessionPictureThird>
@@ -113,10 +117,14 @@ export default function MySession({ session }) {
         </SessionPictureContainer>
         <SessionInfo>
           <SessionDate>
-            {dateFns.format(session.timeStart, dateFormat)}
+            {dateFns.format(timeslot.startTime, dateFormat)}
           </SessionDate>
-          <SessionGamer>{session.gamer}</SessionGamer>
-          <SessionGame>{noUnderscores(session.game)}</SessionGame>
+          {timeslot.gamingSession.gamers.map(gamer => (
+            <SessionGamer>{gamer.name}</SessionGamer>
+          ))}
+          <SessionGame>
+            {noUnderscores(timeslot.gamingSession.game.name)}
+          </SessionGame>
         </SessionInfo>
       </StyledLink>
     </Container>

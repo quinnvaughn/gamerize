@@ -292,17 +292,18 @@ export default function GamerSessionCardBack({
                 const { data } = await createGamingSlot({
                   variables: { input },
                 })
-                dispatch({ type: 'loading', payload: false })
-                data.createGamingTimeSlot.successMsg &&
-                  dispatch({
-                    type: 'setSuccessMsg',
-                    payload: data.createGamingTimeSlot.successMsg,
-                  })
-                data.createGamingTimeSlot.errorMsg &&
-                  dispatch({
-                    type: 'setErrorMsg',
-                    payload: data.createGamingTimeSlot.errorMsg,
-                  })
+                console.log(data)
+                // dispatch({ type: 'loading', payload: false })
+                // data.createGamingSlot.successMsg &&
+                //   dispatch({
+                //     type: 'setSuccessMsg',
+                //     payload: data.createGamingSlot.successMsg,
+                //   })
+                // data.createGamingSlot.errorMsg &&
+                //   dispatch({
+                //     type: 'setErrorMsg',
+                //     payload: data.createGamingSlot.errorMsg,
+                //   })
                 refetch()
               }}
             >

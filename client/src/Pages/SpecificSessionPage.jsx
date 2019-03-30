@@ -244,7 +244,7 @@ const GET_SPECIFIC_SESSION = gql`
       slotsLeftToday
       reviewRating
       numReviews
-      systems
+      system
       game {
         name
       }
@@ -323,16 +323,11 @@ export default function SpecificSessionPage(props) {
                   )}`}</Game>
                 </Flex>
                 <Flex>
-                  <TypeOfContent>{`${singleOrPlural(
-                    data.getSpecificSession.systems,
-                    'System'
-                  )}`}</TypeOfContent>
-                  {data.getSpecificSession.systems.map((system, index) =>
-                    formatCommas(data.getSpecificSession.systems, system, index)
-                  )}
+                  <TypeOfContent>System</TypeOfContent>
+                  <Systems>{data.getSpecificSession.system}</Systems>
                 </Flex>
                 <Flex>
-                  <TypeOfContent>Length</TypeOfContent>
+                  <TypeOfContent>Game Length</TypeOfContent>
                   <Length>{`${data.getSpecificSession.length} minutes`}</Length>
                 </Flex>
               </FlexHalf>
@@ -381,7 +376,7 @@ export default function SpecificSessionPage(props) {
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
-                systems={data.getSpecificSession.systems}
+                system={data.getSpecificSession.system}
               />
             ) : (
               <SelectionOptions
@@ -392,7 +387,7 @@ export default function SpecificSessionPage(props) {
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
-                systems={data.getSpecificSession.systems}
+                system={data.getSpecificSession.system}
               />
             )
           }

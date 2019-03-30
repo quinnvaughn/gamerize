@@ -42,7 +42,6 @@ const Name = styled.div`
   text-size-adjust: 100%;
   font-size: 1.7rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
   cursor: pointer;
   line-height: 1.375em;
   color: black;
@@ -88,12 +87,6 @@ const NumReviews = styled.span`
   color: black;
   font-size: 1.2rem;
 `
-const Reviews = styled.span`
-  font-size: 1.2rem;
-  color: #f10e0e;
-  margin-right: 0.5rem;
-  font-weight: 600;
-`
 
 const StyledLink = styled(Link)`
   padding-left: 0.8rem;
@@ -114,14 +107,6 @@ const Bottom = styled.div`
 
 // pulled function out and named it to make it more obvious and clean up return
 
-const formatCommas = (systems, system, index, username) => {
-  if (index < systems.length - 1) {
-    return <System key={`${username} ${system}`}>{`${system}, `}</System>
-  } else {
-    return <System key={`${username} ${system}`}>{system}</System>
-  }
-}
-
 export default function SmallSession(props) {
   return (
     <Container width={props.width}>
@@ -132,9 +117,7 @@ export default function SmallSession(props) {
         </TitleContainer>
         <Name>{props.name}</Name>
         <Systems>
-          {props.systems.map((system, index) =>
-            formatCommas(props.systems, system, index, props.username)
-          )}
+          <System>{props.system}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
         <Bottom>

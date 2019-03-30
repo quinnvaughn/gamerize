@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import GameSessionDropdown from './GameSessionDropdown'
 import TypeSessionDropdown from './TypeSessionDropdown'
 import SystemsSessionDropdown from './SystemsSessionDropdown'
+import { formatSystem } from '../utils/Strings'
 
 const Card = styled.div`
   background: #fff;
@@ -197,9 +198,9 @@ export default function CreatedSessionCardBack({
         <Buffer>*not counting buffer</Buffer>
       </LengthContainer>
       <SystemsSessionDropdown
-        label={'Systems: '}
+        label={'System: '}
         dispatch={dispatch}
-        title={state.systems}
+        title={formatSystem(state.system)}
       />
       <SlotsContainer>
         <Slots>Slots:</Slots>
@@ -226,11 +227,11 @@ export default function CreatedSessionCardBack({
             game: state.game,
             price: state.price,
             length: state.length,
-            systems: state.systems,
+            system: state.system,
             slots: state.slots,
             type: state.type,
           }
-          const data = await updateSession({ variables: { input } })
+          await updateSession({ variables: { input } })
           await refetch()
           dispatch({ type: 'flip', payload: false })
         }}
