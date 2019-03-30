@@ -19,18 +19,13 @@ export const formatTags = tag => {
 
 export const uppercase = string => string.toUpperCase()
 
-export const formatSystems = systems => {
+export const formatSystem = system => {
   let str = ''
-  systems.forEach((i, index) => {
-    if (i === 'PC' || i === 'PS4') {
-      str += i
-    } else {
-      str += capitalize(noUnderscores(i))
-    }
-    if (index !== systems.length - 1) {
-      str += ', '
-    }
-  })
+  if (system === 'PC' || system === 'PS4') {
+    str = system
+  } else {
+    str = capitalize(noUnderscores(system))
+  }
   return str
 }
 

@@ -167,7 +167,6 @@ function BigGamerCalendar(props) {
       day: selectedDay,
     },
   })
-  console.log(data)
 
   const renderHeader = () => {
     const dateFormat = 'MMMM YYYY'

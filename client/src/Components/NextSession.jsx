@@ -4,10 +4,6 @@ import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import dateFns from 'date-fns'
 
-//local imports
-import useInterval from '../Hooks/useInterval'
-import { objectIsEmpty } from '../utils/Objects'
-
 const Container = styled.div`
   background: #fff;
   border: 1px solid #dddfe2;
@@ -81,10 +77,7 @@ const NEXT_SESSION = gql`
 `
 
 export default function NextSession(props) {
-  const { data, loading, refetch } = useQuery(NEXT_SESSION)
-  useInterval(() => {
-    refetch()
-  }, 60000)
+  const { data, loading } = useQuery(NEXT_SESSION, { pollInterval: 5000 })
   const renderUsernames = () => {
     let usernames = []
     let counter = 0

@@ -252,7 +252,7 @@ const GET_USER = gql`
         game {
           name
         }
-        systems
+        system
         price
         reviews {
           text
@@ -361,7 +361,7 @@ export default function UserProfile(props) {
                     username={data.getUser.username}
                     game={noSpaces(session.game.name)}
                     name={session.game.name}
-                    systems={session.systems}
+                    system={session.system}
                     price={session.price}
                     reviewRating={session.reviewRating}
                     numReviews={session.numReviews}

@@ -83,22 +83,6 @@ const TypeGame = styled.span`
   font-weight: 400;
 `
 
-const formatCommasSystems = (systems, system, index) => {
-  if (index < systems.length - 1) {
-    return (
-      <System key={system}>{`${
-        system === 'PC' ? system : capitalize(noUnderscores(system))
-      }, `}</System>
-    )
-  } else {
-    return (
-      <System key={system}>{`${
-        system === 'PC' ? system : capitalize(noUnderscores(system))
-      }`}</System>
-    )
-  }
-}
-
 export default function CreatedSessionCardFront({ session, buffer, dispatch }) {
   useEffect(() => {
     dispatch({ type: 'setTitle', payload: session.title })
@@ -107,9 +91,7 @@ export default function CreatedSessionCardFront({ session, buffer, dispatch }) {
     dispatch({ type: 'setLength', payload: session.length })
     dispatch({ type: 'setSlots', payload: session.slots })
     dispatch({ type: 'setType', payload: session.type })
-    session.systems.forEach(system => {
-      dispatch({ type: 'setSystems', payload: system })
-    })
+    dispatch({ type: 'setSystem', payload: session.system })
   }, [])
   return (
     <Card
@@ -122,10 +104,12 @@ export default function CreatedSessionCardFront({ session, buffer, dispatch }) {
       <Price>{`$${session.price} a slot`}</Price>
       <Length>{`${session.length + buffer} minutes a game`}</Length>
       <Systems>
-        <SystemTitle>{`Systems: `}</SystemTitle>
-        {session.systems.map((system, index) =>
-          formatCommasSystems(session.systems, system, index)
-        )}
+        <SystemTitle>{`System: `}</SystemTitle>
+        <System>{`${
+          session.system === 'PC'
+            ? session.system
+            : capitalize(noUnderscores(session.system))
+        }`}</System>
       </Systems>
       <Slots>{`${session.slots} slots per game`}</Slots>
       <Type>

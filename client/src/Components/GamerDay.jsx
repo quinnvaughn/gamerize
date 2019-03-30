@@ -119,17 +119,13 @@ const Sessions = styled.div`
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full || props.disabled
+    props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#f10e0e')};
+  color: ${props => (props.disabled ? '#dddfe2' : '#f10e0e')};
   border: ${props =>
-    props.full
-      ? '2px solid rgb(255, 255, 255)'
-      : props.disabled
-      ? 'none'
-      : '1px solid #f10e0e'};
+    props.disabled ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
@@ -141,7 +137,7 @@ const Session = styled.div`
   flex-direction: column;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
-  pointer-events: ${props => (props.full || props.disabled) && 'none'};
+  pointer-events: ${props => props.disabled && 'none'};
   :hover {
     background: #f99f9f;
   }
@@ -262,7 +258,7 @@ export default function GamerDay(props) {
                 onClick={() => {
                   dispatch({ type: 'setSelectedSession', payload: session })
                 }}
-                disabled={session.passed}
+                disabled={session.finished}
               >
                 <SpotsAndGame>{`${session.slots - session.players.length} ${
                   session.slots - session.players.length === 1

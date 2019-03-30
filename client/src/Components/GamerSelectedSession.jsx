@@ -104,9 +104,9 @@ const CancelContainer = styled.div`
   justify-content: flex-end;
 `
 
-const CANCEL_SESSION = gql`
-  mutation($input: CancelSessionInput!) {
-    cancelSession(input: $input) {
+const CANCEL_TIME_SLOT = gql`
+  mutation($input: CancelTimeSlotInput!) {
+    cancelTimeSlot(input: $input) {
       cancelled
     }
   }
@@ -114,7 +114,7 @@ const CANCEL_SESSION = gql`
 
 export default function GamerSelectedSession(props) {
   const [state, dispatch] = useStore(gamerSessionSelection)
-  const cancelSession = useMutation(CANCEL_SESSION)
+  const cancelTimeSlot = useMutation(CANCEL_TIME_SLOT)
   const monthFormat = 'MMMM Do, YYYY'
   const dateFormat = 'h:mm A'
   const renderSlots = () => {
@@ -123,7 +123,7 @@ export default function GamerSelectedSession(props) {
     let end = state.selectedSession.slots
     while (counter < end) {
       let username = state.selectedSession.players[counter]
-        ? state.selectedSession.players[counter].username
+        ? state.selectedSession.players[counter].player.username
         : 'Available'
       slots.push(<Slot taken={username !== 'Available'}>{username}</Slot>)
       counter++
@@ -168,9 +168,9 @@ export default function GamerSelectedSession(props) {
               }
               onClick={async () => {
                 const input = { sessionId: state.selectedSession.id }
-                const data = await cancelSession({ variables: { input } })
+                await cancelTimeSlot({ variables: { input } })
+                dispatch({ type: 'setSelectedSession', payload: null })
                 props.refetch()
-                console.log(data)
               }}
             >
               Cancel Session

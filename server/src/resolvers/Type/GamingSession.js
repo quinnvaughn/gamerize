@@ -1,5 +1,7 @@
 const moment = require('moment')
 const GamingSession = {
+  creator: async (parent, _, { prisma }) =>
+    await prisma.gamingSession({ id: parent.id }).creator(),
   game: async (parent, _, { prisma }) =>
     await prisma.gamingSession({ id: parent.id }).game(),
   gamers: async (parent, _, { prisma }) =>

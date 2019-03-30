@@ -63,7 +63,7 @@ export default function SelectionOptions({
   price,
   reviews,
   numReviews,
-  systems,
+  system,
   gamer,
   game,
   slotsLeftToday,
@@ -90,7 +90,7 @@ export default function SelectionOptions({
         {session => (
           <Fragment>
             <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-            <SystemPicker systems={systems} setSystem={session.setSystem} />
+            <SystemPicker system={system} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
             <Totals price={price} />
           </Fragment>

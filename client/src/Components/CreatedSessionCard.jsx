@@ -21,7 +21,7 @@ const initialState = {
   length: '',
   price: '',
   type: '',
-  systems: [],
+  system: '',
   slots: '',
 }
 
@@ -39,19 +39,8 @@ function reducer(state, action) {
       return { ...state, length: action.payload }
     case 'setType':
       return { ...state, type: action.payload }
-    case 'setSystems':
-      const index = state.systems.indexOf(action.payload)
-      if (index === -1) {
-        return {
-          ...state,
-          systems: [...state.systems, action.payload],
-        }
-      } else {
-        return {
-          ...state,
-          systems: state.systems.filter(system => system !== action.payload),
-        }
-      }
+    case 'setSystem':
+      return { ...state, system: action.payload }
     case 'setSlots':
       return { ...state, slots: action.payload }
     case 'clearState':

@@ -82,7 +82,6 @@ const timeslot = {
     }
   },
   async createBulkGamingTimeSlots(parent, { input }, ctx) {
-    // fix
     const userId = getUserId(ctx)
     const query = `
         {
@@ -92,6 +91,9 @@ const timeslot = {
               gamingSession(where: {id: "${input.gamingSessionId}"}) {
                   length
                   slots
+                  creator {
+                    id
+                  }
                   gamers {
                     id
                   }
@@ -102,6 +104,7 @@ const timeslot = {
     const session = result.gamingSession
     const buffer = result.user.buffer
     const gamers = session.gamers
+    const creator = session.creator
     const sessionLength = session.length + buffer
     if (!gamers) {
       return {
@@ -122,7 +125,7 @@ const timeslot = {
     let sessions = []
     let overlaps = []
     for (let i = 0; i < numTimes; i++) {
-      const overlap = await ctx.prisma.gamingSlots({
+      const overlap = await ctx.prisma.gamingTimeSlots({
         where: {
           gamers_some: { id: userId },
           AND: [
@@ -251,6 +254,7 @@ const timeslot = {
   },
   async bookTimeSlots(parent, { input }, ctx) {
     const userId = getUserId(ctx)
+    let sessionsBought = []
     for (const timeslot in input.timeSlots) {
       const sessionBought = await ctx.prisma.createBooking({
         total: input.timeSlots[timeslot].total,
@@ -267,6 +271,7 @@ const timeslot = {
           },
         },
       })
+      sessionsBought.push(sessionBought)
       let counter = 0
       let end = input.timeSlots[timeslot].slots
       while (counter < end) {
@@ -305,6 +310,10 @@ const timeslot = {
           counter++
         }
       }
+      if (sessionsBought.length > 0) {
+        return { booked: true }
+      }
+      return { booked: false }
     }
   },
 }

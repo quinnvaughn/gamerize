@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 //local imports
-import { capitalize, noUnderscores, formatSystems } from '../utils/Strings'
+import { formatSystem } from '../utils/Strings'
 
 const SelectionContainer = styled.div`
   display: inline-flex;
@@ -97,12 +97,15 @@ const systems = ['PC', 'XBOX_ONE', 'PS4', 'NINTENDO_SWITCH']
 
 export default function SystemsSessionDropdown(props) {
   const [open, setOpen] = useState(false)
-  const value = formatSystems(props.title)
   return (
     <Container>
       <Label>{props.label}</Label>
       <SelectionContainer>
-        <Selection onClick={() => setOpen(!open)} value={value} readOnly />
+        <Selection
+          onClick={() => setOpen(!open)}
+          value={props.title}
+          readOnly
+        />
         {!open && <ChevronDown />}
         {open && <ChevronUp />}
         {open && (
@@ -111,11 +114,11 @@ export default function SystemsSessionDropdown(props) {
               <DropdownOption
                 key={system}
                 onClick={() => {
-                  props.dispatch({ type: 'setSystems', payload: system })
+                  props.dispatch({ type: 'setSystem', payload: system })
                   setOpen(false)
                 }}
               >
-                {system === 'PC' ? system : capitalize(noUnderscores(system))}
+                {formatSystem(system)}
               </DropdownOption>
             ))}
           </Dropdown>

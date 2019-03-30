@@ -112,10 +112,11 @@ const MY_SESSIONS = gql`
       }
     }
     mySlotsToday {
+      id
       startTime
       endTime
       slots
-      passed
+      finished
       players {
         player {
           username
