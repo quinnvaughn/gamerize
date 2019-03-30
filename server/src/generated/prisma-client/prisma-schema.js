@@ -209,6 +209,7 @@ type Booking {
   players(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   total: Float!
   timeslot: GamingTimeSlot!
+  invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
 }
 
 type BookingConnection {
@@ -223,6 +224,7 @@ input BookingCreateInput {
   players: UserCreateManyWithoutTimeSlotsBookedInput
   total: Float!
   timeslot: GamingTimeSlotCreateOneInput!
+  invites: BookingInviteCreateManyWithoutBookingInput
 }
 
 input BookingCreateManyWithoutPlayersInput {
@@ -230,9 +232,17 @@ input BookingCreateManyWithoutPlayersInput {
   connect: [BookingWhereUniqueInput!]
 }
 
-input BookingCreateOneInput {
-  create: BookingCreateInput
+input BookingCreateOneWithoutInvitesInput {
+  create: BookingCreateWithoutInvitesInput
   connect: BookingWhereUniqueInput
+}
+
+input BookingCreateWithoutInvitesInput {
+  numSlots: Int!
+  numPlayers: Int!
+  players: UserCreateManyWithoutTimeSlotsBookedInput
+  total: Float!
+  timeslot: GamingTimeSlotCreateOneInput!
 }
 
 input BookingCreateWithoutPlayersInput {
@@ -240,6 +250,7 @@ input BookingCreateWithoutPlayersInput {
   numPlayers: Int!
   total: Float!
   timeslot: GamingTimeSlotCreateOneInput!
+  invites: BookingInviteCreateManyWithoutBookingInput
 }
 
 type BookingEdge {
@@ -249,6 +260,7 @@ type BookingEdge {
 
 type BookingInvite {
   id: ID!
+  startTime: DateTime!
   booking: Booking!
   to: User
   from: User!
@@ -262,10 +274,16 @@ type BookingInviteConnection {
 }
 
 input BookingInviteCreateInput {
-  booking: BookingCreateOneInput!
+  startTime: DateTime!
+  booking: BookingCreateOneWithoutInvitesInput!
   to: UserCreateOneWithoutInvitesReceivedInput
   from: UserCreateOneWithoutInvitesInput!
   sent: Boolean!
+}
+
+input BookingInviteCreateManyWithoutBookingInput {
+  create: [BookingInviteCreateWithoutBookingInput!]
+  connect: [BookingInviteWhereUniqueInput!]
 }
 
 input BookingInviteCreateManyWithoutFromInput {
@@ -278,14 +296,23 @@ input BookingInviteCreateManyWithoutToInput {
   connect: [BookingInviteWhereUniqueInput!]
 }
 
+input BookingInviteCreateWithoutBookingInput {
+  startTime: DateTime!
+  to: UserCreateOneWithoutInvitesReceivedInput
+  from: UserCreateOneWithoutInvitesInput!
+  sent: Boolean!
+}
+
 input BookingInviteCreateWithoutFromInput {
-  booking: BookingCreateOneInput!
+  startTime: DateTime!
+  booking: BookingCreateOneWithoutInvitesInput!
   to: UserCreateOneWithoutInvitesReceivedInput
   sent: Boolean!
 }
 
 input BookingInviteCreateWithoutToInput {
-  booking: BookingCreateOneInput!
+  startTime: DateTime!
+  booking: BookingCreateOneWithoutInvitesInput!
   from: UserCreateOneWithoutInvitesInput!
   sent: Boolean!
 }
@@ -298,6 +325,8 @@ type BookingInviteEdge {
 enum BookingInviteOrderByInput {
   id_ASC
   id_DESC
+  startTime_ASC
+  startTime_DESC
   sent_ASC
   sent_DESC
   createdAt_ASC
@@ -308,6 +337,7 @@ enum BookingInviteOrderByInput {
 
 type BookingInvitePreviousValues {
   id: ID!
+  startTime: DateTime!
   sent: Boolean!
 }
 
@@ -326,6 +356,14 @@ input BookingInviteScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
   sent: Boolean
   sent_not: Boolean
   AND: [BookingInviteScalarWhereInput!]
@@ -352,18 +390,33 @@ input BookingInviteSubscriptionWhereInput {
 }
 
 input BookingInviteUpdateInput {
-  booking: BookingUpdateOneRequiredInput
+  startTime: DateTime
+  booking: BookingUpdateOneRequiredWithoutInvitesInput
   to: UserUpdateOneWithoutInvitesReceivedInput
   from: UserUpdateOneRequiredWithoutInvitesInput
   sent: Boolean
 }
 
 input BookingInviteUpdateManyDataInput {
+  startTime: DateTime
   sent: Boolean
 }
 
 input BookingInviteUpdateManyMutationInput {
+  startTime: DateTime
   sent: Boolean
+}
+
+input BookingInviteUpdateManyWithoutBookingInput {
+  create: [BookingInviteCreateWithoutBookingInput!]
+  delete: [BookingInviteWhereUniqueInput!]
+  connect: [BookingInviteWhereUniqueInput!]
+  set: [BookingInviteWhereUniqueInput!]
+  disconnect: [BookingInviteWhereUniqueInput!]
+  update: [BookingInviteUpdateWithWhereUniqueWithoutBookingInput!]
+  upsert: [BookingInviteUpsertWithWhereUniqueWithoutBookingInput!]
+  deleteMany: [BookingInviteScalarWhereInput!]
+  updateMany: [BookingInviteUpdateManyWithWhereNestedInput!]
 }
 
 input BookingInviteUpdateManyWithoutFromInput {
@@ -395,16 +448,30 @@ input BookingInviteUpdateManyWithWhereNestedInput {
   data: BookingInviteUpdateManyDataInput!
 }
 
+input BookingInviteUpdateWithoutBookingDataInput {
+  startTime: DateTime
+  to: UserUpdateOneWithoutInvitesReceivedInput
+  from: UserUpdateOneRequiredWithoutInvitesInput
+  sent: Boolean
+}
+
 input BookingInviteUpdateWithoutFromDataInput {
-  booking: BookingUpdateOneRequiredInput
+  startTime: DateTime
+  booking: BookingUpdateOneRequiredWithoutInvitesInput
   to: UserUpdateOneWithoutInvitesReceivedInput
   sent: Boolean
 }
 
 input BookingInviteUpdateWithoutToDataInput {
-  booking: BookingUpdateOneRequiredInput
+  startTime: DateTime
+  booking: BookingUpdateOneRequiredWithoutInvitesInput
   from: UserUpdateOneRequiredWithoutInvitesInput
   sent: Boolean
+}
+
+input BookingInviteUpdateWithWhereUniqueWithoutBookingInput {
+  where: BookingInviteWhereUniqueInput!
+  data: BookingInviteUpdateWithoutBookingDataInput!
 }
 
 input BookingInviteUpdateWithWhereUniqueWithoutFromInput {
@@ -415,6 +482,12 @@ input BookingInviteUpdateWithWhereUniqueWithoutFromInput {
 input BookingInviteUpdateWithWhereUniqueWithoutToInput {
   where: BookingInviteWhereUniqueInput!
   data: BookingInviteUpdateWithoutToDataInput!
+}
+
+input BookingInviteUpsertWithWhereUniqueWithoutBookingInput {
+  where: BookingInviteWhereUniqueInput!
+  update: BookingInviteUpdateWithoutBookingDataInput!
+  create: BookingInviteCreateWithoutBookingInput!
 }
 
 input BookingInviteUpsertWithWhereUniqueWithoutFromInput {
@@ -444,6 +517,14 @@ input BookingInviteWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
   booking: BookingWhereInput
   to: UserWhereInput
   from: UserWhereInput
@@ -542,20 +623,13 @@ input BookingSubscriptionWhereInput {
   NOT: [BookingSubscriptionWhereInput!]
 }
 
-input BookingUpdateDataInput {
-  numSlots: Int
-  numPlayers: Int
-  players: UserUpdateManyWithoutTimeSlotsBookedInput
-  total: Float
-  timeslot: GamingTimeSlotUpdateOneRequiredInput
-}
-
 input BookingUpdateInput {
   numSlots: Int
   numPlayers: Int
   players: UserUpdateManyWithoutTimeSlotsBookedInput
   total: Float
   timeslot: GamingTimeSlotUpdateOneRequiredInput
+  invites: BookingInviteUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateManyDataInput {
@@ -587,11 +661,19 @@ input BookingUpdateManyWithWhereNestedInput {
   data: BookingUpdateManyDataInput!
 }
 
-input BookingUpdateOneRequiredInput {
-  create: BookingCreateInput
-  update: BookingUpdateDataInput
-  upsert: BookingUpsertNestedInput
+input BookingUpdateOneRequiredWithoutInvitesInput {
+  create: BookingCreateWithoutInvitesInput
+  update: BookingUpdateWithoutInvitesDataInput
+  upsert: BookingUpsertWithoutInvitesInput
   connect: BookingWhereUniqueInput
+}
+
+input BookingUpdateWithoutInvitesDataInput {
+  numSlots: Int
+  numPlayers: Int
+  players: UserUpdateManyWithoutTimeSlotsBookedInput
+  total: Float
+  timeslot: GamingTimeSlotUpdateOneRequiredInput
 }
 
 input BookingUpdateWithoutPlayersDataInput {
@@ -599,6 +681,7 @@ input BookingUpdateWithoutPlayersDataInput {
   numPlayers: Int
   total: Float
   timeslot: GamingTimeSlotUpdateOneRequiredInput
+  invites: BookingInviteUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateWithWhereUniqueWithoutPlayersInput {
@@ -606,9 +689,9 @@ input BookingUpdateWithWhereUniqueWithoutPlayersInput {
   data: BookingUpdateWithoutPlayersDataInput!
 }
 
-input BookingUpsertNestedInput {
-  update: BookingUpdateDataInput!
-  create: BookingCreateInput!
+input BookingUpsertWithoutInvitesInput {
+  update: BookingUpdateWithoutInvitesDataInput!
+  create: BookingCreateWithoutInvitesInput!
 }
 
 input BookingUpsertWithWhereUniqueWithoutPlayersInput {
@@ -660,6 +743,9 @@ input BookingWhereInput {
   total_gt: Float
   total_gte: Float
   timeslot: GamingTimeSlotWhereInput
+  invites_every: BookingInviteWhereInput
+  invites_some: BookingInviteWhereInput
+  invites_none: BookingInviteWhereInput
   AND: [BookingWhereInput!]
   OR: [BookingWhereInput!]
   NOT: [BookingWhereInput!]

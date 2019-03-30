@@ -4,10 +4,6 @@ import { FaArrowRight } from 'react-icons/fa'
 import { Subscribe } from 'unstated'
 
 //local
-import Modal from './Modal'
-import Calendar from './TimeSlotsCalendar'
-import TimeSlotsHours from './TimeSlotsHours'
-import TimeSlotSession from './TimeSlotSession'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { singleOrPlural } from '../utils/Strings'
 
@@ -87,53 +83,6 @@ export default function TimeSlots(props) {
           )}
         </Subscribe>
       </SelectionContainer>
-      <Subscribe to={[SessionsContainer]}>
-        {sessions =>
-          sessions.state.showModal && (
-            <Modal
-              onRequestClose={() => {
-                sessions.setShowModal(!sessions.state.showModal)
-                sessions.setSelectedDay(null)
-                sessions.setSelectedSession(null)
-              }}
-            >
-              {sessions.state.selectedSession ? (
-                <TimeSlotSession
-                  selectedSession={sessions.state.selectedSession}
-                  gamer={props.gamer}
-                  game={props.game}
-                  goBack={() => sessions.goBack()}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              ) : sessions.state.selectedDay ? (
-                <TimeSlotsHours
-                  setSelectedSession={sessions.setSelectedSession}
-                  day={sessions.state.selectedDay}
-                  goBack={() => sessions.setSelectedDay(null)}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              ) : (
-                <Calendar
-                  setSelectedDay={sessions.setSelectedDay}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              )}
-            </Modal>
-          )
-        }
-      </Subscribe>
     </Container>
   )
 }

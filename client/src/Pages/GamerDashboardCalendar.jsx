@@ -136,7 +136,6 @@ export default function GamerDashboardCalendar(props) {
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
     pollInterval: 5000,
   })
-  console.log(data)
   const [state] = useStore(gamerSessionSelection)
   return (
     <PageContainer>

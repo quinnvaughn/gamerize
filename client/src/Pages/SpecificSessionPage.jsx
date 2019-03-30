@@ -5,7 +5,10 @@ import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
 import gql from 'graphql-tag'
 import Media from 'react-media'
+import { Subscribe } from 'unstated'
 
+//local
+import SessionsContainer from '../Containers/SessionsContainer'
 import DefaultBanner from '../default-banner.png'
 import DefaultAvatar from '../default-avatar.png'
 import SelectionOptions from '../Components/SelectionOptions'
@@ -14,6 +17,10 @@ import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBarWithScroll from '../Components/NavBarWithScroll'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
+import Modal from '../Components/Modal'
+import Calendar from '../Components/TimeSlotsCalendar'
+import TimeSlotsHours from '../Components/TimeSlotsHours'
+import TimeSlotSession from '../Components/TimeSlotSession'
 import { noUnderscores, capitalize, singleOrPlural } from '../utils/Strings'
 import { formatGamers } from '../utils/Strings'
 
@@ -264,6 +271,9 @@ const GET_SLOTS_TODAY = gql`
       length
       slots
       id
+      gamingSession {
+        slotsLeftToday
+      }
       passed
       players {
         player {
@@ -279,7 +289,7 @@ export default function SpecificSessionPage(props) {
     variables: { sessionId: props.match.params.id },
     pollInterval: 5000,
   })
-  const { data: secondData, loading: secondLoading } = useQuery(
+  const { data: secondData, loading: secondLoading, refetch } = useQuery(
     GET_SLOTS_TODAY,
     {
       variables: { sessionId: props.match.params.id },
@@ -369,9 +379,13 @@ export default function SpecificSessionPage(props) {
           {matches =>
             matches ? (
               <FixedSelectionOptions
+                refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
+                slotsLeftToday={
+                  secondData.specificSessionSlotsToday[0].gamingSession
+                    .slotsLeftToday
+                }
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}
@@ -380,9 +394,13 @@ export default function SpecificSessionPage(props) {
               />
             ) : (
               <SelectionOptions
+                refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
+                slotsLeftToday={
+                  secondData.specificSessionSlotsToday[0].gamingSession
+                    .slotsLeftToday
+                }
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}
@@ -393,105 +411,54 @@ export default function SpecificSessionPage(props) {
           }
         </Media>
       </Content>
-
+      <Subscribe to={[SessionsContainer]}>
+        {sessions =>
+          sessions.state.showModal && (
+            <Modal
+              onRequestClose={() => {
+                sessions.setShowModal(!sessions.state.showModal)
+                sessions.setSelectedDay(null)
+                sessions.setSelectedSession(null)
+              }}
+            >
+              {sessions.state.selectedSession ? (
+                <TimeSlotSession
+                  selectedSession={sessions.state.selectedSession}
+                  gamer={formatGamers(data.getSpecificSession.gamers)}
+                  game={data.getSpecificSession.game.name}
+                  goBack={() => sessions.goBack()}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
+                />
+              ) : sessions.state.selectedDay ? (
+                <TimeSlotsHours
+                  setSelectedSession={sessions.setSelectedSession}
+                  day={sessions.state.selectedDay}
+                  goBack={() => sessions.setSelectedDay(null)}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
+                />
+              ) : (
+                <Calendar
+                  setSelectedDay={sessions.setSelectedDay}
+                  close={() => {
+                    sessions.setShowModal(!sessions.state.showModal)
+                    sessions.setSelectedDay(null)
+                    sessions.setSelectedSession(null)
+                  }}
+                />
+              )}
+            </Modal>
+          )
+        }
+      </Subscribe>
       <Footer />
     </PageContainer>
   )
-}
-
-{
-  /* <LeftSide>
-          <GamerInfo>
-            <TopContainer>
-              <TitleContainer>
-                <Title>{gamer.title}</Title>
-              </TitleContainer>
-              <GamerContainer>
-                <GamerLink to={`/users/${gamer.username}`}>
-                  <Avatar src={DefaultAvatar} alt="Avatar" />
-                  <Gamer>{`${gamer.name}`}</Gamer>
-                </GamerLink>
-                <Occupations>
-                  {gamer.occupations.map(occupation => (
-                    <Occupation key={occupation}>{occupation}</Occupation>
-                  ))}
-                </Occupations>
-              </GamerContainer>
-            </TopContainer>
-            <MiddleContainer>
-              <FlexHalf>
-                <Flex>
-                  <TypeOfContent>Game</TypeOfContent>
-                  <Game>{`${noUnderscores(game)}`}</Game>
-                </Flex>
-                <Flex>
-                  <TypeOfContent>{`${singleOrPlural(
-                    gamer.systems,
-                    'System'
-                  )}`}</TypeOfContent>
-                  {gamer.systems.map((system, index) =>
-                    formatCommas(gamer.systems, system, index)
-                  )}
-                </Flex>
-                <Flex>
-                  <TypeOfContent>Length</TypeOfContent>
-                  <Length>{`${gamer.length} minutes`}</Length>
-                </Flex>
-              </FlexHalf>
-              <FlexHalf>
-                <Flex>
-                  <TypeOfContent>Type of game</TypeOfContent>
-                  <TypeOfGame>
-                    {capitalize(game.type)}
-                  </TypeOfGame>
-                </Flex>
-                <Flex>
-                  <TypeOfContent>Slots per session</TypeOfContent>
-                  <Slots>{`${gamer.slots}`}</Slots>
-                </Flex>
-              </FlexHalf>
-            </MiddleContainer>
-            <RequirementsAndDiscountsContainer>
-              <InnerContainer>
-                <TypeOfContent>Requirements</TypeOfContent>
-                {gamer.requirements.map(requirement => (
-                  <Requirement key={requirement}>{requirement}</Requirement>
-                ))}
-              </InnerContainer>
-              <InnerContainer>
-                <TypeOfContent>Discounts</TypeOfContent>
-                {gamer.discounts.map(discount => (
-                  <Discount key={discount}>{discount}</Discount>
-                ))}
-              </InnerContainer>
-            </RequirementsAndDiscountsContainer>
-          </GamerInfo>
-          <TodayAvailability day={new Date()} />
-          <Reviews reviews={gamer.reviews} numReviews={gamer.numReviews} />
-        </LeftSide>
-        <Media query="(max-width: 1127px)">
-          {matches =>
-            matches ? (
-              <FixedSelectionOptions
-                gamer={gamer}
-                game={game}
-                slots={gamer.slots}
-                price={gamer.price}
-                numReviews={gamer.numReviews}
-                reviewRating={gamer.reviewRating}
-                systems={gamer.systems}
-              />
-            ) : (
-              <SelectionOptions
-                gamer={gamer}
-                game={game}
-                slots={gamer.slots}
-                price={gamer.price}
-                numReviews={gamer.numReviews}
-                reviewRating={gamer.reviewRating}
-                systems={gamer.systems}
-              />
-            )
-          }
-        </Media> */
 }

@@ -1,6 +1,7 @@
 type BookingInvite {
   id: ID! @unique
-  booking: Booking!
+  startTime: DateTime!
+  booking: Booking! @relation(name: "BookingInvites", onDelete: SET_NULL)
   to: User @relation(name: "InvitesReceived")
   from: User! @relation(name: "InvitesFromMe")
   sent: Boolean!

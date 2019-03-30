@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import { Subscribe } from 'unstated'
+import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 
@@ -112,6 +113,8 @@ const BOOK_TIME_SLOTS = gql`
 `
 
 export default function Totals(props) {
+  const [loading, setLoading] = useState(false)
+  const [booked, setBooked] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
   return (
     <Container>
@@ -163,16 +166,30 @@ export default function Totals(props) {
                       slots: timeSlot.slots,
                       players: timeSlot.players,
                       total: totalMinusDiscounts,
+                      startTime: timeSlot.startTime,
                     }
                   })
                   const input = { timeSlots }
-                  console.log(input)
+                  setLoading(true)
                   await bookTimeSlots({
                     variables: { input },
                   })
+                  setLoading(false)
+                  setBooked(true)
+                  container.clearSessions()
+                  setTimeout(() => {
+                    setBooked(false)
+                    props.refetch()
+                  }, 1000)
                 }}
               >
-                Book
+                {loading ? (
+                  'Booking'
+                ) : !loading && booked ? (
+                  <FaCheck />
+                ) : (
+                  'Book'
+                )}
               </Book>
               <NotCharged>
                 <NotChargedYet>You will not be charged yet</NotChargedYet>
