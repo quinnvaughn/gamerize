@@ -1,11 +1,19 @@
 const dateFns = require('date-fns')
 GamingTimeSlot = {
+  gamers: async (parent, _, { prisma }) =>
+    await prisma.gamingTimeSlot({ id: parent.id }).gamers(),
   gamingSession: async (parent, _, { prisma }) =>
     await prisma.gamingTimeSlot({ id: parent.id }).gamingSession(),
   passed: async (parent, _, { prisma }) => {
     const currentTime = new Date()
     const session = await prisma.gamingTimeSlot({ id: parent.id })
     const boolean = dateFns.compareAsc(session.startTime, currentTime)
+    return boolean === (-1 || 0) ? true : false
+  },
+  finished: async (parent, _, { prisma }) => {
+    const currentTime = new Date()
+    const session = await prisma.gamingTimeSlot({ id: parent.id })
+    const boolean = dateFns.compareAsc(session.endTime, currentTime)
     return boolean === (-1 || 0) ? true : false
   },
   full: async (parent, _, { prisma }) => {

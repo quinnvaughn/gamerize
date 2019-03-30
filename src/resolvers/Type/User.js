@@ -5,6 +5,12 @@ const User = {
     })
     return alreadyRequested.length === 1 ? true : false
   },
+  invites: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).invites()
+  },
+  invitesReceived: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).invitesReceived()
+  },
   sessions: async (parent, _, ctx) => {
     return await ctx.prisma.user({ id: parent.id }).sessions()
   },

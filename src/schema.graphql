@@ -62,7 +62,7 @@ input UpdateSessionInput {
   game: String
   price: Float
   length: Int
-  systems: [System!]!
+  system: System!
   slots: Int
   type: TypeOfGame
 }
@@ -237,11 +237,12 @@ type GamingSession {
   id: ID!
   gamers: [User!]!
   game: Game!
+  creator: User!
   title: String!
   length: Int!
   price: Float!
   reviews: [SessionReview!]!
-  systems: [System!]!
+  system: System!
   type: TypeOfGame!
   slots: Int!
   requirements: [Requirement!]!
@@ -263,6 +264,7 @@ type GamingTimeSlot {
   players: [BookedPlayer!]!
   slots: Int!
   passed: Boolean!
+  finished: Boolean!
   full: Boolean!
   length: Int!
 }

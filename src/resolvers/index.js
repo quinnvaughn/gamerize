@@ -13,6 +13,8 @@ const { GamingTimeSlot } = require('./Type/GamingTimeSlot')
 const { User } = require('./Type/User')
 const { Node } = require('./Type/Node')
 const { BookedPlayer } = require('./Type/BookedPlayer')
+const { BookingInvite } = require('./Type/BookingInvite')
+const { Booking } = require('./Type/Booking')
 
 module.exports = {
   Query: {
@@ -34,4 +36,6 @@ module.exports = {
   GamingSession,
   GamingTimeSlot,
   BookedPlayer,
+  BookingInvite,
+  Booking,
 }
