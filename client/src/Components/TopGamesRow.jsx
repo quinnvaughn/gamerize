@@ -92,7 +92,6 @@ export default function GamesRow(props) {
   const { data, loading } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
-  console.log(data)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>

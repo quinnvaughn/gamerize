@@ -5,4 +5,6 @@ type Booking {
   players: [User!]!
   total: Float!
   timeslot: GamingTimeSlot!
+  invites: [BookingInvite!]!
+    @relation(name: "BookingInvites", onDelete: CASCADE)
 }

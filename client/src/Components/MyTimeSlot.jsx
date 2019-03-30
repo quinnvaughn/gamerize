@@ -99,8 +99,29 @@ const SessionGame = styled.span`
   font-weight: 400;
 `
 
-export default function MyTimeSlot({ timeslot }) {
+const PlayedWith = styled.span`
+  font-size: 1.6rem;
+`
+
+const Player = styled.span`
+  font-size: 1.4rem;
+`
+
+export default function MyTimeSlot({ timeslot, me, upcoming }) {
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
+  let counter = 0
+  const players = []
+  while (counter < timeslot.players.length) {
+    if (timeslot.players[counter].player.username === me.username) {
+    } else {
+      players.push(
+        <Player key={`${counter}${timeslot.players[counter].player.username}`}>
+          {timeslot.players[counter].player.username}
+        </Player>
+      )
+    }
+    counter++
+  }
   return (
     <Container>
       <StyledLink
@@ -119,9 +140,15 @@ export default function MyTimeSlot({ timeslot }) {
           <SessionDate>
             {dateFns.format(timeslot.startTime, dateFormat)}
           </SessionDate>
-          {timeslot.gamingSession.gamers.map(gamer => (
-            <SessionGamer>{gamer.name}</SessionGamer>
+          {timeslot.gamingSession.gamers.map((gamer, index) => (
+            <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
           ))}
+          {players.length > 0 ? (
+            <PlayedWith>
+              {upcoming ? 'Playing with: ' : 'Played with: '}
+              {players}
+            </PlayedWith>
+          ) : null}
           <SessionGame>
             {noUnderscores(timeslot.gamingSession.game.name)}
           </SessionGame>

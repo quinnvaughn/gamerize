@@ -90,21 +90,56 @@ const MY_SESSIONS = gql`
   {
     me {
       id
-      timeSlotsBooked {
+      username
+    }
+    myInvites {
+      id
+      booking {
         timeslot {
-          gamingSession {
-            id
-            gamers {
-              name
-            }
-            game {
-              name
-            }
-            creator {
-              username
-            }
+          gamers {
+            username
           }
           startTime
+        }
+      }
+    }
+    myPastBookings {
+      startTime
+      players {
+        player {
+          username
+        }
+      }
+      gamingSession {
+        id
+        gamers {
+          name
+        }
+        game {
+          name
+        }
+        creator {
+          username
+        }
+      }
+    }
+    myUpcomingBookings {
+      startTime
+      players {
+        player {
+          username
+        }
+      }
+      gamingSession {
+        id
+        gamers {
+          name
+        }
+        game {
+          name
+        }
+        creator {
+          username
         }
       }
     }
@@ -112,32 +147,10 @@ const MY_SESSIONS = gql`
 `
 
 export default function UserSessionsPage(props) {
-  const { data, loading } = useQuery(MY_SESSIONS)
-  const sessions =
-    !loading &&
-    _(data.me.timeSlotsBooked)
-      .groupBy(timeslot =>
-        dateFns.isAfter(timeslot.timeslot.startTime, new Date())
-      )
-      .value()
-  let upcoming = !loading && sessions.true
-  let previous = !loading && sessions.false
-  if (!loading && upcoming) {
-    upcoming = upcoming.sort((a, b) => {
-      const firstDate = new Date(a.timeslot.startTime)
-      const secondDate = new Date(b.timeslot.startTime)
-      return firstDate - secondDate
-    })
-  }
-  if (!loading && previous) {
-    previous = previous.sort((a, b) => {
-      console.log(a, b)
-      const firstDate = new Date(a.timeslot.startTime)
-      const secondDate = new Date(b.timeslot.startTime)
-      return secondDate - firstDate
-    })
-  }
-  console.log(previous)
+  const { data, loading } = useQuery(MY_SESSIONS, { pollInterval: 5000 })
+  let upcoming = !loading && data.myUpcomingBookings
+  let previous = !loading && data.myPastBookings
+  console.log(!loading && data.myInvites)
   return loading ? null : (
     <PageContainer>
       <NavBar />
@@ -147,7 +160,12 @@ export default function UserSessionsPage(props) {
           <NegativeMargin>
             <UpcomingContent>
               {_.map(upcoming, timeslot => (
-                <MyTimeSlot timeslot={timeslot.timeslot} />
+                <MyTimeSlot
+                  key={timeslot.startTime}
+                  upcoming
+                  timeslot={timeslot}
+                  me={data.me}
+                />
               ))}
             </UpcomingContent>
           </NegativeMargin>
@@ -157,7 +175,11 @@ export default function UserSessionsPage(props) {
           <NegativeMargin>
             <PreviousContent>
               {_.map(previous, timeslot => (
-                <MyTimeSlot timeslot={timeslot.timeslot} />
+                <MyTimeSlot
+                  key={timeslot.startTime}
+                  timeslot={timeslot}
+                  me={data.me}
+                />
               ))}
             </PreviousContent>
           </NegativeMargin>

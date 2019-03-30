@@ -91,6 +91,7 @@ export default function SmallSelectionOptions({
   system,
   gamer,
   game,
+  refetch,
   close,
 }) {
   return (
@@ -120,7 +121,7 @@ export default function SmallSelectionOptions({
             <HowManySlots>{`${slotsLeft} slots left today`}</HowManySlots>
             <SystemPicker system={system} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
-            <Totals price={price} />
+            <Totals price={price} refetch={refetch} />
           </Fragment>
         )}
       </Subscribe>

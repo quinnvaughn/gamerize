@@ -10,7 +10,10 @@ type Query {
   mySlotsToday: [GamingTimeSlot!]!
   specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
   thatDaySessions(day: DateTime!): [GamingTimeSlot!]!
+  myUpcomingBookings: [GamingTimeSlot!]!
+  myPastBookings: [GamingTimeSlot!]!
   nextTimeSlot: GamingTimeSlot
+  myInvites: [BookingInvite!]!
   getGamers(first: Int): [User!]!
 }
 
@@ -50,6 +53,7 @@ input GamingTimeSlotInput {
   players: Int!
   timeSlotId: String!
   total: Float!
+  startTime: DateTime!
 }
 
 type BookTimeSlotsPayload {
@@ -258,8 +262,6 @@ type GamingTimeSlot {
   startTime: DateTime!
   endTime: DateTime!
   gamingSession: GamingSession!
-  ## gaming session also has this info, but this way the user doesn't have to go through that
-  ## to get to this info.
   gamers: [User!]!
   players: [BookedPlayer!]!
   slots: Int!

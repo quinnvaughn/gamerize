@@ -67,7 +67,6 @@ const Sessions = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 0;
   font-size: 1.6rem;
   margin-left: 5rem;
   margin-right: 4rem;
