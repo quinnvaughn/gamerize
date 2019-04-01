@@ -271,9 +271,6 @@ const GET_SLOTS_TODAY = gql`
       length
       slots
       id
-      gamingSession {
-        slotsLeftToday
-      }
       passed
       players {
         player {
@@ -382,10 +379,7 @@ export default function SpecificSessionPage(props) {
                 refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                slotsLeftToday={
-                  secondData.specificSessionSlotsToday[0].gamingSession
-                    .slotsLeftToday
-                }
+                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}
@@ -397,10 +391,7 @@ export default function SpecificSessionPage(props) {
                 refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                slotsLeftToday={
-                  secondData.specificSessionSlotsToday[0].gamingSession
-                    .slotsLeftToday
-                }
+                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
                 numReviews={data.getSpecificSession.numReviews}

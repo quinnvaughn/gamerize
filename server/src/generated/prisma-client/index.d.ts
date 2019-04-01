@@ -1093,6 +1093,8 @@ export type BookingInviteOrderByInput =
   | "startTime_DESC"
   | "sent_ASC"
   | "sent_DESC"
+  | "accepted_ASC"
+  | "accepted_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1140,6 +1142,7 @@ export interface BookingInviteCreateWithoutFromInput {
   booking: BookingCreateOneWithoutInvitesInput;
   to?: UserCreateOneWithoutInvitesReceivedInput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface DiscountUpdateManyDataInput {
@@ -1200,6 +1203,8 @@ export interface BookingInviteWhereInput {
   from?: UserWhereInput;
   sent?: Boolean;
   sent_not?: Boolean;
+  accepted?: Boolean;
+  accepted_not?: Boolean;
   AND?: BookingInviteWhereInput[] | BookingInviteWhereInput;
   OR?: BookingInviteWhereInput[] | BookingInviteWhereInput;
   NOT?: BookingInviteWhereInput[] | BookingInviteWhereInput;
@@ -1314,6 +1319,7 @@ export interface BookingInviteCreateWithoutToInput {
   booking: BookingCreateOneWithoutInvitesInput;
   from: UserCreateOneWithoutInvitesInput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface BookedPlayerWhereInput {
@@ -2047,6 +2053,7 @@ export interface BookingInviteUpdateInput {
   to?: UserUpdateOneWithoutInvitesReceivedInput;
   from?: UserUpdateOneRequiredWithoutInvitesInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export interface SessionReviewIndexWhereInput {
@@ -2326,6 +2333,7 @@ export interface DiscountScalarWhereInput {
 export interface BookingInviteUpdateManyMutationInput {
   startTime?: DateTimeInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export interface DiscountUpdateManyWithWhereNestedInput {
@@ -2789,6 +2797,7 @@ export interface BookingInviteUpdateWithoutBookingDataInput {
   to?: UserUpdateOneWithoutInvitesReceivedInput;
   from?: UserUpdateOneRequiredWithoutInvitesInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -2907,6 +2916,7 @@ export interface BookingInviteUpdateWithoutFromDataInput {
   booking?: BookingUpdateOneRequiredWithoutInvitesInput;
   to?: UserUpdateOneWithoutInvitesReceivedInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export type BookingInviteWhereUniqueInput = AtLeastOne<{
@@ -3058,6 +3068,7 @@ export interface BookingInviteUpdateWithoutToDataInput {
   booking?: BookingUpdateOneRequiredWithoutInvitesInput;
   from?: UserUpdateOneRequiredWithoutInvitesInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export interface GamingSessionUpdateDataInput {
@@ -3338,6 +3349,8 @@ export interface BookingInviteScalarWhereInput {
   startTime_gte?: DateTimeInput;
   sent?: Boolean;
   sent_not?: Boolean;
+  accepted?: Boolean;
+  accepted_not?: Boolean;
   AND?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
   OR?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
   NOT?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
@@ -3362,6 +3375,7 @@ export interface GamingTimeSlotCreateManyWithoutGamingSessionInput {
 export interface BookingInviteUpdateManyDataInput {
   startTime?: DateTimeInput;
   sent?: Boolean;
+  accepted?: Boolean;
 }
 
 export interface BookingCreateManyWithoutPlayersInput {
@@ -4136,6 +4150,7 @@ export interface BookingInviteCreateWithoutBookingInput {
   to?: UserCreateOneWithoutInvitesReceivedInput;
   from: UserCreateOneWithoutInvitesInput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface GamingSessionUpdateManyWithWhereNestedInput {
@@ -4441,6 +4456,7 @@ export interface BookingInviteCreateInput {
   to?: UserCreateOneWithoutInvitesReceivedInput;
   from: UserCreateOneWithoutInvitesInput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface UserUpsertNestedInput {
@@ -5143,6 +5159,7 @@ export interface BookingInvitePreviousValues {
   id: ID_Output;
   startTime: DateTimeOutput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface BookingInvitePreviousValuesPromise
@@ -5151,6 +5168,7 @@ export interface BookingInvitePreviousValuesPromise
   id: () => Promise<ID_Output>;
   startTime: () => Promise<DateTimeOutput>;
   sent: () => Promise<Boolean>;
+  accepted: () => Promise<Boolean>;
 }
 
 export interface BookingInvitePreviousValuesSubscription
@@ -5159,6 +5177,7 @@ export interface BookingInvitePreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   startTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   sent: () => Promise<AsyncIterator<Boolean>>;
+  accepted: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface AggregateGamingSessionIndex {
@@ -5573,6 +5592,7 @@ export interface BookingInvite {
   id: ID_Output;
   startTime: DateTimeOutput;
   sent: Boolean;
+  accepted?: Boolean;
 }
 
 export interface BookingInvitePromise
@@ -5584,6 +5604,7 @@ export interface BookingInvitePromise
   to: <T = UserPromise>() => T;
   from: <T = UserPromise>() => T;
   sent: () => Promise<Boolean>;
+  accepted: () => Promise<Boolean>;
 }
 
 export interface BookingInviteSubscription
@@ -5595,6 +5616,7 @@ export interface BookingInviteSubscription
   to: <T = UserSubscription>() => T;
   from: <T = UserSubscription>() => T;
   sent: () => Promise<AsyncIterator<Boolean>>;
+  accepted: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface DiscountEdge {

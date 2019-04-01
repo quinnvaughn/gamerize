@@ -15,6 +15,20 @@ const bookingInvite = {
       },
     })
   },
+  async myInvitesReceived(parent, _, ctx) {
+    const userId = getUserId(ctx)
+    return await ctx.prisma.bookingInvites({
+      where: {
+        to: { id: userId },
+        booking: {
+          timeslot: {
+            startTime_gte: new Date(),
+          },
+        },
+        accepted: null,
+      },
+    })
+  },
 }
 
 module.exports = {
