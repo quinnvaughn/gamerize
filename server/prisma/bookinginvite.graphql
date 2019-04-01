@@ -5,4 +5,5 @@ type BookingInvite {
   to: User @relation(name: "InvitesReceived")
   from: User! @relation(name: "InvitesFromMe")
   sent: Boolean!
+  accepted: Boolean
 }

@@ -149,9 +149,7 @@ export default function MyTimeSlot({ timeslot, me, upcoming }) {
               {players}
             </PlayedWith>
           ) : null}
-          <SessionGame>
-            {noUnderscores(timeslot.gamingSession.game.name)}
-          </SessionGame>
+          <SessionGame>{timeslot.gamingSession.game.name}</SessionGame>
         </SessionInfo>
       </StyledLink>
     </Container>
