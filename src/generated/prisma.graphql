@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Mar 30 2019 15:01:11 GMT-0500 (CDT)
+# timestamp: Sun Mar 31 2019 19:51:12 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -363,6 +363,7 @@ type BookingInvite implements Node {
   to: User
   from: User!
   sent: Boolean!
+  accepted: Boolean
 }
 
 """A connection to a list of items."""
@@ -378,6 +379,7 @@ type BookingInviteConnection {
 input BookingInviteCreateInput {
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
   booking: BookingCreateOneWithoutInvitesInput!
   to: UserCreateOneWithoutInvitesReceivedInput
   from: UserCreateOneWithoutInvitesInput!
@@ -401,6 +403,7 @@ input BookingInviteCreateManyWithoutToInput {
 input BookingInviteCreateWithoutBookingInput {
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
   to: UserCreateOneWithoutInvitesReceivedInput
   from: UserCreateOneWithoutInvitesInput!
 }
@@ -408,6 +411,7 @@ input BookingInviteCreateWithoutBookingInput {
 input BookingInviteCreateWithoutFromInput {
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
   booking: BookingCreateOneWithoutInvitesInput!
   to: UserCreateOneWithoutInvitesReceivedInput
 }
@@ -415,6 +419,7 @@ input BookingInviteCreateWithoutFromInput {
 input BookingInviteCreateWithoutToInput {
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
   booking: BookingCreateOneWithoutInvitesInput!
   from: UserCreateOneWithoutInvitesInput!
 }
@@ -435,6 +440,8 @@ enum BookingInviteOrderByInput {
   startTime_DESC
   sent_ASC
   sent_DESC
+  accepted_ASC
+  accepted_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -445,6 +452,7 @@ type BookingInvitePreviousValues {
   id: ID!
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
 }
 
 input BookingInviteScalarWhereInput {
@@ -522,6 +530,10 @@ input BookingInviteScalarWhereInput {
 
   """All values that are not equal to given value."""
   sent_not: Boolean
+  accepted: Boolean
+
+  """All values that are not equal to given value."""
+  accepted_not: Boolean
 }
 
 type BookingInviteSubscriptionPayload {
@@ -566,6 +578,7 @@ input BookingInviteSubscriptionWhereInput {
 input BookingInviteUpdateInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
   booking: BookingUpdateOneRequiredWithoutInvitesInput
   to: UserUpdateOneWithoutInvitesReceivedInput
   from: UserUpdateOneRequiredWithoutInvitesInput
@@ -574,11 +587,13 @@ input BookingInviteUpdateInput {
 input BookingInviteUpdateManyDataInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateManyMutationInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateManyWithoutBookingInput {
@@ -625,6 +640,7 @@ input BookingInviteUpdateManyWithWhereNestedInput {
 input BookingInviteUpdateWithoutBookingDataInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
   to: UserUpdateOneWithoutInvitesReceivedInput
   from: UserUpdateOneRequiredWithoutInvitesInput
 }
@@ -632,6 +648,7 @@ input BookingInviteUpdateWithoutBookingDataInput {
 input BookingInviteUpdateWithoutFromDataInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
   booking: BookingUpdateOneRequiredWithoutInvitesInput
   to: UserUpdateOneWithoutInvitesReceivedInput
 }
@@ -639,6 +656,7 @@ input BookingInviteUpdateWithoutFromDataInput {
 input BookingInviteUpdateWithoutToDataInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
   booking: BookingUpdateOneRequiredWithoutInvitesInput
   from: UserUpdateOneRequiredWithoutInvitesInput
 }
@@ -751,6 +769,10 @@ input BookingInviteWhereInput {
 
   """All values that are not equal to given value."""
   sent_not: Boolean
+  accepted: Boolean
+
+  """All values that are not equal to given value."""
+  accepted_not: Boolean
   booking: BookingWhereInput
   to: UserWhereInput
   from: UserWhereInput

@@ -265,6 +265,7 @@ type BookingInvite {
   to: User
   from: User!
   sent: Boolean!
+  accepted: Boolean
 }
 
 type BookingInviteConnection {
@@ -279,6 +280,7 @@ input BookingInviteCreateInput {
   to: UserCreateOneWithoutInvitesReceivedInput
   from: UserCreateOneWithoutInvitesInput!
   sent: Boolean!
+  accepted: Boolean
 }
 
 input BookingInviteCreateManyWithoutBookingInput {
@@ -301,6 +303,7 @@ input BookingInviteCreateWithoutBookingInput {
   to: UserCreateOneWithoutInvitesReceivedInput
   from: UserCreateOneWithoutInvitesInput!
   sent: Boolean!
+  accepted: Boolean
 }
 
 input BookingInviteCreateWithoutFromInput {
@@ -308,6 +311,7 @@ input BookingInviteCreateWithoutFromInput {
   booking: BookingCreateOneWithoutInvitesInput!
   to: UserCreateOneWithoutInvitesReceivedInput
   sent: Boolean!
+  accepted: Boolean
 }
 
 input BookingInviteCreateWithoutToInput {
@@ -315,6 +319,7 @@ input BookingInviteCreateWithoutToInput {
   booking: BookingCreateOneWithoutInvitesInput!
   from: UserCreateOneWithoutInvitesInput!
   sent: Boolean!
+  accepted: Boolean
 }
 
 type BookingInviteEdge {
@@ -329,6 +334,8 @@ enum BookingInviteOrderByInput {
   startTime_DESC
   sent_ASC
   sent_DESC
+  accepted_ASC
+  accepted_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -339,6 +346,7 @@ type BookingInvitePreviousValues {
   id: ID!
   startTime: DateTime!
   sent: Boolean!
+  accepted: Boolean
 }
 
 input BookingInviteScalarWhereInput {
@@ -366,6 +374,8 @@ input BookingInviteScalarWhereInput {
   startTime_gte: DateTime
   sent: Boolean
   sent_not: Boolean
+  accepted: Boolean
+  accepted_not: Boolean
   AND: [BookingInviteScalarWhereInput!]
   OR: [BookingInviteScalarWhereInput!]
   NOT: [BookingInviteScalarWhereInput!]
@@ -395,16 +405,19 @@ input BookingInviteUpdateInput {
   to: UserUpdateOneWithoutInvitesReceivedInput
   from: UserUpdateOneRequiredWithoutInvitesInput
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateManyDataInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateManyMutationInput {
   startTime: DateTime
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateManyWithoutBookingInput {
@@ -453,6 +466,7 @@ input BookingInviteUpdateWithoutBookingDataInput {
   to: UserUpdateOneWithoutInvitesReceivedInput
   from: UserUpdateOneRequiredWithoutInvitesInput
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateWithoutFromDataInput {
@@ -460,6 +474,7 @@ input BookingInviteUpdateWithoutFromDataInput {
   booking: BookingUpdateOneRequiredWithoutInvitesInput
   to: UserUpdateOneWithoutInvitesReceivedInput
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateWithoutToDataInput {
@@ -467,6 +482,7 @@ input BookingInviteUpdateWithoutToDataInput {
   booking: BookingUpdateOneRequiredWithoutInvitesInput
   from: UserUpdateOneRequiredWithoutInvitesInput
   sent: Boolean
+  accepted: Boolean
 }
 
 input BookingInviteUpdateWithWhereUniqueWithoutBookingInput {
@@ -530,6 +546,8 @@ input BookingInviteWhereInput {
   from: UserWhereInput
   sent: Boolean
   sent_not: Boolean
+  accepted: Boolean
+  accepted_not: Boolean
   AND: [BookingInviteWhereInput!]
   OR: [BookingInviteWhereInput!]
   NOT: [BookingInviteWhereInput!]

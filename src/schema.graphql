@@ -4,6 +4,11 @@ type Query {
   me: User
   allGames(first: Int, orderBy: String): [Game!]!
   getUser(username: String!): User!
+  searchUsersForInvite(
+    search: String!
+    gamers: [String!]!
+    inviteId: String!
+  ): [User!]!
   totalGames: Int!
   totalGamers: Int!
   getSpecificSession(sessionId: String!): GamingSession!
@@ -14,6 +19,7 @@ type Query {
   myPastBookings: [GamingTimeSlot!]!
   nextTimeSlot: GamingTimeSlot
   myInvites: [BookingInvite!]!
+  myInvitesReceived: [BookingInvite!]!
   getGamers(first: Int): [User!]!
 }
 
@@ -42,6 +48,34 @@ type Mutation {
   cancelTimeSlot(input: CancelTimeSlotInput!): CancelTimeSlotPayload!
   updateSession(input: UpdateSessionInput!): UpdateSessionPayload!
   bookTimeSlots(input: BookTimeSlotsInput!): BookTimeSlotsPayload!
+  sendInvite(input: SendInviteInput!): SendInvitePayload!
+  acceptInvite(input: AcceptInviteInput!): AcceptInvitePayload!
+  declineInvite(input: DeclineInviteInput!): DeclineInvitePayload!
+}
+
+input DeclineInviteInput {
+  inviteId: String!
+}
+
+type DeclineInvitePayload {
+  declined: Boolean!
+}
+
+input AcceptInviteInput {
+  inviteId: String!
+}
+
+type AcceptInvitePayload {
+  accepted: Boolean!
+}
+
+input SendInviteInput {
+  username: String!
+  inviteId: String!
+}
+
+type SendInvitePayload {
+  sent: Boolean!
 }
 
 input BookTimeSlotsInput {
