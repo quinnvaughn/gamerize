@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'
 import dateFns from 'date-fns'
 
 import DefaultSessionPicture from '../default-game.gif'
-import { noUnderscores, noSpaces } from '../utils/Strings'
+import { noSpaces } from '../utils/Strings'
+import { useMutation } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 
 const Container = styled.div`
   display: flex;
@@ -53,6 +55,7 @@ const SessionPicture = styled.div`
   background-position: 50% 50% !important;
   background-repeat: no-repeat !important;
   height: 100%;
+
   width: 100%;
   background-image: url(${props => props.src});
 `
@@ -73,7 +76,8 @@ const SessionInfo = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 0.5rem;
-  cursor: pointer;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
 `
 
 const SessionDate = styled.span`
@@ -103,20 +107,77 @@ const PlayedWith = styled.span`
   font-size: 1.6rem;
 `
 
-const Player = styled.span`
-  font-size: 1.4rem;
+const Player = styled(Link)`
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: black;
+  :visited {
+    color: black;
+  }
+  :hover {
+    text-decoration: underline;
+    color: #f10e0e;
+  }
 `
 
-export default function MyTimeSlot({ timeslot, me, upcoming }) {
+const CancelContainer = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+`
+
+const CancelBooking = styled.button`
+  background: #fff;
+  padding: 1rem 1.4rem;
+  color: #f10e0e;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #f10e0e;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
+const EmptyDiv = styled.div`
+  height: 1.9rem;
+  width: 100%;
+`
+
+const CANCEL_BOOKING = gql`
+  mutation($input: CancelBookingInput!) {
+    cancelBooking(input: $input) {
+      cancelled
+    }
+  }
+`
+export default function MyTimeSlot({
+  timeslot,
+  me,
+  upcoming,
+  bookingId,
+  refetch,
+}) {
+  const cancelBooking = useMutation(CANCEL_BOOKING)
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
   let counter = 0
   const players = []
-  while (counter < timeslot.players.length) {
-    if (timeslot.players[counter].player.username === me.username) {
+  // only have uniques
+  const uniquePlayers = [
+    ...new Set(timeslot.players.map(({ player }) => player.username)),
+  ]
+  while (counter < uniquePlayers.length) {
+    console.log(counter === uniquePlayers.length - 1)
+    if (uniquePlayers[counter] === me.username) {
     } else {
       players.push(
-        <Player key={`${counter}${timeslot.players[counter].player.username}`}>
-          {timeslot.players[counter].player.username}
+        <Player
+          key={`${counter}${uniquePlayers[counter]}`}
+          to={`/users/${uniquePlayers[counter]}`}
+        >
+          {counter === uniquePlayers.length - 1
+            ? `${uniquePlayers[counter]}`
+            : `${uniquePlayers[counter]}, `}
         </Player>
       )
     }
@@ -136,22 +197,38 @@ export default function MyTimeSlot({ timeslot, me, upcoming }) {
             </SessionPictureThird>
           </SessionPictureSecond>
         </SessionPictureContainer>
-        <SessionInfo>
-          <SessionDate>
-            {dateFns.format(timeslot.startTime, dateFormat)}
-          </SessionDate>
-          {timeslot.gamingSession.gamers.map((gamer, index) => (
-            <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
-          ))}
-          {players.length > 0 ? (
-            <PlayedWith>
-              {upcoming ? 'Playing with: ' : 'Played with: '}
-              {players}
-            </PlayedWith>
-          ) : null}
-          <SessionGame>{timeslot.gamingSession.game.name}</SessionGame>
-        </SessionInfo>
       </StyledLink>
+      <SessionInfo>
+        <SessionDate>
+          {dateFns.format(timeslot.startTime, dateFormat)}
+        </SessionDate>
+        {timeslot.gamingSession.gamers.map((gamer, index) => (
+          <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
+        ))}
+        {players.length > 0 ? (
+          <PlayedWith>
+            {upcoming ? 'Playing with: ' : 'Played with: '}
+            {players}
+          </PlayedWith>
+        ) : null}
+        <SessionGame>{timeslot.gamingSession.game.name}</SessionGame>
+        {players.length === 0 && <EmptyDiv />}
+        {upcoming && (
+          <CancelContainer>
+            <CancelBooking
+              onClick={async () => {
+                const input = { bookingId }
+                const { data } = await cancelBooking({ variables: { input } })
+                if (data.cancelBooking.cancelled) {
+                  refetch()
+                }
+              }}
+            >
+              Cancel session
+            </CancelBooking>
+          </CancelContainer>
+        )}
+      </SessionInfo>
     </Container>
   )
 }

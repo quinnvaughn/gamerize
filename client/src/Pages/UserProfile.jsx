@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
@@ -16,6 +16,7 @@ import DefaultBanner from '../default-banner.png'
 import { noSpaces, capitalize } from '../utils/Strings'
 import FavoriteGame from '../Components/FavoriteGame'
 import useTitle from '../Hooks/useTitle'
+import AddFriendButton from '../Components/AddFriendButton'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -231,6 +232,16 @@ const SmallRight = styled.div`
   flex: 20%;
 `
 
+const Flex20 = styled.div`
+  flex: 20%;
+  text-align: center;
+`
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 const GET_USER = gql`
   query($username: String!) {
     getUser(username: $username) {
@@ -238,6 +249,10 @@ const GET_USER = gql`
       aboutMe
       username
       numReviews
+      areWeFriends
+      isGamer
+      sentFriendRequest
+      sentMeAFriendRequest
       reviewRating
       occupations
       reviews {
@@ -264,12 +279,21 @@ const GET_USER = gql`
   }
 `
 
+const GET_ME = gql`
+  {
+    me {
+      username
+    }
+  }
+`
+
 export default function UserProfile(props) {
-  const { data, loading } = useQuery(GET_USER, {
+  const { data, loading, refetch } = useQuery(GET_USER, {
     variables: { username: props.match.params.user },
   })
+  const { data: secondData, loading: secondLoading } = useQuery(GET_ME)
   useTitle(`User Profile - Gamerize`)
-  return loading ? null : (
+  return loading || secondLoading ? null : (
     <PageContainer>
       <NavBar />
       <GlobalStyle />
@@ -318,7 +342,7 @@ export default function UserProfile(props) {
                     <Username>@{data.getUser.username}</Username>
                     <Occupations>
                       {data.getUser.occupations.map(job => (
-                        <Occupation>{capitalize(job)}</Occupation>
+                        <Occupation key={job}>{capitalize(job)}</Occupation>
                       ))}
                     </Occupations>
                   </SmallLeft>
@@ -328,11 +352,26 @@ export default function UserProfile(props) {
                 </SmallContainer>
               ) : (
                 <Fragment>
-                  <Name>{data.getUser.name}</Name>
-                  <Username>@{data.getUser.username}</Username>
+                  <Row>
+                    <SmallLeft>
+                      <Name>{data.getUser.name}</Name>
+                      <Username>@{data.getUser.username}</Username>
+                    </SmallLeft>
+                    {secondData.me.username !== data.getUser.username && (
+                      <Flex20>
+                        <AddFriendButton
+                          pending={data.getUser.sentFriendRequest}
+                          respond={data.getUser.sentMeAFriendRequest}
+                          refetch={refetch}
+                          friends={data.getUser.areWeFriends}
+                          username={props.match.params.user}
+                        />
+                      </Flex20>
+                    )}
+                  </Row>
                   <Occupations>
                     {data.getUser.occupations.map(job => (
-                      <Occupation>{capitalize(job)}</Occupation>
+                      <Occupation key={job}>{capitalize(job)}</Occupation>
                     ))}
                   </Occupations>
                 </Fragment>
@@ -345,31 +384,33 @@ export default function UserProfile(props) {
             <FavoriteGamesTitle>Favorite games</FavoriteGamesTitle>
             <FavoriteGameContainer>
               {_.map(data.getUser.favoriteGames, game => (
-                <FavoriteGame game={game.name} />
+                <FavoriteGame game={game.name} key={game.name} />
               ))}
             </FavoriteGameContainer>
           </FavoriteGames>
-          <Sessions>
-            <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
-            <NegativeMargins>
-              <SessionsMapped>
-                {_.map(data.getUser.sessions, session => (
-                  <SmallSession
-                    id={session.id}
-                    title={session.title}
-                    key={session.game}
-                    username={data.getUser.username}
-                    game={noSpaces(session.game.name)}
-                    name={session.game.name}
-                    system={session.system}
-                    price={session.price}
-                    reviewRating={session.reviewRating}
-                    numReviews={session.numReviews}
-                  />
-                ))}
-              </SessionsMapped>
-            </NegativeMargins>
-          </Sessions>
+          {data.getUser.isGamer && (
+            <Sessions>
+              <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
+              <NegativeMargins>
+                <SessionsMapped>
+                  {_.map(data.getUser.sessions, (session, index) => (
+                    <SmallSession
+                      id={session.id}
+                      title={session.title}
+                      key={session.game.name + index}
+                      username={data.getUser.username}
+                      game={noSpaces(session.game.name)}
+                      name={session.game.name}
+                      system={session.system}
+                      price={session.price}
+                      reviewRating={session.reviewRating}
+                      numReviews={session.numReviews}
+                    />
+                  ))}
+                </SessionsMapped>
+              </NegativeMargins>
+            </Sessions>
+          )}
         </RightSide>
       </Content>
     </PageContainer>

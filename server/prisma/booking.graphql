@@ -7,4 +7,5 @@ type Booking {
   timeslot: GamingTimeSlot!
   invites: [BookingInvite!]!
     @relation(name: "BookingInvites", onDelete: CASCADE)
+  cancelled: Boolean
 }

@@ -1,5 +1,7 @@
 const dateFns = require('date-fns')
 GamingTimeSlot = {
+  bookings: async (parent, _, { prisma }) =>
+    await prisma.gamingTimeSlot({ id: parent.id }).bookings(),
   gamers: async (parent, _, { prisma }) =>
     await prisma.gamingTimeSlot({ id: parent.id }).gamers(),
   gamingSession: async (parent, _, { prisma }) =>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import gql from 'graphql-tag'
@@ -24,8 +24,8 @@ const Content = styled.div`
   padding-right: 2.4rem;
   max-width: 160rem;
   @media (min-width: 1128px) {
-    padding-left: 6.4rem;
-    padding-right: 6.4rem;
+    padding-left: 8rem;
+    padding-right: 8rem;
   }
 `
 
@@ -112,6 +112,22 @@ const InvitesContent = styled.div`
   width: 100%;
 `
 
+const SetButton = styled.button`
+  font-size: 1.4rem;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 1.5rem;
+  font-weight: 600;
+  padding: 1rem 0.8rem;
+  margin-bottom: 2rem;
+  background: #fff;
+  outline: none;
+  border: none;
+  border-bottom: ${props =>
+    props.active ? '2px solid #f10e0e' : '2px solid transparent'};
+`
+
 const MY_SESSIONS = gql`
   {
     me {
@@ -120,6 +136,9 @@ const MY_SESSIONS = gql`
     }
     myInvitesReceived {
       id
+      from {
+        username
+      }
       booking {
         timeslot {
           gamingSession {
@@ -153,49 +172,59 @@ const MY_SESSIONS = gql`
       }
     }
     myPastBookings {
-      startTime
-      players {
-        player {
-          username
+      id
+      timeslot {
+        startTime
+        players {
+          player {
+            username
+          }
         }
-      }
-      gamingSession {
-        id
-        gamers {
-          name
-        }
-        game {
-          name
-        }
-        creator {
-          username
+        gamingSession {
+          id
+          gamers {
+            name
+          }
+          game {
+            name
+          }
+          creator {
+            username
+          }
         }
       }
     }
     myUpcomingBookings {
-      startTime
-      players {
-        player {
-          username
+      id
+      timeslot {
+        startTime
+        players {
+          player {
+            username
+          }
         }
-      }
-      gamingSession {
-        id
-        gamers {
-          name
-        }
-        game {
-          name
-        }
-        creator {
-          username
+        gamingSession {
+          id
+          gamers {
+            name
+          }
+          game {
+            name
+          }
+          creator {
+            username
+          }
         }
       }
     }
   }
 `
 
+const SESSIONS = 'SESSIONS'
+const INVITES = 'INVITES'
+
 export default function UserSessionsPage(props) {
+  const [tab, setTab] = useState(SESSIONS)
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
     pollInterval: 5000,
   })
@@ -208,66 +237,82 @@ export default function UserSessionsPage(props) {
     <PageContainer>
       <NavBar />
       <Content>
-        <Invites>
-          <InvitesTitle>Invites received</InvitesTitle>
-          <NegativeMargin>
-            <InvitesContent>
-              {_.map(data.myInvitesReceived, invite => (
-                <MyInviteReceived
-                  refetch={refetch}
-                  key={invite.id}
-                  timeslot={invite.booking.timeslot}
-                  inviteId={invite.id}
-                />
-              ))}
-            </InvitesContent>
-          </NegativeMargin>
-        </Invites>
-        <Invites>
-          <InvitesTitle>My invites</InvitesTitle>
-          <NegativeMargin>
-            <InvitesContent>
-              {_.map(data.myInvites, invite => (
-                <MyInvite
-                  refetch={refetch}
-                  key={invite.id}
-                  timeslot={invite.booking.timeslot}
-                  me={data.me.username}
-                  inviteId={invite.id}
-                />
-              ))}
-            </InvitesContent>
-          </NegativeMargin>
-        </Invites>
-        <Upcoming>
-          <UpcomingSessions>Upcoming sessions</UpcomingSessions>
-          <NegativeMargin>
-            <UpcomingContent>
-              {_.map(upcoming, timeslot => (
-                <MyTimeSlot
-                  key={timeslot.startTime}
-                  upcoming
-                  timeslot={timeslot}
-                  me={data.me}
-                />
-              ))}
-            </UpcomingContent>
-          </NegativeMargin>
-        </Upcoming>
-        <Previous>
-          <PreviousSessions>Sessions you've played</PreviousSessions>
-          <NegativeMargin>
-            <PreviousContent>
-              {_.map(previous, timeslot => (
-                <MyTimeSlot
-                  key={timeslot.startTime}
-                  timeslot={timeslot}
-                  me={data.me}
-                />
-              ))}
-            </PreviousContent>
-          </NegativeMargin>
-        </Previous>
+        <SetButton onClick={() => setTab(SESSIONS)} active={tab === SESSIONS}>
+          Sessions
+        </SetButton>
+        <SetButton onClick={() => setTab(INVITES)} active={tab === INVITES}>
+          Invites
+        </SetButton>
+        {tab === INVITES ? (
+          <Fragment>
+            <Invites>
+              <InvitesTitle>Invites received</InvitesTitle>
+              <NegativeMargin>
+                <InvitesContent>
+                  {_.map(data.myInvitesReceived, invite => (
+                    <MyInviteReceived
+                      from={invite.from.username}
+                      refetch={refetch}
+                      key={invite.id}
+                      timeslot={invite.booking.timeslot}
+                      inviteId={invite.id}
+                    />
+                  ))}
+                </InvitesContent>
+              </NegativeMargin>
+            </Invites>
+            <Invites>
+              <InvitesTitle>My invites</InvitesTitle>
+              <NegativeMargin>
+                <InvitesContent>
+                  {_.map(data.myInvites, invite => (
+                    <MyInvite
+                      refetch={refetch}
+                      key={invite.id}
+                      timeslot={invite.booking.timeslot}
+                      me={data.me.username}
+                      inviteId={invite.id}
+                    />
+                  ))}
+                </InvitesContent>
+              </NegativeMargin>
+            </Invites>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Upcoming>
+              <UpcomingSessions>Upcoming sessions</UpcomingSessions>
+              <NegativeMargin>
+                <UpcomingContent>
+                  {_.map(upcoming, ({ timeslot, id }) => (
+                    <MyTimeSlot
+                      key={id}
+                      upcoming
+                      bookingId={id}
+                      timeslot={timeslot}
+                      me={data.me}
+                      refetch={refetch}
+                    />
+                  ))}
+                </UpcomingContent>
+              </NegativeMargin>
+            </Upcoming>
+            <Previous>
+              <PreviousSessions>Sessions you've played</PreviousSessions>
+              <NegativeMargin>
+                <PreviousContent>
+                  {_.map(previous, ({ timeslot }, index) => (
+                    <MyTimeSlot
+                      key={timeslot.startTime + index}
+                      timeslot={timeslot}
+                      me={data.me}
+                    />
+                  ))}
+                </PreviousContent>
+              </NegativeMargin>
+            </Previous>
+          </Fragment>
+        )}
       </Content>
     </PageContainer>
   )

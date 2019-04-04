@@ -9,6 +9,8 @@ datamodel:
   - enums.graphql
   - booking.graphql
   - bookinginvite.graphql
+  - friendrequest.graphql
+  - notification.graphql
 
 generate:
   - generator: javascript-client

@@ -6,6 +6,7 @@ type GamingTimeSlot {
   ## gaming session also has this info, but this way the user doesn't have to go through that
   ## to get to this info.
   gamers: [User!]! @relation(name: "MyGamingTimeSlots")
+  bookings: [Booking!]!
   players: [BookedPlayer!]!
   length: Int!
   slots: Int!

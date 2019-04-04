@@ -2,6 +2,73 @@ const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
 const _ = require('lodash')
 const timeslot = {
+  async cancelExtraSlot(parent, { input }, ctx) {
+    // Disconnect an invite. Delete an invite.
+    const userId = getUserId(ctx)
+    const QUERY = `
+      {
+        bookingInvite(where: {id: "${input.inviteId}"}) {
+          booking {
+            id 
+            timeslot {
+              id
+            }
+          }
+        }
+      }
+    `
+
+    const {
+      bookingInvite: { booking },
+    } = await ctx.prisma.$graphql(QUERY)
+    const bookingId = booking.id
+    const timeslotId = booking.timeslot.id
+    const { numSlots, numPlayers, total } = await ctx.prisma.booking({
+      id: bookingId,
+    })
+    const GAMING_TIME_SLOT_QUERY = `
+      {
+        gamingTimeSlot(where: {id: "${timeslotId}"}) {
+          players {
+            id
+            player {
+              id
+            }
+          }
+          gamingSession {
+            price
+          }
+        }
+      }
+    `
+    const {
+      gamingTimeSlot: { players, gamingSession },
+    } = await ctx.prisma.$graphql(GAMING_TIME_SLOT_QUERY)
+    const newNumSlots = numSlots - 1
+    const newNumPlayers = numPlayers - 1
+    const newPrice = total - gamingSession.price
+    const disconnectedPlayer = players
+      .filter(({ player }) => player.id === userId)
+      .map(player => player.id)
+      .pop()
+    const deletedPlayer = await ctx.prisma.deleteBookedPlayer({
+      id: disconnectedPlayer,
+    })
+    const updatedBooking = await ctx.prisma.updateBooking({
+      where: { id: bookingId },
+      data: {
+        numSlots: newNumSlots,
+        numPlayers: newNumPlayers,
+        total: newPrice,
+      },
+    })
+    const deletedBooking = await ctx.prisma.deleteBookingInvite({
+      id: input.inviteId,
+    })
+    return deletedPlayer && updatedBooking && deletedBooking
+      ? { cancelled: true }
+      : { cancelled: false }
+  },
   async createGamingTimeSlot(parent, { input }, ctx) {
     const userId = getUserId(ctx)
     const query = `

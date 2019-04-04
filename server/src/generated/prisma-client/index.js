@@ -87,6 +87,18 @@ var models = [
   {
     name: "BookingInvite",
     embedded: false
+  },
+  {
+    name: "FriendRequest",
+    embedded: false
+  },
+  {
+    name: "Notification",
+    embedded: false
+  },
+  {
+    name: "NotificationType",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
