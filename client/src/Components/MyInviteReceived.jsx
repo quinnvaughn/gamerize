@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import dateFns from 'date-fns'
 import gql from 'graphql-tag'
+import { Link } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
 
 import DefaultSessionPicture from '../default-game.gif'
@@ -94,6 +95,14 @@ const SessionInfo = styled.div`
   margin-top: 0.5rem;
 `
 
+const From = styled.div`
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.375em;
+`
+
 const InviteButtonContainer = styled.div`
   width: 100%;
   margin-top: 1rem;
@@ -125,6 +134,19 @@ const DeclineInvite = styled.button`
   font-weight: 600;
 `
 
+const User = styled(Link)`
+  display: inline;
+  color: black;
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-decoration: none;
+  :hover {
+    cursor: pointer;
+    color: #f10e0e;
+    text-decoration: underline;
+  }
+`
+
 const ACCEPT_INVITE = gql`
   mutation($input: AcceptInviteInput!) {
     acceptInvite(input: $input) {
@@ -141,7 +163,12 @@ const DECLINE_INVITE = gql`
   }
 `
 
-export default function MyInviteReceived({ timeslot, refetch, inviteId }) {
+export default function MyInviteReceived({
+  timeslot,
+  refetch,
+  inviteId,
+  from,
+}) {
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
   const acceptInvite = useMutation(ACCEPT_INVITE)
   const declineInvite = useMutation(DECLINE_INVITE)
@@ -159,6 +186,10 @@ export default function MyInviteReceived({ timeslot, refetch, inviteId }) {
           <SessionDate>
             {dateFns.format(timeslot.startTime, dateFormat)}
           </SessionDate>
+          <From>
+            {`Invite From: `}
+            <User to={`/users/${from}`}>{from}</User>
+          </From>
           {timeslot.gamers.map((gamer, index) => (
             <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
           ))}

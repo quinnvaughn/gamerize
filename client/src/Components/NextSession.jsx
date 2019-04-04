@@ -79,7 +79,7 @@ const NEXT_SESSION = gql`
 export default function NextSession(props) {
   const { data, loading } = useQuery(NEXT_SESSION, { pollInterval: 5000 })
   const renderUsernames = () => {
-    let usernames = []
+    let usernames = new Set()
     let counter = 0
     let end = data.nextTimeSlot.slots
     while (counter < end) {
@@ -88,13 +88,16 @@ export default function NextSession(props) {
         data.nextTimeSlot.players[counter]
           ? data.nextTimeSlot.players[counter].player.username
           : 'Empty Slot'
-      usernames.push(<Username>{username}</Username>)
+      usernames.add(username)
       counter++
     }
+    const uniqueUsernames = [...usernames]
     return (
       <FlexHalf>
         <Usernames>Usernames:</Usernames>
-        {usernames}
+        {uniqueUsernames.map(username => (
+          <Username>{username}</Username>
+        ))}
       </FlexHalf>
     )
   }

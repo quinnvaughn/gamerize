@@ -167,6 +167,8 @@ const AddSessions = styled.button`
   color: #fff;
   cursor: pointer;
   outline: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
   border: 1px solid #f10e0e;
   border-radius: 4px;
 `

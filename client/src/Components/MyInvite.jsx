@@ -153,11 +153,11 @@ const DropdownOption = styled.div`
   padding: 1rem;
 `
 
-const SendInviteContainer = styled.div`
+const InvitesContainer = styled.div`
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 `
 
 const SendInvite = styled.button`
@@ -171,6 +171,18 @@ const SendInvite = styled.button`
   font-size: 1.6rem;
   font-weight: 600;
   pointer-events: ${props => props.disabled && 'none'};
+`
+
+const CancelSlot = styled.button`
+  background: #fff;
+  padding: 1rem 1.4rem;
+  color: #f10e0e;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #f10e0e;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
 `
 
 const SEARCH_USERS = gql`
@@ -193,6 +205,14 @@ const SEND_INVITE = gql`
   }
 `
 
+const CANCEL_EXTRA_SLOT = gql`
+  mutation($input: CancelExtraSlotInput!) {
+    cancelExtraSlot(input: $input) {
+      cancelled
+    }
+  }
+`
+
 export default function MyInvite({ inviteId, timeslot, me, refetch }) {
   // Can't send an invite to yourself or the gamers
   let gamers = timeslot.gamers.map(gamer => gamer.username.toLowerCase())
@@ -203,6 +223,7 @@ export default function MyInvite({ inviteId, timeslot, me, refetch }) {
     variables: { search, gamers, inviteId },
   })
   const sendInvite = useMutation(SEND_INVITE)
+  const cancelExtraSlot = useMutation(CANCEL_EXTRA_SLOT)
   const node = useRef(null)
   const [dropdown, setDropdown] = useState(false)
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
@@ -256,7 +277,18 @@ export default function MyInvite({ inviteId, timeslot, me, refetch }) {
               </Dropdown>
             )}
           </SearchPlayersContainer>
-          <SendInviteContainer>
+          <InvitesContainer>
+            <CancelSlot
+              onClick={async () => {
+                const input = { inviteId }
+                const { data } = await cancelExtraSlot({ variables: { input } })
+                if (data.cancelExtraSlot.cancelled) {
+                  refetch()
+                }
+              }}
+            >
+              Cancel Slot
+            </CancelSlot>
             <SendInvite
               disabled={!selected}
               onClick={async () => {
@@ -269,7 +301,7 @@ export default function MyInvite({ inviteId, timeslot, me, refetch }) {
             >
               Send Invite
             </SendInvite>
-          </SendInviteContainer>
+          </InvitesContainer>
         </SessionInfo>
       </Margins>
     </Container>

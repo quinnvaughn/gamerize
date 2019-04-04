@@ -82,6 +82,10 @@ const signedInLinks = [
     text: 'Sessions',
     path: '/sessions',
   },
+  {
+    text: 'Notifications',
+    path: '/notifications',
+  },
 ]
 
 const GET_ME = gql`

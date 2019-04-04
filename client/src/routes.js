@@ -12,6 +12,7 @@ import BecomeAGamerBackground from './Pages/BecomeAGamerBackgroundPage'
 import BecomeAGamerDetails from './Pages/BecomeAGamerDetailsPage'
 import BecomeAGamerFinished from './Pages/BecomeAGamerFinishedPage'
 import GamerDashboard from './Pages/GamerDashboard'
+import NotificationsPage from './Pages/NotificationsPage'
 
 const routes = [
   {
@@ -77,6 +78,11 @@ const routes = [
     path: '/sessions/',
     protected: true,
     component: UserSessionsPage,
+  },
+  {
+    path: '/notifications',
+    protected: true,
+    component: NotificationsPage,
   },
 ]
 

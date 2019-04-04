@@ -15,6 +15,7 @@ type User {
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   buffer: Int
   reviews: [SessionReview!]!
+  friends: [User!]!
 }
 
 ## Workaround for no case insensitive search in prisma yet.
@@ -29,4 +30,5 @@ type UserIndex {
 type BookedPlayer {
   id: ID! @unique
   player: User!
+  timeslot: GamingTimeSlot!
 }
