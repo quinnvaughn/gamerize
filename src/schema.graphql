@@ -15,11 +15,13 @@ type Query {
   mySlotsToday: [GamingTimeSlot!]!
   specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
   thatDaySessions(day: DateTime!): [GamingTimeSlot!]!
-  myUpcomingBookings: [GamingTimeSlot!]!
-  myPastBookings: [GamingTimeSlot!]!
+  myUpcomingBookings: [Booking!]!
+  myPastBookings: [Booking!]!
   nextTimeSlot: GamingTimeSlot
   myInvites: [BookingInvite!]!
   myInvitesReceived: [BookingInvite!]!
+  myFriendRequests: [FriendRequest!]!
+  myNotifications: [Notification!]!
   getGamers(first: Int): [User!]!
 }
 
@@ -50,7 +52,70 @@ type Mutation {
   bookTimeSlots(input: BookTimeSlotsInput!): BookTimeSlotsPayload!
   sendInvite(input: SendInviteInput!): SendInvitePayload!
   acceptInvite(input: AcceptInviteInput!): AcceptInvitePayload!
+  ## This cancels the extra slots in case your friend declines an invite or can't play, etc.
+  ## This does not cancel the entire session, however. Which means it needs a different resolver.
+  ## Could do it in same resolver but that's too messy.
+  cancelExtraSlot(input: CancelExtraSlotInput!): CancelExtraSlotPayload!
+  cancelBooking(input: CancelBookingInput!): CancelBookingPayload!
   declineInvite(input: DeclineInviteInput!): DeclineInvitePayload!
+  sendFriendRequest(input: SendFriendRequestInput!): SendFriendRequestPayload!
+  acceptFriendRequest(
+    input: AcceptFriendRequestInput!
+  ): AcceptFriendRequestPayload!
+  declineFriendRequest(
+    input: DeclineFriendRequestInput!
+  ): DeclineFriendRequestPayload
+  deleteNotification(input: DeleteNotificationInput): DeleteNotificationPayload!
+}
+
+input DeleteNotificationInput {
+  notificationId: String!
+}
+
+type DeleteNotificationPayload {
+  deleted: Boolean!
+}
+
+input DeclineFriendRequestInput {
+  username: String
+  friendRequestId: String
+}
+
+type DeclineFriendRequestPayload {
+  declined: Boolean!
+}
+
+input AcceptFriendRequestInput {
+  friendRequestId: String
+  username: String
+}
+
+type AcceptFriendRequestPayload {
+  accepted: Boolean
+}
+
+input SendFriendRequestInput {
+  username: String!
+}
+
+type SendFriendRequestPayload {
+  sent: Boolean!
+}
+
+input CancelBookingInput {
+  bookingId: String!
+}
+
+type CancelBookingPayload {
+  cancelled: Boolean!
+}
+
+input CancelExtraSlotInput {
+  inviteId: String!
+}
+
+type CancelExtraSlotPayload {
+  cancelled: Boolean!
 }
 
 input DeclineInviteInput {
@@ -259,7 +324,10 @@ type User {
   favoriteGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String
+  areWeFriends: Boolean!
   numReviews: Int!
+  sentMeAFriendRequest: Boolean!
+  sentFriendRequest: Boolean!
   reviews: [SessionReview!]!
   reviewRating: Float!
   invites: [BookingInvite!]!
@@ -300,6 +368,7 @@ type GamingTimeSlot {
   players: [BookedPlayer!]!
   slots: Int!
   passed: Boolean!
+  bookings: [Booking!]!
   finished: Boolean!
   full: Boolean!
   length: Int!

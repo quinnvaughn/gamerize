@@ -1,0 +1,8 @@
+type FriendRequest {
+  id: ID! @unique
+  createdAt: DateTime!
+  to: User! @relation(name: "FriendRequestTo")
+  from: User! @relation(name: "FriendRequestFrom")
+  notification: Notification!
+    @relation(name: "FriendRequestNotification", onDelete: CASCADE)
+}

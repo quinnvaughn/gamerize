@@ -1,9 +1,18 @@
+const { getUserId } = require('../../utils')
+
 const User = {
   currentGamerRequest: async (parent, _, ctx) => {
     const alreadyRequested = await ctx.prisma.gamerRequests({
       where: { user: { id: parent.id } },
     })
     return alreadyRequested.length === 1 ? true : false
+  },
+  areWeFriends: async (parent, _, ctx) => {
+    const userId = getUserId(ctx)
+    const friends = await ctx.prisma
+      .user({ id: parent.id })
+      .friends({ where: { id: userId } })
+    return friends.length > 0 ? true : false
   },
   invites: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).invites()
@@ -19,6 +28,26 @@ const User = {
   },
   timeSlotsBooked: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).timeSlotsBooked()
+  },
+  sentMeAFriendRequest: async (parent, _, ctx) => {
+    const userId = getUserId(ctx)
+    const sentRequest = await ctx.prisma.friendRequests({
+      where: {
+        to: { id: userId },
+        from: { id: parent.id },
+      },
+    })
+    return sentRequest.length > 0 ? true : false
+  },
+  sentFriendRequest: async (parent, _, ctx) => {
+    const userId = getUserId(ctx)
+    const sentRequest = await ctx.prisma.friendRequests({
+      where: {
+        to: { id: parent.id },
+        from: { id: userId },
+      },
+    })
+    return sentRequest.length > 0 ? true : false
   },
   sessionIsGoingOn: async (parent, _, ctx) => {
     const currentTime = new Date()

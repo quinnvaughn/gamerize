@@ -6,4 +6,5 @@ type BookingInvite {
   from: User! @relation(name: "InvitesFromMe")
   sent: Boolean!
   accepted: Boolean
+  notification: Notification
 }
