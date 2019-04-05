@@ -83,7 +83,7 @@ const TypeGame = styled.span`
   font-weight: 400;
 `
 
-export default function CreatedSessionCardFront({ session, buffer, dispatch }) {
+export default function CreatedSessionCardFront({ session, setup, dispatch }) {
   useEffect(() => {
     dispatch({ type: 'setTitle', payload: session.title })
     dispatch({ type: 'setGame', payload: session.game.name })
@@ -102,7 +102,7 @@ export default function CreatedSessionCardFront({ session, buffer, dispatch }) {
       <SessionTitle>{session.title}</SessionTitle>
       <Game>{session.game.name}</Game>
       <Price>{`$${session.price} a slot`}</Price>
-      <Length>{`${session.length + buffer} minutes a game`}</Length>
+      <Length>{`${session.length + setup} minutes a game`}</Length>
       <Systems>
         <SystemTitle>{`System: `}</SystemTitle>
         <System>{`${

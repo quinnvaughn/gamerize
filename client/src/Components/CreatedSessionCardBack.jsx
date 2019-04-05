@@ -97,7 +97,7 @@ const SessionLength = styled.input`
   }
 `
 
-const Buffer = styled.span`
+const setup = styled.span`
   font-size: 1.2rem;
   margin-left: 0.5rem;
 `
@@ -195,7 +195,7 @@ export default function CreatedSessionCardBack({
           }}
           value={state.length}
         />
-        <Buffer>*not counting buffer</Buffer>
+        <setup>*not counting setup</setup>
       </LengthContainer>
       <SystemsSessionDropdown
         label={'System: '}

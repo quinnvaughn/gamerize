@@ -25,6 +25,7 @@ const { BookingInvite } = require('./Type/BookingInvite')
 const { Booking } = require('./Type/Booking')
 const { Notification } = require('./Type/Notification')
 const { FriendRequest } = require('./Type/FriendRequest')
+const { GamerTag } = require('./Type/GamerTag')
 
 module.exports = {
   Query: {
@@ -49,6 +50,7 @@ module.exports = {
     ...game,
     ...gamingsession,
   },
+  GamerTag,
   User,
   Notification,
   Node,

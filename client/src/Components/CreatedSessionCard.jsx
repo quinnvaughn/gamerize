@@ -50,7 +50,7 @@ function reducer(state, action) {
   }
 }
 
-export default function CreatedSessionCard({ session, buffer, refetch }) {
+export default function CreatedSessionCard({ session, setup, refetch }) {
   const node = useRef()
   const [state, dispatch] = useReducer(reducer, initialState)
   const clearAndFlip = () => {
@@ -68,7 +68,7 @@ export default function CreatedSessionCard({ session, buffer, refetch }) {
         <CreatedSessionCardFront
           session={session}
           dispatch={dispatch}
-          buffer={buffer}
+          setup={setup}
           key="front"
         />
         <CreatedSessionCardBack

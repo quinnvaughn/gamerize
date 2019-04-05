@@ -62,7 +62,7 @@ const GET_SESSIONS = gql`
   {
     me {
       id
-      buffer
+      setup
       sessions {
         id
         title
@@ -100,7 +100,7 @@ export default function GamerDashboardSessions(props) {
             <CreatedSessionCard
               session={session}
               refetch={refetch}
-              buffer={data.me.buffer}
+              setup={data.me.setup}
               setOpen={setEdit}
               key={session.title + session.game}
             />

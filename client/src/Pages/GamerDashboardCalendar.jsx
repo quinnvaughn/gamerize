@@ -84,15 +84,33 @@ const MY_SESSIONS = gql`
   {
     me {
       id
-      buffer
+      setup
       sessionIsGoingOn {
         session {
-          id
+          slots
           startTime
-          endTime
           gamingSession {
+            system
             game {
               name
+              launcher
+            }
+          }
+          endTime
+          players {
+            player {
+              gamertags {
+                psn
+                xbl
+                nso
+                pc {
+                  epic
+                  origin
+                  steam
+                  bethesda
+                  battlenet
+                }
+              }
             }
           }
         }
@@ -157,7 +175,7 @@ export default function GamerDashboardCalendar(props) {
             <BigGamerCalendar />
           ) : loading ? null : (
             data.me &&
-            data.me.buffer &&
+            data.me.setup &&
             data.mySlotsToday && <GamerDay todaySessions={data.mySlotsToday} />
           )}
         </LeftSide>
@@ -186,12 +204,12 @@ export default function GamerDashboardCalendar(props) {
               ? null
               : data.me &&
                 data.me.sessions &&
-                data.me.buffer &&
+                data.me.setup &&
                 data.me.sessions.map(session => (
                   <GamerSessionCard
                     session={session}
                     key={session.id}
-                    buffer={data.me.buffer}
+                    setup={data.me.setup}
                     refetch={refetch}
                   />
                 ))}

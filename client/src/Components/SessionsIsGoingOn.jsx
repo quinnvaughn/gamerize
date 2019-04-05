@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
+//local imports
+import { mapSystem, mapLauncher } from '../utils/System'
+
 const Container = styled.div`
   margin-bottom: 1rem;
   background: #fff;
@@ -47,6 +50,26 @@ const AddButton = styled.button`
   }
 `
 
+const Content = styled.div`
+  display: flex;
+`
+const Flex70 = styled.div`
+  flex: 70%;
+`
+
+const Flex30 = styled.div`
+  flex: 30%;
+`
+
+const Usernames = styled.div`
+  font-size: 1.7rem;
+  font-weight: 700;
+`
+
+const Username = styled.div`
+  font-size: 1.6rem;
+`
+
 const ADD_MINUTES_TO_SESSION = gql`
   mutation($input: AddMinutesToTimeSlotInput!) {
     addMinutesToTimeSlot(input: $input) {
@@ -61,33 +84,74 @@ const ADD_MINUTES_TO_SESSION = gql`
 export default function SessionsIsGoingOn({ currentSession, refetch }) {
   const dateFormat = 'h:mm aa'
   const addMinutesToSession = useMutation(ADD_MINUTES_TO_SESSION)
+  const renderUsernames = () => {
+    let usernames = new Set()
+    let counter = 0
+    let end = currentSession.slots
+    const system = mapSystem(currentSession.gamingSession.system)
+    const launcher = mapLauncher(currentSession.gamingSession.game.launcher)
+    while (counter < end) {
+      if (system === 'pc') {
+        let username =
+          currentSession.players.length > 0 &&
+          currentSession.players[counter].player.gamertags[counter]
+            ? currentSession.players[counter].player.gamertags[counter][system][
+                launcher
+              ]
+            : null
+        usernames.add(username)
+      } else {
+        let username =
+          currentSession.players.length > 0 &&
+          currentSession.players[counter].player.gamertags[counter]
+            ? currentSession.players[counter].player.gamertags[counter][system]
+            : null
+        usernames.add(username)
+      }
+      counter++
+    }
+    const uniqueUsernames = [...usernames]
+    return (
+      <Flex30>
+        <Usernames>Usernames:</Usernames>
+        {uniqueUsernames.map(username => (
+          <Username>{username}</Username>
+        ))}
+      </Flex30>
+    )
+  }
   return (
     <Container>
-      <Title>Current Session:</Title>
-      <Name>{currentSession.gamingSession.game.name}</Name>
-      <Time>
-        {dateFns.format(currentSession.startTime, dateFormat)}
-        {` - `}
-        {dateFns.format(currentSession.endTime, dateFormat)}
-      </Time>
-      <AddButton
-        onClick={async () => {
-          const input = { minutes: 5, sessionId: currentSession.id }
-          await addMinutesToSession({ variables: { input } })
-          refetch()
-        }}
-      >
-        Add 5 minutes
-      </AddButton>
-      <AddButton
-        onClick={async () => {
-          const input = { minutes: 10, sessionId: currentSession.id }
-          await addMinutesToSession({ variables: { input } })
-          refetch()
-        }}
-      >
-        Add 10 minutes
-      </AddButton>
+      <Content>
+        <Flex70>
+          <Title>Current Session:</Title>
+          <Name>{currentSession.gamingSession.game.name}</Name>
+          <Time>
+            {dateFns.format(currentSession.startTime, dateFormat)}
+            {` - `}
+            {dateFns.format(currentSession.endTime, dateFormat)}
+          </Time>
+          <AddButton
+            onClick={async () => {
+              const input = { minutes: 5, sessionId: currentSession.id }
+              await addMinutesToSession({ variables: { input } })
+              refetch()
+            }}
+          >
+            Add 5 minutes
+          </AddButton>
+          <AddButton
+            onClick={async () => {
+              const input = { minutes: 10, sessionId: currentSession.id }
+              await addMinutesToSession({ variables: { input } })
+              refetch()
+            }}
+          >
+            Add 10 minutes
+          </AddButton>
+        </Flex70>
+        {renderUsernames()}
+      </Content>
     </Container>
   )
 }
