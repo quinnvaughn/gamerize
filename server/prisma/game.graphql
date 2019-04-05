@@ -6,7 +6,7 @@ type Game {
   name: String! @unique
   tags: [Tags!]!
   sessions: [GamingSession!]!
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int! @default(value: 0)
 }
 
@@ -14,6 +14,7 @@ type Game {
 type GameIndex {
   id: ID! @unique
   name: String!
+  launcher: String
   tags: [String!]!
   game: Game!
 }

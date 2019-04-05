@@ -16,7 +16,7 @@ type User {
   setup: Int
   reviews: [SessionReview!]!
   friends: [User!]!
-  gamertags: [GamerTag!]!
+  gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)
 }
 
 ## Workaround for no case insensitive search in prisma yet.
@@ -36,6 +36,7 @@ type BookedPlayer {
 
 type GamerTag {
   id: ID! @unique
+  user: User! @relation(name: "UserGamerTags", onDelete: SET_NULL)
   ## Playstation Network
   psn: String
   ## Xbox Live
@@ -43,11 +44,12 @@ type GamerTag {
   ## Nintendo Switch Online
   nso: String
   ## Too many fucking launchers
-  pc: PCLauncher
+  pc: PCLauncher @relation(name: "PCLauncher", onDelete: CASCADE)
 }
 
 type PCLauncher {
   id: ID! @unique
+  gamerTag: GamerTag! @relation(name: "PCLauncher", onDelete: SET_NULL)
   epic: String
   steam: String
   origin: String

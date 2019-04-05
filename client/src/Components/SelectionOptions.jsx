@@ -67,7 +67,9 @@ export default function SelectionOptions({
   gamer,
   game,
   slotsLeftToday,
+  launcher,
   refetch,
+  me,
 }) {
   return (
     <Container>
@@ -92,9 +94,14 @@ export default function SelectionOptions({
           <Fragment>
             {/*TODO: Need slotsLeftToday to update at same time */}
             <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-            <SystemPicker system={system} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
-            <Totals price={price} refetch={refetch} />
+            <Totals
+              price={price}
+              refetch={refetch}
+              me={me}
+              system={system}
+              launcher={launcher}
+            />
           </Fragment>
         )}
       </Subscribe>
