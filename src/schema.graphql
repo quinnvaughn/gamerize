@@ -279,6 +279,7 @@ input RespondToGamerRequestInput {
 input CreateGameInput {
   tags: [Tags!]!
   name: String!
+  launcher: String!
 }
 
 type CreateGamePayload {
@@ -325,7 +326,7 @@ type User {
   occupations: [Occupations!]!
   aboutMe: String
   areWeFriends: Boolean!
-  gamertags: [GamerTag!]!
+  gamertags: GamerTag
   numReviews: Int!
   sentMeAFriendRequest: Boolean!
   sentFriendRequest: Boolean!
@@ -368,6 +369,7 @@ type GamingTimeSlot {
   gamers: [User!]!
   players: [BookedPlayer!]!
   slots: Int!
+  setup: Int!
   passed: Boolean!
   bookings: [Booking!]!
   finished: Boolean!
