@@ -13,9 +13,10 @@ type User {
   timeSlotsBooked: [Booking!]!
   invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
-  buffer: Int
+  setup: Int
   reviews: [SessionReview!]!
   friends: [User!]!
+  gamertags: [GamerTag!]!
 }
 
 ## Workaround for no case insensitive search in prisma yet.
@@ -31,4 +32,29 @@ type BookedPlayer {
   id: ID! @unique
   player: User!
   timeslot: GamingTimeSlot!
+}
+
+type GamerTag {
+  id: ID! @unique
+  ## Playstation Network
+  psn: String
+  ## Xbox Live
+  xbl: String
+  ## Nintendo Switch Online
+  nso: String
+  ## Too many fucking launchers
+  pc: PCLauncher
+}
+
+type PCLauncher {
+  id: ID! @unique
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
 }

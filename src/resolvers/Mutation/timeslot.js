@@ -74,7 +74,7 @@ const timeslot = {
     const query = `
         {
           user(where: {id: "${userId}"}) {
-            buffer
+            setup
           }
               gamingSession(where: {id: "${input.gamingSessionId}"}) {
                   length
@@ -87,8 +87,8 @@ const timeslot = {
         `
     const result = await ctx.prisma.$graphql(query)
     const sessions = result.gamingSession
-    const buffer = result.user.buffer
-    const sessionLength = sessions.length + buffer
+    const setup = result.user.setup
+    const sessionLength = sessions.length + setup
     const endTime = addMinutes(input.startTime, sessionLength)
     const gamers = sessions.gamers
     if (!gamers) {
@@ -153,7 +153,7 @@ const timeslot = {
     const query = `
         {
               user(where: {id: "${userId}"}) {
-                buffer
+                setup
               }
               gamingSession(where: {id: "${input.gamingSessionId}"}) {
                   length
@@ -169,10 +169,10 @@ const timeslot = {
         `
     const result = await ctx.prisma.$graphql(query)
     const session = result.gamingSession
-    const buffer = result.user.buffer
+    const setup = result.user.setup
     const gamers = session.gamers
     const creator = session.creator
-    const sessionLength = session.length + buffer
+    const sessionLength = session.length + setup
     if (!gamers) {
       return {
         created: false,

@@ -20,6 +20,9 @@ const User = {
   invitesReceived: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).invitesReceived()
   },
+  gamertags: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).gamertags()
+  },
   sessions: async (parent, _, ctx) => {
     return await ctx.prisma.user({ id: parent.id }).sessions()
   },

@@ -35,6 +35,10 @@ type AggregateGamerRequest {
   count: Int!
 }
 
+type AggregateGamerTag {
+  count: Int!
+}
+
 type AggregateGamingSession {
   count: Int!
 }
@@ -48,6 +52,10 @@ type AggregateGamingTimeSlot {
 }
 
 type AggregateNotification {
+  count: Int!
+}
+
+type AggregatePCLauncher {
   count: Int!
 }
 
@@ -1202,6 +1210,7 @@ type Game {
   name: String!
   tags: [Tags!]!
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
+  launcher: Launcher
   numSessions: Int!
 }
 
@@ -1215,6 +1224,7 @@ input GameCreateInput {
   name: String!
   tags: GameCreatetagsInput
   sessions: GamingSessionCreateManyWithoutGameInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1240,6 +1250,7 @@ input GameCreatetagsInput {
 input GameCreateWithoutSessionsInput {
   name: String!
   tags: GameCreatetagsInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1370,6 +1381,8 @@ enum GameOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  launcher_ASC
+  launcher_DESC
   numSessions_ASC
   numSessions_DESC
   createdAt_ASC
@@ -1382,6 +1395,7 @@ type GamePreviousValues {
   id: ID!
   name: String!
   tags: [Tags!]!
+  launcher: Launcher
   numSessions: Int!
 }
 
@@ -1506,6 +1520,260 @@ input GamerRequestWhereUniqueInput {
   id: ID
 }
 
+type GamerTag {
+  id: ID!
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCLauncher
+}
+
+type GamerTagConnection {
+  pageInfo: PageInfo!
+  edges: [GamerTagEdge]!
+  aggregate: AggregateGamerTag!
+}
+
+input GamerTagCreateInput {
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCLauncherCreateOneInput
+}
+
+input GamerTagCreateManyInput {
+  create: [GamerTagCreateInput!]
+  connect: [GamerTagWhereUniqueInput!]
+}
+
+type GamerTagEdge {
+  node: GamerTag!
+  cursor: String!
+}
+
+enum GamerTagOrderByInput {
+  id_ASC
+  id_DESC
+  psn_ASC
+  psn_DESC
+  xbl_ASC
+  xbl_DESC
+  nso_ASC
+  nso_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GamerTagPreviousValues {
+  id: ID!
+  psn: String
+  xbl: String
+  nso: String
+}
+
+input GamerTagScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  psn: String
+  psn_not: String
+  psn_in: [String!]
+  psn_not_in: [String!]
+  psn_lt: String
+  psn_lte: String
+  psn_gt: String
+  psn_gte: String
+  psn_contains: String
+  psn_not_contains: String
+  psn_starts_with: String
+  psn_not_starts_with: String
+  psn_ends_with: String
+  psn_not_ends_with: String
+  xbl: String
+  xbl_not: String
+  xbl_in: [String!]
+  xbl_not_in: [String!]
+  xbl_lt: String
+  xbl_lte: String
+  xbl_gt: String
+  xbl_gte: String
+  xbl_contains: String
+  xbl_not_contains: String
+  xbl_starts_with: String
+  xbl_not_starts_with: String
+  xbl_ends_with: String
+  xbl_not_ends_with: String
+  nso: String
+  nso_not: String
+  nso_in: [String!]
+  nso_not_in: [String!]
+  nso_lt: String
+  nso_lte: String
+  nso_gt: String
+  nso_gte: String
+  nso_contains: String
+  nso_not_contains: String
+  nso_starts_with: String
+  nso_not_starts_with: String
+  nso_ends_with: String
+  nso_not_ends_with: String
+  AND: [GamerTagScalarWhereInput!]
+  OR: [GamerTagScalarWhereInput!]
+  NOT: [GamerTagScalarWhereInput!]
+}
+
+type GamerTagSubscriptionPayload {
+  mutation: MutationType!
+  node: GamerTag
+  updatedFields: [String!]
+  previousValues: GamerTagPreviousValues
+}
+
+input GamerTagSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GamerTagWhereInput
+  AND: [GamerTagSubscriptionWhereInput!]
+  OR: [GamerTagSubscriptionWhereInput!]
+  NOT: [GamerTagSubscriptionWhereInput!]
+}
+
+input GamerTagUpdateDataInput {
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCLauncherUpdateOneInput
+}
+
+input GamerTagUpdateInput {
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCLauncherUpdateOneInput
+}
+
+input GamerTagUpdateManyDataInput {
+  psn: String
+  xbl: String
+  nso: String
+}
+
+input GamerTagUpdateManyInput {
+  create: [GamerTagCreateInput!]
+  update: [GamerTagUpdateWithWhereUniqueNestedInput!]
+  upsert: [GamerTagUpsertWithWhereUniqueNestedInput!]
+  delete: [GamerTagWhereUniqueInput!]
+  connect: [GamerTagWhereUniqueInput!]
+  set: [GamerTagWhereUniqueInput!]
+  disconnect: [GamerTagWhereUniqueInput!]
+  deleteMany: [GamerTagScalarWhereInput!]
+  updateMany: [GamerTagUpdateManyWithWhereNestedInput!]
+}
+
+input GamerTagUpdateManyMutationInput {
+  psn: String
+  xbl: String
+  nso: String
+}
+
+input GamerTagUpdateManyWithWhereNestedInput {
+  where: GamerTagScalarWhereInput!
+  data: GamerTagUpdateManyDataInput!
+}
+
+input GamerTagUpdateWithWhereUniqueNestedInput {
+  where: GamerTagWhereUniqueInput!
+  data: GamerTagUpdateDataInput!
+}
+
+input GamerTagUpsertWithWhereUniqueNestedInput {
+  where: GamerTagWhereUniqueInput!
+  update: GamerTagUpdateDataInput!
+  create: GamerTagCreateInput!
+}
+
+input GamerTagWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  psn: String
+  psn_not: String
+  psn_in: [String!]
+  psn_not_in: [String!]
+  psn_lt: String
+  psn_lte: String
+  psn_gt: String
+  psn_gte: String
+  psn_contains: String
+  psn_not_contains: String
+  psn_starts_with: String
+  psn_not_starts_with: String
+  psn_ends_with: String
+  psn_not_ends_with: String
+  xbl: String
+  xbl_not: String
+  xbl_in: [String!]
+  xbl_not_in: [String!]
+  xbl_lt: String
+  xbl_lte: String
+  xbl_gt: String
+  xbl_gte: String
+  xbl_contains: String
+  xbl_not_contains: String
+  xbl_starts_with: String
+  xbl_not_starts_with: String
+  xbl_ends_with: String
+  xbl_not_ends_with: String
+  nso: String
+  nso_not: String
+  nso_in: [String!]
+  nso_not_in: [String!]
+  nso_lt: String
+  nso_lte: String
+  nso_gt: String
+  nso_gte: String
+  nso_contains: String
+  nso_not_contains: String
+  nso_starts_with: String
+  nso_not_starts_with: String
+  nso_ends_with: String
+  nso_not_ends_with: String
+  pc: PCLauncherWhereInput
+  AND: [GamerTagWhereInput!]
+  OR: [GamerTagWhereInput!]
+  NOT: [GamerTagWhereInput!]
+}
+
+input GamerTagWhereUniqueInput {
+  id: ID
+}
+
 input GameScalarWhereInput {
   id: ID
   id_not: ID
@@ -1535,6 +1803,10 @@ input GameScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  launcher: Launcher
+  launcher_not: Launcher
+  launcher_in: [Launcher!]
+  launcher_not_in: [Launcher!]
   numSessions: Int
   numSessions_not: Int
   numSessions_in: [Int!]
@@ -1570,6 +1842,7 @@ input GameUpdateDataInput {
   name: String
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1577,12 +1850,14 @@ input GameUpdateInput {
   name: String
   tags: GameUpdatetagsInput
   sessions: GamingSessionUpdateManyWithoutGameInput
+  launcher: Launcher
   numSessions: Int
 }
 
 input GameUpdateManyDataInput {
   name: String
   tags: GameUpdatetagsInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1601,6 +1876,7 @@ input GameUpdateManyInput {
 input GameUpdateManyMutationInput {
   name: String
   tags: GameUpdatetagsInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1630,6 +1906,7 @@ input GameUpdatetagsInput {
 input GameUpdateWithoutSessionsDataInput {
   name: String
   tags: GameUpdatetagsInput
+  launcher: Launcher
   numSessions: Int
 }
 
@@ -1686,6 +1963,10 @@ input GameWhereInput {
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput
+  launcher: Launcher
+  launcher_not: Launcher
+  launcher_in: [Launcher!]
+  launcher_not_in: [Launcher!]
   numSessions: Int
   numSessions_not: Int
   numSessions_in: [Int!]
@@ -2731,6 +3012,18 @@ input GamingTimeSlotWhereUniqueInput {
   id: ID
 }
 
+enum Launcher {
+  EPIC
+  STEAM
+  ORIGIN
+  BATTLENET
+  GOG
+  UPLAY
+  BETHESDA
+  ITCH
+  WINDOWS
+}
+
 scalar Long
 
 type Mutation {
@@ -2777,6 +3070,12 @@ type Mutation {
   upsertGamerRequest(where: GamerRequestWhereUniqueInput!, create: GamerRequestCreateInput!, update: GamerRequestUpdateInput!): GamerRequest!
   deleteGamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   deleteManyGamerRequests(where: GamerRequestWhereInput): BatchPayload!
+  createGamerTag(data: GamerTagCreateInput!): GamerTag!
+  updateGamerTag(data: GamerTagUpdateInput!, where: GamerTagWhereUniqueInput!): GamerTag
+  updateManyGamerTags(data: GamerTagUpdateManyMutationInput!, where: GamerTagWhereInput): BatchPayload!
+  upsertGamerTag(where: GamerTagWhereUniqueInput!, create: GamerTagCreateInput!, update: GamerTagUpdateInput!): GamerTag!
+  deleteGamerTag(where: GamerTagWhereUniqueInput!): GamerTag
+  deleteManyGamerTags(where: GamerTagWhereInput): BatchPayload!
   createGamingSession(data: GamingSessionCreateInput!): GamingSession!
   updateGamingSession(data: GamingSessionUpdateInput!, where: GamingSessionWhereUniqueInput!): GamingSession
   updateManyGamingSessions(data: GamingSessionUpdateManyMutationInput!, where: GamingSessionWhereInput): BatchPayload!
@@ -2801,6 +3100,12 @@ type Mutation {
   upsertNotification(where: NotificationWhereUniqueInput!, create: NotificationCreateInput!, update: NotificationUpdateInput!): Notification!
   deleteNotification(where: NotificationWhereUniqueInput!): Notification
   deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
+  createPCLauncher(data: PCLauncherCreateInput!): PCLauncher!
+  updatePCLauncher(data: PCLauncherUpdateInput!, where: PCLauncherWhereUniqueInput!): PCLauncher
+  updateManyPCLaunchers(data: PCLauncherUpdateManyMutationInput!, where: PCLauncherWhereInput): BatchPayload!
+  upsertPCLauncher(where: PCLauncherWhereUniqueInput!, create: PCLauncherCreateInput!, update: PCLauncherUpdateInput!): PCLauncher!
+  deletePCLauncher(where: PCLauncherWhereUniqueInput!): PCLauncher
+  deleteManyPCLaunchers(where: PCLauncherWhereInput): BatchPayload!
   createRequirement(data: RequirementCreateInput!): Requirement!
   updateManyRequirements(data: RequirementUpdateManyMutationInput!, where: RequirementWhereInput): BatchPayload!
   deleteManyRequirements(where: RequirementWhereInput): BatchPayload!
@@ -2951,8 +3256,9 @@ input NotificationSubscriptionWhereInput {
 }
 
 enum NotificationType {
+  CANCELLED_TIMESLOT
   ACCEPTED_GAMER_REQUEST
-  DECLINED_GAMER_REQUEST
+  DENIED_GAMER_REQUEST
   FRIEND_REQUEST
   ACCEPTED_TIMESLOT_REQUEST
   TIMESLOT_REQUEST
@@ -3108,6 +3414,305 @@ type PageInfo {
   endCursor: String
 }
 
+type PCLauncher {
+  id: ID!
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+type PCLauncherConnection {
+  pageInfo: PageInfo!
+  edges: [PCLauncherEdge]!
+  aggregate: AggregatePCLauncher!
+}
+
+input PCLauncherCreateInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+input PCLauncherCreateOneInput {
+  create: PCLauncherCreateInput
+  connect: PCLauncherWhereUniqueInput
+}
+
+type PCLauncherEdge {
+  node: PCLauncher!
+  cursor: String!
+}
+
+enum PCLauncherOrderByInput {
+  id_ASC
+  id_DESC
+  epic_ASC
+  epic_DESC
+  steam_ASC
+  steam_DESC
+  origin_ASC
+  origin_DESC
+  gog_ASC
+  gog_DESC
+  battlenet_ASC
+  battlenet_DESC
+  uplay_ASC
+  uplay_DESC
+  bethesda_ASC
+  bethesda_DESC
+  itch_ASC
+  itch_DESC
+  windows_ASC
+  windows_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PCLauncherPreviousValues {
+  id: ID!
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+type PCLauncherSubscriptionPayload {
+  mutation: MutationType!
+  node: PCLauncher
+  updatedFields: [String!]
+  previousValues: PCLauncherPreviousValues
+}
+
+input PCLauncherSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PCLauncherWhereInput
+  AND: [PCLauncherSubscriptionWhereInput!]
+  OR: [PCLauncherSubscriptionWhereInput!]
+  NOT: [PCLauncherSubscriptionWhereInput!]
+}
+
+input PCLauncherUpdateDataInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+input PCLauncherUpdateInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+input PCLauncherUpdateManyMutationInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+}
+
+input PCLauncherUpdateOneInput {
+  create: PCLauncherCreateInput
+  update: PCLauncherUpdateDataInput
+  upsert: PCLauncherUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PCLauncherWhereUniqueInput
+}
+
+input PCLauncherUpsertNestedInput {
+  update: PCLauncherUpdateDataInput!
+  create: PCLauncherCreateInput!
+}
+
+input PCLauncherWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  epic: String
+  epic_not: String
+  epic_in: [String!]
+  epic_not_in: [String!]
+  epic_lt: String
+  epic_lte: String
+  epic_gt: String
+  epic_gte: String
+  epic_contains: String
+  epic_not_contains: String
+  epic_starts_with: String
+  epic_not_starts_with: String
+  epic_ends_with: String
+  epic_not_ends_with: String
+  steam: String
+  steam_not: String
+  steam_in: [String!]
+  steam_not_in: [String!]
+  steam_lt: String
+  steam_lte: String
+  steam_gt: String
+  steam_gte: String
+  steam_contains: String
+  steam_not_contains: String
+  steam_starts_with: String
+  steam_not_starts_with: String
+  steam_ends_with: String
+  steam_not_ends_with: String
+  origin: String
+  origin_not: String
+  origin_in: [String!]
+  origin_not_in: [String!]
+  origin_lt: String
+  origin_lte: String
+  origin_gt: String
+  origin_gte: String
+  origin_contains: String
+  origin_not_contains: String
+  origin_starts_with: String
+  origin_not_starts_with: String
+  origin_ends_with: String
+  origin_not_ends_with: String
+  gog: String
+  gog_not: String
+  gog_in: [String!]
+  gog_not_in: [String!]
+  gog_lt: String
+  gog_lte: String
+  gog_gt: String
+  gog_gte: String
+  gog_contains: String
+  gog_not_contains: String
+  gog_starts_with: String
+  gog_not_starts_with: String
+  gog_ends_with: String
+  gog_not_ends_with: String
+  battlenet: String
+  battlenet_not: String
+  battlenet_in: [String!]
+  battlenet_not_in: [String!]
+  battlenet_lt: String
+  battlenet_lte: String
+  battlenet_gt: String
+  battlenet_gte: String
+  battlenet_contains: String
+  battlenet_not_contains: String
+  battlenet_starts_with: String
+  battlenet_not_starts_with: String
+  battlenet_ends_with: String
+  battlenet_not_ends_with: String
+  uplay: String
+  uplay_not: String
+  uplay_in: [String!]
+  uplay_not_in: [String!]
+  uplay_lt: String
+  uplay_lte: String
+  uplay_gt: String
+  uplay_gte: String
+  uplay_contains: String
+  uplay_not_contains: String
+  uplay_starts_with: String
+  uplay_not_starts_with: String
+  uplay_ends_with: String
+  uplay_not_ends_with: String
+  bethesda: String
+  bethesda_not: String
+  bethesda_in: [String!]
+  bethesda_not_in: [String!]
+  bethesda_lt: String
+  bethesda_lte: String
+  bethesda_gt: String
+  bethesda_gte: String
+  bethesda_contains: String
+  bethesda_not_contains: String
+  bethesda_starts_with: String
+  bethesda_not_starts_with: String
+  bethesda_ends_with: String
+  bethesda_not_ends_with: String
+  itch: String
+  itch_not: String
+  itch_in: [String!]
+  itch_not_in: [String!]
+  itch_lt: String
+  itch_lte: String
+  itch_gt: String
+  itch_gte: String
+  itch_contains: String
+  itch_not_contains: String
+  itch_starts_with: String
+  itch_not_starts_with: String
+  itch_ends_with: String
+  itch_not_ends_with: String
+  windows: String
+  windows_not: String
+  windows_in: [String!]
+  windows_not_in: [String!]
+  windows_lt: String
+  windows_lte: String
+  windows_gt: String
+  windows_gte: String
+  windows_contains: String
+  windows_not_contains: String
+  windows_starts_with: String
+  windows_not_starts_with: String
+  windows_ends_with: String
+  windows_not_ends_with: String
+  AND: [PCLauncherWhereInput!]
+  OR: [PCLauncherWhereInput!]
+  NOT: [PCLauncherWhereInput!]
+}
+
+input PCLauncherWhereUniqueInput {
+  id: ID
+}
+
 enum PlayerOrSession {
   PLAYER
   SESSION
@@ -3137,6 +3742,9 @@ type Query {
   gamerRequest(where: GamerRequestWhereUniqueInput!): GamerRequest
   gamerRequests(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerRequest]!
   gamerRequestsConnection(where: GamerRequestWhereInput, orderBy: GamerRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerRequestConnection!
+  gamerTag(where: GamerTagWhereUniqueInput!): GamerTag
+  gamerTags(where: GamerTagWhereInput, orderBy: GamerTagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerTag]!
+  gamerTagsConnection(where: GamerTagWhereInput, orderBy: GamerTagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamerTagConnection!
   gamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
   gamingSessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession]!
   gamingSessionsConnection(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionConnection!
@@ -3149,6 +3757,9 @@ type Query {
   notification(where: NotificationWhereUniqueInput!): Notification
   notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification]!
   notificationsConnection(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationConnection!
+  pCLauncher(where: PCLauncherWhereUniqueInput!): PCLauncher
+  pCLaunchers(where: PCLauncherWhereInput, orderBy: PCLauncherOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PCLauncher]!
+  pCLaunchersConnection(where: PCLauncherWhereInput, orderBy: PCLauncherOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PCLauncherConnection!
   requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement]!
   requirementsConnection(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RequirementConnection!
   sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
@@ -3925,10 +4536,12 @@ type Subscription {
   game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
   gameIndex(where: GameIndexSubscriptionWhereInput): GameIndexSubscriptionPayload
   gamerRequest(where: GamerRequestSubscriptionWhereInput): GamerRequestSubscriptionPayload
+  gamerTag(where: GamerTagSubscriptionWhereInput): GamerTagSubscriptionPayload
   gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
   gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
   gamingTimeSlot(where: GamingTimeSlotSubscriptionWhereInput): GamingTimeSlotSubscriptionPayload
   notification(where: NotificationSubscriptionWhereInput): NotificationSubscriptionPayload
+  pCLauncher(where: PCLauncherSubscriptionWhereInput): PCLauncherSubscriptionPayload
   requirement(where: RequirementSubscriptionWhereInput): RequirementSubscriptionPayload
   sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
@@ -3938,10 +4551,10 @@ type Subscription {
 }
 
 enum System {
+  PS4
+  PC
   XBOX_ONE
   NINTENDO_SWITCH
-  PC
-  PS4
 }
 
 enum Tags {
@@ -4001,9 +4614,10 @@ type User {
   timeSlotsBooked(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
   invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   invitesReceived(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
-  buffer: Int
+  setup: Int
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  gamertags(where: GamerTagWhereInput, orderBy: GamerTagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamerTag!]
 }
 
 type UserConnection {
@@ -4026,9 +4640,10 @@ input UserCreateInput {
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateManyInput {
@@ -4088,9 +4703,10 @@ input UserCreateWithoutInvitesInput {
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateWithoutInvitesReceivedInput {
@@ -4106,9 +4722,10 @@ input UserCreateWithoutInvitesReceivedInput {
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateWithoutReviewsInput {
@@ -4125,8 +4742,9 @@ input UserCreateWithoutReviewsInput {
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateWithoutSessionsInput {
@@ -4142,9 +4760,10 @@ input UserCreateWithoutSessionsInput {
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateWithoutTimeSlotsBookedInput {
@@ -4160,9 +4779,10 @@ input UserCreateWithoutTimeSlotsBookedInput {
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 input UserCreateWithoutTimeSlotsInput {
@@ -4178,9 +4798,10 @@ input UserCreateWithoutTimeSlotsInput {
   timeSlotsBooked: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
+  gamertags: GamerTagCreateManyInput
 }
 
 type UserEdge {
@@ -4351,8 +4972,8 @@ enum UserOrderByInput {
   name_DESC
   aboutMe_ASC
   aboutMe_DESC
-  buffer_ASC
-  buffer_DESC
+  setup_ASC
+  setup_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -4368,7 +4989,7 @@ type UserPreviousValues {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
-  buffer: Int
+  setup: Int
 }
 
 input UserScalarWhereInput {
@@ -4458,14 +5079,14 @@ input UserScalarWhereInput {
   aboutMe_not_starts_with: String
   aboutMe_ends_with: String
   aboutMe_not_ends_with: String
-  buffer: Int
-  buffer_not: Int
-  buffer_in: [Int!]
-  buffer_not_in: [Int!]
-  buffer_lt: Int
-  buffer_lte: Int
-  buffer_gt: Int
-  buffer_gte: Int
+  setup: Int
+  setup_not: Int
+  setup_in: [Int!]
+  setup_not_in: [Int!]
+  setup_lt: Int
+  setup_lte: Int
+  setup_gt: Int
+  setup_gte: Int
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -4503,9 +5124,10 @@ input UserUpdateDataInput {
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateInput {
@@ -4522,9 +5144,10 @@ input UserUpdateInput {
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateManyDataInput {
@@ -4535,7 +5158,7 @@ input UserUpdateManyDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  buffer: Int
+  setup: Int
 }
 
 input UserUpdateManyInput {
@@ -4558,7 +5181,7 @@ input UserUpdateManyMutationInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  buffer: Int
+  setup: Int
 }
 
 input UserUpdateManyWithoutSessionsInput {
@@ -4658,9 +5281,10 @@ input UserUpdateWithoutInvitesDataInput {
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithoutInvitesReceivedDataInput {
@@ -4676,9 +5300,10 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithoutReviewsDataInput {
@@ -4695,8 +5320,9 @@ input UserUpdateWithoutReviewsDataInput {
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithoutSessionsDataInput {
@@ -4712,9 +5338,10 @@ input UserUpdateWithoutSessionsDataInput {
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithoutTimeSlotsBookedDataInput {
@@ -4730,9 +5357,10 @@ input UserUpdateWithoutTimeSlotsBookedDataInput {
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithoutTimeSlotsDataInput {
@@ -4748,9 +5376,10 @@ input UserUpdateWithoutTimeSlotsDataInput {
   timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
-  buffer: Int
+  setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateManyInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -4922,20 +5551,23 @@ input UserWhereInput {
   invitesReceived_every: BookingInviteWhereInput
   invitesReceived_some: BookingInviteWhereInput
   invitesReceived_none: BookingInviteWhereInput
-  buffer: Int
-  buffer_not: Int
-  buffer_in: [Int!]
-  buffer_not_in: [Int!]
-  buffer_lt: Int
-  buffer_lte: Int
-  buffer_gt: Int
-  buffer_gte: Int
+  setup: Int
+  setup_not: Int
+  setup_in: [Int!]
+  setup_not_in: [Int!]
+  setup_lt: Int
+  setup_lte: Int
+  setup_gt: Int
+  setup_gte: Int
   reviews_every: SessionReviewWhereInput
   reviews_some: SessionReviewWhereInput
   reviews_none: SessionReviewWhereInput
   friends_every: UserWhereInput
   friends_some: UserWhereInput
   friends_none: UserWhereInput
+  gamertags_every: GamerTagWhereInput
+  gamertags_some: GamerTagWhereInput
+  gamertags_none: GamerTagWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

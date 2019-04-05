@@ -6,6 +6,7 @@ type Game {
   name: String! @unique
   tags: [Tags!]!
   sessions: [GamingSession!]!
+  launcher: Launcher
   numSessions: Int! @default(value: 0)
 }
 
@@ -15,4 +16,16 @@ type GameIndex {
   name: String!
   tags: [String!]!
   game: Game!
+}
+
+enum Launcher {
+  EPIC
+  STEAM
+  ORIGIN
+  BATTLENET
+  GOG
+  UPLAY
+  BETHESDA
+  ITCH
+  WINDOWS
 }

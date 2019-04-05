@@ -17,6 +17,14 @@ var models = [
     embedded: false
   },
   {
+    name: "GamerTag",
+    embedded: false
+  },
+  {
+    name: "PCLauncher",
+    embedded: false
+  },
+  {
     name: "GamerRequest",
     embedded: false
   },
@@ -30,6 +38,10 @@ var models = [
   },
   {
     name: "GameIndex",
+    embedded: false
+  },
+  {
+    name: "Launcher",
     embedded: false
   },
   {
@@ -69,11 +81,11 @@ var models = [
     embedded: false
   },
   {
-    name: "TypeOfGame",
+    name: "System",
     embedded: false
   },
   {
-    name: "System",
+    name: "TypeOfGame",
     embedded: false
   },
   {
