@@ -12,8 +12,9 @@ type Notification {
 }
 
 enum NotificationType {
+  CANCELLED_TIMESLOT
   ACCEPTED_GAMER_REQUEST
-  DECLINED_GAMER_REQUEST
+  DENIED_GAMER_REQUEST
   FRIEND_REQUEST
   ## For user when timeslot is accepted
   ACCEPTED_TIMESLOT_REQUEST

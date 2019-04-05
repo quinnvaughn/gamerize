@@ -4,6 +4,9 @@ import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import dateFns from 'date-fns'
 
+//local imports
+import { mapSystem, mapLauncher } from '../utils/System'
+
 const Container = styled.div`
   background: #fff;
   border: 1px solid #dddfe2;
@@ -62,14 +65,27 @@ const NEXT_SESSION = gql`
       slots
       startTime
       gamingSession {
+        system
         game {
           name
+          launcher
         }
       }
       endTime
       players {
         player {
-          username
+          gamertags {
+            psn
+            xbl
+            nso
+            pc {
+              epic
+              origin
+              steam
+              bethesda
+              battlenet
+            }
+          }
         }
       }
     }
@@ -82,13 +98,28 @@ export default function NextSession(props) {
     let usernames = new Set()
     let counter = 0
     let end = data.nextTimeSlot.slots
+    const system = mapSystem(data.nextTimeSlot.gamingSession.system)
+    const launcher = mapLauncher(data.nextTimeSlot.gamingSession.game.launcher)
     while (counter < end) {
-      let username =
-        data.nextTimeSlot.players.length > 0 &&
-        data.nextTimeSlot.players[counter]
-          ? data.nextTimeSlot.players[counter].player.username
-          : 'Empty Slot'
-      usernames.add(username)
+      if (system === 'pc') {
+        let username =
+          data.nextTimeSlot.players.length > 0 &&
+          data.nextTimeSlot.players[counter].player.gamertags[counter]
+            ? data.nextTimeSlot.players[counter].player.gamertags[counter][
+                system
+              ][launcher]
+            : null
+        usernames.add(username)
+      } else {
+        let username =
+          data.nextTimeSlot.players.length > 0 &&
+          data.nextTimeSlot.players[counter].player.gamertags[counter]
+            ? data.nextTimeSlot.players[counter].player.gamertags[counter][
+                system
+              ]
+            : null
+        usernames.add(username)
+      }
       counter++
     }
     const uniqueUsernames = [...usernames]

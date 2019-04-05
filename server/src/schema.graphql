@@ -320,11 +320,12 @@ type User {
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!
   sessionIsGoingOn: SessionIsGoingOn
-  buffer: Int
+  setup: Int
   favoriteGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String
   areWeFriends: Boolean!
+  gamertags: [GamerTag!]!
   numReviews: Int!
   sentMeAFriendRequest: Boolean!
   sentFriendRequest: Boolean!

@@ -62,16 +62,16 @@ enum Tags {
   VISUAL_NOVEL
 }
 
+enum System {
+  PS4
+  PC
+  XBOX_ONE
+  NINTENDO_SWITCH
+}
+
 enum TypeOfGame {
   CUSTOM
   MATCHMAKING
-}
-
-enum System {
-  XBOX_ONE
-  NINTENDO_SWITCH
-  PC
-  PS4
 }
 
 enum PlayerOrSession {
