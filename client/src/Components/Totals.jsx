@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 
 import SessionsContainer from '../Containers/SessionsContainer'
+import { mapSystem, mapLauncher } from '../utils/System'
 
 const Container = styled.div`
   width: 100%;
@@ -61,13 +62,14 @@ const Book = styled.button`
   cursor: pointer;
   flex: 1;
   color: white;
-  background: #f10e0e;
+  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
   border-radius: 4px;
   line-height: 2.4rem;
   padding: 1rem 2.2rem;
   outline: 0;
   border: 0;
   font-size: 1.6rem;
+  pointer-events: ${props => props.disabled && 'none'};
 `
 
 const NotCharged = styled.div`
@@ -96,6 +98,20 @@ const YouPay = styled.span`
   overflow-wrap: break-word;
 `
 
+const AppropriateGT = styled.div`
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  overflow-wrap: break-word;
+`
+const AddSession = styled.div`
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  overflow-wrap: break-word;
+  margin-bottom: 1rem;
+`
+
 const DiscountsTitle = styled.span``
 
 const DiscountPercentage = styled.span``
@@ -116,6 +132,12 @@ export default function Totals(props) {
   const [loading, setLoading] = useState(false)
   const [booked, setBooked] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
+  const disabled =
+    props.me && props.system === 'PC'
+      ? !props.me.gamertags[mapSystem(props.system)][
+          mapLauncher(props.launcher)
+        ]
+      : !props.me.gamertags[mapSystem(props.system)]
   return (
     <Container>
       <Subscribe to={[SessionsContainer]}>
@@ -154,11 +176,19 @@ export default function Totals(props) {
                 <TotalCost>{`$${totalMinusDiscounts}`}</TotalCost>
               </Total>
             </TotalsContainer>
-          ) : null
+          ) : (
+            <AddSession>Please add a session</AddSession>
+          )
           return (
             <Fragment>
               {content}
+              {disabled && (
+                <AppropriateGT>
+                  You need to add the appropiate gamertag before playing this.
+                </AppropriateGT>
+              )}
               <Book
+                disabled={sessions.length === 0 || disabled}
                 onClick={async () => {
                   const timeSlots = sessions.map(timeSlot => {
                     return {

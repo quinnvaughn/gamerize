@@ -193,6 +193,15 @@ const Length = styled.span`
   font-size: 1.6rem;
   font-weight: 400;
 `
+const Setup = styled.span`
+  font-size: 1.6rem;
+  font-weight: 400;
+`
+
+const Launcher = styled.span`
+  font-size: 1.6rem;
+  font-weight: 400;
+`
 
 const GamerInfo = styled.div`
   width: 100%;
@@ -252,8 +261,12 @@ const GET_SPECIFIC_SESSION = gql`
       reviewRating
       numReviews
       system
+      creator {
+        setup
+      }
       game {
         name
+        launcher
       }
       gamers {
         occupations
@@ -281,6 +294,29 @@ const GET_SLOTS_TODAY = gql`
   }
 `
 
+const GET_ME = gql`
+  {
+    me {
+      gamertags {
+        psn
+        xbl
+        nso
+        pc {
+          epic
+          steam
+          origin
+          gog
+          battlenet
+          uplay
+          bethesda
+          itch
+          windows
+        }
+      }
+    }
+  }
+`
+
 export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: { sessionId: props.match.params.id },
@@ -293,7 +329,8 @@ export default function SpecificSessionPage(props) {
       pollInterval: 5000,
     }
   )
-  return loading || secondLoading ? null : (
+  const { data: thirdData, loading: thirdLoading } = useQuery(GET_ME)
+  return loading || secondLoading || thirdLoading ? null : (
     <PageContainer>
       <NavBarWithScroll
       // visibleSection={currentSection}
@@ -337,6 +374,14 @@ export default function SpecificSessionPage(props) {
                   <TypeOfContent>Game Length</TypeOfContent>
                   <Length>{`${data.getSpecificSession.length} minutes`}</Length>
                 </Flex>
+                {data.getSpecificSession.system === 'PC' && (
+                  <Flex>
+                    <TypeOfContent>Launcher</TypeOfContent>
+                    <Launcher>
+                      {capitalize(data.getSpecificSession.game.launcher)}
+                    </Launcher>
+                  </Flex>
+                )}
               </FlexHalf>
               <FlexHalf>
                 <Flex>
@@ -348,6 +393,12 @@ export default function SpecificSessionPage(props) {
                 <Flex>
                   <TypeOfContent>Slots per session</TypeOfContent>
                   <Slots>{`${data.getSpecificSession.slots}`}</Slots>
+                </Flex>
+                <Flex>
+                  <TypeOfContent>Setup Length</TypeOfContent>
+                  <Setup>{`${
+                    data.getSpecificSession.creator.setup
+                  } minutes`}</Setup>
                 </Flex>
               </FlexHalf>
             </MiddleContainer>
@@ -376,6 +427,7 @@ export default function SpecificSessionPage(props) {
           {matches =>
             matches ? (
               <FixedSelectionOptions
+                me={thirdData.me}
                 refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
@@ -385,9 +437,11 @@ export default function SpecificSessionPage(props) {
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
                 system={data.getSpecificSession.system}
+                launcher={data.getSpecificSession.game.launcher}
               />
             ) : (
               <SelectionOptions
+                me={thirdData.me}
                 refetch={refetch}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
@@ -397,6 +451,7 @@ export default function SpecificSessionPage(props) {
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
                 system={data.getSpecificSession.system}
+                launcher={data.getSpecificSession.game.launcher}
               />
             )
           }
