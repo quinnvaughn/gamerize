@@ -19,7 +19,11 @@ const auth = {
     if (alreadyEmail) {
       throw new Error('Email is already in use')
     }
-    const user = await prisma.createUser({ ...input, password })
+    const user = await prisma.createUser({
+      ...input,
+      password,
+      roles: ['USER'],
+    })
 
     await prisma.createUserIndex({
       email,

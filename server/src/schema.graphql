@@ -66,6 +66,15 @@ type Mutation {
     input: DeclineFriendRequestInput!
   ): DeclineFriendRequestPayload
   deleteNotification(input: DeleteNotificationInput): DeleteNotificationPayload!
+  acceptGamerRequest(input: AcceptGamerRequestInput): AcceptGamerRequestPayload!
+}
+
+input AcceptGamerRequestInput {
+  gamerRequestId: String!
+}
+
+type AcceptGamerRequestPayload {
+  accepted: Boolean!
 }
 
 input DeleteNotificationInput {
@@ -317,6 +326,8 @@ type User {
   username: String!
   currentGamerRequest: Boolean!
   isGamer: Boolean!
+  isAdmin: Boolean!
+  gamerIsSetUp: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!
