@@ -332,6 +332,11 @@ const timeslot = {
             id: input.timeSlots[timeslot].timeSlotId,
           },
         },
+        bookee: {
+          connect: {
+            id: userId,
+          },
+        },
         players: {
           connect: {
             id: userId,
