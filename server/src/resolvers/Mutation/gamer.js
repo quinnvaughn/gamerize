@@ -23,12 +23,14 @@ const gamer = {
     }
     return { msg: 'You already have a pending gamer request', created: false }
   },
-  async respondToGamerRequest(parent, { input }, { prisma }) {
+  async acceptGamerRequest(parent, { input }, { prisma }) {
+    let request
     const user = await prisma.updateUser({
       where: { id: input.userId },
       data: {
-        isGamer: input.decision === 'ACCEPT' ? true : false,
-        occupations: input.occupations,
+        roles: {
+          set: ['USER', 'GAMER'],
+        },
       },
     })
     if (user) {
@@ -36,12 +38,7 @@ const gamer = {
         id: input.gamerRequestId,
       })
     }
-    return user
-      ? { responded: true }
-      : {
-          msg: 'Your attempt cannot be processed. Please try again.',
-          responded: false,
-        }
+    return request ? { accepted: true } : { accepted: false }
   },
 }
 
