@@ -4,6 +4,7 @@ const { gamer } = require('./Mutation/gamer')
 const { game } = require('./Mutation/game')
 const { notification: notificationQuery } = require('./Query/notification')
 const { notification } = require('./Mutation/notification')
+const { gamerrequest } = require('./Mutation/gamerrequest')
 const { game: gameQuery } = require('./Query/game')
 const { gamingsession } = require('./Mutation/gamingsession')
 const { timeslot: timeSlotQuery } = require('./Query/timeslot')
@@ -40,6 +41,7 @@ module.exports = {
     ...timeSlotQuery,
   },
   Mutation: {
+    ...gamerrequest,
     ...notification,
     ...friendrequest,
     ...booking,
