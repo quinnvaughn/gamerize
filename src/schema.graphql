@@ -31,9 +31,6 @@ type Mutation {
   createGamerRequest(
     input: CreateGamerRequestInput!
   ): CreateGamerRequestPayload!
-  respondToGamerRequest(
-    input: RespondToGamerRequestInput!
-  ): RespondToGamerRequestPayload!
   createGame(input: CreateGameInput!): CreateGamePayload!
   createGamingSession(
     input: CreateGamingSessionInput!
@@ -64,13 +61,25 @@ type Mutation {
   ): AcceptFriendRequestPayload!
   declineFriendRequest(
     input: DeclineFriendRequestInput!
-  ): DeclineFriendRequestPayload
+  ): DeclineFriendRequestPayload!
   deleteNotification(input: DeleteNotificationInput): DeleteNotificationPayload!
   acceptGamerRequest(input: AcceptGamerRequestInput): AcceptGamerRequestPayload!
+  declineGamerRequest(
+    input: DeclineGamerRequestInput!
+  ): DeclineGamerRequestPayload!
+}
+
+input DeclineGamerRequestInput {
+  gamerRequestId: String!
+}
+
+type DeclineGamerRequestPayload {
+  declined: Boolean!
 }
 
 input AcceptGamerRequestInput {
   gamerRequestId: String!
+  userId: String!
 }
 
 type AcceptGamerRequestPayload {
@@ -279,12 +288,6 @@ type CreateGamerRequestPayload {
   msg: String
 }
 
-input RespondToGamerRequestInput {
-  gamerRequestId: String!
-  userId: String!
-  decision: Decision!
-}
-
 input CreateGameInput {
   tags: [Tags!]!
   name: String!
@@ -294,16 +297,6 @@ input CreateGameInput {
 type CreateGamePayload {
   created: Boolean!
   game: Game
-  msg: String
-}
-
-enum Decision {
-  ACCEPT
-  DENY
-}
-
-type RespondToGamerRequestPayload {
-  responded: Boolean!
   msg: String
 }
 
