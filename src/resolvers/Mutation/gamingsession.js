@@ -17,7 +17,7 @@ const gamingsession = {
       },
       type: input.type,
       slots: input.slots,
-      systems: { set: input.systems },
+      system: input.system,
       requirements: { create: [] },
       discounts: { create: [] },
     })
@@ -50,7 +50,7 @@ const gamingsession = {
           price: input.price,
           game: { connect: { name: input.game } },
           length: input.length,
-          systems: { set: input.systems },
+          system: input.system,
           slots: input.slots,
           type: input.type,
         },

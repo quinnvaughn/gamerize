@@ -1287,11 +1287,6 @@ input GameCreateInput {
   numSessions: Int
 }
 
-input GameCreateManyInput {
-  create: [GameCreateInput!]
-  connect: [GameWhereUniqueInput!]
-}
-
 input GameCreateOneInput {
   create: GameCreateInput
   connect: GameWhereUniqueInput
@@ -1814,52 +1809,6 @@ input GamerTagWhereUniqueInput {
   id: ID
 }
 
-input GameScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  launcher: Launcher
-  launcher_not: Launcher
-  launcher_in: [Launcher!]
-  launcher_not_in: [Launcher!]
-  numSessions: Int
-  numSessions_not: Int
-  numSessions_in: [Int!]
-  numSessions_not_in: [Int!]
-  numSessions_lt: Int
-  numSessions_lte: Int
-  numSessions_gt: Int
-  numSessions_gte: Int
-  AND: [GameScalarWhereInput!]
-  OR: [GameScalarWhereInput!]
-  NOT: [GameScalarWhereInput!]
-}
-
 type GameSubscriptionPayload {
   mutation: MutationType!
   node: Game
@@ -1894,35 +1843,11 @@ input GameUpdateInput {
   numSessions: Int
 }
 
-input GameUpdateManyDataInput {
-  name: String
-  tags: GameUpdatetagsInput
-  launcher: Launcher
-  numSessions: Int
-}
-
-input GameUpdateManyInput {
-  create: [GameCreateInput!]
-  update: [GameUpdateWithWhereUniqueNestedInput!]
-  upsert: [GameUpsertWithWhereUniqueNestedInput!]
-  delete: [GameWhereUniqueInput!]
-  connect: [GameWhereUniqueInput!]
-  set: [GameWhereUniqueInput!]
-  disconnect: [GameWhereUniqueInput!]
-  deleteMany: [GameScalarWhereInput!]
-  updateMany: [GameUpdateManyWithWhereNestedInput!]
-}
-
 input GameUpdateManyMutationInput {
   name: String
   tags: GameUpdatetagsInput
   launcher: Launcher
   numSessions: Int
-}
-
-input GameUpdateManyWithWhereNestedInput {
-  where: GameScalarWhereInput!
-  data: GameUpdateManyDataInput!
 }
 
 input GameUpdateOneRequiredInput {
@@ -1950,11 +1875,6 @@ input GameUpdateWithoutSessionsDataInput {
   numSessions: Int
 }
 
-input GameUpdateWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput!
-  data: GameUpdateDataInput!
-}
-
 input GameUpsertNestedInput {
   update: GameUpdateDataInput!
   create: GameCreateInput!
@@ -1963,12 +1883,6 @@ input GameUpsertNestedInput {
 input GameUpsertWithoutSessionsInput {
   update: GameUpdateWithoutSessionsDataInput!
   create: GameCreateWithoutSessionsInput!
-}
-
-input GameUpsertWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput!
-  update: GameUpdateDataInput!
-  create: GameCreateInput!
 }
 
 input GameWhereInput {
@@ -4670,7 +4584,6 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
-  favoriteGames(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game!]
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   timeSlots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
   timeSlotsBooked(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
@@ -4698,7 +4611,6 @@ input UserCreateInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -4774,7 +4686,6 @@ input UserCreateWithoutGamertagsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -4795,7 +4706,6 @@ input UserCreateWithoutInvitesInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -4816,7 +4726,6 @@ input UserCreateWithoutInvitesReceivedInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -4837,7 +4746,6 @@ input UserCreateWithoutReviewsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -4858,7 +4766,6 @@ input UserCreateWithoutSessionsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -4879,7 +4786,6 @@ input UserCreateWithoutTimeSlotsBookedInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -4900,7 +4806,6 @@ input UserCreateWithoutTimeSlotsInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -4921,7 +4826,6 @@ input UserCreateWithoutTimeSlotsPlayedInput {
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -5255,7 +5159,6 @@ input UserUpdateDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5277,7 +5180,6 @@ input UserUpdateInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5433,7 +5335,6 @@ input UserUpdateWithoutGamertagsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5454,7 +5355,6 @@ input UserUpdateWithoutInvitesDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5475,7 +5375,6 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5496,7 +5395,6 @@ input UserUpdateWithoutReviewsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5517,7 +5415,6 @@ input UserUpdateWithoutSessionsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -5538,7 +5435,6 @@ input UserUpdateWithoutTimeSlotsBookedDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -5559,7 +5455,6 @@ input UserUpdateWithoutTimeSlotsDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -5580,7 +5475,6 @@ input UserUpdateWithoutTimeSlotsPlayedDataInput {
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -5754,9 +5648,6 @@ input UserWhereInput {
   aboutMe_not_starts_with: String
   aboutMe_ends_with: String
   aboutMe_not_ends_with: String
-  favoriteGames_every: GameWhereInput
-  favoriteGames_some: GameWhereInput
-  favoriteGames_none: GameWhereInput
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput
