@@ -64,13 +64,11 @@ const ShowAllRight = styled(FaChevronRight)`
 const map = (gamers, first, setFirst) => {
   setFirst(first)
   return gamers.map((gamer, index) => {
-    const favoriteGames = gamer.favoriteGames.map(game => game.name)
     return (
       index <= first - 1 && (
         <Gamer
           name={gamer.name}
           occupations={gamer.occupations}
-          favoriteGames={favoriteGames}
           username={gamer.username}
           key={gamer.username}
         />
@@ -85,9 +83,6 @@ const GET_GAMERS = gql`
       name
       username
       occupations
-      favoriteGames {
-        name
-      }
     }
     totalGamers
   }

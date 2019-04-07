@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Apr 07 2019 12:38:47 GMT-0500 (CDT)
+# timestamp: Sun Apr 07 2019 14:23:47 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -1868,11 +1868,6 @@ input GameCreateInput {
   sessions: GamingSessionCreateManyWithoutGameInput
 }
 
-input GameCreateManyInput {
-  create: [GameCreateInput!]
-  connect: [GameWhereUniqueInput!]
-}
-
 input GameCreateOneInput {
   create: GameCreateInput
   connect: GameWhereUniqueInput
@@ -2735,129 +2730,6 @@ input GamerTagWhereUniqueInput {
   id: ID
 }
 
-input GameScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [GameScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [GameScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [GameScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  launcher: Launcher
-
-  """All values that are not equal to given value."""
-  launcher_not: Launcher
-
-  """All values that are contained in given list."""
-  launcher_in: [Launcher!]
-
-  """All values that are not contained in given list."""
-  launcher_not_in: [Launcher!]
-  numSessions: Int
-
-  """All values that are not equal to given value."""
-  numSessions_not: Int
-
-  """All values that are contained in given list."""
-  numSessions_in: [Int!]
-
-  """All values that are not contained in given list."""
-  numSessions_not_in: [Int!]
-
-  """All values less than the given value."""
-  numSessions_lt: Int
-
-  """All values less than or equal the given value."""
-  numSessions_lte: Int
-
-  """All values greater than the given value."""
-  numSessions_gt: Int
-
-  """All values greater than or equal the given value."""
-  numSessions_gte: Int
-}
-
 type GameSubscriptionPayload {
   mutation: MutationType!
   node: Game
@@ -2913,35 +2785,11 @@ input GameUpdateInput {
   sessions: GamingSessionUpdateManyWithoutGameInput
 }
 
-input GameUpdateManyDataInput {
-  name: String
-  launcher: Launcher
-  numSessions: Int
-  tags: GameUpdatetagsInput
-}
-
-input GameUpdateManyInput {
-  create: [GameCreateInput!]
-  connect: [GameWhereUniqueInput!]
-  set: [GameWhereUniqueInput!]
-  disconnect: [GameWhereUniqueInput!]
-  delete: [GameWhereUniqueInput!]
-  update: [GameUpdateWithWhereUniqueNestedInput!]
-  updateMany: [GameUpdateManyWithWhereNestedInput!]
-  deleteMany: [GameScalarWhereInput!]
-  upsert: [GameUpsertWithWhereUniqueNestedInput!]
-}
-
 input GameUpdateManyMutationInput {
   name: String
   launcher: Launcher
   numSessions: Int
   tags: GameUpdatetagsInput
-}
-
-input GameUpdateManyWithWhereNestedInput {
-  where: GameScalarWhereInput!
-  data: GameUpdateManyDataInput!
 }
 
 input GameUpdateOneRequiredInput {
@@ -2969,11 +2817,6 @@ input GameUpdateWithoutSessionsDataInput {
   tags: GameUpdatetagsInput
 }
 
-input GameUpdateWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput!
-  data: GameUpdateDataInput!
-}
-
 input GameUpsertNestedInput {
   update: GameUpdateDataInput!
   create: GameCreateInput!
@@ -2982,12 +2825,6 @@ input GameUpsertNestedInput {
 input GameUpsertWithoutSessionsInput {
   update: GameUpdateWithoutSessionsDataInput!
   create: GameCreateWithoutSessionsInput!
-}
-
-input GameUpsertWithWhereUniqueNestedInput {
-  where: GameWhereUniqueInput!
-  update: GameUpdateDataInput!
-  create: GameCreateInput!
 }
 
 input GameWhereInput {
@@ -7313,7 +7150,6 @@ type User implements Node {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
-  favoriteGames(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game!]
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   timeSlots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
   timeSlotsBooked(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
@@ -7347,7 +7183,6 @@ input UserCreateInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -7423,7 +7258,6 @@ input UserCreateWithoutGamertagsInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -7444,7 +7278,6 @@ input UserCreateWithoutInvitesInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -7465,7 +7298,6 @@ input UserCreateWithoutInvitesReceivedInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -7486,7 +7318,6 @@ input UserCreateWithoutReviewsInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -7507,7 +7338,6 @@ input UserCreateWithoutSessionsInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -7528,7 +7358,6 @@ input UserCreateWithoutTimeSlotsBookedInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -7549,7 +7378,6 @@ input UserCreateWithoutTimeSlotsInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
   timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
@@ -7570,7 +7398,6 @@ input UserCreateWithoutTimeSlotsPlayedInput {
   setup: Int
   role: Role
   occupations: UserCreateoccupationsInput
-  favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   timeSlotsBooked: BookingCreateManyWithoutBookeeInput
@@ -8250,7 +8077,6 @@ input UserUpdateDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8272,7 +8098,6 @@ input UserUpdateInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8428,7 +8253,6 @@ input UserUpdateWithoutGamertagsDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8449,7 +8273,6 @@ input UserUpdateWithoutInvitesDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8470,7 +8293,6 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8491,7 +8313,6 @@ input UserUpdateWithoutReviewsDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8512,7 +8333,6 @@ input UserUpdateWithoutSessionsDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -8533,7 +8353,6 @@ input UserUpdateWithoutTimeSlotsBookedDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -8554,7 +8373,6 @@ input UserUpdateWithoutTimeSlotsDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
   timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
@@ -8575,7 +8393,6 @@ input UserUpdateWithoutTimeSlotsPlayedDataInput {
   setup: Int
   role: Role
   occupations: UserUpdateoccupationsInput
-  favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
@@ -8945,9 +8762,6 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [Role!]
-  favoriteGames_every: GameWhereInput
-  favoriteGames_some: GameWhereInput
-  favoriteGames_none: GameWhereInput
   sessions_every: GamingSessionWhereInput
   sessions_some: GamingSessionWhereInput
   sessions_none: GamingSessionWhereInput

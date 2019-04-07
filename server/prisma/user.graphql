@@ -7,7 +7,6 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
-  favoriteGames: [Game!]!
   sessions: [GamingSession!]! @relation(name: "MySessions")
   timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
   timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
