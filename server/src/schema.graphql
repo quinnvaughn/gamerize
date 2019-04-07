@@ -324,7 +324,7 @@ type User {
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
   role: Role!
-  mostPlayedGames: [Game!]!
+  mostPlayedGames: [MostPlayedGames!]!
   occupations: [Occupations!]!
   aboutMe: String
   areWeFriends: Boolean!
@@ -336,6 +336,11 @@ type User {
   reviewRating: Float!
   invites: [BookingInvite!]!
   invitesReceived: [BookingInvite!]!
+}
+
+type MostPlayedGames {
+  name: String!
+  count: Int!
 }
 
 type SessionIsGoingOn {
