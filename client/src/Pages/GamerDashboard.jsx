@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import GamerDashboardCalendar from './GamerDashboardCalendar'
 import GamerDashboardSessions from './GamerDashboardSessions'
+import GamerDashboardAccount from './GamerDashboardAccount'
 import GamerDashboardHome from './GamerDashboardHome'
 import GamerRoute from '../Components/GamerRoute'
 
@@ -25,6 +26,10 @@ const routes = [
   {
     path: '/gamer-dashboard/sessions',
     component: GamerDashboardSessions,
+  },
+  {
+    path: '/gamer-dashboard/account',
+    component: GamerDashboardAccount,
   },
 ]
 
