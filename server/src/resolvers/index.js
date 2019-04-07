@@ -47,7 +47,6 @@ module.exports = {
     ...bookingInvite,
     ...timeslot,
     ...auth,
-    ...gamer,
     ...game,
     ...gamingsession,
   },

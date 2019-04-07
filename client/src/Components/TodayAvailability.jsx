@@ -4,7 +4,6 @@ import { Subscribe } from 'unstated'
 import dateFns from 'date-fns'
 
 // local imports
-import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { singleOrPlural } from '../utils/Strings'
 

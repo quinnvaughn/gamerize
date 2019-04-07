@@ -3,8 +3,6 @@ type User {
   email: String! @unique
   username: String! @unique
   password: String!
-  isGamer: Boolean! @default(value: false)
-  isAdmin: Boolean! @default(value: false)
   gamerIsSetUp: Boolean! @default(value: false)
   occupations: [Occupations!]!
   name: String!
@@ -21,7 +19,7 @@ type User {
   reviews: [SessionReview!]!
   friends: [User!]!
   gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)
-  roles: [Role!]!
+  role: Role! @default(value: "USER")
 }
 
 enum Role {
