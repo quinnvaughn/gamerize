@@ -262,7 +262,7 @@ input CreateGamingSessionInput {
   price: Int!
   type: TypeOfGame!
   slots: Int!
-  systems: [System!]!
+  system: System!
 }
 
 input RequirementInput {
@@ -324,7 +324,7 @@ type User {
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
   role: Role!
-  favoriteGames: [Game!]!
+  mostPlayedGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String
   areWeFriends: Boolean!

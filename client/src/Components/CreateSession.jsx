@@ -84,7 +84,7 @@ const SessionLength = styled.input`
   }
 `
 
-const setup = styled.span`
+const Setup = styled.span`
   font-size: 1.2rem;
   margin-left: 0.5rem;
 `
@@ -141,7 +141,7 @@ const initialState = {
   length: '',
   price: '',
   type: '',
-  systems: [],
+  system: '',
   slots: '',
 }
 
@@ -159,19 +159,8 @@ function reducer(state, action) {
       return { ...state, length: action.payload }
     case 'setType':
       return { ...state, type: action.payload }
-    case 'setSystems':
-      const index = state.systems.indexOf(action.payload)
-      if (index === -1) {
-        return {
-          ...state,
-          systems: [...state.systems, action.payload],
-        }
-      } else {
-        return {
-          ...state,
-          systems: state.systems.filter(system => system !== action.payload),
-        }
-      }
+    case 'setSystem':
+      return { ...state, system: action.payload }
     case 'setSlots':
       return { ...state, slots: action.payload }
     case 'clearState':
@@ -238,12 +227,12 @@ export default function CreateSession(props) {
           }}
           value={state.length}
         />
-        <setup>*not counting setup</setup>
+        <Setup>*not counting setup</Setup>
       </LengthContainer>
       <SystemsSessionDropdown
-        label={'Systems: '}
+        label={'System: '}
         dispatch={dispatch}
-        title={state.systems}
+        title={state.system}
       />
       <SlotsContainer>
         <Slots>Slots: </Slots>
@@ -269,7 +258,7 @@ export default function CreateSession(props) {
             game: state.game,
             price: state.price,
             length: state.length,
-            systems: state.systems,
+            system: state.system,
             slots: state.slots,
             type: state.type,
           }

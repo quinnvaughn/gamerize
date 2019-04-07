@@ -87,6 +87,7 @@ const MY_SESSIONS = gql`
       setup
       sessionIsGoingOn {
         session {
+          id
           slots
           startTime
           gamingSession {
@@ -155,7 +156,6 @@ export default function GamerDashboardCalendar(props) {
     pollInterval: 5000,
   })
   const [state] = useStore(gamerSessionSelection)
-  console.log(data)
   return (
     <PageContainer>
       <Content>

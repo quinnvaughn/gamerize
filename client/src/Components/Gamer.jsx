@@ -104,12 +104,12 @@ export default function Gamer(props) {
             )
           )}
         </Occupations>
-        <FavoriteGames>
+        {/* <FavoriteGames>
           {`Favorite Games: `}
           {props.favoriteGames.map((game, index) =>
             formatCommasGames(props.favoriteGames, game, index)
           )}
-        </FavoriteGames>
+        </FavoriteGames> */}
       </StyledLink>
     </Container>
   )

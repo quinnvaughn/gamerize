@@ -64,8 +64,8 @@ const User = {
       ? { session: session[0], goingOn: true }
       : { goingOn: false }
   },
-  favoriteGames: async (parent, _, { prisma }) => {
-    return await prisma.user({ id: parent.id }).favoriteGames()
+  mostPlayedGames: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id })
   },
   numReviews: async (parent, _, { prisma }) => {
     const reviews = await prisma.user({ id: parent.id }).reviews()
