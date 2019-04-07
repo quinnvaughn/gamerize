@@ -79,7 +79,6 @@ type DeclineGamerRequestPayload {
 
 input AcceptGamerRequestInput {
   gamerRequestId: String!
-  userId: String!
 }
 
 type AcceptGamerRequestPayload {
@@ -326,6 +325,7 @@ type User {
   timeSlotsBooked: [Booking!]!
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
+  roles: [Role!]!
   favoriteGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String
