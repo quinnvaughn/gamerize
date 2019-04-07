@@ -1,6 +1,5 @@
 const { user } = require('./Query/user')
 const { auth } = require('./Mutation/auth')
-const { gamer } = require('./Mutation/gamer')
 const { game } = require('./Mutation/game')
 const { notification: notificationQuery } = require('./Query/notification')
 const { notification } = require('./Mutation/notification')
