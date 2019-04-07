@@ -1,5 +1,10 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import styled from 'styled-components'
+
+//local imports
+import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
+import GamerDashboardAccountEdit from './GamerDashboardAccountEdit'
+import GamerRoute from '../Components/GamerRoute'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -13,43 +18,12 @@ const Content = styled.div`
   margin: 0 auto;
   padding-left: 8rem;
   padding-right: 8rem;
-  padding-top: 1rem;
+  padding-top: 4rem;
   margin-bottom: 9rem;
-`
-
-const Account = styled.div`
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-`
-
-const Top = styled.div`
-  width: 100%;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  padding-right: 1rem;
-`
-
-const Section = styled.div`
-  width: 100%;
-  margin-bottom: 2rem;
-`
-
-const SectionTitle = styled.div`
-  font-size: 2rem;
-  font-weight: 400;
-  padding-bottom: 1rem;
-  width: 100%;
-  border-bottom: 1px solid black;
-`
-
-const Subtitle = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
+  display: flex;
 `
 
 const initialState = {
-  favoriteGames: [],
   setup: 0,
 }
 
@@ -71,20 +45,30 @@ const reducer = (state, action) => {
   }
 }
 
+const routes = [
+  {
+    path: '/gamer-dashboard/account/edit',
+    component: GamerDashboardAccountEdit,
+  },
+]
+
 export default function GamerDashboardAccount(props) {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  useEffect(() => {
+    props.history.push('/gamer-dashboard/account/edit')
+  }, {})
   return (
     <PageContainer>
       <Content>
-        <Top>
-          <Account>Account</Account>
-        </Top>
-        <Section>
-          <SectionTitle>Favorite Games</SectionTitle>
-          <Subtitle>Add 3 favorite games</Subtitle>
-        </Section>
-        <Section>
-          <SectionTitle>Setup</SectionTitle>
-        </Section>
+        <GamerDashboardAccountNav />
+        {routes.map(route => (
+          <GamerRoute
+            to={route.path}
+            component={route.component}
+            exact={route.exact}
+            key={route.path}
+          />
+        ))}
       </Content>
     </PageContainer>
   )

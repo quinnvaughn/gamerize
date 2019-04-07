@@ -97,7 +97,7 @@ const SessionLength = styled.input`
   }
 `
 
-const setup = styled.span`
+const Setup = styled.span`
   font-size: 1.2rem;
   margin-left: 0.5rem;
 `
@@ -195,7 +195,7 @@ export default function CreatedSessionCardBack({
           }}
           value={state.length}
         />
-        <setup>*not counting setup</setup>
+        <Setup>*not counting setup</Setup>
       </LengthContainer>
       <SystemsSessionDropdown
         label={'System: '}
