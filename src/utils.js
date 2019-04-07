@@ -14,8 +14,8 @@ const addMinutes = (date, minutes) =>
   new Date(new Date(date).getTime() + minutes * 60000)
 
 class AuthError extends Error {
-  constructor() {
-    super('Not authorized')
+  constructor(props) {
+    super(props ? props : 'Not authorized')
   }
 }
 
