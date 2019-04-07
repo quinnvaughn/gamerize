@@ -26,7 +26,7 @@ const gamerrequest = {
   async acceptGamerRequest(parent, { input }, ctx) {
     const adminId = getUserId(ctx)
     const admin = await ctx.prisma.user({ id: adminId })
-    if (!admin.roles.includes('ADMIN')) {
+    if (admin.role !== 'ADMIN') {
       throw new AuthError('You are not an admin')
     }
     const request = await ctx.prisma.gamerRequest({
@@ -40,10 +40,9 @@ const gamerrequest = {
     const updatedUser = await ctx.prisma.updateUser({
       where: { id: user.id },
       data: {
-        roles: {
-          set: ['USER', 'GAMER'],
-        },
+        role: 'GAMER',
         occupations: { set: request.occupations },
+        setup: 5,
       },
     })
     if (updatedUser) {
@@ -70,8 +69,8 @@ const gamerrequest = {
   async declineGamerRequest(parent, { input }, ctx) {
     const adminId = getUserId(ctx)
     const admin = await ctx.prisma.user({ id: adminId })
-    if (!admin.roles.includes('ADMIN')) {
-      throw AuthError()
+    if (admin.role !== 'ADMIN') {
+      throw AuthError('You are not an admin')
     }
     const deletedRequest = await ctx.prisma.deleteGamerRequest({
       id: input.gamerRequestId,

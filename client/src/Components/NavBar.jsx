@@ -94,7 +94,7 @@ const GET_ME = gql`
       id
       name
       username
-      isGamer
+      role
     }
   }
 `
@@ -125,7 +125,7 @@ function NavBar(props) {
                   : signedInLinks.map(link => {
                       if (
                         link.path === '/become-a-gamer' &&
-                        data.me.isGamer === true
+                        data.me.role === 'GAMER'
                       ) {
                         return (
                           <StyledLink
