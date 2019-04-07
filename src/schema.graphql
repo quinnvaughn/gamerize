@@ -317,15 +317,13 @@ type User {
   name: String!
   username: String!
   currentGamerRequest: Boolean!
-  isGamer: Boolean!
-  isAdmin: Boolean!
   gamerIsSetUp: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
-  roles: [Role!]!
+  role: Role!
   favoriteGames: [Game!]!
   occupations: [Occupations!]!
   aboutMe: String

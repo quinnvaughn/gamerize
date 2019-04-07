@@ -4666,8 +4666,6 @@ type User {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean!
-  isAdmin: Boolean!
   gamerIsSetUp: Boolean!
   occupations: [Occupations!]!
   name: String!
@@ -4683,7 +4681,7 @@ type User {
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   gamertags: GamerTag
-  roles: [Role!]!
+  role: Role!
 }
 
 type UserConnection {
@@ -4696,8 +4694,6 @@ input UserCreateInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4713,7 +4709,7 @@ input UserCreateInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateManyInput {
@@ -4770,16 +4766,10 @@ input UserCreateOneWithoutTimeSlotsBookedInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreaterolesInput {
-  set: [Role!]
-}
-
 input UserCreateWithoutGamertagsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4794,15 +4784,13 @@ input UserCreateWithoutGamertagsInput {
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutInvitesInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4817,15 +4805,13 @@ input UserCreateWithoutInvitesInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutInvitesReceivedInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4840,15 +4826,13 @@ input UserCreateWithoutInvitesReceivedInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutReviewsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4863,15 +4847,13 @@ input UserCreateWithoutReviewsInput {
   setup: Int
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutSessionsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4886,15 +4868,13 @@ input UserCreateWithoutSessionsInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutTimeSlotsBookedInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4909,15 +4889,13 @@ input UserCreateWithoutTimeSlotsBookedInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutTimeSlotsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4932,15 +4910,13 @@ input UserCreateWithoutTimeSlotsInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 input UserCreateWithoutTimeSlotsPlayedInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -4955,7 +4931,7 @@ input UserCreateWithoutTimeSlotsPlayedInput {
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
+  role: Role
 }
 
 type UserEdge {
@@ -5120,10 +5096,6 @@ enum UserOrderByInput {
   username_DESC
   password_ASC
   password_DESC
-  isGamer_ASC
-  isGamer_DESC
-  isAdmin_ASC
-  isAdmin_DESC
   gamerIsSetUp_ASC
   gamerIsSetUp_DESC
   name_ASC
@@ -5132,6 +5104,8 @@ enum UserOrderByInput {
   aboutMe_DESC
   setup_ASC
   setup_DESC
+  role_ASC
+  role_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -5143,14 +5117,12 @@ type UserPreviousValues {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean!
-  isAdmin: Boolean!
   gamerIsSetUp: Boolean!
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
   setup: Int
-  roles: [Role!]!
+  role: Role!
 }
 
 input UserScalarWhereInput {
@@ -5210,10 +5182,6 @@ input UserScalarWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
-  isGamer: Boolean
-  isGamer_not: Boolean
-  isAdmin: Boolean
-  isAdmin_not: Boolean
   gamerIsSetUp: Boolean
   gamerIsSetUp_not: Boolean
   name: String
@@ -5252,6 +5220,10 @@ input UserScalarWhereInput {
   setup_lte: Int
   setup_gt: Int
   setup_gte: Int
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -5279,8 +5251,6 @@ input UserUpdateDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5296,15 +5266,13 @@ input UserUpdateDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5320,21 +5288,19 @@ input UserUpdateInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateManyDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
   setup: Int
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateManyInput {
@@ -5353,14 +5319,12 @@ input UserUpdateManyMutationInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
   setup: Int
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateManyWithoutSessionsInput {
@@ -5461,16 +5425,10 @@ input UserUpdateOneWithoutInvitesReceivedInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdaterolesInput {
-  set: [Role!]
-}
-
 input UserUpdateWithoutGamertagsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5485,15 +5443,13 @@ input UserUpdateWithoutGamertagsDataInput {
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutInvitesDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5508,15 +5464,13 @@ input UserUpdateWithoutInvitesDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutInvitesReceivedDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5531,15 +5485,13 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutReviewsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5554,15 +5506,13 @@ input UserUpdateWithoutReviewsDataInput {
   setup: Int
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutSessionsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5577,15 +5527,13 @@ input UserUpdateWithoutSessionsDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutTimeSlotsBookedDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5600,15 +5548,13 @@ input UserUpdateWithoutTimeSlotsBookedDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutTimeSlotsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5623,15 +5569,13 @@ input UserUpdateWithoutTimeSlotsDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithoutTimeSlotsPlayedDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
-  isAdmin: Boolean
   gamerIsSetUp: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -5646,7 +5590,7 @@ input UserUpdateWithoutTimeSlotsPlayedDataInput {
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
-  roles: UserUpdaterolesInput
+  role: Role
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -5780,10 +5724,6 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
-  isGamer: Boolean
-  isGamer_not: Boolean
-  isAdmin: Boolean
-  isAdmin_not: Boolean
   gamerIsSetUp: Boolean
   gamerIsSetUp_not: Boolean
   name: String
@@ -5850,6 +5790,10 @@ input UserWhereInput {
   friends_some: UserWhereInput
   friends_none: UserWhereInput
   gamertags: GamerTagWhereInput
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

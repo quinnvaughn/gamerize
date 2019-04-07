@@ -22,9 +22,6 @@ const auth = {
     const user = await prisma.createUser({
       ...input,
       password,
-      roles: {
-        set: ['USER'],
-      },
     })
 
     await prisma.createUserIndex({
