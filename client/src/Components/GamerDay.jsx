@@ -11,7 +11,7 @@ const Container = styled.div`
   display: block;
   position: relative;
   width: 100%;
-  max-height: 60rem;
+  max-height: calc(100vh - 18rem);
   overflow-y: scroll;
   background: #fff;
   border: 1px solid #dddfe2;

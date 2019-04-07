@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 const GET_GAMER_STATUS = gql`
   {
     me {
-      isGamer
+      role
     }
   }
 `
@@ -17,7 +17,7 @@ export default function GamerRoute({ component: Component, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        data && data.me && data.me.isGamer === true ? (
+        data && data.me && data.me.role === 'GAMER' ? (
           <Component {...props} />
         ) : (
           <Redirect to="/" />

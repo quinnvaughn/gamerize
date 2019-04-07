@@ -250,7 +250,7 @@ const GET_USER = gql`
       username
       numReviews
       areWeFriends
-      isGamer
+      role
       sentFriendRequest
       sentMeAFriendRequest
       reviewRating
@@ -388,7 +388,7 @@ export default function UserProfile(props) {
               ))}
             </FavoriteGameContainer>
           </FavoriteGames>
-          {data.getUser.isGamer && (
+          {data.getUser.role === 'GAMER' && (
             <Sessions>
               <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
               <NegativeMargins>

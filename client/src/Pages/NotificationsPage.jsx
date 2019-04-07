@@ -81,6 +81,7 @@ export default function NotificationsPage(props) {
   groups.ACCEPTED_FRIEND_REQUEST && misc.push(...groups.ACCEPTED_FRIEND_REQUEST)
   groups.ACCEPTED_TIMESLOT_INVITE &&
     misc.push(...groups.ACCEPTED_TIMESLOT_INVITE)
+  groups.ACCEPTED_GAMER_REQUEST && misc.push(...groups.ACCEPTED_GAMER_REQUEST)
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
   return loading ? null : (

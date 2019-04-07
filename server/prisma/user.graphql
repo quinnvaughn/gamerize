@@ -3,20 +3,29 @@ type User {
   email: String! @unique
   username: String! @unique
   password: String!
-  isGamer: Boolean! @default(value: false)
+  gamerIsSetUp: Boolean! @default(value: false)
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
   favoriteGames: [Game!]!
   sessions: [GamingSession!]! @relation(name: "MySessions")
   timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
-  timeSlotsBooked: [Booking!]!
+  timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
+  timeSlotsPlayed: [Booking!]!
+    @relation(name: "BookingPlayers", onDelete: SET_NULL)
   invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   setup: Int
   reviews: [SessionReview!]!
   friends: [User!]!
   gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)
+  role: Role! @default(value: "USER")
+}
+
+enum Role {
+  USER
+  GAMER
+  ADMIN
 }
 
 ## Workaround for no case insensitive search in prisma yet.

@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Apr 05 2019 13:30:20 GMT-0500 (CDT)
+# timestamp: Sun Apr 07 2019 12:38:47 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -322,6 +322,7 @@ type Booking implements Node {
   numPlayers: Int!
   players(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   total: Float!
+  bookee: User!
   timeslot: GamingTimeSlot!
   invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   cancelled: Boolean
@@ -342,9 +343,15 @@ input BookingCreateInput {
   numPlayers: Int!
   total: Float!
   cancelled: Boolean
-  players: UserCreateManyWithoutTimeSlotsBookedInput
+  players: UserCreateManyWithoutTimeSlotsPlayedInput
+  bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
   invites: BookingInviteCreateManyWithoutBookingInput
+}
+
+input BookingCreateManyWithoutBookeeInput {
+  create: [BookingCreateWithoutBookeeInput!]
+  connect: [BookingWhereUniqueInput!]
 }
 
 input BookingCreateManyWithoutPlayersInput {
@@ -367,12 +374,23 @@ input BookingCreateOneWithoutInvitesInput {
   connect: BookingWhereUniqueInput
 }
 
+input BookingCreateWithoutBookeeInput {
+  numSlots: Int!
+  numPlayers: Int!
+  total: Float!
+  cancelled: Boolean
+  players: UserCreateManyWithoutTimeSlotsPlayedInput
+  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
+  invites: BookingInviteCreateManyWithoutBookingInput
+}
+
 input BookingCreateWithoutInvitesInput {
   numSlots: Int!
   numPlayers: Int!
   total: Float!
   cancelled: Boolean
-  players: UserCreateManyWithoutTimeSlotsBookedInput
+  players: UserCreateManyWithoutTimeSlotsPlayedInput
+  bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
 }
 
@@ -381,6 +399,7 @@ input BookingCreateWithoutPlayersInput {
   numPlayers: Int!
   total: Float!
   cancelled: Boolean
+  bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
   invites: BookingInviteCreateManyWithoutBookingInput
 }
@@ -390,7 +409,8 @@ input BookingCreateWithoutTimeslotInput {
   numPlayers: Int!
   total: Float!
   cancelled: Boolean
-  players: UserCreateManyWithoutTimeSlotsBookedInput
+  players: UserCreateManyWithoutTimeSlotsPlayedInput
+  bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   invites: BookingInviteCreateManyWithoutBookingInput
 }
 
@@ -1066,7 +1086,8 @@ input BookingUpdateDataInput {
   numPlayers: Int
   total: Float
   cancelled: Boolean
-  players: UserUpdateManyWithoutTimeSlotsBookedInput
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
 }
@@ -1076,7 +1097,8 @@ input BookingUpdateInput {
   numPlayers: Int
   total: Float
   cancelled: Boolean
-  players: UserUpdateManyWithoutTimeSlotsBookedInput
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
 }
@@ -1093,6 +1115,18 @@ input BookingUpdateManyMutationInput {
   numPlayers: Int
   total: Float
   cancelled: Boolean
+}
+
+input BookingUpdateManyWithoutBookeeInput {
+  create: [BookingCreateWithoutBookeeInput!]
+  connect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
+  disconnect: [BookingWhereUniqueInput!]
+  delete: [BookingWhereUniqueInput!]
+  update: [BookingUpdateWithWhereUniqueWithoutBookeeInput!]
+  updateMany: [BookingUpdateManyWithWhereNestedInput!]
+  deleteMany: [BookingScalarWhereInput!]
+  upsert: [BookingUpsertWithWhereUniqueWithoutBookeeInput!]
 }
 
 input BookingUpdateManyWithoutPlayersInput {
@@ -1140,12 +1174,23 @@ input BookingUpdateOneRequiredWithoutInvitesInput {
   upsert: BookingUpsertWithoutInvitesInput
 }
 
+input BookingUpdateWithoutBookeeDataInput {
+  numSlots: Int
+  numPlayers: Int
+  total: Float
+  cancelled: Boolean
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
+  invites: BookingInviteUpdateManyWithoutBookingInput
+}
+
 input BookingUpdateWithoutInvitesDataInput {
   numSlots: Int
   numPlayers: Int
   total: Float
   cancelled: Boolean
-  players: UserUpdateManyWithoutTimeSlotsBookedInput
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
 }
 
@@ -1154,6 +1199,7 @@ input BookingUpdateWithoutPlayersDataInput {
   numPlayers: Int
   total: Float
   cancelled: Boolean
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
 }
@@ -1163,8 +1209,14 @@ input BookingUpdateWithoutTimeslotDataInput {
   numPlayers: Int
   total: Float
   cancelled: Boolean
-  players: UserUpdateManyWithoutTimeSlotsBookedInput
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   invites: BookingInviteUpdateManyWithoutBookingInput
+}
+
+input BookingUpdateWithWhereUniqueWithoutBookeeInput {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateWithoutBookeeDataInput!
 }
 
 input BookingUpdateWithWhereUniqueWithoutPlayersInput {
@@ -1185,6 +1237,12 @@ input BookingUpsertNestedInput {
 input BookingUpsertWithoutInvitesInput {
   update: BookingUpdateWithoutInvitesDataInput!
   create: BookingCreateWithoutInvitesInput!
+}
+
+input BookingUpsertWithWhereUniqueWithoutBookeeInput {
+  where: BookingWhereUniqueInput!
+  update: BookingUpdateWithoutBookeeDataInput!
+  create: BookingCreateWithoutBookeeInput!
 }
 
 input BookingUpsertWithWhereUniqueWithoutPlayersInput {
@@ -1321,6 +1379,7 @@ input BookingWhereInput {
   players_every: UserWhereInput
   players_some: UserWhereInput
   players_none: UserWhereInput
+  bookee: UserWhereInput
   timeslot: GamingTimeSlotWhereInput
   invites_every: BookingInviteWhereInput
   invites_some: BookingInviteWhereInput
@@ -6034,6 +6093,12 @@ input RequirementWhereInput {
   msg_not_ends_with: String
 }
 
+enum Role {
+  USER
+  GAMER
+  ADMIN
+}
+
 type SessionReview implements Node {
   id: ID!
   createdAt: DateTime!
@@ -7244,7 +7309,7 @@ type User implements Node {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean!
+  gamerIsSetUp: Boolean!
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
@@ -7252,12 +7317,14 @@ type User implements Node {
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   timeSlots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
   timeSlotsBooked(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
+  timeSlotsPlayed(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
   invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   invitesReceived(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   setup: Int
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   gamertags: GamerTag
+  role: Role!
 }
 
 """A connection to a list of items."""
@@ -7274,15 +7341,17 @@ input UserCreateInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -7300,13 +7369,13 @@ input UserCreateManyWithoutSessionsInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateManyWithoutTimeSlotsBookedInput {
-  create: [UserCreateWithoutTimeSlotsBookedInput!]
+input UserCreateManyWithoutTimeSlotsInput {
+  create: [UserCreateWithoutTimeSlotsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateManyWithoutTimeSlotsInput {
-  create: [UserCreateWithoutTimeSlotsInput!]
+input UserCreateManyWithoutTimeSlotsPlayedInput {
+  create: [UserCreateWithoutTimeSlotsPlayedInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -7339,19 +7408,26 @@ input UserCreateOneWithoutReviewsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutTimeSlotsBookedInput {
+  create: UserCreateWithoutTimeSlotsBookedInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutGamertagsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -7362,15 +7438,17 @@ input UserCreateWithoutInvitesInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -7381,15 +7459,17 @@ input UserCreateWithoutInvitesReceivedInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -7400,15 +7480,17 @@ input UserCreateWithoutReviewsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   friends: UserCreateManyInput
@@ -7419,14 +7501,16 @@ input UserCreateWithoutSessionsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -7438,14 +7522,16 @@ input UserCreateWithoutTimeSlotsBookedInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -7457,14 +7543,37 @@ input UserCreateWithoutTimeSlotsInput {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String!
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserCreateoccupationsInput
   favoriteGames: GameCreateManyInput
   sessions: GamingSessionCreateManyWithoutGamersInput
-  timeSlotsBooked: BookingCreateManyWithoutPlayersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingCreateManyWithoutPlayersInput
+  invites: BookingInviteCreateManyWithoutFromInput
+  invitesReceived: BookingInviteCreateManyWithoutToInput
+  reviews: SessionReviewCreateManyWithoutUserInput
+  friends: UserCreateManyInput
+  gamertags: GamerTagCreateOneWithoutUserInput
+}
+
+input UserCreateWithoutTimeSlotsPlayedInput {
+  email: String!
+  username: String!
+  password: String!
+  gamerIsSetUp: Boolean
+  name: String!
+  aboutMe: String
+  setup: Int
+  role: Role
+  occupations: UserCreateoccupationsInput
+  favoriteGames: GameCreateManyInput
+  sessions: GamingSessionCreateManyWithoutGamersInput
+  timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
+  timeSlotsBooked: BookingCreateManyWithoutBookeeInput
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -7776,14 +7885,16 @@ enum UserOrderByInput {
   username_DESC
   password_ASC
   password_DESC
-  isGamer_ASC
-  isGamer_DESC
+  gamerIsSetUp_ASC
+  gamerIsSetUp_DESC
   name_ASC
   name_DESC
   aboutMe_ASC
   aboutMe_DESC
   setup_ASC
   setup_DESC
+  role_ASC
+  role_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -7795,11 +7906,12 @@ type UserPreviousValues {
   email: String!
   username: String!
   password: String!
-  isGamer: Boolean!
+  gamerIsSetUp: Boolean!
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
   setup: Int
+  role: Role!
 }
 
 input UserScalarWhereInput {
@@ -7971,10 +8083,10 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
 
   """All values that are not equal to given value."""
-  isGamer_not: Boolean
+  gamerIsSetUp_not: Boolean
   name: String
 
   """All values that are not equal to given value."""
@@ -8077,6 +8189,16 @@ input UserScalarWhereInput {
 
   """All values greater than or equal the given value."""
   setup_gte: Int
+  role: Role
+
+  """All values that are not equal to given value."""
+  role_not: Role
+
+  """All values that are contained in given list."""
+  role_in: [Role!]
+
+  """All values that are not contained in given list."""
+  role_not_in: [Role!]
 }
 
 type UserSubscriptionPayload {
@@ -8122,15 +8244,17 @@ input UserUpdateDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8142,15 +8266,17 @@ input UserUpdateInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8162,10 +8288,11 @@ input UserUpdateManyDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
 }
 
@@ -8185,10 +8312,11 @@ input UserUpdateManyMutationInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
 }
 
@@ -8204,18 +8332,6 @@ input UserUpdateManyWithoutSessionsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutSessionsInput!]
 }
 
-input UserUpdateManyWithoutTimeSlotsBookedInput {
-  create: [UserCreateWithoutTimeSlotsBookedInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput!]
-}
-
 input UserUpdateManyWithoutTimeSlotsInput {
   create: [UserCreateWithoutTimeSlotsInput!]
   connect: [UserWhereUniqueInput!]
@@ -8226,6 +8342,18 @@ input UserUpdateManyWithoutTimeSlotsInput {
   updateMany: [UserUpdateManyWithWhereNestedInput!]
   deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutTimeSlotsInput!]
+}
+
+input UserUpdateManyWithoutTimeSlotsPlayedInput {
+  create: [UserCreateWithoutTimeSlotsPlayedInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTimeSlotsPlayedInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTimeSlotsPlayedInput!]
 }
 
 input UserUpdateManyWithWhereNestedInput {
@@ -8274,6 +8402,13 @@ input UserUpdateOneRequiredWithoutReviewsInput {
   upsert: UserUpsertWithoutReviewsInput
 }
 
+input UserUpdateOneRequiredWithoutTimeSlotsBookedInput {
+  create: UserCreateWithoutTimeSlotsBookedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutTimeSlotsBookedDataInput
+  upsert: UserUpsertWithoutTimeSlotsBookedInput
+}
+
 input UserUpdateOneWithoutInvitesReceivedInput {
   create: UserCreateWithoutInvitesReceivedInput
   connect: UserWhereUniqueInput
@@ -8287,15 +8422,17 @@ input UserUpdateWithoutGamertagsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8306,15 +8443,17 @@ input UserUpdateWithoutInvitesDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -8325,15 +8464,17 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -8344,15 +8485,17 @@ input UserUpdateWithoutReviewsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   friends: UserUpdateManyInput
@@ -8363,14 +8506,16 @@ input UserUpdateWithoutSessionsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8382,14 +8527,16 @@ input UserUpdateWithoutTimeSlotsBookedDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8401,14 +8548,37 @@ input UserUpdateWithoutTimeSlotsDataInput {
   email: String
   username: String
   password: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
   name: String
   aboutMe: String
   setup: Int
+  role: Role
   occupations: UserUpdateoccupationsInput
   favoriteGames: GameUpdateManyInput
   sessions: GamingSessionUpdateManyWithoutGamersInput
-  timeSlotsBooked: BookingUpdateManyWithoutPlayersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
+  timeSlotsPlayed: BookingUpdateManyWithoutPlayersInput
+  invites: BookingInviteUpdateManyWithoutFromInput
+  invitesReceived: BookingInviteUpdateManyWithoutToInput
+  reviews: SessionReviewUpdateManyWithoutUserInput
+  friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutTimeSlotsPlayedDataInput {
+  email: String
+  username: String
+  password: String
+  gamerIsSetUp: Boolean
+  name: String
+  aboutMe: String
+  setup: Int
+  role: Role
+  occupations: UserUpdateoccupationsInput
+  favoriteGames: GameUpdateManyInput
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+  timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
+  timeSlotsBooked: BookingUpdateManyWithoutBookeeInput
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -8426,14 +8596,14 @@ input UserUpdateWithWhereUniqueWithoutSessionsInput {
   data: UserUpdateWithoutSessionsDataInput!
 }
 
-input UserUpdateWithWhereUniqueWithoutTimeSlotsBookedInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutTimeSlotsBookedDataInput!
-}
-
 input UserUpdateWithWhereUniqueWithoutTimeSlotsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutTimeSlotsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutTimeSlotsPlayedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTimeSlotsPlayedDataInput!
 }
 
 input UserUpsertNestedInput {
@@ -8461,6 +8631,11 @@ input UserUpsertWithoutReviewsInput {
   create: UserCreateWithoutReviewsInput!
 }
 
+input UserUpsertWithoutTimeSlotsBookedInput {
+  update: UserUpdateWithoutTimeSlotsBookedDataInput!
+  create: UserCreateWithoutTimeSlotsBookedInput!
+}
+
 input UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
   update: UserUpdateDataInput!
@@ -8473,16 +8648,16 @@ input UserUpsertWithWhereUniqueWithoutSessionsInput {
   create: UserCreateWithoutSessionsInput!
 }
 
-input UserUpsertWithWhereUniqueWithoutTimeSlotsBookedInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutTimeSlotsBookedDataInput!
-  create: UserCreateWithoutTimeSlotsBookedInput!
-}
-
 input UserUpsertWithWhereUniqueWithoutTimeSlotsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutTimeSlotsDataInput!
   create: UserCreateWithoutTimeSlotsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTimeSlotsPlayedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTimeSlotsPlayedDataInput!
+  create: UserCreateWithoutTimeSlotsPlayedInput!
 }
 
 input UserWhereInput {
@@ -8654,10 +8829,10 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  isGamer: Boolean
+  gamerIsSetUp: Boolean
 
   """All values that are not equal to given value."""
-  isGamer_not: Boolean
+  gamerIsSetUp_not: Boolean
   name: String
 
   """All values that are not equal to given value."""
@@ -8760,6 +8935,16 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   setup_gte: Int
+  role: Role
+
+  """All values that are not equal to given value."""
+  role_not: Role
+
+  """All values that are contained in given list."""
+  role_in: [Role!]
+
+  """All values that are not contained in given list."""
+  role_not_in: [Role!]
   favoriteGames_every: GameWhereInput
   favoriteGames_some: GameWhereInput
   favoriteGames_none: GameWhereInput
@@ -8772,6 +8957,9 @@ input UserWhereInput {
   timeSlotsBooked_every: BookingWhereInput
   timeSlotsBooked_some: BookingWhereInput
   timeSlotsBooked_none: BookingWhereInput
+  timeSlotsPlayed_every: BookingWhereInput
+  timeSlotsPlayed_some: BookingWhereInput
+  timeSlotsPlayed_none: BookingWhereInput
   invites_every: BookingInviteWhereInput
   invites_some: BookingInviteWhereInput
   invites_none: BookingInviteWhereInput

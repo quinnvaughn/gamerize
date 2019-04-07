@@ -31,6 +31,18 @@ const User = styled(Link)`
   }
 `
 
+const EditProfile = styled(Link)`
+  display: inline;
+  color: black;
+  font-size: 1.6rem;
+  text-decoration: none;
+  :hover {
+    cursor: pointer;
+    color: #f10e0e;
+    text-decoration: underline;
+  }
+`
+
 const Close = styled(MdClose)`
   font-size: 1.6rem;
   color: black;
@@ -54,20 +66,33 @@ export default function NotificationMiscellaneous({
   last,
   refetch,
 }) {
-  const text = notification.text
-    .split(' ')
-    .splice(1)
-    .join(' ')
-    .replace(/,/g, ' ')
+  const text =
+    notification.type !== 'ACCEPTED_GAMER_REQUEST' &&
+    notification.text
+      .split(' ')
+      .splice(1)
+      .join(' ')
+      .replace(/,/g, ' ')
+  const acceptedGamerRequestText = notification.text.split('.').splice(0, 1)
+  const acceptedGamerLink = notification.text.split('.').splice(1, 1)
   const username = notification.text.split(' ')[0]
   const deleteNotification = useMutation(DELETE_NOTIFICATION)
   return (
     <Container last={last}>
       <TextContainer>
-        <Text>
-          <User to={`/users/${username}`}>{username}</User>
-          {` ${text}`}
-        </Text>
+        {notification.type !== 'ACCEPTED_GAMER_REQUEST' ? (
+          <Text>
+            <User to={`/users/${username}`}>{username}</User>
+            {` ${text}`}
+          </Text>
+        ) : (
+          <Text>
+            {`${acceptedGamerRequestText}. `}
+            <EditProfile to="/gamer-dashboard/account">
+              {`${acceptedGamerLink}.`}
+            </EditProfile>
+          </Text>
+        )}
       </TextContainer>
       <Close
         onClick={async () => {
