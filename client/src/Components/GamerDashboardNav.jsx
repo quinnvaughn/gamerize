@@ -50,6 +50,14 @@ export default function GamerDashboardNav(props) {
       <StyledLink to="/gamer-dashboard/home">Home</StyledLink>
       <StyledLink to="/gamer-dashboard/calendar">Calendar</StyledLink>
       <StyledLink to="/gamer-dashboard/sessions">Sessions</StyledLink>
+      <StyledLink
+        to="/gamer-dashboard/account/edit"
+        isActive={(_, { pathname }) =>
+          pathname.match(`\/gamer-dashboard\/account\/d*`)
+        }
+      >
+        Account
+      </StyledLink>
     </Container>
   )
 }

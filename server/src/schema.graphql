@@ -67,6 +67,15 @@ type Mutation {
   declineGamerRequest(
     input: DeclineGamerRequestInput!
   ): DeclineGamerRequestPayload!
+  updateGamerProfile(input: UpdateGamerProfileInput): UpdateGamerProfilePayload!
+}
+
+input UpdateGamerProfileInput {
+  setup: Int
+}
+
+type UpdateGamerProfilePayload {
+  updated: Boolean!
 }
 
 input DeclineGamerRequestInput {
@@ -262,7 +271,7 @@ input CreateGamingSessionInput {
   price: Int!
   type: TypeOfGame!
   slots: Int!
-  systems: [System!]!
+  system: System!
 }
 
 input RequirementInput {
@@ -317,14 +326,13 @@ type User {
   name: String!
   username: String!
   currentGamerRequest: Boolean!
-  gamerIsSetUp: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
   role: Role!
-  favoriteGames: [Game!]!
+  mostPlayedGames: [MostPlayedGames!]!
   occupations: [Occupations!]!
   aboutMe: String
   areWeFriends: Boolean!
@@ -336,6 +344,11 @@ type User {
   reviewRating: Float!
   invites: [BookingInvite!]!
   invitesReceived: [BookingInvite!]!
+}
+
+type MostPlayedGames {
+  name: String!
+  count: Int!
 }
 
 type SessionIsGoingOn {

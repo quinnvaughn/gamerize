@@ -64,8 +64,38 @@ const User = {
       ? { session: session[0], goingOn: true }
       : { goingOn: false }
   },
-  favoriteGames: async (parent, _, { prisma }) => {
-    return await prisma.user({ id: parent.id }).favoriteGames()
+  mostPlayedGames: async (parent, _, { prisma }) => {
+    const QUERY = `
+      {
+        gamingTimeSlots(where: {
+          gamers_some: {
+            id: "${parent.id}"
+          }
+        }) {
+          gamingSession {
+            game {
+              name
+            }
+          }
+        }
+      }
+    `
+    const { gamingTimeSlots } = await prisma.$graphql(QUERY)
+    const res = {}
+    gamingTimeSlots
+      .map(({ gamingSession }) => gamingSession.game)
+      .forEach(v => {
+        res[v.name] = (res[v.name] || 0) + 1
+      })
+    return Object.keys(res)
+      .map(key => ({
+        name: key,
+        count: res[key],
+      }))
+      .sort((a, b) => {
+        return b.count - a.count
+      })
+      .slice(0, 3)
   },
   numReviews: async (parent, _, { prisma }) => {
     const reviews = await prisma.user({ id: parent.id }).reviews()

@@ -184,7 +184,7 @@ export default function Totals(props) {
               {content}
               {disabled && (
                 <AppropriateGT>
-                  You need to add the appropiate gamertag before playing this.
+                  You need to add the appropriate gamertag before playing this.
                 </AppropriateGT>
               )}
               <Book
