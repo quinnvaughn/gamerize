@@ -26,8 +26,10 @@ const GET_GAMERS = gql`
     getGamers {
       name
       username
-      occupations
-      favoriteGames {
+      mostPlayedGames {
+        name
+      }
+      occupations {
         name
       }
     }
@@ -35,7 +37,7 @@ const GET_GAMERS = gql`
   }
 `
 
-export default function DisplayGames(props) {
+export default function DisplayGamers(props) {
   const { data, loading } = useQuery(GET_GAMERS)
   return (
     <Container>
@@ -46,7 +48,7 @@ export default function DisplayGames(props) {
               <ExploreGamer
                 name={gamer.name}
                 occupations={gamer.occupations}
-                favoriteGames={gamer.favoriteGames}
+                mostPlayedGames={gamer.mostPlayedGames}
                 username={gamer.username}
                 key={gamer.username}
               />

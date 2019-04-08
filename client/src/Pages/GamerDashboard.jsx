@@ -4,9 +4,11 @@ import styled from 'styled-components'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import GamerDashboardCalendar from './GamerDashboardCalendar'
 import GamerDashboardSessions from './GamerDashboardSessions'
-import GamerDashboardAccount from './GamerDashboardAccount'
+import GamerDashboardAccountEdit from './GamerDashboardAccountEdit'
+import GamerDashboardAccountPhotos from './GamerDashboardAccountPhotos'
 import GamerDashboardHome from './GamerDashboardHome'
 import GamerRoute from '../Components/GamerRoute'
+import useTitle from '../Hooks/useTitle'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -28,12 +30,17 @@ const routes = [
     component: GamerDashboardSessions,
   },
   {
-    path: '/gamer-dashboard/account',
-    component: GamerDashboardAccount,
+    path: '/gamer-dashboard/account/edit',
+    component: GamerDashboardAccountEdit,
+  },
+  {
+    path: '/gamer-dashboard/account/photos',
+    component: GamerDashboardAccountPhotos,
   },
 ]
 
 export default function GamerDashboard(props) {
+  useTitle('Your Gamer Dashboard')
   return (
     <PageContainer>
       <GamerDashboardNav />
