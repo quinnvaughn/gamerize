@@ -67,6 +67,15 @@ type Mutation {
   declineGamerRequest(
     input: DeclineGamerRequestInput!
   ): DeclineGamerRequestPayload!
+  updateGamerProfile(input: UpdateGamerProfileInput): UpdateGamerProfilePayload!
+}
+
+input UpdateGamerProfileInput {
+  setup: Int
+}
+
+type UpdateGamerProfilePayload {
+  updated: Boolean!
 }
 
 input DeclineGamerRequestInput {
@@ -317,7 +326,6 @@ type User {
   name: String!
   username: String!
   currentGamerRequest: Boolean!
-  gamerIsSetUp: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!

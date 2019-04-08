@@ -36,13 +36,13 @@ const Occupations = styled.p`
   margin-bottom: 0.3rem;
 `
 
-const FavoriteGames = styled.p`
+const MostPlayedGames = styled.p`
   font-size: 1.4rem;
   font-weight: 600;
   color: black;
 `
 
-const FavoriteGame = styled.span`
+const MostPlayedGame = styled.span`
   font-size: 1.4rem;
   font-weight: 400;
   color: black;
@@ -67,11 +67,11 @@ const Occupation = styled.span`
 `
 
 // pulled function out and named it to make it more obvious and clean up return
-const formatCommasGames = (favoriteGames, game, index) => {
-  if (index < favoriteGames.length - 1) {
-    return <FavoriteGame key={game}>{`${game.name}, `}</FavoriteGame>
+const formatCommasGames = (mostPlayedGames, game, index) => {
+  if (index < mostPlayedGames.length - 1) {
+    return <MostPlayedGame key={game}>{`${game.name}, `}</MostPlayedGame>
   } else {
-    return <FavoriteGame key={game}>{`${game.name}`}</FavoriteGame>
+    return <MostPlayedGame key={game}>{`${game.name}`}</MostPlayedGame>
   }
 }
 
@@ -98,12 +98,12 @@ export default function ExploreGamer(props) {
             )
           )}
         </Occupations>
-        <FavoriteGames>
-          {`Favorite Games: `}
-          {props.favoriteGames.map((game, index) =>
-            formatCommasGames(props.favoriteGames, game, index)
+        <MostPlayedGames>
+          {`Most Played Games: `}
+          {props.mostPlayedGames.map((game, index) =>
+            formatCommasGames(props.mostPlayedGames, game, index)
           )}
-        </FavoriteGames>
+        </MostPlayedGames>
       </StyledLink>
     </Container>
   )

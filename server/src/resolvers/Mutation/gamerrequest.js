@@ -53,7 +53,7 @@ const gamerrequest = {
         type: 'ACCEPTED_GAMER_REQUEST',
         text: `Congratulations ${
           user.name.split(' ')[0]
-        }! Your gamer request has been accepted. Please fill out additional information so you can start hosting sessions`,
+        }! Your gamer request has been accepted. You can now start hosting games.`,
         for: {
           connect: {
             id: user.id,
@@ -77,7 +77,7 @@ const gamerrequest = {
     })
     const notification = await ctx.prisma.createNotification({
       type: 'DECLINED_GAMER_REQUEST',
-      text: `Unfortunately your gamer request was not accepted. You can keep applying as you get more popular,`,
+      text: `Unfortunately your gamer request was not accepted. However, you can keep applying as you get more popular.`,
       for: {
         connect: {
           id: user.id,

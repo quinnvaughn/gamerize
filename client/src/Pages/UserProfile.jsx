@@ -258,7 +258,7 @@ const GET_USER = gql`
       reviews {
         text
       }
-      favoriteGames {
+      mostPlayedGames {
         name
       }
       sessions {
@@ -381,9 +381,9 @@ export default function UserProfile(props) {
           <AboutMe>About me</AboutMe>
           <AboutMeParagraph>{data.getUser.aboutMe}</AboutMeParagraph>
           <FavoriteGames>
-            <FavoriteGamesTitle>Favorite games</FavoriteGamesTitle>
+            <FavoriteGamesTitle>Most played games</FavoriteGamesTitle>
             <FavoriteGameContainer>
-              {_.map(data.getUser.favoriteGames, game => (
+              {_.map(data.getUser.mostPlayedGames, game => (
                 <FavoriteGame game={game.name} key={game.name} />
               ))}
             </FavoriteGameContainer>
