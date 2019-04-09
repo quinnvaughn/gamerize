@@ -7,6 +7,7 @@ import Media from 'react-media'
 import gql from 'graphql-tag'
 
 //local imports
+import NotificationBadge from './NotificationBadge'
 import SearchBar from './SearchBar'
 import NavBarAvatar from './NavBarAvatar'
 
@@ -60,6 +61,11 @@ const StyledLink = styled(Link)`
   }
 `
 
+const NotificationContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+`
+
 const Empty = styled.div``
 
 const notSignedInLinks = [
@@ -98,16 +104,26 @@ const GET_ME = gql`
     }
   }
 `
+
+const GET_MY_NOTIFICATIONS = gql`
+  {
+    numUserNotifications
+  }
+`
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
   const { data, loading, refetch } = useQuery(GET_ME, { skip: !token })
+  const { data: notifications, loading: secondLoading } = useQuery(
+    GET_MY_NOTIFICATIONS,
+    { pollInterval: 1000 }
+  )
   useEffect(() => {
     refetch()
   }, [token])
   return (
     <Container className="navbar">
       {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
-      {loading ? null : (
+      {loading || secondLoading ? null : (
         <Media query={{ maxWidth: 1127 }}>
           {matches =>
             matches && !_.isEmpty(data) ? (
@@ -133,6 +149,17 @@ function NavBar(props) {
                             to={'/gamer-dashboard/home'}
                           >
                             {`Gamer Dashboard`}
+                          </StyledLink>
+                        )
+                      } else if (link.path === '/notifications') {
+                        return (
+                          <StyledLink key={link.text} to={'/notifications'}>
+                            <NotificationContainer>
+                              <NotificationBadge
+                                count={notifications.numUserNotifications}
+                              />
+                              {link.text}
+                            </NotificationContainer>
                           </StyledLink>
                         )
                       } else {

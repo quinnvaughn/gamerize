@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
+
+//local imports
+import NotificationBadge from './NotificationBadge'
 
 const Container = styled.div`
   height: 8rem;
@@ -44,10 +49,29 @@ const StyledLink = styled(NavLink)`
   }
 `
 
+const NotificationContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+`
+
+const GET_MY_NOTIFICATIONS = gql`
+  {
+    numGamerNotifications
+  }
+`
+
 export default function GamerDashboardNav(props) {
-  return (
+  const { data, loading } = useQuery(GET_MY_NOTIFICATIONS, {
+    pollInterval: 1000,
+  })
+  return loading ? null : (
     <Container>
-      <StyledLink to="/gamer-dashboard/home">Home</StyledLink>
+      <StyledLink to="/gamer-dashboard/home">
+        <NotificationContainer>
+          <NotificationBadge count={data.numGamerNotifications} />
+          Home
+        </NotificationContainer>
+      </StyledLink>
       <StyledLink to="/gamer-dashboard/calendar">Calendar</StyledLink>
       <StyledLink to="/gamer-dashboard/sessions">Sessions</StyledLink>
       <StyledLink

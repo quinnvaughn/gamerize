@@ -5,6 +5,9 @@ const Notification = {
   bookingInvite: async (parent, _, { prisma }) => {
     return await prisma.notification({ id: parent.id }).bookingInvite()
   },
+  booking: async (parent, _, { prisma }) => {
+    return await prisma.notification({ id: parent.id }).booking()
+  },
 }
 
 module.exports = {

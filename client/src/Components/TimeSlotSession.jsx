@@ -242,7 +242,6 @@ export default function TimeSlotSession(props) {
     let counter = 0
     let end = session.state.selectedSession.slots
     while (counter < end) {
-      console.log(session.state.selectedSession.players[counter])
       let username = session.state.selectedSession.players[counter]
         ? session.state.selectedSession.players[counter].player.username
         : 'Available'

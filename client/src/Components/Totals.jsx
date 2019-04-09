@@ -133,7 +133,7 @@ export default function Totals(props) {
   const [booked, setBooked] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
   const disabled =
-    props.me && props.system === 'PC'
+    props.me.gamertags && props.system === 'PC'
       ? !props.me.gamertags[mapSystem(props.system)][
           mapLauncher(props.launcher)
         ]
