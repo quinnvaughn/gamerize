@@ -313,23 +313,66 @@ const timeslot = {
     if (gamers.length === 0) {
       throw AuthError()
     } else {
+      const QUERY = `
+        {
+          gamingTimeSlot(where: {id: "${input.sessionId}"}) {
+            startTime
+            endTime
+            gamingSession {
+              creator {
+                username
+              }
+            }
+            players {
+              player {
+                id
+              }
+            }
+          }
+        }
+      `
+      const { gamingTimeSlot } = await ctx.prisma.$graphql(QUERY)
+      const playerIds = []
+      for (const player of gamingTimeSlot.players) {
+        const timeFormat = 'h:mm aa'
+        // don't send person multiple notifications if they booked multiple slots.
+        if (playerIds.includes(player.player.id)) {
+        } else {
+          playerIds.push(player.player.id)
+          await ctx.prisma.createNotification({
+            for: {
+              connect: {
+                id: player.player.id,
+              },
+            },
+            type: 'CANCELLED_TIMESLOT',
+            text: `${
+              gamingTimeSlot.gamingSession.creator.username
+            } cancelled the timeslot from ${dateFns.format(
+              gamingTimeSlot.startTime,
+              timeFormat
+            )}-${dateFns.format(gamingTimeSlot.endTime, timeFormat)}`,
+          })
+        }
+      }
       const deletedSession = await ctx.prisma.deleteGamingTimeSlot({
         id: input.sessionId,
       })
-      return { cancelled: deletedSession ? true : false }
+      return deletedSession ? { cancelled: true } : { cancelled: false }
     }
   },
   async bookTimeSlots(parent, { input }, ctx) {
     const userId = getUserId(ctx)
-    let sessionsBought = []
-    for (const timeslot in input.timeSlots) {
-      const sessionBought = await ctx.prisma.createBooking({
-        total: input.timeSlots[timeslot].total,
-        numSlots: input.timeSlots[timeslot].slots,
-        numPlayers: input.timeSlots[timeslot].players,
+    let timeslotsBought = []
+    const user = await ctx.prisma.user({ id: userId })
+    for (const timeslot of input.timeSlots) {
+      const timeslotBought = await ctx.prisma.createBooking({
+        total: timeslot.total,
+        numSlots: timeslot.slots,
+        numPlayers: timeslot.players,
         timeslot: {
           connect: {
-            id: input.timeSlots[timeslot].timeSlotId,
+            id: timeslot.timeSlotId,
           },
         },
         bookee: {
@@ -343,9 +386,45 @@ const timeslot = {
           },
         },
       })
-      sessionsBought.push(sessionBought)
+      const QUERY = `
+        {
+          gamingTimeSlot(where: {id: "${timeslot.timeSlotId}"}) {
+            gamers {
+              id
+            }
+            gamingSession {
+              game {
+                name
+              }
+            }
+          }
+        }
+      `
+      const {
+        gamingTimeSlot: {
+          gamers,
+          gamingSession: { game },
+        },
+      } = await ctx.prisma.$graphql(QUERY)
+      for (const gamer of gamers) {
+        await ctx.prisma.createNotification({
+          for: {
+            connect: {
+              id: gamer.id,
+            },
+          },
+          type: 'BOOKED_TIMESLOT',
+          text: `${user.username} booked a timeslot for ${game.name}`,
+          booking: {
+            connect: {
+              id: timeslotBought.id,
+            },
+          },
+        })
+      }
+      timeslotsBought.push(timeslotBought)
       let counter = 0
-      let end = input.timeSlots[timeslot].slots
+      let end = timeslot.slots
       while (counter < end) {
         await ctx.prisma.updateGamingTimeSlot({
           data: {
@@ -356,20 +435,20 @@ const timeslot = {
             },
           },
           where: {
-            id: input.timeSlots[timeslot].timeSlotId,
+            id: timeslot.timeSlotId,
           },
         })
         counter++
       }
-      if (input.timeSlots[timeslot].players > 1) {
+      if (timeslot.players > 1) {
         let counter = 0
         // The number of players you can send an invite to. Doesn't include you.
-        let end = input.timeSlots[timeslot].players - 1
+        let end = timeslot.players - 1
         while (counter < end) {
           await ctx.prisma.createBookingInvite({
             booking: {
               connect: {
-                id: sessionBought.id,
+                id: timeslotBought.id,
               },
             },
             from: {
@@ -377,14 +456,14 @@ const timeslot = {
                 id: userId,
               },
             },
-            startTime: input.timeSlots[timeslot].startTime,
+            startTime: timeslot.startTime,
             sent: false,
           })
           counter++
         }
       }
     }
-    if (sessionsBought.length > 0) {
+    if (timeslotsBought.length > 0) {
       return { booked: true }
     }
     return { booked: false }

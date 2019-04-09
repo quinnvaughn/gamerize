@@ -40,6 +40,7 @@ type BookedPlayer {
   id: ID! @unique
   player: User!
   timeslot: GamingTimeSlot!
+    @relation(name: "TimeSlotBookedPlayers", onDelete: SET_NULL)
 }
 
 type GamerTag {

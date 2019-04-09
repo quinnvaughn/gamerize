@@ -21,7 +21,10 @@ type Query {
   myInvites: [BookingInvite!]!
   myInvitesReceived: [BookingInvite!]!
   myFriendRequests: [FriendRequest!]!
-  myNotifications: [Notification!]!
+  myUserNotifications: [Notification!]!
+  myGamerNotifications: [Notification!]!
+  numUserNotifications: Int!
+  numGamerNotifications: Int!
   getGamers(first: Int): [User!]!
 }
 
@@ -67,7 +70,15 @@ type Mutation {
   declineGamerRequest(
     input: DeclineGamerRequestInput!
   ): DeclineGamerRequestPayload!
-  updateGamerProfile(input: UpdateGamerProfileInput): UpdateGamerProfilePayload!
+  updateGamerProfile(
+    input: UpdateGamerProfileInput!
+  ): UpdateGamerProfilePayload!
+  viewUserNotifications: ViewNotificationsPayload!
+  viewGamerNotifications: ViewNotificationsPayload!
+}
+
+type ViewNotificationsPayload {
+  viewed: Boolean!
 }
 
 input UpdateGamerProfileInput {
