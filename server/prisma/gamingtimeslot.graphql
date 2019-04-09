@@ -6,8 +6,9 @@ type GamingTimeSlot {
   ## gaming session also has this info, but this way the user doesn't have to go through that
   ## to get to this info.
   gamers: [User!]! @relation(name: "MyGamingTimeSlots")
-  bookings: [Booking!]!
+  bookings: [Booking!]! @relation(name: "TimeSlotBookings", onDelete: CASCADE)
   players: [BookedPlayer!]!
+    @relation(name: "TimeSlotBookedPlayers", onDelete: CASCADE)
   length: Int!
   slots: Int!
 }

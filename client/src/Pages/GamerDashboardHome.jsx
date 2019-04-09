@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
+import _ from 'lodash'
+import { useQuery, useMutation } from 'react-apollo-hooks'
 
 //local imports
 import GamerBookings from '../Components/GamerBookings'
@@ -46,7 +49,50 @@ const SectionTitle = styled.div`
   border-bottom: 1px solid black;
 `
 
+const MY_NOTIFICATIONS = gql`
+  {
+    myGamerNotifications {
+      id
+      text
+      type
+      booking {
+        numPlayers
+        numSlots
+        total
+        timeslot {
+          startTime
+          endTime
+        }
+      }
+    }
+  }
+`
+
+const VIEW_NOTIFICATIONS = gql`
+  mutation {
+    viewGamerNotifications {
+      viewed
+    }
+  }
+`
+
 export default function GamerDashboardHome(props) {
+  const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
+    pollInterval: 1000,
+  })
+  const viewGamerNotifications = useMutation(VIEW_NOTIFICATIONS)
+  useEffect(() => {
+    async function notifications() {
+      await viewGamerNotifications()
+    }
+    notifications()
+  }, {})
+  const groups =
+    !loading &&
+    _(data.myGamerNotifications)
+      .groupBy(x => x.type)
+      .value()
+  const bookings = groups.BOOKED_TIMESLOT
   return (
     <PageContainer>
       <Content>
@@ -55,15 +101,15 @@ export default function GamerDashboardHome(props) {
         </Top>
         <Section>
           <SectionTitle>Bookings</SectionTitle>
-          {/*misc &&
-            misc.map((notification, index) => (
-              <NotificationMiscellaneous
+          {bookings &&
+            bookings.map((notification, index) => (
+              <GamerBookings
                 refetch={refetch}
                 notification={notification}
                 key={notification.id}
-                last={index === misc.length - 1}
+                last={index === bookings.length - 1}
               />
-            )) */}
+            ))}
         </Section>
       </Content>
     </PageContainer>

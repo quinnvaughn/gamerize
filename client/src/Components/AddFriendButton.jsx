@@ -157,6 +157,7 @@ export default function AddFriendButton({
           })
           if (data.sendFriendRequest.sent) {
             refetch()
+            setDropdown(false)
           }
         }
       }}

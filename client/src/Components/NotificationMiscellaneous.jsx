@@ -88,7 +88,7 @@ export default function NotificationMiscellaneous({
         ) : (
           <Text>
             {`${acceptedGamerRequestText}. `}
-            <EditProfile to="/gamer-dashboard/account">
+            <EditProfile to="/gamer-dashboard/sessions">
               {`${acceptedGamerLink}.`}
             </EditProfile>
           </Text>

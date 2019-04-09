@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery, useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import _ from 'lodash'
 
@@ -53,7 +53,7 @@ const SectionTitle = styled.div`
 
 const MY_NOTIFICATIONS = gql`
   {
-    myNotifications {
+    myUserNotifications {
       id
       text
       type
@@ -70,18 +70,37 @@ const MY_NOTIFICATIONS = gql`
   }
 `
 
+const VIEW_NOTIFICATIONS = gql`
+  mutation {
+    viewUserNotifications {
+      viewed
+    }
+  }
+`
+
 export default function NotificationsPage(props) {
-  const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS)
+  const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
+    pollInterval: 5000,
+  })
+  const viewUserNotifications = useMutation(VIEW_NOTIFICATIONS)
+  useEffect(() => {
+    async function notifications() {
+      await viewUserNotifications()
+    }
+    notifications()
+  }, {})
   const groups =
     !loading &&
-    _(data.myNotifications)
+    _(data.myUserNotifications)
       .groupBy(x => x.type)
       .value()
   const misc = []
   groups.ACCEPTED_FRIEND_REQUEST && misc.push(...groups.ACCEPTED_FRIEND_REQUEST)
   groups.ACCEPTED_TIMESLOT_INVITE &&
     misc.push(...groups.ACCEPTED_TIMESLOT_INVITE)
+  groups.CANCELLED_TIMESLOT && misc.push(...groups.CANCELLED_TIMESLOT)
   groups.ACCEPTED_GAMER_REQUEST && misc.push(...groups.ACCEPTED_GAMER_REQUEST)
+  groups.DENIED_GAMER_REQUEST && misc.push(...groups.DENIED_GAMER_REQUEST)
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
   return loading ? null : (
