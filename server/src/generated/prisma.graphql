@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Apr 07 2019 14:23:47 GMT-0500 (CDT)
+# timestamp: Tue Apr 09 2019 15:28:55 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -326,6 +326,7 @@ type Booking implements Node {
   timeslot: GamingTimeSlot!
   invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   cancelled: Boolean
+  notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification!]
 }
 
 """A connection to a list of items."""
@@ -347,6 +348,7 @@ input BookingCreateInput {
   bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
   invites: BookingInviteCreateManyWithoutBookingInput
+  notifications: NotificationCreateManyWithoutBookingInput
 }
 
 input BookingCreateManyWithoutBookeeInput {
@@ -364,13 +366,13 @@ input BookingCreateManyWithoutTimeslotInput {
   connect: [BookingWhereUniqueInput!]
 }
 
-input BookingCreateOneInput {
-  create: BookingCreateInput
+input BookingCreateOneWithoutInvitesInput {
+  create: BookingCreateWithoutInvitesInput
   connect: BookingWhereUniqueInput
 }
 
-input BookingCreateOneWithoutInvitesInput {
-  create: BookingCreateWithoutInvitesInput
+input BookingCreateOneWithoutNotificationsInput {
+  create: BookingCreateWithoutNotificationsInput
   connect: BookingWhereUniqueInput
 }
 
@@ -382,6 +384,7 @@ input BookingCreateWithoutBookeeInput {
   players: UserCreateManyWithoutTimeSlotsPlayedInput
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
   invites: BookingInviteCreateManyWithoutBookingInput
+  notifications: NotificationCreateManyWithoutBookingInput
 }
 
 input BookingCreateWithoutInvitesInput {
@@ -392,6 +395,18 @@ input BookingCreateWithoutInvitesInput {
   players: UserCreateManyWithoutTimeSlotsPlayedInput
   bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
+  notifications: NotificationCreateManyWithoutBookingInput
+}
+
+input BookingCreateWithoutNotificationsInput {
+  numSlots: Int!
+  numPlayers: Int!
+  total: Float!
+  cancelled: Boolean
+  players: UserCreateManyWithoutTimeSlotsPlayedInput
+  bookee: UserCreateOneWithoutTimeSlotsBookedInput!
+  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
+  invites: BookingInviteCreateManyWithoutBookingInput
 }
 
 input BookingCreateWithoutPlayersInput {
@@ -402,6 +417,7 @@ input BookingCreateWithoutPlayersInput {
   bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   timeslot: GamingTimeSlotCreateOneWithoutBookingsInput!
   invites: BookingInviteCreateManyWithoutBookingInput
+  notifications: NotificationCreateManyWithoutBookingInput
 }
 
 input BookingCreateWithoutTimeslotInput {
@@ -412,6 +428,7 @@ input BookingCreateWithoutTimeslotInput {
   players: UserCreateManyWithoutTimeSlotsPlayedInput
   bookee: UserCreateOneWithoutTimeSlotsBookedInput!
   invites: BookingInviteCreateManyWithoutBookingInput
+  notifications: NotificationCreateManyWithoutBookingInput
 }
 
 """An edge in a connection."""
@@ -1081,17 +1098,6 @@ input BookingSubscriptionWhereInput {
   node: BookingWhereInput
 }
 
-input BookingUpdateDataInput {
-  numSlots: Int
-  numPlayers: Int
-  total: Float
-  cancelled: Boolean
-  players: UserUpdateManyWithoutTimeSlotsPlayedInput
-  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
-  timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
-  invites: BookingInviteUpdateManyWithoutBookingInput
-}
-
 input BookingUpdateInput {
   numSlots: Int
   numPlayers: Int
@@ -1101,6 +1107,7 @@ input BookingUpdateInput {
   bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
+  notifications: NotificationUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateManyDataInput {
@@ -1158,20 +1165,20 @@ input BookingUpdateManyWithWhereNestedInput {
   data: BookingUpdateManyDataInput!
 }
 
-input BookingUpdateOneInput {
-  create: BookingCreateInput
-  connect: BookingWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: BookingUpdateDataInput
-  upsert: BookingUpsertNestedInput
-}
-
 input BookingUpdateOneRequiredWithoutInvitesInput {
   create: BookingCreateWithoutInvitesInput
   connect: BookingWhereUniqueInput
   update: BookingUpdateWithoutInvitesDataInput
   upsert: BookingUpsertWithoutInvitesInput
+}
+
+input BookingUpdateOneWithoutNotificationsInput {
+  create: BookingCreateWithoutNotificationsInput
+  connect: BookingWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: BookingUpdateWithoutNotificationsDataInput
+  upsert: BookingUpsertWithoutNotificationsInput
 }
 
 input BookingUpdateWithoutBookeeDataInput {
@@ -1182,6 +1189,7 @@ input BookingUpdateWithoutBookeeDataInput {
   players: UserUpdateManyWithoutTimeSlotsPlayedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
+  notifications: NotificationUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateWithoutInvitesDataInput {
@@ -1192,6 +1200,18 @@ input BookingUpdateWithoutInvitesDataInput {
   players: UserUpdateManyWithoutTimeSlotsPlayedInput
   bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
+  notifications: NotificationUpdateManyWithoutBookingInput
+}
+
+input BookingUpdateWithoutNotificationsDataInput {
+  numSlots: Int
+  numPlayers: Int
+  total: Float
+  cancelled: Boolean
+  players: UserUpdateManyWithoutTimeSlotsPlayedInput
+  bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
+  timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
+  invites: BookingInviteUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateWithoutPlayersDataInput {
@@ -1202,6 +1222,7 @@ input BookingUpdateWithoutPlayersDataInput {
   bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   timeslot: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput
   invites: BookingInviteUpdateManyWithoutBookingInput
+  notifications: NotificationUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateWithoutTimeslotDataInput {
@@ -1212,6 +1233,7 @@ input BookingUpdateWithoutTimeslotDataInput {
   players: UserUpdateManyWithoutTimeSlotsPlayedInput
   bookee: UserUpdateOneRequiredWithoutTimeSlotsBookedInput
   invites: BookingInviteUpdateManyWithoutBookingInput
+  notifications: NotificationUpdateManyWithoutBookingInput
 }
 
 input BookingUpdateWithWhereUniqueWithoutBookeeInput {
@@ -1229,14 +1251,14 @@ input BookingUpdateWithWhereUniqueWithoutTimeslotInput {
   data: BookingUpdateWithoutTimeslotDataInput!
 }
 
-input BookingUpsertNestedInput {
-  update: BookingUpdateDataInput!
-  create: BookingCreateInput!
-}
-
 input BookingUpsertWithoutInvitesInput {
   update: BookingUpdateWithoutInvitesDataInput!
   create: BookingCreateWithoutInvitesInput!
+}
+
+input BookingUpsertWithoutNotificationsInput {
+  update: BookingUpdateWithoutNotificationsDataInput!
+  create: BookingCreateWithoutNotificationsInput!
 }
 
 input BookingUpsertWithWhereUniqueWithoutBookeeInput {
@@ -1384,6 +1406,9 @@ input BookingWhereInput {
   invites_every: BookingInviteWhereInput
   invites_some: BookingInviteWhereInput
   invites_none: BookingInviteWhereInput
+  notifications_every: NotificationWhereInput
+  notifications_some: NotificationWhereInput
+  notifications_none: NotificationWhereInput
 }
 
 input BookingWhereUniqueInput {
@@ -4556,6 +4581,7 @@ type Mutation {
   createGamingSessionIndex(data: GamingSessionIndexCreateInput!): GamingSessionIndex!
   createSessionReviewIndex(data: SessionReviewIndexCreateInput!): SessionReviewIndex!
   createGamingTimeSlot(data: GamingTimeSlotCreateInput!): GamingTimeSlot!
+  createBooking(data: BookingCreateInput!): Booking!
   createBookingInvite(data: BookingInviteCreateInput!): BookingInvite!
   createFriendRequest(data: FriendRequestCreateInput!): FriendRequest!
   createNotification(data: NotificationCreateInput!): Notification!
@@ -4565,7 +4591,6 @@ type Mutation {
   createSessionReview(data: SessionReviewCreateInput!): SessionReview!
   createSocialMedia(data: SocialMediaCreateInput!): SocialMedia!
   createGamingSession(data: GamingSessionCreateInput!): GamingSession!
-  createBooking(data: BookingCreateInput!): Booking!
   createUser(data: UserCreateInput!): User!
   updateUserIndex(data: UserIndexUpdateInput!, where: UserIndexWhereUniqueInput!): UserIndex
   updateBookedPlayer(data: BookedPlayerUpdateInput!, where: BookedPlayerWhereUniqueInput!): BookedPlayer
@@ -4576,6 +4601,7 @@ type Mutation {
   updateGamingSessionIndex(data: GamingSessionIndexUpdateInput!, where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   updateSessionReviewIndex(data: SessionReviewIndexUpdateInput!, where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
   updateGamingTimeSlot(data: GamingTimeSlotUpdateInput!, where: GamingTimeSlotWhereUniqueInput!): GamingTimeSlot
+  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
   updateBookingInvite(data: BookingInviteUpdateInput!, where: BookingInviteWhereUniqueInput!): BookingInvite
   updateFriendRequest(data: FriendRequestUpdateInput!, where: FriendRequestWhereUniqueInput!): FriendRequest
   updateNotification(data: NotificationUpdateInput!, where: NotificationWhereUniqueInput!): Notification
@@ -4583,7 +4609,6 @@ type Mutation {
   updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
   updateSocialMedia(data: SocialMediaUpdateInput!, where: SocialMediaWhereUniqueInput!): SocialMedia
   updateGamingSession(data: GamingSessionUpdateInput!, where: GamingSessionWhereUniqueInput!): GamingSession
-  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteUserIndex(where: UserIndexWhereUniqueInput!): UserIndex
   deleteBookedPlayer(where: BookedPlayerWhereUniqueInput!): BookedPlayer
@@ -4594,6 +4619,7 @@ type Mutation {
   deleteGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   deleteSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
   deleteGamingTimeSlot(where: GamingTimeSlotWhereUniqueInput!): GamingTimeSlot
+  deleteBooking(where: BookingWhereUniqueInput!): Booking
   deleteBookingInvite(where: BookingInviteWhereUniqueInput!): BookingInvite
   deleteFriendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
   deleteNotification(where: NotificationWhereUniqueInput!): Notification
@@ -4601,7 +4627,6 @@ type Mutation {
   deleteSessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   deleteSocialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   deleteGamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
-  deleteBooking(where: BookingWhereUniqueInput!): Booking
   deleteUser(where: UserWhereUniqueInput!): User
   upsertUserIndex(where: UserIndexWhereUniqueInput!, create: UserIndexCreateInput!, update: UserIndexUpdateInput!): UserIndex!
   upsertBookedPlayer(where: BookedPlayerWhereUniqueInput!, create: BookedPlayerCreateInput!, update: BookedPlayerUpdateInput!): BookedPlayer!
@@ -4612,6 +4637,7 @@ type Mutation {
   upsertGamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!, create: GamingSessionIndexCreateInput!, update: GamingSessionIndexUpdateInput!): GamingSessionIndex!
   upsertSessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!, create: SessionReviewIndexCreateInput!, update: SessionReviewIndexUpdateInput!): SessionReviewIndex!
   upsertGamingTimeSlot(where: GamingTimeSlotWhereUniqueInput!, create: GamingTimeSlotCreateInput!, update: GamingTimeSlotUpdateInput!): GamingTimeSlot!
+  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
   upsertBookingInvite(where: BookingInviteWhereUniqueInput!, create: BookingInviteCreateInput!, update: BookingInviteUpdateInput!): BookingInvite!
   upsertFriendRequest(where: FriendRequestWhereUniqueInput!, create: FriendRequestCreateInput!, update: FriendRequestUpdateInput!): FriendRequest!
   upsertNotification(where: NotificationWhereUniqueInput!, create: NotificationCreateInput!, update: NotificationUpdateInput!): Notification!
@@ -4619,7 +4645,6 @@ type Mutation {
   upsertSessionReview(where: SessionReviewWhereUniqueInput!, create: SessionReviewCreateInput!, update: SessionReviewUpdateInput!): SessionReview!
   upsertSocialMedia(where: SocialMediaWhereUniqueInput!, create: SocialMediaCreateInput!, update: SocialMediaUpdateInput!): SocialMedia!
   upsertGamingSession(where: GamingSessionWhereUniqueInput!, create: GamingSessionCreateInput!, update: GamingSessionUpdateInput!): GamingSession!
-  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyUserIndexes(data: UserIndexUpdateManyMutationInput!, where: UserIndexWhereInput): BatchPayload!
   updateManyGamerTags(data: GamerTagUpdateManyMutationInput!, where: GamerTagWhereInput): BatchPayload!
@@ -4629,6 +4654,7 @@ type Mutation {
   updateManyGamingSessionIndexes(data: GamingSessionIndexUpdateManyMutationInput!, where: GamingSessionIndexWhereInput): BatchPayload!
   updateManySessionReviewIndexes(data: SessionReviewIndexUpdateManyMutationInput!, where: SessionReviewIndexWhereInput): BatchPayload!
   updateManyGamingTimeSlots(data: GamingTimeSlotUpdateManyMutationInput!, where: GamingTimeSlotWhereInput): BatchPayload!
+  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
   updateManyBookingInvites(data: BookingInviteUpdateManyMutationInput!, where: BookingInviteWhereInput): BatchPayload!
   updateManyNotifications(data: NotificationUpdateManyMutationInput!, where: NotificationWhereInput): BatchPayload!
   updateManyRequirements(data: RequirementUpdateManyMutationInput!, where: RequirementWhereInput): BatchPayload!
@@ -4637,7 +4663,6 @@ type Mutation {
   updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
   updateManySocialMedias(data: SocialMediaUpdateManyMutationInput!, where: SocialMediaWhereInput): BatchPayload!
   updateManyGamingSessions(data: GamingSessionUpdateManyMutationInput!, where: GamingSessionWhereInput): BatchPayload!
-  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyUserIndexes(where: UserIndexWhereInput): BatchPayload!
   deleteManyBookedPlayers(where: BookedPlayerWhereInput): BatchPayload!
@@ -4648,6 +4673,7 @@ type Mutation {
   deleteManyGamingSessionIndexes(where: GamingSessionIndexWhereInput): BatchPayload!
   deleteManySessionReviewIndexes(where: SessionReviewIndexWhereInput): BatchPayload!
   deleteManyGamingTimeSlots(where: GamingTimeSlotWhereInput): BatchPayload!
+  deleteManyBookings(where: BookingWhereInput): BatchPayload!
   deleteManyBookingInvites(where: BookingInviteWhereInput): BatchPayload!
   deleteManyFriendRequests(where: FriendRequestWhereInput): BatchPayload!
   deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
@@ -4657,7 +4683,6 @@ type Mutation {
   deleteManySessionReviews(where: SessionReviewWhereInput): BatchPayload!
   deleteManySocialMedias(where: SocialMediaWhereInput): BatchPayload!
   deleteManyGamingSessions(where: GamingSessionWhereInput): BatchPayload!
-  deleteManyBookings(where: BookingWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
@@ -4703,8 +4728,13 @@ input NotificationCreateInput {
   for: UserCreateOneInput!
   friendRequest: FriendRequestCreateOneWithoutNotificationInput
   bookingInvite: BookingInviteCreateOneWithoutNotificationInput
-  booking: BookingCreateOneInput
+  booking: BookingCreateOneWithoutNotificationsInput
   friend: UserCreateOneInput
+}
+
+input NotificationCreateManyWithoutBookingInput {
+  create: [NotificationCreateWithoutBookingInput!]
+  connect: [NotificationWhereUniqueInput!]
 }
 
 input NotificationCreateOneWithoutBookingInviteInput {
@@ -4717,13 +4747,23 @@ input NotificationCreateOneWithoutFriendRequestInput {
   connect: NotificationWhereUniqueInput
 }
 
+input NotificationCreateWithoutBookingInput {
+  type: NotificationType!
+  text: String!
+  viewed: Boolean
+  for: UserCreateOneInput!
+  friendRequest: FriendRequestCreateOneWithoutNotificationInput
+  bookingInvite: BookingInviteCreateOneWithoutNotificationInput
+  friend: UserCreateOneInput
+}
+
 input NotificationCreateWithoutBookingInviteInput {
   type: NotificationType!
   text: String!
   viewed: Boolean
   for: UserCreateOneInput!
   friendRequest: FriendRequestCreateOneWithoutNotificationInput
-  booking: BookingCreateOneInput
+  booking: BookingCreateOneWithoutNotificationsInput
   friend: UserCreateOneInput
 }
 
@@ -4733,7 +4773,7 @@ input NotificationCreateWithoutFriendRequestInput {
   viewed: Boolean
   for: UserCreateOneInput!
   bookingInvite: BookingInviteCreateOneWithoutNotificationInput
-  booking: BookingCreateOneInput
+  booking: BookingCreateOneWithoutNotificationsInput
   friend: UserCreateOneInput
 }
 
@@ -4766,6 +4806,111 @@ type NotificationPreviousValues {
   type: NotificationType!
   text: String!
   viewed: Boolean!
+}
+
+input NotificationScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: NotificationType
+
+  """All values that are not equal to given value."""
+  type_not: NotificationType
+
+  """All values that are contained in given list."""
+  type_in: [NotificationType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [NotificationType!]
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  viewed: Boolean
+
+  """All values that are not equal to given value."""
+  viewed_not: Boolean
 }
 
 type NotificationSubscriptionPayload {
@@ -4827,14 +4972,37 @@ input NotificationUpdateInput {
   for: UserUpdateOneRequiredInput
   friendRequest: FriendRequestUpdateOneWithoutNotificationInput
   bookingInvite: BookingInviteUpdateOneWithoutNotificationInput
-  booking: BookingUpdateOneInput
+  booking: BookingUpdateOneWithoutNotificationsInput
   friend: UserUpdateOneInput
+}
+
+input NotificationUpdateManyDataInput {
+  type: NotificationType
+  text: String
+  viewed: Boolean
 }
 
 input NotificationUpdateManyMutationInput {
   type: NotificationType
   text: String
   viewed: Boolean
+}
+
+input NotificationUpdateManyWithoutBookingInput {
+  create: [NotificationCreateWithoutBookingInput!]
+  connect: [NotificationWhereUniqueInput!]
+  set: [NotificationWhereUniqueInput!]
+  disconnect: [NotificationWhereUniqueInput!]
+  delete: [NotificationWhereUniqueInput!]
+  update: [NotificationUpdateWithWhereUniqueWithoutBookingInput!]
+  updateMany: [NotificationUpdateManyWithWhereNestedInput!]
+  deleteMany: [NotificationScalarWhereInput!]
+  upsert: [NotificationUpsertWithWhereUniqueWithoutBookingInput!]
+}
+
+input NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput!
+  data: NotificationUpdateManyDataInput!
 }
 
 input NotificationUpdateOneRequiredWithoutFriendRequestInput {
@@ -4853,13 +5021,23 @@ input NotificationUpdateOneWithoutBookingInviteInput {
   upsert: NotificationUpsertWithoutBookingInviteInput
 }
 
+input NotificationUpdateWithoutBookingDataInput {
+  type: NotificationType
+  text: String
+  viewed: Boolean
+  for: UserUpdateOneRequiredInput
+  friendRequest: FriendRequestUpdateOneWithoutNotificationInput
+  bookingInvite: BookingInviteUpdateOneWithoutNotificationInput
+  friend: UserUpdateOneInput
+}
+
 input NotificationUpdateWithoutBookingInviteDataInput {
   type: NotificationType
   text: String
   viewed: Boolean
   for: UserUpdateOneRequiredInput
   friendRequest: FriendRequestUpdateOneWithoutNotificationInput
-  booking: BookingUpdateOneInput
+  booking: BookingUpdateOneWithoutNotificationsInput
   friend: UserUpdateOneInput
 }
 
@@ -4869,8 +5047,13 @@ input NotificationUpdateWithoutFriendRequestDataInput {
   viewed: Boolean
   for: UserUpdateOneRequiredInput
   bookingInvite: BookingInviteUpdateOneWithoutNotificationInput
-  booking: BookingUpdateOneInput
+  booking: BookingUpdateOneWithoutNotificationsInput
   friend: UserUpdateOneInput
+}
+
+input NotificationUpdateWithWhereUniqueWithoutBookingInput {
+  where: NotificationWhereUniqueInput!
+  data: NotificationUpdateWithoutBookingDataInput!
 }
 
 input NotificationUpsertWithoutBookingInviteInput {
@@ -4881,6 +5064,12 @@ input NotificationUpsertWithoutBookingInviteInput {
 input NotificationUpsertWithoutFriendRequestInput {
   update: NotificationUpdateWithoutFriendRequestDataInput!
   create: NotificationCreateWithoutFriendRequestInput!
+}
+
+input NotificationUpsertWithWhereUniqueWithoutBookingInput {
+  where: NotificationWhereUniqueInput!
+  update: NotificationUpdateWithoutBookingDataInput!
+  create: NotificationCreateWithoutBookingInput!
 }
 
 input NotificationWhereInput {
@@ -5667,6 +5856,7 @@ type Query {
   gamingSessionIndexes(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSessionIndex]!
   sessionReviewIndexes(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReviewIndex]!
   gamingTimeSlots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot]!
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking]!
   bookingInvites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite]!
   friendRequests(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest]!
   notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification]!
@@ -5676,7 +5866,6 @@ type Query {
   sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
   socialMedias(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SocialMedia]!
   gamingSessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession]!
-  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   userIndex(where: UserIndexWhereUniqueInput!): UserIndex
   bookedPlayer(where: BookedPlayerWhereUniqueInput!): BookedPlayer
@@ -5687,6 +5876,7 @@ type Query {
   gamingSessionIndex(where: GamingSessionIndexWhereUniqueInput!): GamingSessionIndex
   sessionReviewIndex(where: SessionReviewIndexWhereUniqueInput!): SessionReviewIndex
   gamingTimeSlot(where: GamingTimeSlotWhereUniqueInput!): GamingTimeSlot
+  booking(where: BookingWhereUniqueInput!): Booking
   bookingInvite(where: BookingInviteWhereUniqueInput!): BookingInvite
   friendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
   notification(where: NotificationWhereUniqueInput!): Notification
@@ -5694,7 +5884,6 @@ type Query {
   sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   socialMedia(where: SocialMediaWhereUniqueInput!): SocialMedia
   gamingSession(where: GamingSessionWhereUniqueInput!): GamingSession
-  booking(where: BookingWhereUniqueInput!): Booking
   user(where: UserWhereUniqueInput!): User
   userIndexesConnection(where: UserIndexWhereInput, orderBy: UserIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserIndexConnection!
   bookedPlayersConnection(where: BookedPlayerWhereInput, orderBy: BookedPlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookedPlayerConnection!
@@ -5705,6 +5894,7 @@ type Query {
   gamingSessionIndexesConnection(where: GamingSessionIndexWhereInput, orderBy: GamingSessionIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionIndexConnection!
   sessionReviewIndexesConnection(where: SessionReviewIndexWhereInput, orderBy: SessionReviewIndexOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewIndexConnection!
   gamingTimeSlotsConnection(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingTimeSlotConnection!
+  bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
   bookingInvitesConnection(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingInviteConnection!
   friendRequestsConnection(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FriendRequestConnection!
   notificationsConnection(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationConnection!
@@ -5714,7 +5904,6 @@ type Query {
   sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
   socialMediasConnection(where: SocialMediaWhereInput, orderBy: SocialMediaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SocialMediaConnection!
   gamingSessionsConnection(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GamingSessionConnection!
-  bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -7079,6 +7268,7 @@ type Subscription {
   gamingSessionIndex(where: GamingSessionIndexSubscriptionWhereInput): GamingSessionIndexSubscriptionPayload
   sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
   gamingTimeSlot(where: GamingTimeSlotSubscriptionWhereInput): GamingTimeSlotSubscriptionPayload
+  booking(where: BookingSubscriptionWhereInput): BookingSubscriptionPayload
   bookingInvite(where: BookingInviteSubscriptionWhereInput): BookingInviteSubscriptionPayload
   friendRequest(where: FriendRequestSubscriptionWhereInput): FriendRequestSubscriptionPayload
   notification(where: NotificationSubscriptionWhereInput): NotificationSubscriptionPayload
@@ -7088,7 +7278,6 @@ type Subscription {
   sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
   gamingSession(where: GamingSessionSubscriptionWhereInput): GamingSessionSubscriptionPayload
-  booking(where: BookingSubscriptionWhereInput): BookingSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

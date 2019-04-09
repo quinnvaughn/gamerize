@@ -6,7 +6,7 @@ type Notification {
   friendRequest: FriendRequest
     @relation(name: "FriendRequestNotification", onDelete: SET_NULL)
   bookingInvite: BookingInvite
-  booking: Booking
+  booking: Booking @relation(name: "BookingNotifications", onDelete: SET_NULL)
   friend: User @relation(name: "NewFriendNotification", onDelete: SET_NULL)
   viewed: Boolean! @default(value: false)
 }

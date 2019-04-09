@@ -297,6 +297,7 @@ const GET_SLOTS_TODAY = gql`
 const GET_ME = gql`
   {
     me {
+      id
       gamertags {
         psn
         xbl
