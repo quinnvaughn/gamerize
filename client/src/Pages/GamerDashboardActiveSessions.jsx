@@ -5,6 +5,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 //local imports
 import CreatedSessionCard from '../Components/CreatedSessionCard'
+import GamerDashboardSessionsNav from '../Components/GamerDashboardSessionsNav'
 import CreateSession from '../Components/CreateSession'
 import Modal from '../Components/Modal'
 
@@ -58,35 +59,43 @@ const NewSession = styled.button`
   font-weight: 600;
 `
 
-const GET_SESSIONS = gql`
+const GET_ME = gql`
   {
     me {
       id
       setup
-      sessions {
-        id
-        title
-        game {
-          name
-        }
-        gamers {
-          username
-        }
-        price
-        length
-        system
-        slots
-        type
-      }
     }
   }
 `
 
-export default function GamerDashboardSessions(props) {
+const GET_SESSIONS = gql`
+  {
+    myGamingSessions {
+      id
+      title
+      game {
+        name
+      }
+      gamers {
+        username
+      }
+      price
+      length
+      system
+      slots
+      type
+    }
+  }
+`
+
+export default function GamerDashboardActiveSessions(props) {
   const [openNew, setOpenNew] = useState(false)
   const [edit, setEdit] = useState(false)
-  const { data, loading, refetch } = useQuery(GET_SESSIONS)
-  return loading ? null : (
+  const { data, loading } = useQuery(GET_ME)
+  const { data: sessions, loading: secondLoading, refetch } = useQuery(
+    GET_SESSIONS
+  )
+  return loading || secondLoading ? null : (
     <PageContainer>
       <Content>
         <Top>
@@ -95,8 +104,9 @@ export default function GamerDashboardSessions(props) {
             Create new session
           </NewSession>
         </Top>
+        <GamerDashboardSessionsNav />
         <Sessions>
-          {data.me.sessions.map(session => (
+          {sessions.myGamingSessions.map(session => (
             <CreatedSessionCard
               session={session}
               refetch={refetch}

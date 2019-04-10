@@ -126,10 +126,28 @@ const SessionSlots = styled.input`
   }
 `
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
 const EditSession = styled.button`
   background: #f10e0e;
   padding: 1rem 1.4rem;
   color: #fff;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #f10e0e;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-top: 1rem;
+`
+
+const DeleteSession = styled.button`
+  background: #fff;
+  padding: 1rem 1.4rem;
+  color: #f10e0e;
   cursor: pointer;
   outline: 0;
   border: 1px solid #f10e0e;
@@ -149,6 +167,14 @@ const UPDATE_SESSION = gql`
   }
 `
 
+const RETIRE_SESSION = gql`
+  mutation($input: RetireSessionInput!) {
+    retireSession(input: $input) {
+      retired
+    }
+  }
+`
+
 export default function CreatedSessionCardBack({
   session,
   dispatch,
@@ -156,6 +182,7 @@ export default function CreatedSessionCardBack({
   refetch,
 }) {
   const updateSession = useMutation(UPDATE_SESSION)
+  const retireSession = useMutation(RETIRE_SESSION)
   return (
     <Card back>
       <TitleContainer>
@@ -219,25 +246,41 @@ export default function CreatedSessionCardBack({
         dispatch={dispatch}
         title={state.type}
       />
-      <EditSession
-        onClick={async () => {
-          const input = {
-            sessionId: session.id,
-            title: state.title,
-            game: state.game,
-            price: state.price,
-            length: state.length,
-            system: state.system,
-            slots: state.slots,
-            type: state.type,
-          }
-          await updateSession({ variables: { input } })
-          await refetch()
-          dispatch({ type: 'flip', payload: false })
-        }}
-      >
-        Update Session
-      </EditSession>
+      <ButtonContainer>
+        <EditSession
+          onClick={async () => {
+            const input = {
+              sessionId: session.id,
+              title: state.title,
+              game: state.game,
+              price: state.price,
+              length: state.length,
+              system: state.system,
+              slots: state.slots,
+              type: state.type,
+            }
+            await updateSession({ variables: { input } })
+            await refetch()
+            dispatch({ type: 'flip', payload: false })
+          }}
+        >
+          Update Session
+        </EditSession>
+        <DeleteSession
+          onClick={async () => {
+            const input = {
+              sessionId: session.id,
+            }
+            const { data } = await retireSession({ variables: { input } })
+            if (data.retireSession.retired) {
+              await refetch()
+            }
+            dispatch({ type: 'flip', payload: false })
+          }}
+        >
+          Retire Session
+        </DeleteSession>
+      </ButtonContainer>
     </Card>
   )
 }

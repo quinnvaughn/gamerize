@@ -113,7 +113,7 @@ export default function NextSession(props) {
       } else {
         let username =
           data.nextTimeSlot.players.length > 0 &&
-          data.nextTimeSlot.players[counter].player.gamertags[counter]
+          data.nextTimeSlot.players[counter].player.gamertags
             ? data.nextTimeSlot.players[counter].player.gamertags[system]
             : null
         usernames.add(username)

@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Apr 09 2019 15:28:55 GMT-0500 (CDT)
+# timestamp: Tue Apr 09 2019 17:48:49 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -2998,6 +2998,7 @@ type GamingSession implements Node {
   requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement!]
   discounts(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Discount!]
   timeslots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
+  retired: Boolean!
 }
 
 """A connection to a list of items."""
@@ -3017,6 +3018,7 @@ input GamingSessionCreateInput {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean
   gamers: UserCreateManyWithoutSessionsInput
   creator: UserCreateOneInput!
   game: GameCreateOneWithoutSessionsInput!
@@ -3058,6 +3060,7 @@ input GamingSessionCreateWithoutGameInput {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean
   gamers: UserCreateManyWithoutSessionsInput
   creator: UserCreateOneInput!
   reviews: SessionReviewCreateManyWithoutSessionInput
@@ -3073,6 +3076,7 @@ input GamingSessionCreateWithoutGamersInput {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean
   creator: UserCreateOneInput!
   game: GameCreateOneWithoutSessionsInput!
   reviews: SessionReviewCreateManyWithoutSessionInput
@@ -3088,6 +3092,7 @@ input GamingSessionCreateWithoutReviewsInput {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean
   gamers: UserCreateManyWithoutSessionsInput
   creator: UserCreateOneInput!
   game: GameCreateOneWithoutSessionsInput!
@@ -3103,6 +3108,7 @@ input GamingSessionCreateWithoutTimeslotsInput {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean
   gamers: UserCreateManyWithoutSessionsInput
   creator: UserCreateOneInput!
   game: GameCreateOneWithoutSessionsInput!
@@ -3325,6 +3331,8 @@ enum GamingSessionOrderByInput {
   type_DESC
   slots_ASC
   slots_DESC
+  retired_ASC
+  retired_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3339,6 +3347,7 @@ type GamingSessionPreviousValues {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean!
 }
 
 input GamingSessionScalarWhereInput {
@@ -3516,6 +3525,10 @@ input GamingSessionScalarWhereInput {
 
   """All values greater than or equal the given value."""
   slots_gte: Int
+  retired: Boolean
+
+  """All values that are not equal to given value."""
+  retired_not: Boolean
 }
 
 type GamingSessionSubscriptionPayload {
@@ -3564,6 +3577,7 @@ input GamingSessionUpdateDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
@@ -3580,6 +3594,7 @@ input GamingSessionUpdateInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
@@ -3596,6 +3611,7 @@ input GamingSessionUpdateManyDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
 }
 
 input GamingSessionUpdateManyMutationInput {
@@ -3605,6 +3621,7 @@ input GamingSessionUpdateManyMutationInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
 }
 
 input GamingSessionUpdateManyWithoutGameInput {
@@ -3664,6 +3681,7 @@ input GamingSessionUpdateWithoutGameDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
@@ -3679,6 +3697,7 @@ input GamingSessionUpdateWithoutGamersDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
   reviews: SessionReviewUpdateManyWithoutSessionInput
@@ -3694,6 +3713,7 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
@@ -3709,6 +3729,7 @@ input GamingSessionUpdateWithoutTimeslotsDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
@@ -3929,6 +3950,10 @@ input GamingSessionWhereInput {
 
   """All values greater than or equal the given value."""
   slots_gte: Int
+  retired: Boolean
+
+  """All values that are not equal to given value."""
+  retired_not: Boolean
   gamers_every: UserWhereInput
   gamers_some: UserWhereInput
   gamers_none: UserWhereInput

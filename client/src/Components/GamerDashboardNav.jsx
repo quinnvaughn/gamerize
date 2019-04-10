@@ -73,11 +73,18 @@ export default function GamerDashboardNav(props) {
         </NotificationContainer>
       </StyledLink>
       <StyledLink to="/gamer-dashboard/calendar">Calendar</StyledLink>
-      <StyledLink to="/gamer-dashboard/sessions">Sessions</StyledLink>
+      <StyledLink
+        to="/gamer-dashboard/sessions/active"
+        isActive={(_, { pathname }) =>
+          pathname.match(`/gamer-dashboard/sessions/d*`)
+        }
+      >
+        Sessions
+      </StyledLink>
       <StyledLink
         to="/gamer-dashboard/account/edit"
         isActive={(_, { pathname }) =>
-          pathname.match(`\/gamer-dashboard\/account\/d*`)
+          pathname.match(`/gamer-dashboard/account/d*`)
         }
       >
         Account

@@ -1979,6 +1979,7 @@ type GamingSession {
   requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement!]
   discounts(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Discount!]
   timeslots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
+  retired: Boolean!
 }
 
 type GamingSessionConnection {
@@ -2001,6 +2002,7 @@ input GamingSessionCreateInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionCreateManyWithoutGameInput {
@@ -2041,6 +2043,7 @@ input GamingSessionCreateWithoutGameInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionCreateWithoutGamersInput {
@@ -2056,6 +2059,7 @@ input GamingSessionCreateWithoutGamersInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionCreateWithoutReviewsInput {
@@ -2071,6 +2075,7 @@ input GamingSessionCreateWithoutReviewsInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionCreateWithoutTimeslotsInput {
@@ -2086,6 +2091,7 @@ input GamingSessionCreateWithoutTimeslotsInput {
   slots: Int!
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
+  retired: Boolean
 }
 
 type GamingSessionEdge {
@@ -2212,6 +2218,8 @@ enum GamingSessionOrderByInput {
   type_DESC
   slots_ASC
   slots_DESC
+  retired_ASC
+  retired_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2226,6 +2234,7 @@ type GamingSessionPreviousValues {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  retired: Boolean!
 }
 
 input GamingSessionScalarWhereInput {
@@ -2289,6 +2298,8 @@ input GamingSessionScalarWhereInput {
   slots_lte: Int
   slots_gt: Int
   slots_gte: Int
+  retired: Boolean
+  retired_not: Boolean
   AND: [GamingSessionScalarWhereInput!]
   OR: [GamingSessionScalarWhereInput!]
   NOT: [GamingSessionScalarWhereInput!]
@@ -2326,6 +2337,7 @@ input GamingSessionUpdateDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateInput {
@@ -2342,6 +2354,7 @@ input GamingSessionUpdateInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateManyDataInput {
@@ -2351,6 +2364,7 @@ input GamingSessionUpdateManyDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
 }
 
 input GamingSessionUpdateManyMutationInput {
@@ -2360,6 +2374,7 @@ input GamingSessionUpdateManyMutationInput {
   system: System
   type: TypeOfGame
   slots: Int
+  retired: Boolean
 }
 
 input GamingSessionUpdateManyWithoutGameInput {
@@ -2425,6 +2440,7 @@ input GamingSessionUpdateWithoutGameDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateWithoutGamersDataInput {
@@ -2440,6 +2456,7 @@ input GamingSessionUpdateWithoutGamersDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateWithoutReviewsDataInput {
@@ -2455,6 +2472,7 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateWithoutTimeslotsDataInput {
@@ -2470,6 +2488,7 @@ input GamingSessionUpdateWithoutTimeslotsDataInput {
   slots: Int
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
+  retired: Boolean
 }
 
 input GamingSessionUpdateWithWhereUniqueWithoutGameInput {
@@ -2587,6 +2606,8 @@ input GamingSessionWhereInput {
   timeslots_every: GamingTimeSlotWhereInput
   timeslots_some: GamingTimeSlotWhereInput
   timeslots_none: GamingTimeSlotWhereInput
+  retired: Boolean
+  retired_not: Boolean
   AND: [GamingSessionWhereInput!]
   OR: [GamingSessionWhereInput!]
   NOT: [GamingSessionWhereInput!]
