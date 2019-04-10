@@ -3,7 +3,8 @@ import styled from 'styled-components'
 
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import GamerDashboardCalendar from './GamerDashboardCalendar'
-import GamerDashboardSessions from './GamerDashboardSessions'
+import GamerDashboardActiveSessions from './GamerDashboardActiveSessions'
+import GamerDashboardRetiredSessions from './GamerDashboardRetiredSessions'
 import GamerDashboardAccountEdit from './GamerDashboardAccountEdit'
 import GamerDashboardAccountPhotos from './GamerDashboardAccountPhotos'
 import GamerDashboardHome from './GamerDashboardHome'
@@ -26,8 +27,12 @@ const routes = [
     component: GamerDashboardCalendar,
   },
   {
-    path: '/gamer-dashboard/sessions',
-    component: GamerDashboardSessions,
+    path: '/gamer-dashboard/sessions/active',
+    component: GamerDashboardActiveSessions,
+  },
+  {
+    path: '/gamer-dashboard/sessions/retired',
+    component: GamerDashboardRetiredSessions,
   },
   {
     path: '/gamer-dashboard/account/edit',

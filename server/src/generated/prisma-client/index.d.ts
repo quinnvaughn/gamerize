@@ -1037,6 +1037,8 @@ export type GamingSessionOrderByInput =
   | "type_DESC"
   | "slots_ASC"
   | "slots_DESC"
+  | "retired_ASC"
+  | "retired_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1774,6 +1776,7 @@ export interface GamingSessionUpdateWithoutGamersDataInput {
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface BookingInviteSubscriptionWhereInput {
@@ -2058,6 +2061,7 @@ export interface GamingSessionUpdateWithoutTimeslotsDataInput {
   slots?: Int;
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
+  retired?: Boolean;
 }
 
 export interface GamerRequestWhereInput {
@@ -2574,6 +2578,7 @@ export interface GamingSessionUpdateInput {
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface BookingUpdateWithWhereUniqueWithoutPlayersInput {
@@ -2936,6 +2941,7 @@ export interface GamingSessionUpdateWithoutReviewsDataInput {
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface UserCreateInput {
@@ -3118,6 +3124,7 @@ export interface GamingSessionCreateWithoutTimeslotsInput {
   slots: Int;
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
+  retired?: Boolean;
 }
 
 export interface DiscountUpdateManyDataInput {
@@ -3462,6 +3469,7 @@ export interface GamingSessionCreateWithoutReviewsInput {
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
   timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface UserUpdateWithWhereUniqueNestedInput {
@@ -4343,6 +4351,8 @@ export interface GamingSessionWhereInput {
   timeslots_every?: GamingTimeSlotWhereInput;
   timeslots_some?: GamingTimeSlotWhereInput;
   timeslots_none?: GamingTimeSlotWhereInput;
+  retired?: Boolean;
+  retired_not?: Boolean;
   AND?: GamingSessionWhereInput[] | GamingSessionWhereInput;
   OR?: GamingSessionWhereInput[] | GamingSessionWhereInput;
   NOT?: GamingSessionWhereInput[] | GamingSessionWhereInput;
@@ -4368,6 +4378,7 @@ export interface GamingSessionCreateInput {
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
   timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface NotificationScalarWhereInput {
@@ -4601,6 +4612,7 @@ export interface GamingSessionCreateWithoutGamersInput {
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
   timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface BookedPlayerUpdateWithoutTimeslotDataInput {
@@ -5274,6 +5286,7 @@ export interface GamingSessionUpdateDataInput {
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface UserUpsertWithoutReviewsInput {
@@ -5288,6 +5301,7 @@ export interface GamingSessionUpdateManyMutationInput {
   system?: System;
   type?: TypeOfGame;
   slots?: Int;
+  retired?: Boolean;
 }
 
 export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
@@ -5375,6 +5389,8 @@ export interface GamingSessionScalarWhereInput {
   slots_lte?: Int;
   slots_gt?: Int;
   slots_gte?: Int;
+  retired?: Boolean;
+  retired_not?: Boolean;
   AND?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
   OR?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
   NOT?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
@@ -5403,6 +5419,7 @@ export interface GamingSessionUpdateManyDataInput {
   system?: System;
   type?: TypeOfGame;
   slots?: Int;
+  retired?: Boolean;
 }
 
 export interface GamingSessionCreateOneWithoutTimeslotsInput {
@@ -5892,6 +5909,7 @@ export interface GamingSessionCreateWithoutGameInput {
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
   timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface UserCreateOneWithoutReviewsInput {
@@ -5985,6 +6003,7 @@ export interface GamingSessionUpdateWithoutGameDataInput {
   requirements?: RequirementUpdateManyInput;
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface GameIndexUpdateManyMutationInput {
@@ -6070,6 +6089,7 @@ export interface GamingSession {
   system: System;
   type: TypeOfGame;
   slots: Int;
+  retired: Boolean;
 }
 
 export interface GamingSessionPromise
@@ -6139,6 +6159,7 @@ export interface GamingSessionPromise
       last?: Int;
     }
   ) => T;
+  retired: () => Promise<Boolean>;
 }
 
 export interface GamingSessionSubscription
@@ -6208,6 +6229,7 @@ export interface GamingSessionSubscription
       last?: Int;
     }
   ) => T;
+  retired: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface SessionReview {
@@ -7941,6 +7963,7 @@ export interface GamingSessionPreviousValues {
   system: System;
   type: TypeOfGame;
   slots: Int;
+  retired: Boolean;
 }
 
 export interface GamingSessionPreviousValuesPromise
@@ -7953,6 +7976,7 @@ export interface GamingSessionPreviousValuesPromise
   system: () => Promise<System>;
   type: () => Promise<TypeOfGame>;
   slots: () => Promise<Int>;
+  retired: () => Promise<Boolean>;
 }
 
 export interface GamingSessionPreviousValuesSubscription
@@ -7965,6 +7989,7 @@ export interface GamingSessionPreviousValuesSubscription
   system: () => Promise<AsyncIterator<System>>;
   type: () => Promise<AsyncIterator<TypeOfGame>>;
   slots: () => Promise<AsyncIterator<Int>>;
+  retired: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface SessionReviewConnection {

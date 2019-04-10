@@ -58,6 +58,44 @@ const gamingsession = {
       return { updatedSession }
     }
   },
+  async retireSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    const gamers = await ctx.prisma
+      .gamingSession({ id: input.sessionId })
+      .gamers({ where: { id: userId } })
+    if (gamers.length === 0) {
+      throw AuthError()
+    } else {
+      const retiredSession = await ctx.prisma.updateGamingSession({
+        where: {
+          id: input.sessionId,
+        },
+        data: {
+          retired: true,
+        },
+      })
+      return { retired: retiredSession ? true : false }
+    }
+  },
+  async unretireSession(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    const gamers = await ctx.prisma
+      .gamingSession({ id: input.sessionId })
+      .gamers({ where: { id: userId } })
+    if (gamers.length === 0) {
+      throw AuthError()
+    } else {
+      const unretiredSession = await ctx.prisma.updateGamingSession({
+        where: {
+          id: input.sessionId,
+        },
+        data: {
+          retired: false,
+        },
+      })
+      return { unretired: unretiredSession ? true : false }
+    }
+  },
 }
 
 module.exports = { gamingsession }

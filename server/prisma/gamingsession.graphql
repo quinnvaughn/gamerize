@@ -19,6 +19,7 @@ type GamingSession {
   requirements: [Requirement!]!
   discounts: [Discount!]!
   timeslots: [GamingTimeSlot!]!
+  retired: Boolean! @default(value: false)
 }
 
 ## Workaround for no case insensitive search in prisma yet.
