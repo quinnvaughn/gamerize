@@ -17,6 +17,8 @@ type Query {
   thatDaySessions(day: DateTime!): [GamingTimeSlot!]!
   myUpcomingBookings: [Booking!]!
   myPastBookings: [Booking!]!
+  myGamingSessions: [GamingSession!]!
+  myRetiredGamingSessions: [GamingSession!]!
   nextTimeSlot: GamingTimeSlot
   myInvites: [BookingInvite!]!
   myInvitesReceived: [BookingInvite!]!
@@ -65,8 +67,12 @@ type Mutation {
   declineFriendRequest(
     input: DeclineFriendRequestInput!
   ): DeclineFriendRequestPayload!
-  deleteNotification(input: DeleteNotificationInput): DeleteNotificationPayload!
-  acceptGamerRequest(input: AcceptGamerRequestInput): AcceptGamerRequestPayload!
+  deleteNotification(
+    input: DeleteNotificationInput!
+  ): DeleteNotificationPayload!
+  acceptGamerRequest(
+    input: AcceptGamerRequestInput!
+  ): AcceptGamerRequestPayload!
   declineGamerRequest(
     input: DeclineGamerRequestInput!
   ): DeclineGamerRequestPayload!
@@ -75,6 +81,24 @@ type Mutation {
   ): UpdateGamerProfilePayload!
   viewUserNotifications: ViewNotificationsPayload!
   viewGamerNotifications: ViewNotificationsPayload!
+  retireSession(input: RetireSessionInput!): RetireSessionPayload!
+  unretireSession(input: UnretireSessionInput!): UnretireSessionPayload!
+}
+
+input UnretireSessionInput {
+  sessionId: String!
+}
+
+type UnretireSessionPayload {
+  unretired: Boolean!
+}
+
+input RetireSessionInput {
+  sessionId: String!
+}
+
+type RetireSessionPayload {
+  retired: Boolean!
 }
 
 type ViewNotificationsPayload {
