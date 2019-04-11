@@ -25,6 +25,7 @@ type Query {
   myFriendRequests: [FriendRequest!]!
   myUserNotifications: [Notification!]!
   myGamerNotifications: [Notification!]!
+  specificGame(name: String!): Game!
   numUserNotifications: Int!
   numGamerNotifications: Int!
   getGamers(first: Int): [User!]!

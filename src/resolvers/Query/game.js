@@ -11,6 +11,9 @@ const game = {
       .aggregate()
       .count()
   },
+  async specificGame(parent, { name }, { prisma }) {
+    return await prisma.game({ name })
+  },
 }
 
 module.exports = { game }
