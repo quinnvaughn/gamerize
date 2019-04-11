@@ -1,15 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
+import gql from 'graphql-tag'
+import { useQuery } from 'react-apollo-hooks'
 
 import NavBar from '../Components/NavBar'
-import Filters from '../Components/Filters'
-import TopSessionsRow from '../Components/TopSessionsRow'
-import { noUnderscores } from '../utils/Strings'
-
-//data
-import gamers from '../data/gamers'
-import games from '../data/games'
+import GamesRow from '../Components/GamesRow'
+import { capitalize } from '../utils/Strings'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -74,26 +71,49 @@ const Sessions = styled.div`
   margin-bottom: 1.2rem;
 `
 
+const GET_GAME = gql`
+  query($name: String!) {
+    specificGame(name: $name) {
+      name
+      tags
+      numSessions
+      sessions {
+        system 
+        numReviews
+        reviewRating
+        id
+        creator {
+          username
+          name
+        }
+        title
+        price
+      }
+    }
+  }
+`
+
 export default function SpecificGamePage(props) {
-  const game = _.find(
-    games,
-    singleGame => singleGame.name === noUnderscores(props.match.params.game)
-  )
-  console.log(game)
-  return (
+  const { data, loading } = useQuery(GET_GAME, {
+    variables: { name: props.match.params.game },
+  })
+  const { specificGame: game } = data
+  return loading ? null : (
     <PageContainer>
       <NavBar />
-      <Filters />
       <Content>
         <TitleOfGame>{`${game.name}`}</TitleOfGame>
-        <Sessions>{`${game.sessions} sessions`}</Sessions>
+        <Sessions>{`${game.numSessions} ${
+          game.numSessions === 1 ? 'session' : 'sessions'
+        }
+        `}</Sessions>
         <Tags>
           {game.tags.map(tag => (
-            <Tag>{tag}</Tag>
+            <Tag>{capitalize(tag)}</Tag>
           ))}
         </Tags>
         <InnerContent>
-          <TopSessionsRow gamers={gamers} game={game.name} />
+          <GamesRow name={game.name} sessions={game.sessions} />
         </InnerContent>
       </Content>
     </PageContainer>

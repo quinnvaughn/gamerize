@@ -116,7 +116,7 @@ const Bottom = styled.div`
 export default function Session(props) {
   return (
     <Container>
-      <StyledLink to={`/users/${props.username}/${noSpaces(props.game)}`}>
+      <StyledLink to={`/users/${props.username}/${noSpaces(props.game)}/${props.id}`}>
         <DynamicImage src={DefaultAvatar} />
         <TitleContainer>
           <Title>{props.title}</Title>
