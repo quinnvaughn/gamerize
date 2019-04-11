@@ -132,12 +132,13 @@ export default function Totals(props) {
   const [loading, setLoading] = useState(false)
   const [booked, setBooked] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
-  const disabled =
-    props.me.gamertags && props.system === 'PC'
+  const disabled = props.me.gamertags
+    ? props.system === 'PC'
       ? !props.me.gamertags[mapSystem(props.system)][
           mapLauncher(props.launcher)
         ]
       : !props.me.gamertags[mapSystem(props.system)]
+    : true
   return (
     <Container>
       <Subscribe to={[SessionsContainer]}>

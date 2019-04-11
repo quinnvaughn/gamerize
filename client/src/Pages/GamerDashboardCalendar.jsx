@@ -34,6 +34,7 @@ const LeftSide = styled.div`
 
 const RightSide = styled.div`
   flex: 40%;
+  height: calc(100vh - 80rem);
 `
 
 const YourSessions = styled.div`
@@ -74,7 +75,27 @@ const Top = styled.div`
   margin-bottom: 2rem;
 `
 
-const Bottom = styled.div``
+const AllSessions = styled.div`
+  height: calc(100vh - 40rem);
+  overflow-y: scroll;
+  border: 1px solid #ebebeb;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`
+
+const Bottom = styled.div`
+  height: 100%;
+`
 
 const MONTH = 'MONTH'
 
@@ -201,6 +222,7 @@ export default function GamerDashboardCalendar(props) {
               These are all your sessions. Click on them to get options to add
               them to your calendar. Edit them in the sessions tab.
             </Info>
+            <AllSessions>
             {loading
               ? null
               : data.me &&
@@ -214,6 +236,7 @@ export default function GamerDashboardCalendar(props) {
                     refetch={refetch}
                   />
                 ))}
+                </AllSessions>
           </Bottom>
         </RightSide>
       </Content>
