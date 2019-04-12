@@ -104,7 +104,7 @@ export default function NextSession(props) {
       if (system === 'pc') {
         let username =
           data.nextTimeSlot.players.length > 0 &&
-          data.nextTimeSlot.players[counter].player.gamertags
+          data.nextTimeSlot.players[counter]
             ? data.nextTimeSlot.players[counter].player.gamertags[system][
                 launcher
               ]
@@ -113,7 +113,7 @@ export default function NextSession(props) {
       } else {
         let username =
           data.nextTimeSlot.players.length > 0 &&
-          data.nextTimeSlot.players[counter].player.gamertags
+          data.nextTimeSlot.players[counter]
             ? data.nextTimeSlot.players[counter].player.gamertags[system]
             : null
         usernames.add(username)
