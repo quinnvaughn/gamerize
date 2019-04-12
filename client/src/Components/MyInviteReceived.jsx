@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
 
 import DefaultSessionPicture from '../default-game.gif'
+import { displaySystem, mapLauncher, mapSystem } from '../utils/System'
+import { capitalize } from '../utils/Strings.js'
 
 const Container = styled.div`
   display: flex;
@@ -111,12 +113,13 @@ const InviteButtonContainer = styled.div`
 `
 
 const AcceptInvite = styled.button`
-  background: #f10e0e;
+  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  pointer-events: ${props => props.disabled && 'none'};
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
@@ -146,6 +149,11 @@ const User = styled(Link)`
     text-decoration: underline;
   }
 `
+const CorrectGamertag = styled.div`
+  word-wrap: break-word;
+  text-align: center;
+  margin-top: 1rem;
+`
 
 const ACCEPT_INVITE = gql`
   mutation($input: AcceptInviteInput!) {
@@ -168,10 +176,22 @@ export default function MyInviteReceived({
   refetch,
   inviteId,
   from,
+  gamertags,
 }) {
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
   const acceptInvite = useMutation(ACCEPT_INVITE)
   const declineInvite = useMutation(DECLINE_INVITE)
+  const noGamertags = gamertags === null ? true : false
+  const { system, game } = timeslot.gamingSession
+  const correctGamertags =
+    gamertags && system === 'PC'
+      ? gamertags && gamertags.pc[mapLauncher(game.launcher)] === null
+        ? true
+        : false
+      : gamertags && gamertags[mapSystem(system)] === null
+      ? true
+      : false
+  const disabled = noGamertags || !correctGamertags
   return (
     <Container>
       <Margins>
@@ -207,6 +227,7 @@ export default function MyInviteReceived({
               Decline Invite
             </DeclineInvite>
             <AcceptInvite
+              disabled={disabled}
               onClick={async () => {
                 const input = { inviteId }
                 const { data } = await acceptInvite({ variables: { input } })
@@ -218,6 +239,12 @@ export default function MyInviteReceived({
               Accept Invite
             </AcceptInvite>
           </InviteButtonContainer>
+          <CorrectGamertag>
+            You must add the correct gamer tag for{' '}
+            {system === 'PC'
+              ? `${capitalize(game.launcher)} Launcher`
+              : displaySystem(system)}
+          </CorrectGamertag>
         </SessionInfo>
       </Margins>
     </Container>

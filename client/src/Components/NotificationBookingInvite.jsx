@@ -5,7 +5,7 @@ import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 //local imports
-import { capitalize } from '../utils/Strings.js'
+import { capitalize } from '../utils/Strings'
 import { displaySystem, mapLauncher, mapSystem } from '../utils/System'
 
 const Container = styled.div`

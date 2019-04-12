@@ -16,7 +16,7 @@ const Card = styled.div`
   border-radius: 4px;
   padding: 2rem;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: ${props => (props.last ? '4rem' : '1rem')};
   min-height: 100%;
   :hover {
     background: ${props => !props.back && '#ededed'};
@@ -204,11 +204,12 @@ export default function GamerSessionCardBack({
   session,
   dispatch,
   refetch,
+  last,
 }) {
   const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
   const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
   return (
-    <Card back>
+    <Card back last={last}>
       {state.addState === null && (
         <Fragment>
           <Buttons>
