@@ -10,7 +10,7 @@ const Card = styled.div`
   border-radius: 4px;
   padding: 2rem;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: ${props => (props.last ? '4rem' : '1rem')};
   min-height: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -56,9 +56,14 @@ const Length = styled.div`
   font-weight: 400;
 `
 
-export default function GamerSessionCardFront({ session, dispatch, setup }) {
+export default function GamerSessionCardFront({
+  session,
+  dispatch,
+  setup,
+  last,
+}) {
   return (
-    <Card onClick={() => dispatch({ type: 'flip', payload: true })}>
+    <Card onClick={() => dispatch({ type: 'flip', payload: true })} last={last}>
       <SessionTitle>{session.title}</SessionTitle>
       <Game>{session.game.name}</Game>
       <Gamers>

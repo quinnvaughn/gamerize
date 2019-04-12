@@ -133,6 +133,18 @@ const MY_SESSIONS = gql`
     me {
       id
       username
+      gamertags {
+        psn
+        nso
+        xbl
+        pc {
+          epic
+          origin
+          steam
+          battlenet
+          bethesda
+        }
+      }
     }
     myInvitesReceived {
       id
@@ -142,8 +154,10 @@ const MY_SESSIONS = gql`
       booking {
         timeslot {
           gamingSession {
+            system
             game {
               name
+              launcher
             }
           }
           gamers {
@@ -256,6 +270,7 @@ export default function UserSessionsPage(props) {
                       key={invite.id}
                       timeslot={invite.booking.timeslot}
                       inviteId={invite.id}
+                      gamertags={data.me.gamertags}
                     />
                   ))}
                 </InvitesContent>

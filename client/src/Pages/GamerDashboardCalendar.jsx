@@ -76,7 +76,7 @@ const Top = styled.div`
 `
 
 const AllSessions = styled.div`
-  height: calc(100vh - 40rem);
+  height: 40rem;
   overflow-y: scroll;
   border: 1px solid #ebebeb;
   ::-webkit-scrollbar {
@@ -228,11 +228,12 @@ export default function GamerDashboardCalendar(props) {
                 : data.me &&
                   data.me.sessions &&
                   data.me.setup &&
-                  data.me.sessions.map(session => (
+                  data.me.sessions.map((session, index) => (
                     <GamerSessionCard
                       session={session}
                       key={session.id}
                       setup={data.me.setup}
+                      last={index === data.me.sessions.length - 1}
                       refetch={refetch}
                     />
                   ))}
