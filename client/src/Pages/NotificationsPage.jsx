@@ -67,6 +67,7 @@ const MY_NOTIFICATIONS = gql`
         id
         booking {
           timeslot {
+            passed
             gamingSession {
               system
               game {

@@ -11,6 +11,7 @@ const bookingInvite = {
           booking {
             timeslot {
               gamingSession {
+                system
                 game {
                   name
                 }
@@ -34,8 +35,11 @@ const bookingInvite = {
     const usernames = timeslot.gamers.map(gamer => gamer.username)
     const gamers = usernames.join(', ')
     const dateFormat = 'h:mm a'
+    const dayFormat = 'MMM Do'
+    const system = timeslot.gamingSession.system
     const start = dateFns.format(timeslot.startTime, dateFormat)
     const end = dateFns.format(timeslot.endTime, dateFormat)
+    const day = dateFns.format(timeslot.startTime, dayFormat)
     const to = await ctx.prisma
       .updateBookingInvite({
         data: {
@@ -49,7 +53,7 @@ const bookingInvite = {
               type: 'TIMESLOT_INVITE',
               text: `${from.username} sent you an invite to play ${
                 timeslot.gamingSession.game.name
-              } with ${gamers} from ${start}-${end}`,
+              } on ${system} with ${gamers} from ${start}-${end} on ${day}`,
               for: {
                 connect: {
                   username: input.username,
