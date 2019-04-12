@@ -33,7 +33,7 @@ const bookingInvite = {
     } = await ctx.prisma.$graphql(QUERY)
     const usernames = timeslot.gamers.map(gamer => gamer.username)
     const gamers = usernames.join(', ')
-    const dateFormat = 'h:mm A'
+    const dateFormat = 'h:mm a'
     const start = dateFns.format(timeslot.startTime, dateFormat)
     const end = dateFns.format(timeslot.endTime, dateFormat)
     const to = await ctx.prisma

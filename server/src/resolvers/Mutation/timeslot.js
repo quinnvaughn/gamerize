@@ -381,11 +381,16 @@ const timeslot = {
           },
         },
         players: {
-          connect: {
-            id: userId,
+          create: {
+            timeslot: { connect: { id: timeslot.timeSlotId } },
+            player: { connect: { id: userId } },
           },
         },
       })
+      const players = await ctx.prisma
+        .booking({ id: timeslotBought.id })
+        .players()
+      const player = players[0]
       const QUERY = `
         {
           gamingTimeSlot(where: {id: "${timeslot.timeSlotId}"}) {
@@ -429,8 +434,8 @@ const timeslot = {
         await ctx.prisma.updateGamingTimeSlot({
           data: {
             players: {
-              create: {
-                player: { connect: { id: userId } },
+              connect: {
+                id: player.id,
               },
             },
           },

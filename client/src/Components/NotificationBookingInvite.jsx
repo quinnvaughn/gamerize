@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
+//local imports
+import { capitalize } from '../utils/Strings.js'
+import { displaySystem, mapLauncher, mapSystem } from '../utils/System'
+
 const Container = styled.div`
   padding: 2rem 0;
   border-bottom: ${props => (props.last ? 'none' : '1px solid #ebebeb')};
@@ -18,20 +22,25 @@ const Text = styled.div`
   font-size: 1.6rem;
 `
 
-const Buttons = styled.div``
+const Buttons = styled.div`
+  white-space: nowrap;
+  text-align: center;
+`
 
 const Accept = styled.button`
   margin-right: 1rem;
-  background: #f10e0e;
+  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  pointer-events: ${props => props.disabled && 'none'};
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
   border-radius: 4px;
   position: relative;
+  margin-bottom: 0.5rem;
 `
 
 const Decline = styled.button`
@@ -59,6 +68,10 @@ const User = styled(Link)`
   }
 `
 
+const CorrectGamertag = styled.div`
+  word-wrap: break-word;
+`
+
 const ACCEPT_INVITE = gql`
   mutation($input: AcceptInviteInput!) {
     acceptInvite(input: $input) {
@@ -79,6 +92,7 @@ export default function NotificationBookingInvite({
   notification,
   refetch,
   last,
+  gamertags,
 }) {
   const text = notification.text
     .split(' ')
@@ -88,6 +102,20 @@ export default function NotificationBookingInvite({
   const username = notification.text.split(' ')[0]
   const acceptInvite = useMutation(ACCEPT_INVITE)
   const declineInvite = useMutation(DECLINE_INVITE)
+  const noGamertags = gamertags === null ? true : false
+  const {
+    system,
+    game,
+  } = notification.bookingInvite.booking.timeslot.gamingSession
+  const correctGamertags =
+    gamertags && system === 'PC'
+      ? gamertags && gamertags.pc[mapLauncher(game.launcher)] === null
+        ? true
+        : false
+      : gamertags && gamertags[mapSystem(system)] === null
+      ? true
+      : false
+  const disabled = noGamertags || !correctGamertags
   return (
     <Container last={last}>
       <TextContainer>
@@ -98,6 +126,7 @@ export default function NotificationBookingInvite({
       </TextContainer>
       <Buttons>
         <Accept
+          disabled={disabled}
           onClick={async () => {
             const input = { inviteId: notification.bookingInvite.id }
             const { data } = await acceptInvite({ variables: { input } })
@@ -119,6 +148,14 @@ export default function NotificationBookingInvite({
         >
           Decline
         </Decline>
+        {disabled && (
+          <CorrectGamertag>
+            You must add the correct gamer tag for{' '}
+            {system === 'PC'
+              ? `${capitalize(game.launcher)} Launcher`
+              : displaySystem(system)}
+          </CorrectGamertag>
+        )}
       </Buttons>
     </Container>
   )

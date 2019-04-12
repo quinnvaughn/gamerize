@@ -357,17 +357,18 @@ export default function UserProfile(props) {
                       <Name>{data.getUser.name}</Name>
                       <Username>@{data.getUser.username}</Username>
                     </SmallLeft>
-                    {secondData.me.username !== data.getUser.username && (
-                      <Flex20>
-                        <AddFriendButton
-                          pending={data.getUser.sentFriendRequest}
-                          respond={data.getUser.sentMeAFriendRequest}
-                          refetch={refetch}
-                          friends={data.getUser.areWeFriends}
-                          username={props.match.params.user}
-                        />
-                      </Flex20>
-                    )}
+                    {secondData.me &&
+                      secondData.me.username !== data.getUser.username && (
+                        <Flex20>
+                          <AddFriendButton
+                            pending={data.getUser.sentFriendRequest}
+                            respond={data.getUser.sentMeAFriendRequest}
+                            refetch={refetch}
+                            friends={data.getUser.areWeFriends}
+                            username={props.match.params.user}
+                          />
+                        </Flex20>
+                      )}
                   </Row>
                   <Occupations>
                     {data.getUser.occupations.map(job => (

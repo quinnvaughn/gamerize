@@ -2,7 +2,7 @@ type Booking {
   id: ID! @unique
   numSlots: Int!
   numPlayers: Int!
-  players: [User!]! @relation(name: "BookingPlayers", onDelete: SET_NULL)
+  players: [BookedPlayer!]! @relation(name: "BookingPlayers", onDelete: CASCADE)
   total: Float!
   bookee: User! @relation(name: "Bookee", onDelete: SET_NULL)
   timeslot: GamingTimeSlot!

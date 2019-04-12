@@ -2,8 +2,12 @@ const { getUserId } = require('../../utils')
 
 const user = {
   async me(parent, args, ctx) {
-    const id = getUserId(ctx)
-    return await ctx.prisma.user({ id })
+    try {
+      const id = getUserId(ctx)
+      return await ctx.prisma.user({ id })
+    } catch (e) {
+      return null
+    }
   },
   async getUser(parent, { username }, { prisma }) {
     return await prisma.user({ username })
