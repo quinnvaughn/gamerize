@@ -8,11 +8,15 @@ const User = {
     return alreadyRequested.length === 1 ? true : false
   },
   areWeFriends: async (parent, _, ctx) => {
-    const userId = getUserId(ctx)
-    const friends = await ctx.prisma
-      .user({ id: parent.id })
-      .friends({ where: { id: userId } })
-    return friends.length > 0 ? true : false
+    try {
+      const userId = getUserId(ctx)
+      const friends = await ctx.prisma
+        .user({ id: parent.id })
+        .friends({ where: { id: userId } })
+      return friends.length > 0 ? true : false
+    } catch (e) {
+      if (e) return false
+    }
   },
   invites: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).invites()
@@ -33,24 +37,32 @@ const User = {
     return await prisma.user({ id: parent.id }).timeSlotsBooked()
   },
   sentMeAFriendRequest: async (parent, _, ctx) => {
-    const userId = getUserId(ctx)
-    const sentRequest = await ctx.prisma.friendRequests({
-      where: {
-        to: { id: userId },
-        from: { id: parent.id },
-      },
-    })
-    return sentRequest.length > 0 ? true : false
+    try {
+      const userId = getUserId(ctx)
+      const sentRequest = await ctx.prisma.friendRequests({
+        where: {
+          to: { id: userId },
+          from: { id: parent.id },
+        },
+      })
+      return sentRequest.length > 0 ? true : false
+    } catch (e) {
+      if (e) return false
+    }
   },
   sentFriendRequest: async (parent, _, ctx) => {
-    const userId = getUserId(ctx)
-    const sentRequest = await ctx.prisma.friendRequests({
-      where: {
-        to: { id: parent.id },
-        from: { id: userId },
-      },
-    })
-    return sentRequest.length > 0 ? true : false
+    try {
+      const userId = getUserId(ctx)
+      const sentRequest = await ctx.prisma.friendRequests({
+        where: {
+          to: { id: parent.id },
+          from: { id: userId },
+        },
+      })
+      return sentRequest.length > 0 ? true : false
+    } catch (e) {
+      if (e) return false
+    }
   },
   sessionIsGoingOn: async (parent, _, ctx) => {
     const currentTime = new Date()
