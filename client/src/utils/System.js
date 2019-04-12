@@ -16,3 +16,16 @@ export const mapSystem = system => {
 export const mapLauncher = launcher => {
   return launcher.toLowerCase()
 }
+
+export const displaySystem = system => {
+  switch (system) {
+    case 'XBOX_ONE':
+      return 'Xbox Live'
+    case 'PS4':
+      return 'Playstation Network'
+    case 'NINTENDO_SWITCH':
+      return 'Nintendo Switch Online'
+    default:
+      return 'Not a system'
+  }
+}

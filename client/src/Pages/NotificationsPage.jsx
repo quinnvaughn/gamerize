@@ -65,6 +65,36 @@ const MY_NOTIFICATIONS = gql`
       }
       bookingInvite {
         id
+        booking {
+          timeslot {
+            gamingSession {
+              system
+              game {
+                launcher
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+const MYSELF = gql`
+  {
+    me {
+      id
+      gamertags {
+        psn
+        xbl
+        nso
+        pc {
+          epic
+          origin
+          steam
+          bethesda
+          battlenet
+        }
       }
     }
   }
@@ -82,6 +112,7 @@ export default function NotificationsPage(props) {
   const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
     pollInterval: 5000,
   })
+  const { data: secondData, loading: secondLoading } = useQuery(MYSELF)
   const viewUserNotifications = useMutation(VIEW_NOTIFICATIONS)
   useEffect(() => {
     async function notifications() {
@@ -103,7 +134,7 @@ export default function NotificationsPage(props) {
   groups.DENIED_GAMER_REQUEST && misc.push(...groups.DENIED_GAMER_REQUEST)
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
-  return loading ? null : (
+  return loading || secondLoading ? null : (
     <PageContainer>
       <NavBar />
       <Content>
@@ -137,6 +168,7 @@ export default function NotificationsPage(props) {
           {bookingInvites &&
             bookingInvites.map((notification, index) => (
               <NotificationBookingInvite
+                gamertags={secondData.me.gamertags}
                 refetch={refetch}
                 notification={notification}
                 key={notification.id}

@@ -9,9 +9,9 @@ type User {
   aboutMe: String
   sessions: [GamingSession!]! @relation(name: "MySessions")
   timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
-  timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
-  timeSlotsPlayed: [Booking!]!
-    @relation(name: "BookingPlayers", onDelete: SET_NULL)
+  #timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
+  # timeSlotsPlayed: [Booking!]!
+  #   @relation(name: "BookingPlayers", onDelete: SET_NULL)
   invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   setup: Int
@@ -39,6 +39,7 @@ type UserIndex {
 type BookedPlayer {
   id: ID! @unique
   player: User!
+  booking: Booking! @relation(name: "BookingPlayers", onDelete: SET_NULL)
   timeslot: GamingTimeSlot!
     @relation(name: "TimeSlotBookedPlayers", onDelete: SET_NULL)
 }

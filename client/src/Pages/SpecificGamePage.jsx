@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
-import { capitalize } from '../utils/Strings'
+import { capitalize, noUnderscores } from '../utils/Strings'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -78,7 +78,7 @@ const GET_GAME = gql`
       tags
       numSessions
       sessions {
-        system 
+        system
         numReviews
         reviewRating
         id
@@ -95,7 +95,7 @@ const GET_GAME = gql`
 
 export default function SpecificGamePage(props) {
   const { data, loading } = useQuery(GET_GAME, {
-    variables: { name: props.match.params.game },
+    variables: { name: noUnderscores(props.match.params.game) },
   })
   const { specificGame: game } = data
   return loading ? null : (

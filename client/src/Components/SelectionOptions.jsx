@@ -59,6 +59,11 @@ const HowManySlots = styled.div`
   margin-bottom: 1rem;
 `
 
+const SignInToBook = styled.div`
+  font-size: 1.8rem;
+  font-weight: 800;
+`
+
 export default function SelectionOptions({
   price,
   reviews,
@@ -89,22 +94,26 @@ export default function SelectionOptions({
           <NumReviews>{`${numReviews}`}</NumReviews>
         </RatingContainer>
       </Top>
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <Fragment>
-            {/*TODO: Need slotsLeftToday to update at same time */}
-            <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-            <TimeSlots gamer={gamer} game={game} />
-            <Totals
-              price={price}
-              refetch={refetch}
-              me={me}
-              system={system}
-              launcher={launcher}
-            />
-          </Fragment>
-        )}
-      </Subscribe>
+      {me === null ? (
+        <SignInToBook>Please sign in to book</SignInToBook>
+      ) : (
+        <Subscribe to={[SessionsContainer]}>
+          {session => (
+            <Fragment>
+              {/*TODO: Need slotsLeftToday to update at same time */}
+              <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
+              <TimeSlots gamer={gamer} game={game} />
+              <Totals
+                price={price}
+                refetch={refetch}
+                me={me}
+                system={system}
+                launcher={launcher}
+              />
+            </Fragment>
+          )}
+        </Subscribe>
+      )}
     </Container>
   )
 }

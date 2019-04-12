@@ -223,20 +223,20 @@ export default function GamerDashboardCalendar(props) {
               them to your calendar. Edit them in the sessions tab.
             </Info>
             <AllSessions>
-            {loading
-              ? null
-              : data.me &&
-                data.me.sessions &&
-                data.me.setup &&
-                data.me.sessions.map(session => (
-                  <GamerSessionCard
-                    session={session}
-                    key={session.id}
-                    setup={data.me.setup}
-                    refetch={refetch}
-                  />
-                ))}
-                </AllSessions>
+              {loading
+                ? null
+                : data.me &&
+                  data.me.sessions &&
+                  data.me.setup &&
+                  data.me.sessions.map(session => (
+                    <GamerSessionCard
+                      session={session}
+                      key={session.id}
+                      setup={data.me.setup}
+                      refetch={refetch}
+                    />
+                  ))}
+            </AllSessions>
           </Bottom>
         </RightSide>
       </Content>

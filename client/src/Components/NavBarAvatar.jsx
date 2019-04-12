@@ -73,9 +73,9 @@ function NavBarAvatar(props) {
           <Dropdown>
             <DropdownOption
               onClick={async () => {
-                await localStorage.removeItem('TOKEN')
                 await client.resetStore()
                 await props.history.push('/')
+                await localStorage.removeItem('TOKEN')
               }}
             >
               Logout

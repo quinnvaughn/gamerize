@@ -112,7 +112,7 @@ const GET_MY_NOTIFICATIONS = gql`
 `
 function NavBar(props) {
   const token = localStorage.getItem('TOKEN')
-  const { data, loading, refetch } = useQuery(GET_ME, { skip: !token })
+  const { data, loading, refetch } = useQuery(GET_ME)
   const { data: notifications, loading: secondLoading } = useQuery(
     GET_MY_NOTIFICATIONS,
     { pollInterval: 1000 }
