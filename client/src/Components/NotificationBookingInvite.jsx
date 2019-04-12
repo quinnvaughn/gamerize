@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
@@ -116,6 +116,19 @@ export default function NotificationBookingInvite({
       ? true
       : false
   const disabled = noGamertags || !correctGamertags
+  const passed = notification.bookingInvite.booking.timeslot.passed
+  useEffect(() => {
+    async function passedBooking() {
+      if (passed) {
+        const input = { inviteId: notification.bookingInvite.id }
+        const { data } = await declineInvite({ variables: { input } })
+        if (data.declineInvite.declined) {
+          refetch()
+        }
+      }
+    }
+    passedBooking()
+  }, {})
   return (
     <Container last={last}>
       <TextContainer>
@@ -150,9 +163,9 @@ export default function NotificationBookingInvite({
         </Decline>
         {disabled && (
           <CorrectGamertag>
-            You must add the correct gamer tag for{' '}
+            You must add a gamertag for{' '}
             {system === 'PC'
-              ? `${capitalize(game.launcher)} Launcher`
+              ? `the ${capitalize(game.launcher)} Launcher`
               : displaySystem(system)}
           </CorrectGamertag>
         )}

@@ -240,9 +240,9 @@ export default function MyInviteReceived({
             </AcceptInvite>
           </InviteButtonContainer>
           <CorrectGamertag>
-            You must add the correct gamer tag for{' '}
+            You must add a gamer tag for{' '}
             {system === 'PC'
-              ? `${capitalize(game.launcher)} Launcher`
+              ? `the ${capitalize(game.launcher)} Launcher`
               : displaySystem(system)}
           </CorrectGamertag>
         </SessionInfo>
