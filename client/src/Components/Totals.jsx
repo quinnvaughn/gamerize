@@ -3,10 +3,12 @@ import styled from 'styled-components'
 import { Subscribe } from 'unstated'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
+import { withRouter } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
 
 import SessionsContainer from '../Containers/SessionsContainer'
-import { mapSystem, mapLauncher } from '../utils/System'
+import { capitalize } from '../utils/Strings'
+import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 
 const Container = styled.div`
   width: 100%;
@@ -104,6 +106,13 @@ const AppropriateGT = styled.div`
   font-weight: 800;
   overflow-wrap: break-word;
 `
+const Me = styled.div`
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  overflow-wrap: break-word;
+`
+
 const AddSession = styled.div`
   text-align: center;
   font-size: 1.6rem;
@@ -128,7 +137,7 @@ const BOOK_TIME_SLOTS = gql`
   }
 `
 
-export default function Totals(props) {
+function Totals(props) {
   const [loading, setLoading] = useState(false)
   const [booked, setBooked] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
@@ -139,6 +148,7 @@ export default function Totals(props) {
         ]
       : !props.me.gamertags[mapSystem(props.system)]
     : true
+  const isMe = props.match.params.user === props.me.username
   return (
     <Container>
       <Subscribe to={[SessionsContainer]}>
@@ -177,15 +187,20 @@ export default function Totals(props) {
                 <TotalCost>{`$${totalMinusDiscounts}`}</TotalCost>
               </Total>
             </TotalsContainer>
+          ) : isMe ? (
+            <Me>You can't add timeslots on your own session</Me>
           ) : (
             <AddSession>Please add a session</AddSession>
           )
           return (
             <Fragment>
               {content}
-              {disabled && (
+              {disabled && !isMe && (
                 <AppropriateGT>
-                  You need to add the appropriate gamertag before playing this.
+                  You must add a gamertag for{' '}
+                  {props.system === 'PC'
+                    ? `the ${capitalize(props.launcher)} Launcher`
+                    : displaySystem(props.system)}
                 </AppropriateGT>
               )}
               <Book
@@ -240,3 +255,5 @@ export default function Totals(props) {
     </Container>
   )
 }
+
+export default withRouter(Totals)
