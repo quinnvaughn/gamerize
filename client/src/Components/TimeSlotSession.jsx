@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
 import { Subscribe } from 'unstated'
+import { withRouter } from 'react-router-dom'
 import { MdClose } from 'react-icons/md'
 
 //local imports
@@ -10,6 +11,8 @@ import Slot from './Slot'
 import SessionsContainer from '../Containers/SessionsContainer'
 import SlotOptionsDropdown from './SlotOptionsDropdown'
 import { noUnderscores } from '../utils/Strings'
+import { capitalize } from '../utils/Strings'
+import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 
 const Container = styled.div`
   display: block;
@@ -162,14 +165,15 @@ const PickAllSlotsForMe = styled.button`
 `
 
 const AddSessions = styled.button`
-  background: #f10e0e;
+  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  pointer-events: ${props => props.disabled && 'none'};
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
   border-radius: 4px;
 `
 
@@ -202,11 +206,42 @@ const ExitContainer = styled.div`
   height: 3rem;
 `
 
-export default function TimeSlotSession(props) {
+const ExtraContainer = styled.div`
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
+`
+
+const LoggedIn = styled.div`
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
+const CorrectGamerTag = styled.div`
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+const Me = styled.div`
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  overflow-wrap: break-word;
+`
+
+function TimeSlotSession(props) {
   useEffect(() => {
     const element = document.getElementById('modal')
     element.scrollTop = 0
   }, {})
+  const { system, game } = props.selectedSession.gamingSession
+  const disabled = !props.me
+    ? true
+    : props.me.gamertags
+    ? system === 'PC'
+      ? !props.me.gamertags[mapSystem(system)][mapLauncher(game.launcher)]
+      : !props.me.gamertags[mapSystem(system)]
+    : true
+  const isMe = props.match.params.user === props.me.username
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
     const endTime = 'h:mm a'
@@ -259,10 +294,27 @@ export default function TimeSlotSession(props) {
       <Slots>
         {slots}
         <AddSessionsContainer>
-          <AddSessions onClick={() => session.addSessions()}>
+          <AddSessions
+            disabled={disabled}
+            onClick={() => session.addSessions()}
+          >
             Add Session
           </AddSessions>
         </AddSessionsContainer>
+        <ExtraContainer>
+          {props.me === null && (
+            <LoggedIn>You need to be logged in to add time slots.</LoggedIn>
+          )}
+          {props.me !== null && disabled && !isMe && (
+            <CorrectGamerTag>
+              You must add a gamertag for{' '}
+              {system === 'PC'
+                ? `the ${capitalize(game.launcher)} Launcher`
+                : displaySystem(system)}
+            </CorrectGamerTag>
+          )}
+          {isMe && <Me>You can't add timeslots on your own session</Me>}
+        </ExtraContainer>
       </Slots>
     )
   }
@@ -323,3 +375,5 @@ export default function TimeSlotSession(props) {
     </Container>
   )
 }
+
+export default withRouter(TimeSlotSession)

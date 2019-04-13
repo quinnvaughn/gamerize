@@ -285,6 +285,12 @@ const GET_SLOTS_TODAY = gql`
       slots
       id
       passed
+      gamingSession {
+        system
+        game {
+          launcher
+        }
+      }
       players {
         player {
           username
@@ -297,6 +303,7 @@ const GET_SLOTS_TODAY = gql`
 const GET_ME = gql`
   {
     me {
+      username
       id
       gamertags {
         psn
@@ -470,6 +477,7 @@ export default function SpecificSessionPage(props) {
             >
               {sessions.state.selectedSession ? (
                 <TimeSlotSession
+                  me={thirdData.me}
                   selectedSession={sessions.state.selectedSession}
                   gamer={formatGamers(data.getSpecificSession.gamers)}
                   game={data.getSpecificSession.game.name}
