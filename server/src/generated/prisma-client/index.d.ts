@@ -891,7 +891,9 @@ export type GamingSessionOrderByInput =
   | "retired_DESC";
 
 export type NotificationType =
+  | "CANCELLED_BOOKING"
   | "CANCELLED_TIMESLOT"
+  | "GAMER_PUSHED_BACK_SLOT"
   | "ACCEPTED_GAMER_REQUEST"
   | "DENIED_GAMER_REQUEST"
   | "FRIEND_REQUEST"
@@ -899,6 +901,8 @@ export type NotificationType =
   | "TIMESLOT_REQUEST"
   | "BOOKED_TIMESLOT"
   | "TIMESLOT_INVITE"
+  | "FRIEND_CANCELLED_BOOKING"
+  | "FRIEND_CANCELLED_THEIR_SLOT"
   | "ACCEPTED_TIMESLOT_INVITE"
   | "ACCEPTED_FRIEND_REQUEST";
 

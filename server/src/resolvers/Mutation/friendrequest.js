@@ -1,5 +1,16 @@
 const { getUserId } = require('../../utils')
 const friendrequest = {
+  async cancelFriendRequest(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    const request = await ctx.prisma.friendRequests({
+      where: {
+        from: { id: userId },
+        to: { username: input.username },
+      },
+    })
+    const deleted = await ctx.prisma.deleteFriendRequest({ id: request[0].id })
+    return deleted ? { cancelled: true } : { cancelled: false }
+  },
   async sendFriendRequest(parent, { input }, ctx) {
     const userId = getUserId(ctx)
     // Check if there is already a pending one.Prevent if so.

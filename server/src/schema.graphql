@@ -29,6 +29,7 @@ type Query {
   numUserNotifications: Int!
   numGamerNotifications: Int!
   getGamers(first: Int): [User!]!
+  gamerSessionsSpecificDay(day: DateTime!, gamer: String!): [GamingTimeSlot!]!
 }
 
 type Mutation {
@@ -62,6 +63,9 @@ type Mutation {
   cancelBooking(input: CancelBookingInput!): CancelBookingPayload!
   declineInvite(input: DeclineInviteInput!): DeclineInvitePayload!
   sendFriendRequest(input: SendFriendRequestInput!): SendFriendRequestPayload!
+  cancelFriendRequest(
+    input: CancelFriendRequestInput!
+  ): CancelFriendRequestPayload!
   acceptFriendRequest(
     input: AcceptFriendRequestInput!
   ): AcceptFriendRequestPayload!
@@ -84,6 +88,30 @@ type Mutation {
   viewGamerNotifications: ViewNotificationsPayload!
   retireSession(input: RetireSessionInput!): RetireSessionPayload!
   unretireSession(input: UnretireSessionInput!): UnretireSessionPayload!
+  deleteOldInvites: DeleteOldInvitesPayload!
+  cancelNotBookeeBooking(
+    input: CancelNotBookeeBookingInput!
+  ): CancelNotBookeeBookingPayload!
+}
+
+input CancelNotBookeeBookingInput {
+  bookingId: String
+}
+
+type CancelNotBookeeBookingPayload {
+  cancelled: Boolean
+}
+
+input CancelFriendRequestInput {
+  username: String!
+}
+
+type CancelFriendRequestPayload {
+  cancelled: Boolean!
+}
+
+type DeleteOldInvitesPayload {
+  deleted: Boolean!
 }
 
 input UnretireSessionInput {

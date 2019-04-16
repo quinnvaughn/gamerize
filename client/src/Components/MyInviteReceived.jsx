@@ -186,11 +186,11 @@ export default function MyInviteReceived({
   const correctGamertags =
     gamertags && system === 'PC'
       ? gamertags && gamertags.pc[mapLauncher(game.launcher)] === null
-        ? true
-        : false
+        ? false
+        : true
       : gamertags && gamertags[mapSystem(system)] === null
-      ? true
-      : false
+      ? false
+      : true
   const disabled = noGamertags || !correctGamertags
   return (
     <Container>
@@ -239,12 +239,14 @@ export default function MyInviteReceived({
               Accept Invite
             </AcceptInvite>
           </InviteButtonContainer>
-          <CorrectGamertag>
-            You must add a gamer tag for{' '}
-            {system === 'PC'
-              ? `the ${capitalize(game.launcher)} Launcher`
-              : displaySystem(system)}
-          </CorrectGamertag>
+          {disabled && (
+            <CorrectGamertag>
+              You must add a gamer tag for{' '}
+              {system === 'PC'
+                ? `the ${capitalize(game.launcher)} Launcher`
+                : displaySystem(system)}
+            </CorrectGamertag>
+          )}
         </SessionInfo>
       </Margins>
     </Container>

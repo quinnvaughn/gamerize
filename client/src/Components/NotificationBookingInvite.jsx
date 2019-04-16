@@ -110,25 +110,12 @@ export default function NotificationBookingInvite({
   const correctGamertags =
     gamertags && system === 'PC'
       ? gamertags && gamertags.pc[mapLauncher(game.launcher)] === null
-        ? true
-        : false
+        ? false
+        : true
       : gamertags && gamertags[mapSystem(system)] === null
-      ? true
-      : false
+      ? false
+      : true
   const disabled = noGamertags || !correctGamertags
-  const passed = notification.bookingInvite.booking.timeslot.passed
-  useEffect(() => {
-    async function passedBooking() {
-      if (passed) {
-        const input = { inviteId: notification.bookingInvite.id }
-        const { data } = await declineInvite({ variables: { input } })
-        if (data.declineInvite.declined) {
-          refetch()
-        }
-      }
-    }
-    passedBooking()
-  }, {})
   return (
     <Container last={last}>
       <TextContainer>

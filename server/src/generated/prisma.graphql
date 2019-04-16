@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Thu Apr 11 2019 16:24:49 GMT-0500 (CDT)
+# timestamp: Mon Apr 15 2019 19:39:14 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -4997,7 +4997,9 @@ input NotificationSubscriptionWhereInput {
 }
 
 enum NotificationType {
+  CANCELLED_BOOKING
   CANCELLED_TIMESLOT
+  GAMER_PUSHED_BACK_SLOT
   ACCEPTED_GAMER_REQUEST
   DENIED_GAMER_REQUEST
   FRIEND_REQUEST
@@ -5005,6 +5007,8 @@ enum NotificationType {
   TIMESLOT_REQUEST
   BOOKED_TIMESLOT
   TIMESLOT_INVITE
+  FRIEND_CANCELLED_BOOKING
+  FRIEND_CANCELLED_THEIR_SLOT
   ACCEPTED_TIMESLOT_INVITE
   ACCEPTED_FRIEND_REQUEST
 }

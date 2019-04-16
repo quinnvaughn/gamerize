@@ -83,6 +83,13 @@ const bookingInvite = {
           booking {
             id
             timeslot {
+              startTime 
+              endTime 
+              gamingSession {
+                creator {
+                  username
+                }
+              }
               id
             }
           }
@@ -96,42 +103,57 @@ const bookingInvite = {
       where: { id: booking.id },
       data: {
         players: {
-          connect: {
-            id: userId,
+          create: {
+            timeslot: {
+              connect: {
+                id: booking.timeslot.id,
+              },
+            },
+            player: {
+              connect: {
+                id: userId,
+              },
+            },
           },
         },
       },
     })
-    const SECOND_QUERY = `
-      {
-        gamingTimeSlot(where: {id: "${booking.timeslot.id}"}) {
-          players(where: {player: {id: "${user.id}"}}) {
-            id
-          }
-        }
-      }
-    `
-    const timeslot = await ctx.prisma.$graphql(SECOND_QUERY)
-    const updateId = timeslot.gamingTimeSlot.players[1].id
-    const updatedBookedPlayer = await ctx.prisma.updateBookedPlayer({
-      where: { id: updateId },
-      data: {
-        player: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    })
+    // const SECOND_QUERY = `
+    //   {
+    //     gamingTimeSlot(where: {id: "${booking.timeslot.id}"}) {
+    //       players(where: {player: {id: "${user.id}"}}) {
+    //         id
+    //       }
+    //     }
+    //   }
+    // `
+    // const timeslot = await ctx.prisma.$graphql(SECOND_QUERY)
+    // const updateId = timeslot.gamingTimeSlot.players[1].id
+    // const updatedBookedPlayer = await ctx.prisma.updateBookedPlayer({
+    //   where: { id: updateId },
+    //   data: {
+    //     player: {
+    //       connect: {
+    //         id: userId,
+    //       },
+    //     },
+    //   },
+    // })
     const updatedInvite = await ctx.prisma.updateBookingInvite({
       where: { id: input.inviteId },
       data: {
         accepted: true,
       },
     })
+    const gamer = booking.timeslot.gamingSession.creator
+    const timeFormat = 'h:mm aa'
+    const startTime = dateFns.format(booking.timeslot.startTime, timeFormat)
+    const endTime = dateFns.format(booking.timeslot.endTime, timeFormat)
     const createdNotification = await ctx.prisma.createNotification({
       type: 'ACCEPTED_TIMESLOT_INVITE',
-      text: `${you.username} accepted your invite`,
+      text: `${you.username} accepted your invite for the session with ${
+        gamer.username
+      } from ${startTime}-${endTime}`,
       for: {
         connect: {
           id: user.id,
@@ -144,7 +166,6 @@ const bookingInvite = {
     return createdNotification &&
       deletedNotification &&
       updatedBooking &&
-      updatedBookedPlayer &&
       updatedInvite
       ? { accepted: true }
       : { accepted: false }
@@ -177,6 +198,26 @@ const bookingInvite = {
     return deletedNotification && updatedInvite
       ? { declined: true }
       : { declined: false }
+  },
+  async deleteOldInvites(parent, { input }, ctx) {
+    const userId = getUserId(ctx)
+    await ctx.prisma.deleteManyBookingInvites({
+      OR: [
+        {
+          from: {
+            id: userId,
+          },
+          startTime_lte: new Date(),
+        },
+        {
+          to: {
+            id: userId,
+          },
+          startTime_lte: new Date(),
+        },
+      ],
+    })
+    return { deleted: true }
   },
 }
 

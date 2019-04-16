@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 import gql from 'graphql-tag'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery, useMutation } from 'react-apollo-hooks'
 
 //local imports
 import MyTimeSlot from '../Components/MyTimeSlot'
@@ -210,6 +210,9 @@ const MY_SESSIONS = gql`
     }
     myUpcomingBookings {
       id
+      bookee {
+        username
+      }
       timeslot {
         startTime
         players {
@@ -234,6 +237,14 @@ const MY_SESSIONS = gql`
   }
 `
 
+const DELETE_OLD_INVITES = gql`
+  mutation {
+    deleteOldInvites {
+      deleted
+    }
+  }
+`
+
 const SESSIONS = 'SESSIONS'
 const INVITES = 'INVITES'
 
@@ -242,7 +253,12 @@ export default function UserSessionsPage(props) {
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
     pollInterval: 5000,
   })
+  const deleteOldInvites = useMutation(DELETE_OLD_INVITES)
   useEffect(() => {
+    async function oldInvites() {
+      await deleteOldInvites()
+    }
+    oldInvites()
     refetch()
   }, {})
   let upcoming = !loading && data.myUpcomingBookings
@@ -299,7 +315,7 @@ export default function UserSessionsPage(props) {
               <UpcomingSessions>Upcoming sessions</UpcomingSessions>
               <NegativeMargin>
                 <UpcomingContent>
-                  {_.map(upcoming, ({ timeslot, id }) => (
+                  {_.map(upcoming, ({ timeslot, id, bookee }) => (
                     <MyTimeSlot
                       key={id}
                       upcoming
@@ -307,6 +323,7 @@ export default function UserSessionsPage(props) {
                       timeslot={timeslot}
                       me={data.me}
                       refetch={refetch}
+                      bookee={bookee}
                     />
                   ))}
                 </UpcomingContent>

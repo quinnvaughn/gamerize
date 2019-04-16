@@ -91,7 +91,6 @@ const GET_GAMERS = gql`
 export default function GamerRow(props) {
   const [first, setFirst] = useState(4)
   const { data, loading } = useQuery(GET_GAMERS, { variables: { first } })
-  console.log(data)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
