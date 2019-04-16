@@ -309,7 +309,7 @@ export default function UserProfile(props) {
                   <ProfilePictureContainer>
                     <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
                   </ProfilePictureContainer>
-                  <ReviewsContainer>
+                  {/* <ReviewsContainer>
                     <NumReviews>{`${
                       data.getUser.numReviews
                     } reviews`}</NumReviews>
@@ -326,7 +326,7 @@ export default function UserProfile(props) {
                         data.getUser.reviewRating
                       })`}</ReviewRating>
                     </ReviewRatingContainer>
-                  </ReviewsContainer>
+                  </ReviewsContainer> */}
                 </ProfileInfoContainer>
               </LeftSide>
             )

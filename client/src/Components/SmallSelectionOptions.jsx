@@ -103,7 +103,7 @@ export default function SmallSelectionOptions({
         <Price>
           {`$${price}`} <Per>per slot</Per>
         </Price>
-        <RatingContainer>
+        {/* <RatingContainer>
           <StarRatings
             rating={reviews}
             starRatedColor="#f10e0e"
@@ -113,7 +113,7 @@ export default function SmallSelectionOptions({
             starSpacing=".1rem"
           />
           <NumReviews>{`${numReviews}`}</NumReviews>
-        </RatingContainer>
+        </RatingContainer> */}
       </Top>
       <Subscribe to={[SessionsContainer]}>
         {session => (
