@@ -116,7 +116,9 @@ const Bottom = styled.div`
 export default function Session(props) {
   return (
     <Container>
-      <StyledLink to={`/users/${props.username}/${noSpaces(props.game)}/${props.id}`}>
+      <StyledLink
+        to={`/users/${props.username}/${noSpaces(props.game)}/${props.id}`}
+      >
         <DynamicImage src={DefaultAvatar} />
         <TitleContainer>
           <Title>{props.title}</Title>
@@ -126,7 +128,7 @@ export default function Session(props) {
           <System>{props.system}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
-        <Bottom>
+        {/* <Bottom>
           <Reviews>{props.reviews}</Reviews>
           <StarRatings
             rating={props.reviews}
@@ -137,7 +139,7 @@ export default function Session(props) {
             starSpacing="1px"
           />
           <NumReviews>{`(${props.numReviews})`}</NumReviews>
-        </Bottom>
+        </Bottom> */}
       </StyledLink>
     </Container>
   )

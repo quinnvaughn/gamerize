@@ -78,7 +78,7 @@ export default function FixedSelectionOptions(props) {
           <Price>
             {`$${props.price}`} <Per>per slot</Per>
           </Price>
-          <RatingContainer>
+          {/* <RatingContainer>
             <StarRatings
               rating={props.reviews}
               starRatedColor="#f10e0e"
@@ -88,7 +88,7 @@ export default function FixedSelectionOptions(props) {
               starSpacing=".1rem"
             />
             <NumReviews>{`${props.numReviews}`}</NumReviews>
-          </RatingContainer>
+          </RatingContainer> */}
         </LeftSide>
         <BookContainer>
           <Book onClick={() => setModal(true)}>Book</Book>

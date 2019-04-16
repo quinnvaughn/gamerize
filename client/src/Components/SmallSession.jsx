@@ -120,7 +120,7 @@ export default function SmallSession(props) {
           <System>{props.system}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
-        <Bottom>
+        {/* <Bottom>
           <StarRatings
             rating={props.reviewRating}
             starRatedColor="#f10e0e"
@@ -130,7 +130,7 @@ export default function SmallSession(props) {
             starSpacing="1px"
           />
           <NumReviews>{`(${props.numReviews})`}</NumReviews>
-        </Bottom>
+        </Bottom> */}
       </StyledLink>
     </Container>
   )

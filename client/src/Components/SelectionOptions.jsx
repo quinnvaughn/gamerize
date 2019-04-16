@@ -82,7 +82,7 @@ export default function SelectionOptions({
         <Price>
           {`$${price}`} <Per>per slot</Per>
         </Price>
-        <RatingContainer>
+        {/* <RatingContainer>
           <StarRatings
             rating={reviews}
             starRatedColor="#f10e0e"
@@ -92,7 +92,7 @@ export default function SelectionOptions({
             starSpacing=".1rem"
           />
           <NumReviews>{`${numReviews}`}</NumReviews>
-        </RatingContainer>
+        </RatingContainer> */}
       </Top>
       {me === null ? (
         <SignInToBook>Please sign in to book</SignInToBook>
