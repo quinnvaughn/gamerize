@@ -263,25 +263,54 @@ const timeslot = {
         ],
       },
     })
+    const gamer = await ctx.prisma.user({ id: userId })
     let pushedEnd = session.endTime
     let counter = overlaps.length
     while (counter > 0) {
-      for (const session in overlaps) {
+      for (const session of overlaps) {
         let timeAdded =
           input.minutes -
-          dateFns.differenceInMinutes(overlaps[session].startTime, pushedEnd)
-        startTime = addMinutes(overlaps[session].startTime, timeAdded)
-        endTime = addMinutes(overlaps[session].endTime, timeAdded)
-        pushedEnd = overlaps[session].endTime
+          dateFns.differenceInMinutes(session.startTime, pushedEnd)
+        startTime = addMinutes(session.startTime, timeAdded)
+        endTime = addMinutes(session.endTime, timeAdded)
+        pushedEnd = session.endTime
+        const players = await ctx.prisma
+          .gamingTimeSlot({ id: session.id })
+          .players()
+          .player()
+        const game = await ctx.prisma
+          .gamingTimeSlot({ id: session.id })
+          .gamingSession()
+          .game()
+        for (const { player } of players) {
+          const timeFormat = 'h:mm aa'
+          const formattedOldStartTime = dateFns.format(
+            session.startTime,
+            timeFormat
+          )
+          const formattedNewStartTime = dateFns.format(startTime, timeFormat)
+          await ctx.prisma.createNotification({
+            for: {
+              connect: {
+                id: player.id,
+              },
+            },
+            type: 'GAMER_PUSHED_BACK_SLOT',
+            text: `${gamer.username} pushed back the session for ${
+              game.name
+            } at ${formattedOldStartTime} ${timeAdded} minutes to ${formattedNewStartTime}`,
+          })
+        }
         await ctx.prisma.updateGamingTimeSlot({
-          where: { id: overlaps[session].id },
+          where: { id: session.id },
           data: {
             startTime,
             endTime,
           },
         })
       }
-      let newOverlaps = await ctx.prisma.gamingTimeSlot({
+
+      let newOverlaps = await ctx.prisma.gamingTimeSlots({
         where: {
           gamers_some: { id: userId },
           AND: [
@@ -319,6 +348,9 @@ const timeslot = {
             startTime
             endTime
             gamingSession {
+              game {
+                name
+              }
               creator {
                 username
               }
@@ -348,7 +380,9 @@ const timeslot = {
             type: 'CANCELLED_TIMESLOT',
             text: `${
               gamingTimeSlot.gamingSession.creator.username
-            } cancelled the timeslot from ${dateFns.format(
+            } cancelled the timeslot for ${
+              gamingTimeSlot.game.name
+            } from ${dateFns.format(
               gamingTimeSlot.startTime,
               timeFormat
             )}-${dateFns.format(gamingTimeSlot.endTime, timeFormat)}`,

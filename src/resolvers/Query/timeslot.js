@@ -26,6 +26,15 @@ const timeslot = {
       },
     })
   },
+  async gamerSessionsSpecificDay(parent, { day, gamer }, ctx) {
+    return await ctx.prisma.gamingTimeSlots({
+      where: {
+        gamers_some: { username: gamer },
+        startTime_gte: dateFns.startOfDay(new Date(day)),
+        startTime_lte: dateFns.endOfDay(new Date(day)),
+      },
+    })
+  },
   async nextTimeSlot(parent, _, ctx) {
     const userId = getUserId(ctx)
     const sessions = await ctx.prisma.gamingTimeSlots({
