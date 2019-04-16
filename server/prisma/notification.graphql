@@ -12,7 +12,12 @@ type Notification {
 }
 
 enum NotificationType {
+  ## User cancelled booking. Notify gamer with this.
+  CANCELLED_BOOKING
+  ## Gamer cancelled timeslot. Notify users with this.
   CANCELLED_TIMESLOT
+  ## Gamer added minutes to current slot and pushed back slots.
+  GAMER_PUSHED_BACK_SLOT
   ACCEPTED_GAMER_REQUEST
   DENIED_GAMER_REQUEST
   FRIEND_REQUEST
@@ -23,6 +28,10 @@ enum NotificationType {
   ## For Gamer
   BOOKED_TIMESLOT
   TIMESLOT_INVITE
+  ## Your friend cancelled whole booking
+  FRIEND_CANCELLED_BOOKING
+  ## Your friend you invited cancelled their spot
+  FRIEND_CANCELLED_THEIR_SLOT
   ACCEPTED_TIMESLOT_INVITE
   ACCEPTED_FRIEND_REQUEST
 }

@@ -3,7 +3,10 @@ import styled from 'styled-components'
 import dateFns from 'date-fns'
 import { FaChevronLeft } from 'react-icons/fa'
 import { Subscribe } from 'unstated'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 import { MdClose } from 'react-icons/md'
+import { withRouter } from 'react-router-dom'
 
 import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
@@ -157,12 +160,41 @@ const ExitContainer = styled.div`
   height: 3rem;
 `
 
-export default function TimeSlotHours(props) {
+const GAMER_SESSIONS_SPECIFIC_DAY = gql`
+  query($day: DateTime!, $gamer: String!) {
+    gamerSessionsSpecificDay(day: $day, gamer: $gamer) {
+      startTime
+      length
+      slots
+      id
+      passed
+      gamingSession {
+        system
+        game {
+          launcher
+        }
+      }
+      players {
+        player {
+          username
+        }
+      }
+    }
+  }
+`
+
+function TimeSlotHours(props) {
   useEffect(() => {
     const element = document.getElementById('currentCalendar')
     element && element.scrollIntoView()
     window.parent.scrollTo(0, 0)
   }, {})
+  const { data, loading } = useQuery(GAMER_SESSIONS_SPECIFIC_DAY, {
+    variables: {
+      day: props.day,
+      gamer: props.match.params.user,
+    },
+  })
   const renderHeader = () => {
     const dateFormat = 'MMMM Do, YYYY'
 
@@ -181,8 +213,8 @@ export default function TimeSlotHours(props) {
     let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
-      const sessions = exampleSessions.filter(
-        session => dateFns.getHours(session.timeStart) === i
+      const sessions = data.gamerSessionsSpecificDay.filter(
+        session => dateFns.getHours(session.startTime) === i
       )
 
       hours.push(
@@ -238,15 +270,15 @@ export default function TimeSlotHours(props) {
               <Sessions>
                 {sessions.map(session => (
                   <Session
-                    key={session.timeStart}
+                    key={session.startTime}
                     height={session.length}
                     full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.timeStart)}
+                    startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
                       container.setSelectedSession(session)
                     }}
                     disabled={
-                      dateFns.compareAsc(new Date(), session.timeStart) === 1
+                      dateFns.compareAsc(new Date(), session.startTime) === 1
                     }
                   >
                     {`${session.slots - session.players.length} ${
@@ -265,7 +297,7 @@ export default function TimeSlotHours(props) {
 
     return <Hours>{hours}</Hours>
   }
-  return (
+  return loading ? null : (
     <Container>
       <ExitContainer>
         <Exit onClick={props.close} />
@@ -275,3 +307,5 @@ export default function TimeSlotHours(props) {
     </Container>
   )
 }
+
+export default withRouter(TimeSlotHours)

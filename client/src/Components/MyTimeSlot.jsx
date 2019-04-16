@@ -151,14 +151,24 @@ const CANCEL_BOOKING = gql`
     }
   }
 `
+
+const CANCEL_NOT_BOOKEE_BOOKING = gql`
+  mutation($input: CancelNotBookeeBookingInput!) {
+    cancelNotBookeeBooking(input: $input) {
+      cancelled
+    }
+  }
+`
 export default function MyTimeSlot({
   timeslot,
   me,
   upcoming,
   bookingId,
   refetch,
+  bookee,
 }) {
   const cancelBooking = useMutation(CANCEL_BOOKING)
+  const cancelNotBookeeBooking = useMutation(CANCEL_NOT_BOOKEE_BOOKING)
   const dateFormat = 'MMMM Do, YYYY, h:mm a'
   let counter = 0
   const players = []
@@ -167,7 +177,6 @@ export default function MyTimeSlot({
     ...new Set(timeslot.players.map(({ player }) => player.username)),
   ]
   while (counter < uniquePlayers.length) {
-    console.log(counter === uniquePlayers.length - 1)
     if (uniquePlayers[counter] === me.username) {
     } else {
       players.push(
@@ -217,10 +226,20 @@ export default function MyTimeSlot({
           <CancelContainer>
             <CancelBooking
               onClick={async () => {
-                const input = { bookingId }
-                const { data } = await cancelBooking({ variables: { input } })
-                if (data.cancelBooking.cancelled) {
-                  refetch()
+                if (me.username === bookee.username) {
+                  const input = { bookingId }
+                  const { data } = await cancelBooking({ variables: { input } })
+                  if (data.cancelBooking.cancelled) {
+                    refetch()
+                  }
+                } else {
+                  const input = { bookingId }
+                  const { data } = await cancelNotBookeeBooking({
+                    variables: { input },
+                  })
+                  if (data.cancelNotBookeeBooking.cancelled) {
+                    refetch()
+                  }
                 }
               }}
             >

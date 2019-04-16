@@ -67,7 +67,6 @@ const MY_NOTIFICATIONS = gql`
         id
         booking {
           timeslot {
-            passed
             gamingSession {
               system
               game {
@@ -130,6 +129,9 @@ export default function NotificationsPage(props) {
   groups.ACCEPTED_FRIEND_REQUEST && misc.push(...groups.ACCEPTED_FRIEND_REQUEST)
   groups.ACCEPTED_TIMESLOT_INVITE &&
     misc.push(...groups.ACCEPTED_TIMESLOT_INVITE)
+  groups.FRIEND_CANCELLED_THEIR_SLOT &&
+    misc.push(...groups.FRIEND_CANCELLED_THEIR_SLOT)
+  groups.GAMER_PUSHED_BACK_SLOT && misc.push(...groups.GAMER_PUSHED_BACK_SLOT)
   groups.CANCELLED_TIMESLOT && misc.push(...groups.CANCELLED_TIMESLOT)
   groups.ACCEPTED_GAMER_REQUEST && misc.push(...groups.ACCEPTED_GAMER_REQUEST)
   groups.DENIED_GAMER_REQUEST && misc.push(...groups.DENIED_GAMER_REQUEST)

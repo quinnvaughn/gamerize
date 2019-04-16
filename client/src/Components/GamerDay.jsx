@@ -248,7 +248,7 @@ export default function GamerDay(props) {
           <Sessions>
             {sessions.map(session => (
               <Session
-                key={session.timeStart}
+                key={session.startTime}
                 height={dateFns.differenceInMinutes(
                   session.endTime,
                   session.startTime

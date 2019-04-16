@@ -93,18 +93,14 @@ export default function SessionsIsGoingOn({ currentSession, refetch }) {
     while (counter < end) {
       if (system === 'pc') {
         let username =
-          currentSession.players.length > 0 &&
-          currentSession.players[counter].player.gamertags[counter]
-            ? currentSession.players[counter].player.gamertags[counter][system][
-                launcher
-              ]
+          currentSession.players.length > 0 && currentSession.players[counter]
+            ? currentSession.players[counter].player.gamertags[system][launcher]
             : null
         usernames.add(username)
       } else {
         let username =
-          currentSession.players.length > 0 &&
-          currentSession.players[counter].player.gamertags[counter]
-            ? currentSession.players[counter].player.gamertags[counter][system]
+          currentSession.players.length > 0 && currentSession.players[counter]
+            ? currentSession.players[counter].player.gamertags[system]
             : null
         usernames.add(username)
       }

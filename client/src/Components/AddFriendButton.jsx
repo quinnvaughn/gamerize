@@ -57,7 +57,7 @@ const Dropdown = styled.div`
   border-radius: 4px;
   width: 100%;
   border: 1px solid #ebebeb;
-  height: 8rem;
+  min-height: 4rem;
 `
 
 const DropdownOption = styled.div`
@@ -93,6 +93,14 @@ const DECLINE_FRIEND_REQUEST = gql`
   }
 `
 
+const CANCEL_FRIEND_REQUEST = gql`
+  mutation($input: CancelFriendRequestInput!) {
+    cancelFriendRequest(input: $input) {
+      cancelled
+    }
+  }
+`
+
 export default function AddFriendButton({
   pending,
   respond,
@@ -104,12 +112,13 @@ export default function AddFriendButton({
   const sendFriendRequest = useMutation(SEND_FRIEND_REQUEST)
   const acceptFriendRequest = useMutation(ACCEPT_FRIEND_REQUEST)
   const declineFriendRequest = useMutation(DECLINE_FRIEND_REQUEST)
+  const cancelFriendRequest = useMutation(CANCEL_FRIEND_REQUEST)
   const [dropdown, setDropdown] = useDropdown(node)
   return pending || respond ? (
     <PendingOrRespond ref={node}>
       {pending ? 'Pending' : 'Respond'}
       {//Need to add pending option - cancel invite. Also don't show confirm or deny on it.
-      dropdown ? (
+      dropdown && respond ? (
         <Dropdown>
           <DropdownOption
             onClick={async () => {
@@ -138,6 +147,23 @@ export default function AddFriendButton({
             }}
           >
             Deny
+          </DropdownOption>
+        </Dropdown>
+      ) : dropdown && pending ? (
+        <Dropdown>
+          <DropdownOption
+            onClick={async () => {
+              const input = { username }
+              const { data } = await cancelFriendRequest({
+                variables: { input },
+              })
+              if (data.cancelFriendRequest.cancelled) {
+                setDropdown(false)
+                refetch()
+              }
+            }}
+          >
+            Cancel
           </DropdownOption>
         </Dropdown>
       ) : null}

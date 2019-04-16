@@ -21,6 +21,8 @@ const notification = {
           { type: 'FRIEND_REQUEST' },
           { type: 'ACCEPTED_TIMESLOT_REQUEST' },
           { type: 'TIMESLOT_INVITE' },
+          { type: 'FRIEND_CANCELLED_THEIR_SLOT' },
+          { type: 'GAMER_PUSHED_BACK_SLOT' },
         ],
       },
       data: { viewed: true },

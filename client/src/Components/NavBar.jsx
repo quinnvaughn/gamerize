@@ -168,7 +168,7 @@ function NavBar(props) {
                             key={link.text}
                             to={
                               link.path === '/sessions'
-                                ? `/sessions/${data.me.username}`
+                                ? `/sessions`
                                 : link.path
                             }
                           >

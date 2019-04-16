@@ -75,8 +75,9 @@ const routes = [
     component: SignUpPage,
   },
   {
-    path: '/sessions/',
+    path: '/sessions',
     protected: true,
+    exact: true,
     component: UserSessionsPage,
   },
   {
