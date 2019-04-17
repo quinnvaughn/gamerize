@@ -76,6 +76,27 @@ const User = {
       ? { session: session[0], goingOn: true }
       : { goingOn: false }
   },
+  numSessions: async (parent, _, ctx) => {
+    const QUERY = `
+      {
+        gamingSessionsConnection(where: {
+          gamers_some: {
+            id: "${parent.id}"
+          }
+        }) {
+          aggregate {
+            count
+          }
+        }
+      }
+    `
+    const {
+      gamingSessionsConnection: {
+        aggregate: { count },
+      },
+    } = await ctx.prisma.$graphql(QUERY)
+    return count
+  },
   mostPlayedGames: async (parent, _, { prisma }) => {
     const QUERY = `
       {

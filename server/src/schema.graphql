@@ -30,6 +30,23 @@ type Query {
   numGamerNotifications: Int!
   getGamers(first: Int): [User!]!
   gamerSessionsSpecificDay(day: DateTime!, gamer: String!): [GamingTimeSlot!]!
+  searchGamerize(search: String!): [SearchResult!]!
+  moreSessions(search: String!, skip: Int): [GamingSession!]!
+  moreGames(search: String!, skip: Int): [Game!]!
+  moreUsers(search: String!, skip: Int): [User!]!
+}
+
+type SearchResult {
+  type: SearchResultType!
+  game: Game
+  user: User
+  session: GamingSession
+}
+
+enum SearchResultType {
+  GAME
+  USER
+  SESSION
 }
 
 type Mutation {
@@ -426,6 +443,7 @@ type User {
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!
   timeSlotsBooked: [Booking!]!
+  numSessions: Int!
   sessionIsGoingOn: SessionIsGoingOn
   setup: Int
   role: Role!

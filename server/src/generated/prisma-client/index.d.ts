@@ -996,7 +996,11 @@ export type GamingSessionIndexOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "title_ASC"
-  | "title_DESC";
+  | "title_DESC"
+  | "gamer_ASC"
+  | "gamer_DESC"
+  | "game_ASC"
+  | "game_DESC";
 
 export type DiscountOrderByInput =
   | "percentage_ASC"
@@ -2269,6 +2273,8 @@ export interface GamingTimeSlotUpdateOneRequiredWithoutPlayersInput {
 
 export interface GamingSessionIndexUpdateInput {
   title?: String;
+  gamer?: String;
+  game?: String;
   gamingSession?: GamingSessionUpdateOneRequiredInput;
 }
 
@@ -2306,6 +2312,8 @@ export interface UserUpdateManyWithoutTimeSlotsInput {
 
 export interface GamingSessionIndexCreateInput {
   title: String;
+  gamer: String;
+  game?: String;
   gamingSession: GamingSessionCreateOneInput;
 }
 
@@ -3902,6 +3910,8 @@ export interface UserUpsertNestedInput {
 
 export interface GamingSessionIndexUpdateManyMutationInput {
   title?: String;
+  gamer?: String;
+  game?: String;
 }
 
 export interface NotificationUpsertWithWhereUniqueWithoutBookingInput {
@@ -5604,6 +5614,34 @@ export interface GamingSessionIndexWhereInput {
   title_not_starts_with?: String;
   title_ends_with?: String;
   title_not_ends_with?: String;
+  gamer?: String;
+  gamer_not?: String;
+  gamer_in?: String[] | String;
+  gamer_not_in?: String[] | String;
+  gamer_lt?: String;
+  gamer_lte?: String;
+  gamer_gt?: String;
+  gamer_gte?: String;
+  gamer_contains?: String;
+  gamer_not_contains?: String;
+  gamer_starts_with?: String;
+  gamer_not_starts_with?: String;
+  gamer_ends_with?: String;
+  gamer_not_ends_with?: String;
+  game?: String;
+  game_not?: String;
+  game_in?: String[] | String;
+  game_not_in?: String[] | String;
+  game_lt?: String;
+  game_lte?: String;
+  game_gt?: String;
+  game_gte?: String;
+  game_contains?: String;
+  game_not_contains?: String;
+  game_starts_with?: String;
+  game_not_starts_with?: String;
+  game_ends_with?: String;
+  game_not_ends_with?: String;
   gamingSession?: GamingSessionWhereInput;
   AND?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
   OR?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
@@ -7653,6 +7691,8 @@ export interface NotificationEdgeSubscription
 export interface GamingSessionIndexPreviousValues {
   id: ID_Output;
   title: String;
+  gamer: String;
+  game?: String;
 }
 
 export interface GamingSessionIndexPreviousValuesPromise
@@ -7660,6 +7700,8 @@ export interface GamingSessionIndexPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
+  gamer: () => Promise<String>;
+  game: () => Promise<String>;
 }
 
 export interface GamingSessionIndexPreviousValuesSubscription
@@ -7667,6 +7709,8 @@ export interface GamingSessionIndexPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
+  gamer: () => Promise<AsyncIterator<String>>;
+  game: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GamingTimeSlotConnection {
@@ -7718,6 +7762,8 @@ export interface FriendRequestSubscription
 export interface GamingSessionIndex {
   id: ID_Output;
   title: String;
+  gamer: String;
+  game?: String;
 }
 
 export interface GamingSessionIndexPromise
@@ -7725,6 +7771,8 @@ export interface GamingSessionIndexPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
+  gamer: () => Promise<String>;
+  game: () => Promise<String>;
   gamingSession: <T = GamingSessionPromise>() => T;
 }
 
@@ -7733,6 +7781,8 @@ export interface GamingSessionIndexSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
+  gamer: () => Promise<AsyncIterator<String>>;
+  game: () => Promise<AsyncIterator<String>>;
   gamingSession: <T = GamingSessionSubscription>() => T;
 }
 

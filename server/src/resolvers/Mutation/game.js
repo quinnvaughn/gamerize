@@ -6,6 +6,7 @@ const game = {
     const game = await prisma.createGame({
       name: input.name,
       tags: { set: input.tags },
+      launcher: input.launcher,
     })
     await prisma.createGameIndex({
       name: lowercaseName,
