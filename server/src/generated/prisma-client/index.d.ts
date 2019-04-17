@@ -870,7 +870,15 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type BookedPlayerOrderByInput = "id_ASC" | "id_DESC";
+export type BookingInviteOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "startTime_ASC"
+  | "startTime_DESC"
+  | "sent_ASC"
+  | "sent_DESC"
+  | "accepted_ASC"
+  | "accepted_DESC";
 
 export type GamingSessionOrderByInput =
   | "id_ASC"
@@ -890,6 +898,18 @@ export type GamingSessionOrderByInput =
   | "retired_ASC"
   | "retired_DESC";
 
+export type BookedPlayerOrderByInput = "id_ASC" | "id_DESC";
+
+export type UserIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "name_ASC"
+  | "name_DESC";
+
 export type NotificationType =
   | "CANCELLED_BOOKING"
   | "CANCELLED_TIMESLOT"
@@ -906,15 +926,21 @@ export type NotificationType =
   | "ACCEPTED_TIMESLOT_INVITE"
   | "ACCEPTED_FRIEND_REQUEST";
 
-export type UserIndexOrderByInput =
+export type SocialMediaOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "name_ASC"
-  | "name_DESC";
+  | "twitter_ASC"
+  | "twitter_DESC"
+  | "facebook_ASC"
+  | "facebook_DESC"
+  | "youtube_ASC"
+  | "youtube_DESC"
+  | "instagram_ASC"
+  | "instagram_DESC"
+  | "twitch_ASC"
+  | "twitch_DESC"
+  | "snapchat_ASC"
+  | "snapchat_DESC";
 
 export type BookingOrderByInput =
   | "id_ASC"
@@ -928,11 +954,31 @@ export type BookingOrderByInput =
   | "cancelled_ASC"
   | "cancelled_DESC";
 
-export type SessionReviewIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "text_ASC"
-  | "text_DESC";
+export type Occupations =
+  | "CELEBRITY"
+  | "INFLUENCER"
+  | "ENTERTAINER"
+  | "STREAMER"
+  | "YOUTUBER"
+  | "MEDIA"
+  | "SPORTS_PERSONALITY"
+  | "INTERNET_PERSONALITY"
+  | "ATHLETE"
+  | "PROFESIONAL_GAMER"
+  | "ACTOR"
+  | "COMEDIAN"
+  | "ROCK_STAR"
+  | "RAPPER"
+  | "SINGER"
+  | "MUSICIAN"
+  | "POLITICIAN"
+  | "DJ"
+  | "MUSIC_PRODUCER"
+  | "ENTREPRENEUR"
+  | "ARTIST"
+  | "ACTRESS"
+  | "MODEL"
+  | "ADULT_PERFORMER";
 
 export type GamingTimeSlotOrderByInput =
   | "id_ASC"
@@ -945,6 +991,73 @@ export type GamingTimeSlotOrderByInput =
   | "length_DESC"
   | "slots_ASC"
   | "slots_DESC";
+
+export type GamingSessionIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC";
+
+export type DiscountOrderByInput =
+  | "percentage_ASC"
+  | "percentage_DESC"
+  | "threshold_ASC"
+  | "threshold_DESC"
+  | "playerOrSession_ASC"
+  | "playerOrSession_DESC";
+
+export type GamerRequestOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "addToOccupations_ASC"
+  | "addToOccupations_DESC";
+
+export type RequirementOrderByInput = "msg_ASC" | "msg_DESC";
+
+export type GameOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "launcher_ASC"
+  | "launcher_DESC"
+  | "numSessions_ASC"
+  | "numSessions_DESC";
+
+export type Role = "USER" | "GAMER" | "ADMIN";
+
+export type NotificationOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "type_ASC"
+  | "type_DESC"
+  | "text_ASC"
+  | "text_DESC"
+  | "viewed_ASC"
+  | "viewed_DESC";
+
+export type SessionReviewOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "text_ASC"
+  | "text_DESC"
+  | "rating_ASC"
+  | "rating_DESC";
+
+export type Gender = "MALE" | "FEMALE" | "OTHER";
+
+export type Launcher =
+  | "EPIC"
+  | "STEAM"
+  | "ORIGIN"
+  | "BATTLENET"
+  | "GOG"
+  | "UPLAY"
+  | "BETHESDA"
+  | "ITCH"
+  | "WINDOWS";
 
 export type PCLauncherOrderByInput =
   | "id_ASC"
@@ -966,27 +1079,11 @@ export type PCLauncherOrderByInput =
   | "itch_ASC"
   | "itch_DESC"
   | "windows_ASC"
-  | "windows_DESC";
+  | "windows_DESC"
+  | "riot_ASC"
+  | "riot_DESC";
 
-export type DiscountOrderByInput =
-  | "percentage_ASC"
-  | "percentage_DESC"
-  | "threshold_ASC"
-  | "threshold_DESC"
-  | "playerOrSession_ASC"
-  | "playerOrSession_DESC";
-
-export type GamerTagOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "psn_ASC"
-  | "psn_DESC"
-  | "xbl_ASC"
-  | "xbl_DESC"
-  | "nso_ASC"
-  | "nso_DESC";
-
-export type RequirementOrderByInput = "msg_ASC" | "msg_DESC";
+export type System = "PS4" | "PC" | "XBOX_ONE" | "NINTENDO_SWITCH";
 
 export type GameIndexOrderByInput =
   | "id_ASC"
@@ -996,74 +1093,13 @@ export type GameIndexOrderByInput =
   | "launcher_ASC"
   | "launcher_DESC";
 
-export type Role = "USER" | "GAMER" | "ADMIN";
-
-export type FriendRequestOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
-
-export type SessionReviewOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "text_ASC"
-  | "text_DESC"
-  | "rating_ASC"
-  | "rating_DESC";
-
-export type BookingInviteOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "startTime_ASC"
-  | "startTime_DESC"
-  | "sent_ASC"
-  | "sent_DESC"
-  | "accepted_ASC"
-  | "accepted_DESC";
-
-export type Launcher =
-  | "EPIC"
-  | "STEAM"
-  | "ORIGIN"
-  | "BATTLENET"
-  | "GOG"
-  | "UPLAY"
-  | "BETHESDA"
-  | "ITCH"
-  | "WINDOWS";
-
-export type SocialMediaOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "twitter_ASC"
-  | "twitter_DESC"
-  | "facebook_ASC"
-  | "facebook_DESC"
-  | "youtube_ASC"
-  | "youtube_DESC"
-  | "instagram_ASC"
-  | "instagram_DESC"
-  | "twitch_ASC"
-  | "twitch_DESC"
-  | "snapchat_ASC"
-  | "snapchat_DESC";
-
-export type System = "PS4" | "PC" | "XBOX_ONE" | "NINTENDO_SWITCH";
-
-export type GamingSessionIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "title_ASC"
-  | "title_DESC";
-
 export type PlayerOrSession = "PLAYER" | "SESSION";
 
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "gender_ASC"
+  | "gender_DESC"
   | "email_ASC"
   | "email_DESC"
   | "username_ASC"
@@ -1119,59 +1155,29 @@ export type Tags =
 
 export type TypeOfGame = "CUSTOM" | "MATCHMAKING";
 
-export type GamerRequestOrderByInput =
+export type FriendRequestOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "addToOccupations_ASC"
-  | "addToOccupations_DESC";
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type Occupations =
-  | "CELEBRITY"
-  | "INFLUENCER"
-  | "ENTERTAINER"
-  | "STREAMER"
-  | "YOUTUBER"
-  | "MEDIA"
-  | "SPORTS_PERSONALITY"
-  | "INTERNET_PERSONALITY"
-  | "ATHLETE"
-  | "PROFESIONAL_GAMER"
-  | "ACTOR"
-  | "COMEDIAN"
-  | "ROCK_STAR"
-  | "RAPPER"
-  | "SINGER"
-  | "MUSICIAN"
-  | "POLITICIAN"
-  | "DJ"
-  | "MUSIC_PRODUCER"
-  | "ENTREPRENEUR"
-  | "ARTIST"
-  | "ACTRESS"
-  | "MODEL"
-  | "ADULT_PERFORMER";
+export type GamerTagOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "psn_ASC"
+  | "psn_DESC"
+  | "xbl_ASC"
+  | "xbl_DESC"
+  | "nso_ASC"
+  | "nso_DESC";
+
+export type SessionReviewIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "text_ASC"
+  | "text_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export type NotificationOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "text_ASC"
-  | "text_DESC"
-  | "viewed_ASC"
-  | "viewed_DESC";
-
-export type GameOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "launcher_ASC"
-  | "launcher_DESC"
-  | "numSessions_ASC"
-  | "numSessions_DESC";
 
 export interface BookingInviteUpdateManyWithoutToInput {
   create?:
@@ -1484,6 +1490,7 @@ export interface GameIndexSubscriptionWhereInput {
 }
 
 export interface UserUpdateDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -1618,6 +1625,7 @@ export interface GameUpdateOneRequiredWithoutSessionsInput {
 }
 
 export interface UserUpdateManyMutationInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -1766,6 +1774,7 @@ export interface GameIndexWhereInput {
 }
 
 export interface UserUpdateWithoutReviewsDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -1894,6 +1903,7 @@ export interface PCLauncherUpdateManyMutationInput {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface GamingSessionUpdateWithoutTimeslotsDataInput {
@@ -1957,9 +1967,11 @@ export interface PCLauncherUpdateInput {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface UserUpdateWithoutSessionsDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -2013,6 +2025,7 @@ export interface PCLauncherCreateInput {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface BookingInviteUpdateWithWhereUniqueWithoutFromInput {
@@ -2073,6 +2086,10 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  gender?: Gender;
+  gender_not?: Gender;
+  gender_in?: Gender[] | Gender;
+  gender_not_in?: Gender[] | Gender;
   email?: String;
   email_not?: String;
   email_in?: String[] | String;
@@ -2315,6 +2332,7 @@ export interface GamingSessionUpdateInput {
 }
 
 export interface UserUpdateWithoutTimeSlotsDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -2414,6 +2432,7 @@ export interface SessionReviewIndexWhereInput {
 }
 
 export interface UserUpdateWithoutInvitesDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -2681,6 +2700,7 @@ export interface DiscountScalarWhereInput {
 }
 
 export interface UserCreateInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -2793,6 +2813,7 @@ export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
 }
 
 export interface UserCreateWithoutReviewsInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -2873,6 +2894,7 @@ export interface BookingUpdateWithoutTimeslotDataInput {
 }
 
 export interface UserCreateWithoutSessionsInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -2969,6 +2991,7 @@ export interface GamingTimeSlotCreateWithoutPlayersInput {
 }
 
 export interface UserUpdateWithoutInvitesReceivedDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -2987,6 +3010,7 @@ export interface UserUpdateWithoutInvitesReceivedDataInput {
 }
 
 export interface UserCreateWithoutTimeSlotsInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -3037,6 +3061,7 @@ export interface UserUpdateWithWhereUniqueNestedInput {
 }
 
 export interface UserCreateWithoutInvitesInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -3081,6 +3106,10 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  gender?: Gender;
+  gender_not?: Gender;
+  gender_in?: Gender[] | Gender;
+  gender_not_in?: Gender[] | Gender;
   email?: String;
   email_not?: String;
   email_in?: String[] | String;
@@ -3196,6 +3225,7 @@ export interface RequirementCreateInput {
 }
 
 export interface UserUpdateManyDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -3278,9 +3308,11 @@ export interface PCLauncherUpdateWithoutGamerTagDataInput {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface UserCreateWithoutInvitesReceivedInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -3642,6 +3674,7 @@ export interface BookedPlayerUpdateWithWhereUniqueWithoutTimeslotInput {
 }
 
 export interface UserUpdateInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -4038,6 +4071,7 @@ export interface NotificationUpdateManyDataInput {
 }
 
 export interface UserUpdateWithoutGamertagsDataInput {
+  gender?: Gender;
   email?: String;
   username?: String;
   password?: String;
@@ -4061,6 +4095,7 @@ export interface BookingUpsertWithoutPlayersInput {
 }
 
 export interface UserCreateWithoutGamertagsInput {
+  gender?: Gender;
   email: String;
   username: String;
   password: String;
@@ -4446,6 +4481,7 @@ export interface PCLauncherCreateWithoutGamerTagInput {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface SessionReviewScalarWhereInput {
@@ -4650,6 +4686,20 @@ export interface PCLauncherWhereInput {
   windows_not_starts_with?: String;
   windows_ends_with?: String;
   windows_not_ends_with?: String;
+  riot?: String;
+  riot_not?: String;
+  riot_in?: String[] | String;
+  riot_not_in?: String[] | String;
+  riot_lt?: String;
+  riot_lte?: String;
+  riot_gt?: String;
+  riot_gte?: String;
+  riot_contains?: String;
+  riot_not_contains?: String;
+  riot_starts_with?: String;
+  riot_not_starts_with?: String;
+  riot_ends_with?: String;
+  riot_not_ends_with?: String;
   AND?: PCLauncherWhereInput[] | PCLauncherWhereInput;
   OR?: PCLauncherWhereInput[] | PCLauncherWhereInput;
   NOT?: PCLauncherWhereInput[] | PCLauncherWhereInput;
@@ -7049,6 +7099,7 @@ export interface PCLauncher {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface PCLauncherPromise extends Promise<PCLauncher>, Fragmentable {
@@ -7063,6 +7114,7 @@ export interface PCLauncherPromise extends Promise<PCLauncher>, Fragmentable {
   bethesda: () => Promise<String>;
   itch: () => Promise<String>;
   windows: () => Promise<String>;
+  riot: () => Promise<String>;
 }
 
 export interface PCLauncherSubscription
@@ -7079,6 +7131,7 @@ export interface PCLauncherSubscription
   bethesda: () => Promise<AsyncIterator<String>>;
   itch: () => Promise<AsyncIterator<String>>;
   windows: () => Promise<AsyncIterator<String>>;
+  riot: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FriendRequestConnection {
@@ -7129,6 +7182,7 @@ export interface GamerTagSubscriptionPayloadSubscription
 
 export interface User {
   id: ID_Output;
+  gender: Gender;
   email: String;
   username: String;
   password: String;
@@ -7142,6 +7196,7 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  gender: () => Promise<Gender>;
   email: () => Promise<String>;
   username: () => Promise<String>;
   password: () => Promise<String>;
@@ -7212,6 +7267,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
@@ -8036,6 +8092,7 @@ export interface PCLauncherPreviousValues {
   bethesda?: String;
   itch?: String;
   windows?: String;
+  riot?: String;
 }
 
 export interface PCLauncherPreviousValuesPromise
@@ -8051,6 +8108,7 @@ export interface PCLauncherPreviousValuesPromise
   bethesda: () => Promise<String>;
   itch: () => Promise<String>;
   windows: () => Promise<String>;
+  riot: () => Promise<String>;
 }
 
 export interface PCLauncherPreviousValuesSubscription
@@ -8066,6 +8124,7 @@ export interface PCLauncherPreviousValuesSubscription
   bethesda: () => Promise<AsyncIterator<String>>;
   itch: () => Promise<AsyncIterator<String>>;
   windows: () => Promise<AsyncIterator<String>>;
+  riot: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateSessionReview {
@@ -8499,6 +8558,7 @@ export interface AggregateGamingTimeSlotSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
+  gender: Gender;
   email: String;
   username: String;
   password: String;
@@ -8514,6 +8574,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  gender: () => Promise<Gender>;
   email: () => Promise<String>;
   username: () => Promise<String>;
   password: () => Promise<String>;
@@ -8529,6 +8590,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
@@ -8739,6 +8801,10 @@ export type Float = number;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Gender",
     embedded: false
   },
   {

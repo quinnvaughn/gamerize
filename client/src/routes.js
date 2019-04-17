@@ -13,6 +13,7 @@ import BecomeAGamerDetails from './Pages/BecomeAGamerDetailsPage'
 import BecomeAGamerFinished from './Pages/BecomeAGamerFinishedPage'
 import GamerDashboard from './Pages/GamerDashboard'
 import NotificationsPage from './Pages/NotificationsPage'
+import EditProfileInfoPage from './Pages/EditProfileInfoPage'
 
 const routes = [
   {
@@ -84,6 +85,11 @@ const routes = [
     path: '/notifications',
     protected: true,
     component: NotificationsPage,
+  },
+  {
+    path: '/profile/edit',
+    protected: true,
+    component: EditProfileInfoPage,
   },
 ]
 
