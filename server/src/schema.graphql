@@ -92,6 +92,38 @@ type Mutation {
   cancelNotBookeeBooking(
     input: CancelNotBookeeBookingInput!
   ): CancelNotBookeeBookingPayload!
+  updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfilePayload!
+}
+
+input UpdateUserProfileInput {
+  name: String
+  aboutMe: String
+  gender: Gender
+  gamertags: GamertagsInput
+}
+
+input GamertagsInput {
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCInput
+}
+
+input PCInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  riot: String
+  windows: String
+}
+
+type UpdateUserProfilePayload {
+  updated: Boolean!
 }
 
 input CancelNotBookeeBookingInput {
@@ -389,6 +421,7 @@ type User {
   email: String!
   name: String!
   username: String!
+  gender: Gender!
   currentGamerRequest: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!

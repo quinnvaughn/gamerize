@@ -14,7 +14,6 @@ export const singleOrPlural = (decider, word) =>
 
 export const formatTags = tag => {
   const words = tag.split('_')
-  console.log(words)
 }
 
 export const uppercase = string => string.toUpperCase()
@@ -38,4 +37,17 @@ export const formatGamers = gamers => {
     }
   })
   return str
+}
+
+export const formatGender = gender => {
+  switch (gender) {
+    case 'MALE':
+      return 'Male'
+    case 'FEMALE':
+      return 'Female'
+    case 'OTHER':
+      return 'Other'
+    default:
+      return 'Not a gender'
+  }
 }

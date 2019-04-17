@@ -1,13 +1,13 @@
-import React, {memo} from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
+import { withRouter } from 'react-router-dom'
+import { useApolloClient } from 'react-apollo-hooks'
 
-
-const Container = styled.div`
+const Dropdown = styled.div`
   position: absolute;
   top: 8rem;
   right: 0;
   background: #fff;
-  padding: 2rem;
   z-index: 10;
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px;
   border: 1px solid rgb(235, 235, 235);
@@ -18,11 +18,37 @@ const Container = styled.div`
   }
 `
 
-const NavBarAvatarDropdown = memo(function NavBarAvatarDropdown (props) {
-    return (
-        <Container>
-            <div>Hello</div>
-        </Container>
-    )
+const DropdownOption = styled.div`
+  background: #fff;
+  cursor: pointer;
+  :hover {
+    background: #d3d3d3;
+  }
+  padding: 1rem;
+  width: 100%;
+`
+
+const NavBarAvatarDropdown = memo(function NavBarAvatarDropdown(props) {
+  const client = useApolloClient()
+  return (
+    <Dropdown>
+      <DropdownOption
+        onClick={async () => {
+          await props.history.push('/profile/edit')
+        }}
+      >
+        Profile
+      </DropdownOption>
+      <DropdownOption
+        onClick={async () => {
+          await client.resetStore()
+          await props.history.push('/')
+          await localStorage.removeItem('TOKEN')
+        }}
+      >
+        Logout
+      </DropdownOption>
+    </Dropdown>
+  )
 })
-export default NavBarAvatarDropdown
+export default withRouter(NavBarAvatarDropdown)

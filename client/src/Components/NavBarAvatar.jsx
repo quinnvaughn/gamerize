@@ -1,11 +1,10 @@
 import React, { useRef } from 'react'
-import { useApolloClient } from 'react-apollo-hooks'
-import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 // local imports
 import DefaultAvatar from '../default-avatar.png'
 import useDropdown from '../Hooks/useDropdown'
+import NavBarAvatarDropdown from './NavBarAvatarDropdown'
 
 const Avatar = styled.img`
   width: 4rem;
@@ -29,30 +28,6 @@ const AvatarContainer = styled.div`
   }
 `
 
-const Dropdown = styled.div`
-  position: absolute;
-  top: 8rem;
-  right: 0;
-  background: #fff;
-  z-index: 10;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px;
-  border: 1px solid rgb(235, 235, 235);
-  border-top: none;
-  border-radius: 4px;
-  :hover {
-    z-index: 9999;
-  }
-`
-
-const DropdownOption = styled.div`
-  background: #fff;
-  cursor: pointer;
-  :hover {
-    background: #d3d3d3;
-  }
-  padding: 1rem;
-`
-
 const Content = styled.div`
   display: flex;
   align-items: center;
@@ -61,30 +36,15 @@ const Content = styled.div`
   width: 100%;
 `
 
-function NavBarAvatar(props) {
+export default function NavBarAvatar(props) {
   const node = useRef()
   const [dropdown, setDropdown] = useDropdown(node, true)
-  const client = useApolloClient()
   return (
     <AvatarContainer ref={node}>
       <Content>
         <Avatar src={DefaultAvatar} alt="Avatar" />
-        {dropdown && (
-          <Dropdown>
-            <DropdownOption
-              onClick={async () => {
-                await client.resetStore()
-                await props.history.push('/')
-                await localStorage.removeItem('TOKEN')
-              }}
-            >
-              Logout
-            </DropdownOption>
-          </Dropdown>
-        )}
+        {dropdown && <NavBarAvatarDropdown />}
       </Content>
     </AvatarContainer>
   )
 }
-
-export default withRouter(NavBarAvatar)

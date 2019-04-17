@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Apr 15 2019 19:39:14 GMT-0500 (CDT)
+# timestamp: Tue Apr 16 2019 18:35:06 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -4590,6 +4590,12 @@ input GamingTimeSlotWhereUniqueInput {
   id: ID
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -5288,6 +5294,7 @@ type PCLauncher implements Node {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 """A connection to a list of items."""
@@ -5311,6 +5318,7 @@ input PCLauncherCreateInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
   gamerTag: GamerTagCreateOneWithoutPcInput!
 }
 
@@ -5330,6 +5338,7 @@ input PCLauncherCreateWithoutGamerTagInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 """An edge in a connection."""
@@ -5362,6 +5371,8 @@ enum PCLauncherOrderByInput {
   itch_DESC
   windows_ASC
   windows_DESC
+  riot_ASC
+  riot_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -5379,6 +5390,7 @@ type PCLauncherPreviousValues {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 type PCLauncherSubscriptionPayload {
@@ -5430,6 +5442,7 @@ input PCLauncherUpdateInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
   gamerTag: GamerTagUpdateOneRequiredWithoutPcInput
 }
 
@@ -5443,6 +5456,7 @@ input PCLauncherUpdateManyMutationInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherUpdateOneWithoutGamerTagInput {
@@ -5464,6 +5478,7 @@ input PCLauncherUpdateWithoutGamerTagDataInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherUpsertWithoutGamerTagInput {
@@ -5880,6 +5895,46 @@ input PCLauncherWhereInput {
 
   """All values not ending with the given string."""
   windows_not_ends_with: String
+  riot: String
+
+  """All values that are not equal to given value."""
+  riot_not: String
+
+  """All values that are contained in given list."""
+  riot_in: [String!]
+
+  """All values that are not contained in given list."""
+  riot_not_in: [String!]
+
+  """All values less than the given value."""
+  riot_lt: String
+
+  """All values less than or equal the given value."""
+  riot_lte: String
+
+  """All values greater than the given value."""
+  riot_gt: String
+
+  """All values greater than or equal the given value."""
+  riot_gte: String
+
+  """All values containing the given string."""
+  riot_contains: String
+
+  """All values not containing the given string."""
+  riot_not_contains: String
+
+  """All values starting with the given string."""
+  riot_starts_with: String
+
+  """All values not starting with the given string."""
+  riot_not_starts_with: String
+
+  """All values ending with the given string."""
+  riot_ends_with: String
+
+  """All values not ending with the given string."""
+  riot_not_ends_with: String
   gamerTag: GamerTagWhereInput
 }
 
@@ -7387,6 +7442,7 @@ enum TypeOfGame {
 
 type User implements Node {
   id: ID!
+  gender: Gender!
   email: String!
   username: String!
   password: String!
@@ -7417,6 +7473,7 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7481,6 +7538,7 @@ input UserCreateOneWithoutReviewsInput {
 
 input UserCreateWithoutGamertagsInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7500,6 +7558,7 @@ input UserCreateWithoutGamertagsInput {
 
 input UserCreateWithoutInvitesInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7519,6 +7578,7 @@ input UserCreateWithoutInvitesInput {
 
 input UserCreateWithoutInvitesReceivedInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7538,6 +7598,7 @@ input UserCreateWithoutInvitesReceivedInput {
 
 input UserCreateWithoutReviewsInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7557,6 +7618,7 @@ input UserCreateWithoutReviewsInput {
 
 input UserCreateWithoutSessionsInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7576,6 +7638,7 @@ input UserCreateWithoutSessionsInput {
 
 input UserCreateWithoutTimeSlotsInput {
   id: ID
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -7892,6 +7955,8 @@ input UserIndexWhereUniqueInput {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  gender_ASC
+  gender_DESC
   email_ASC
   email_DESC
   username_ASC
@@ -7916,6 +7981,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  gender: Gender!
   email: String!
   username: String!
   password: String!
@@ -7976,6 +8042,16 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  gender: Gender
+
+  """All values that are not equal to given value."""
+  gender_not: Gender
+
+  """All values that are contained in given list."""
+  gender_in: [Gender!]
+
+  """All values that are not contained in given list."""
+  gender_not_in: [Gender!]
   email: String
 
   """All values that are not equal to given value."""
@@ -8254,6 +8330,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8273,6 +8350,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8292,6 +8370,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8316,6 +8395,7 @@ input UserUpdateManyInput {
 }
 
 input UserUpdateManyMutationInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8407,6 +8487,7 @@ input UserUpdateOneWithoutInvitesReceivedInput {
 }
 
 input UserUpdateWithoutGamertagsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8425,6 +8506,7 @@ input UserUpdateWithoutGamertagsDataInput {
 }
 
 input UserUpdateWithoutInvitesDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8443,6 +8525,7 @@ input UserUpdateWithoutInvitesDataInput {
 }
 
 input UserUpdateWithoutInvitesReceivedDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8461,6 +8544,7 @@ input UserUpdateWithoutInvitesReceivedDataInput {
 }
 
 input UserUpdateWithoutReviewsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8479,6 +8563,7 @@ input UserUpdateWithoutReviewsDataInput {
 }
 
 input UserUpdateWithoutSessionsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8497,6 +8582,7 @@ input UserUpdateWithoutSessionsDataInput {
 }
 
 input UserUpdateWithoutTimeSlotsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -8621,6 +8707,16 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  gender: Gender
+
+  """All values that are not equal to given value."""
+  gender_not: Gender
+
+  """All values that are contained in given list."""
+  gender_in: [Gender!]
+
+  """All values that are not contained in given list."""
+  gender_not_in: [Gender!]
   email: String
 
   """All values that are not equal to given value."""

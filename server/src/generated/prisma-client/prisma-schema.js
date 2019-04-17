@@ -2946,6 +2946,12 @@ input GamingTimeSlotWhereUniqueInput {
   id: ID
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 enum Launcher {
   EPIC
   STEAM
@@ -3459,6 +3465,7 @@ type PCLauncher {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 type PCLauncherConnection {
@@ -3478,6 +3485,7 @@ input PCLauncherCreateInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherCreateOneWithoutGamerTagInput {
@@ -3495,6 +3503,7 @@ input PCLauncherCreateWithoutGamerTagInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 type PCLauncherEdge {
@@ -3523,6 +3532,8 @@ enum PCLauncherOrderByInput {
   itch_DESC
   windows_ASC
   windows_DESC
+  riot_ASC
+  riot_DESC
 }
 
 type PCLauncherPreviousValues {
@@ -3536,6 +3547,7 @@ type PCLauncherPreviousValues {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 type PCLauncherSubscriptionPayload {
@@ -3567,6 +3579,7 @@ input PCLauncherUpdateInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherUpdateManyMutationInput {
@@ -3579,6 +3592,7 @@ input PCLauncherUpdateManyMutationInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherUpdateOneWithoutGamerTagInput {
@@ -3600,6 +3614,7 @@ input PCLauncherUpdateWithoutGamerTagDataInput {
   bethesda: String
   itch: String
   windows: String
+  riot: String
 }
 
 input PCLauncherUpsertWithoutGamerTagInput {
@@ -3749,6 +3764,20 @@ input PCLauncherWhereInput {
   windows_not_starts_with: String
   windows_ends_with: String
   windows_not_ends_with: String
+  riot: String
+  riot_not: String
+  riot_in: [String!]
+  riot_not_in: [String!]
+  riot_lt: String
+  riot_lte: String
+  riot_gt: String
+  riot_gte: String
+  riot_contains: String
+  riot_not_contains: String
+  riot_starts_with: String
+  riot_not_starts_with: String
+  riot_ends_with: String
+  riot_not_ends_with: String
   AND: [PCLauncherWhereInput!]
   OR: [PCLauncherWhereInput!]
   NOT: [PCLauncherWhereInput!]
@@ -4636,6 +4665,7 @@ enum TypeOfGame {
 
 type User {
   id: ID!
+  gender: Gender!
   email: String!
   username: String!
   password: String!
@@ -4661,6 +4691,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4724,6 +4755,7 @@ input UserCreateOneWithoutReviewsInput {
 }
 
 input UserCreateWithoutGamertagsInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4742,6 +4774,7 @@ input UserCreateWithoutGamertagsInput {
 }
 
 input UserCreateWithoutInvitesInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4760,6 +4793,7 @@ input UserCreateWithoutInvitesInput {
 }
 
 input UserCreateWithoutInvitesReceivedInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4778,6 +4812,7 @@ input UserCreateWithoutInvitesReceivedInput {
 }
 
 input UserCreateWithoutReviewsInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4796,6 +4831,7 @@ input UserCreateWithoutReviewsInput {
 }
 
 input UserCreateWithoutSessionsInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4814,6 +4850,7 @@ input UserCreateWithoutSessionsInput {
 }
 
 input UserCreateWithoutTimeSlotsInput {
+  gender: Gender
   email: String!
   username: String!
   password: String!
@@ -4983,6 +5020,8 @@ input UserIndexWhereUniqueInput {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  gender_ASC
+  gender_DESC
   email_ASC
   email_DESC
   username_ASC
@@ -5003,6 +5042,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  gender: Gender!
   email: String!
   username: String!
   password: String!
@@ -5029,6 +5069,10 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  gender: Gender
+  gender_not: Gender
+  gender_in: [Gender!]
+  gender_not_in: [Gender!]
   email: String
   email_not: String
   email_in: [String!]
@@ -5137,6 +5181,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5156,6 +5201,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5175,6 +5221,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5199,6 +5246,7 @@ input UserUpdateManyInput {
 }
 
 input UserUpdateManyMutationInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5290,6 +5338,7 @@ input UserUpdateOneWithoutInvitesReceivedInput {
 }
 
 input UserUpdateWithoutGamertagsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5308,6 +5357,7 @@ input UserUpdateWithoutGamertagsDataInput {
 }
 
 input UserUpdateWithoutInvitesDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5326,6 +5376,7 @@ input UserUpdateWithoutInvitesDataInput {
 }
 
 input UserUpdateWithoutInvitesReceivedDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5344,6 +5395,7 @@ input UserUpdateWithoutInvitesReceivedDataInput {
 }
 
 input UserUpdateWithoutReviewsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5362,6 +5414,7 @@ input UserUpdateWithoutReviewsDataInput {
 }
 
 input UserUpdateWithoutSessionsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5380,6 +5433,7 @@ input UserUpdateWithoutSessionsDataInput {
 }
 
 input UserUpdateWithoutTimeSlotsDataInput {
+  gender: Gender
   email: String
   username: String
   password: String
@@ -5470,6 +5524,10 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  gender: Gender
+  gender_not: Gender
+  gender_in: [Gender!]
+  gender_not_in: [Gender!]
   email: String
   email_not: String
   email_in: [String!]
