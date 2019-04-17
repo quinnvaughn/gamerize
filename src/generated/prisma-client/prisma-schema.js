@@ -2048,6 +2048,8 @@ type GamingSessionEdge {
 type GamingSessionIndex {
   id: ID!
   title: String!
+  gamer: String!
+  game: String
   gamingSession: GamingSession!
 }
 
@@ -2059,6 +2061,8 @@ type GamingSessionIndexConnection {
 
 input GamingSessionIndexCreateInput {
   title: String!
+  gamer: String!
+  game: String
   gamingSession: GamingSessionCreateOneInput!
 }
 
@@ -2072,11 +2076,17 @@ enum GamingSessionIndexOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  gamer_ASC
+  gamer_DESC
+  game_ASC
+  game_DESC
 }
 
 type GamingSessionIndexPreviousValues {
   id: ID!
   title: String!
+  gamer: String!
+  game: String
 }
 
 type GamingSessionIndexSubscriptionPayload {
@@ -2099,11 +2109,15 @@ input GamingSessionIndexSubscriptionWhereInput {
 
 input GamingSessionIndexUpdateInput {
   title: String
+  gamer: String
+  game: String
   gamingSession: GamingSessionUpdateOneRequiredInput
 }
 
 input GamingSessionIndexUpdateManyMutationInput {
   title: String
+  gamer: String
+  game: String
 }
 
 input GamingSessionIndexWhereInput {
@@ -2135,6 +2149,34 @@ input GamingSessionIndexWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  gamer: String
+  gamer_not: String
+  gamer_in: [String!]
+  gamer_not_in: [String!]
+  gamer_lt: String
+  gamer_lte: String
+  gamer_gt: String
+  gamer_gte: String
+  gamer_contains: String
+  gamer_not_contains: String
+  gamer_starts_with: String
+  gamer_not_starts_with: String
+  gamer_ends_with: String
+  gamer_not_ends_with: String
+  game: String
+  game_not: String
+  game_in: [String!]
+  game_not_in: [String!]
+  game_lt: String
+  game_lte: String
+  game_gt: String
+  game_gte: String
+  game_contains: String
+  game_not_contains: String
+  game_starts_with: String
+  game_not_starts_with: String
+  game_ends_with: String
+  game_not_ends_with: String
   gamingSession: GamingSessionWhereInput
   AND: [GamingSessionIndexWhereInput!]
   OR: [GamingSessionIndexWhereInput!]

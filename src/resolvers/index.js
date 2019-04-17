@@ -18,6 +18,7 @@ const { friendrequest: friendRequestQuery } = require('./Query/friendrequest')
 const { friendrequest } = require('./Mutation/friendrequest')
 const { gamer } = require('./Mutation/gamer')
 const { user } = require('./Mutation/user')
+const { search } = require('./Query/search')
 const { GamingSession } = require('./Type/GamingSession')
 const { GamingTimeSlot } = require('./Type/GamingTimeSlot')
 const { User } = require('./Type/User')
@@ -32,6 +33,7 @@ const { Game } = require('./Type/Game')
 
 module.exports = {
   Query: {
+    ...search,
     ...notificationQuery,
     ...friendRequestQuery,
     ...bookingInviteQuery,

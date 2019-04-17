@@ -2,6 +2,7 @@ const { getUserId, AuthError } = require('../../utils')
 const gamingsession = {
   async createGamingSession(parent, { input }, ctx) {
     const userId = getUserId(ctx)
+    const gamer = await ctx.prisma.user({ id: userId })
     const gamingSession = await ctx.prisma.createGamingSession({
       game: { connect: { name: input.game } },
       title: input.title,
@@ -22,7 +23,9 @@ const gamingsession = {
       discounts: { create: [] },
     })
     await ctx.prisma.createGamingSessionIndex({
-      title: input.title,
+      title: input.title.toLowerCase(),
+      gamer: gamer.username.toLowerCase(),
+      game: input.game.toLowerCase(),
       gamingSession: { connect: { id: gamingSession.id } },
     })
     return gamingSession
@@ -53,6 +56,21 @@ const gamingsession = {
           system: input.system,
           slots: input.slots,
           type: input.type,
+        },
+      })
+      const gamingSessionIndex = await ctx.prisma.gamingSessionIndexes({
+        where: {
+          gamingSession: {
+            id: input.sessionId,
+          },
+        },
+      })
+      const indexId = gamingSessionIndex[0].id
+      await ctx.prisma.updateGamingSessionIndex({
+        where: { id: indexId },
+        data: {
+          title: input.title.toLowerCase(),
+          game: input.game.toLowerCase(),
         },
       })
       return { updatedSession }
