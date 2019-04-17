@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Apr 16 2019 18:35:06 GMT-0500 (CDT)
+# timestamp: Tue Apr 16 2019 22:02:00 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -3138,6 +3138,8 @@ type GamingSessionEdge {
 type GamingSessionIndex implements Node {
   id: ID!
   title: String!
+  gamer: String!
+  game: String
   gamingSession: GamingSession!
 }
 
@@ -3154,6 +3156,8 @@ type GamingSessionIndexConnection {
 input GamingSessionIndexCreateInput {
   id: ID
   title: String!
+  gamer: String!
+  game: String
   gamingSession: GamingSessionCreateOneInput!
 }
 
@@ -3171,6 +3175,10 @@ enum GamingSessionIndexOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  gamer_ASC
+  gamer_DESC
+  game_ASC
+  game_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3180,6 +3188,8 @@ enum GamingSessionIndexOrderByInput {
 type GamingSessionIndexPreviousValues {
   id: ID!
   title: String!
+  gamer: String!
+  game: String
 }
 
 type GamingSessionIndexSubscriptionPayload {
@@ -3223,11 +3233,15 @@ input GamingSessionIndexSubscriptionWhereInput {
 
 input GamingSessionIndexUpdateInput {
   title: String
+  gamer: String
+  game: String
   gamingSession: GamingSessionUpdateOneRequiredInput
 }
 
 input GamingSessionIndexUpdateManyMutationInput {
   title: String
+  gamer: String
+  game: String
 }
 
 input GamingSessionIndexWhereInput {
@@ -3319,6 +3333,86 @@ input GamingSessionIndexWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  gamer: String
+
+  """All values that are not equal to given value."""
+  gamer_not: String
+
+  """All values that are contained in given list."""
+  gamer_in: [String!]
+
+  """All values that are not contained in given list."""
+  gamer_not_in: [String!]
+
+  """All values less than the given value."""
+  gamer_lt: String
+
+  """All values less than or equal the given value."""
+  gamer_lte: String
+
+  """All values greater than the given value."""
+  gamer_gt: String
+
+  """All values greater than or equal the given value."""
+  gamer_gte: String
+
+  """All values containing the given string."""
+  gamer_contains: String
+
+  """All values not containing the given string."""
+  gamer_not_contains: String
+
+  """All values starting with the given string."""
+  gamer_starts_with: String
+
+  """All values not starting with the given string."""
+  gamer_not_starts_with: String
+
+  """All values ending with the given string."""
+  gamer_ends_with: String
+
+  """All values not ending with the given string."""
+  gamer_not_ends_with: String
+  game: String
+
+  """All values that are not equal to given value."""
+  game_not: String
+
+  """All values that are contained in given list."""
+  game_in: [String!]
+
+  """All values that are not contained in given list."""
+  game_not_in: [String!]
+
+  """All values less than the given value."""
+  game_lt: String
+
+  """All values less than or equal the given value."""
+  game_lte: String
+
+  """All values greater than the given value."""
+  game_gt: String
+
+  """All values greater than or equal the given value."""
+  game_gte: String
+
+  """All values containing the given string."""
+  game_contains: String
+
+  """All values not containing the given string."""
+  game_not_contains: String
+
+  """All values starting with the given string."""
+  game_starts_with: String
+
+  """All values not starting with the given string."""
+  game_not_starts_with: String
+
+  """All values ending with the given string."""
+  game_ends_with: String
+
+  """All values not ending with the given string."""
+  game_not_ends_with: String
   gamingSession: GamingSessionWhereInput
 }
 
