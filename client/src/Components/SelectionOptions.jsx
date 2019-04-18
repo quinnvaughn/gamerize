@@ -97,22 +97,18 @@ export default function SelectionOptions({
       {me === null ? (
         <SignInToBook>Please sign in to book</SignInToBook>
       ) : (
-        <Subscribe to={[SessionsContainer]}>
-          {session => (
-            <Fragment>
-              {/*TODO: Need slotsLeftToday to update at same time */}
-              <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-              <TimeSlots gamer={gamer} game={game} />
-              <Totals
-                price={price}
-                refetch={refetch}
-                me={me}
-                system={system}
-                launcher={launcher}
-              />
-            </Fragment>
-          )}
-        </Subscribe>
+        <Fragment>
+          {/*TODO: Need slotsLeftToday to update at same time */}
+          <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
+          <TimeSlots gamer={gamer} game={game} />
+          <Totals
+            price={price}
+            refetch={refetch}
+            me={me}
+            system={system}
+            launcher={launcher}
+          />
+        </Fragment>
       )}
     </Container>
   )

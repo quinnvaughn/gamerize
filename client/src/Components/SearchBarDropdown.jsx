@@ -110,6 +110,7 @@ const mapSessions = (sessions, first) => {
           gamers={session.session.gamers}
           game={session.session.game}
           id={session.session.id}
+          price={session.session.price}
           creator={session.session.creator}
         />
       )

@@ -51,3 +51,47 @@ export const formatGender = gender => {
       return 'Not a gender'
   }
 }
+
+export const mapTags = tag => {
+  switch (tag) {
+    case 'CARD_AND_BOARD_GAME':
+      return 'Card & Board Game'
+    case 'DRIVING_SLASH_RACING_GAME':
+      return 'Driving/Racing Game'
+    case 'FPS':
+      return 'FPS'
+    case 'MMORPG':
+      return 'MMORPG'
+    case 'MOBA':
+      return 'MOBA'
+    case 'POINT_AND_CLICK':
+      return 'Point and Click'
+    case 'RHYTHM_AND_MUSIC_GAME':
+      return 'Rhythm & Music Game'
+    case 'RPG':
+      return 'RPG'
+    case 'RTS':
+      return 'RTS'
+    case 'SERIES_COLON_SOULS':
+      return 'Series: Souls'
+    case 'SHOOT_HYPHEN_EM_UP':
+      return `Shoot 'Em Up`
+    default:
+      return tag
+        .toLowerCase()
+        .split('_')
+        .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ')
+  }
+}
+
+export const mapGameType = type => {
+  switch (type) {
+    case 'CASUAL':
+      return 'Casual Matchmaking'
+    case 'COMPETITIVE':
+      return 'Competitive Matchmaking'
+    default:
+      return capitalize(type)
+  }
+}

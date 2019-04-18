@@ -1061,7 +1061,8 @@ export type Launcher =
   | "UPLAY"
   | "BETHESDA"
   | "ITCH"
-  | "WINDOWS";
+  | "WINDOWS"
+  | "RIOT";
 
 export type PCLauncherOrderByInput =
   | "id_ASC"
@@ -1157,7 +1158,7 @@ export type Tags =
   | "SURVIVAL"
   | "VISUAL_NOVEL";
 
-export type TypeOfGame = "CUSTOM" | "MATCHMAKING";
+export type TypeOfGame = "CUSTOM" | "MATCHMAKING" | "CASUAL" | "COMPETITIVE";
 
 export type FriendRequestOrderByInput =
   | "id_ASC"

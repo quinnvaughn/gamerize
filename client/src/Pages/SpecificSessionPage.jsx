@@ -21,7 +21,12 @@ import Modal from '../Components/Modal'
 import Calendar from '../Components/TimeSlotsCalendar'
 import TimeSlotsHours from '../Components/TimeSlotsHours'
 import TimeSlotSession from '../Components/TimeSlotSession'
-import { noUnderscores, capitalize, singleOrPlural } from '../utils/Strings'
+import {
+  noUnderscores,
+  capitalize,
+  singleOrPlural,
+  mapGameType,
+} from '../utils/Strings'
 import { formatGamers } from '../utils/Strings'
 
 //data
@@ -395,7 +400,7 @@ export default function SpecificSessionPage(props) {
                 <Flex>
                   <TypeOfContent>Type of game</TypeOfContent>
                   <TypeOfGame>
-                    {capitalize(data.getSpecificSession.type)}
+                    {mapGameType(data.getSpecificSession.type)}
                   </TypeOfGame>
                 </Flex>
                 <Flex>

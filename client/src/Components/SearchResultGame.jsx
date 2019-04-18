@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 //local imports
 import DefaultGame from '../default-game.gif'
-import { capitalize, noSpaces } from '../utils/Strings'
+import { noSpaces, mapTags } from '../utils/Strings'
 
 const Container = styled(Link)`
   padding: 1.6rem 2.4rem;
@@ -72,7 +72,7 @@ export default function SearchResultGame(props) {
         <Game>{props.game}</Game>
         <Tags>
           {props.tags.map(tag => (
-            <Tag>{capitalize(tag)}</Tag>
+            <Tag>{mapTags(tag)}</Tag>
           ))}
         </Tags>
       </InfoContainer>

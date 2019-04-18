@@ -42,6 +42,11 @@ const Title = styled.div`
   cursor: pointer;
 `
 
+const Price = styled.div`
+  font-size: 1.4rem;
+  cursor: pointer;
+`
+
 const Gamers = styled.div`
   font-size: 1.4rem;
   font-weight: 400;
@@ -74,6 +79,7 @@ export default function SearchResultSession(props) {
             <Gamer>{gamer.username}</Gamer>
           ))}
         </Gamers>
+        <Price>{`$${props.price}`}</Price>
       </InfoContainer>
     </Container>
   )

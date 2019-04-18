@@ -29,4 +29,5 @@ enum Launcher {
   BETHESDA
   ITCH
   WINDOWS
+  RIOT
 }

@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
+import Media from 'react-media'
 import { useApolloClient } from 'react-apollo-hooks'
 
 const Dropdown = styled.div`
@@ -31,24 +32,81 @@ const DropdownOption = styled.div`
 const NavBarAvatarDropdown = memo(function NavBarAvatarDropdown(props) {
   const client = useApolloClient()
   return (
-    <Dropdown>
-      <DropdownOption
-        onClick={async () => {
-          await props.history.push('/profile/edit')
-        }}
-      >
-        Profile
-      </DropdownOption>
-      <DropdownOption
-        onClick={async () => {
-          await client.resetStore()
-          await props.history.push('/')
-          await localStorage.removeItem('TOKEN')
-        }}
-      >
-        Logout
-      </DropdownOption>
-    </Dropdown>
+    <Media query={{ maxWidth: 1127 }}>
+      {matches =>
+        matches ? (
+          <Dropdown>
+            {!props.gamer && (
+              <DropdownOption
+                onClick={async () => {
+                  await props.history.push('/become-a-gamer')
+                }}
+              >
+                Become a Gamer
+              </DropdownOption>
+            )}
+            {props.gamer && (
+              <DropdownOption
+                onClick={async () => {
+                  await props.history.push('/gamer-dashboard/home')
+                }}
+              >
+                Gamer Dashboard
+              </DropdownOption>
+            )}
+            <DropdownOption
+              onClick={async () => {
+                await props.history.push('/sessions')
+              }}
+            >
+              Sessions
+            </DropdownOption>
+            <DropdownOption
+              onClick={async () => {
+                await props.history.push('/notifications')
+              }}
+            >
+              Notifications
+            </DropdownOption>
+            <DropdownOption
+              onClick={async () => {
+                await props.history.push('/profile/edit')
+              }}
+            >
+              Profile
+            </DropdownOption>
+            <DropdownOption
+              onClick={async () => {
+                await client.resetStore()
+                await props.history.push('/')
+                await localStorage.removeItem('TOKEN')
+              }}
+            >
+              Logout
+            </DropdownOption>
+          </Dropdown>
+        ) : (
+          <Dropdown>
+            <DropdownOption
+              onClick={async () => {
+                await props.history.push('/profile/edit')
+              }}
+            >
+              Profile
+            </DropdownOption>
+            <DropdownOption
+              onClick={async () => {
+                await client.resetStore()
+                await props.history.push('/')
+                await localStorage.removeItem('TOKEN')
+              }}
+            >
+              Logout
+            </DropdownOption>
+          </Dropdown>
+        )
+      }
+    </Media>
   )
 })
 export default withRouter(NavBarAvatarDropdown)

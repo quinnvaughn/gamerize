@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Apr 16 2019 22:02:00 GMT-0500 (CDT)
+# timestamp: Thu Apr 18 2019 15:18:52 GMT-0500 (CDT)
 
 type AggregateBookedPlayer {
   count: Int!
@@ -4703,6 +4703,7 @@ enum Launcher {
   BETHESDA
   ITCH
   WINDOWS
+  RIOT
 }
 
 """
@@ -7532,6 +7533,8 @@ enum Tags {
 enum TypeOfGame {
   CUSTOM
   MATCHMAKING
+  CASUAL
+  COMPETITIVE
 }
 
 type User implements Node {
