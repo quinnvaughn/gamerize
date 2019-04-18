@@ -3004,6 +3004,7 @@ enum Launcher {
   BETHESDA
   ITCH
   WINDOWS
+  RIOT
 }
 
 scalar Long
@@ -4703,6 +4704,8 @@ enum Tags {
 enum TypeOfGame {
   CUSTOM
   MATCHMAKING
+  CASUAL
+  COMPETITIVE
 }
 
 type User {

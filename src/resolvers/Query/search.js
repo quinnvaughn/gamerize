@@ -9,7 +9,7 @@ const search = {
             { username_contains: undercaseSearch },
           ],
         },
-        first: 4,
+        first: 7,
       })
       .user()
     const userSearchResults = users.map(user => ({
@@ -24,7 +24,7 @@ const search = {
             { launcher_contains: undercaseSearch },
           ],
         },
-        first: 4,
+        first: 7,
       })
       .game()
     const gameSearchResults = games.map(game => ({
@@ -39,7 +39,7 @@ const search = {
             { gamer_contains: undercaseSearch },
           ],
         },
-        first: 4,
+        first: 7,
       })
       .gamingSession()
     const gamingSessionSearchResults = sessions.map(session => ({

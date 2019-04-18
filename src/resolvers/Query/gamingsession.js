@@ -26,6 +26,12 @@ const gamingsession = {
       },
     })
   },
+  async allSessions(parent, { first, orderBy }, { prisma }) {
+    return await prisma.gamingSessions({
+      orderBy: orderBy ? orderBy : 'title_ASC',
+      first,
+    })
+  },
 }
 
 module.exports = { gamingsession }
