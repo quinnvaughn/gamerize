@@ -120,15 +120,16 @@ function NavBar(props) {
   useEffect(() => {
     refetch()
   }, [token])
+  const gamer = !loading && data && data.me.role === 'GAMER'
   return (
     <Container className="navbar">
-      {props.match.path !== '/users/:user' ? <SearchBar /> : <Empty />}
+      <SearchBar />
       {loading || secondLoading ? null : (
         <Media query={{ maxWidth: 1127 }}>
           {matches =>
             matches && !_.isEmpty(data) ? (
               <Links>
-                <NavBarAvatar />
+                <NavBarAvatar gamer={gamer} />
               </Links>
             ) : (
               <Links>

@@ -1,12 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import Session from './Session'
 
 const RowTitle = styled.h3`
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: bold;
   width: 100%;
   display: block;
+  cursor: default;
+  padding-left: 0.8rem;
 `
 
 const Container = styled.div`
@@ -17,31 +20,39 @@ const Container = styled.div`
   margin-bottom: 3rem;
 `
 
-const AllTheGamers = styled.div`
+const AllTheSessions = styled.div`
   margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
 `
 
+const map = (sessions, first) => {
+  return sessions.map((session, index) => {
+    return (
+      index <= first - 1 && (
+        <Session
+          id={session.id}
+          name={session.creator.name}
+          game={session.game.name}
+          username={session.creator.username}
+          system={session.system}
+          price={session.price}
+          key={session.id}
+          title={session.title}
+        />
+      )
+    )
+  })
+}
+
 export default function TopSessionsRow(props) {
+  console.log(props)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      <AllTheGamers>
-        {props.gamers.map(gamer => (
-          <Session
-            name={gamer.name}
-            game={props.game}
-            username={gamer.username}
-            systems={gamer.systems}
-            price={gamer.price}
-            reviews={gamer.reviews}
-            numReviews={gamer.numReviews}
-            key={gamer.name}
-            title={gamer.title}
-          />
-        ))}
-      </AllTheGamers>
+      <AllTheSessions>
+        {map(props.data.allSessions, props.first)}
+      </AllTheSessions>
     </Container>
   )
 }

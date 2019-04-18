@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
+import Media from 'react-media'
+
 //local imports
 import NavBar from '../Components/NavBar'
 import GamerRow from '../Components/TopGamersRow'
@@ -8,6 +11,8 @@ import Jumbotron from '../Components/Jumbotron'
 import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
+import TopSessionsRow from '../Components/TopSessionsRow'
+import useQueryNotBugged from '../Hooks/useQueryNotBugged'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -37,16 +42,153 @@ const InnerContent = styled.div`
   overflow: hidden;
 `
 
+const GET_SESSIONS = gql`
+  query($first: Int, $orderBy: String) {
+    allSessions(first: $first, orderBy: $orderBy) {
+      id
+      system
+      price
+      title
+      creator {
+        name
+        username
+      }
+      game {
+        name
+      }
+    }
+  }
+`
+
+const GET_GAMERS = gql`
+  query($first: Int) {
+    getGamers(first: $first) {
+      name
+      username
+      occupations
+    }
+    totalGamers
+  }
+`
+
+const GET_GAMES = gql`
+  query($first: Int, $orderBy: String) {
+    allGames(first: $first, orderBy: $orderBy) {
+      name
+      tags
+      numSessions
+    }
+    totalGames
+  }
+`
+
 export default function HomePage(props) {
   useTitle('Play games with your favorite people - Gamerize')
-  return (
+  const [first, setFirst] = useState(4)
+  const { data, loading } = useQueryNotBugged(GET_GAMES, {
+    variables: { first, orderBy: 'numSessions_DESC' },
+  })
+  const { data: secondData, loading: secondLoading } = useQueryNotBugged(
+    GET_GAMERS,
+    { variables: { first } }
+  )
+  const { data: thirdData, loading: thirdLoading } = useQueryNotBugged(
+    GET_SESSIONS,
+    {
+      variables: { first },
+    }
+  )
+  return loading ||
+    secondLoading ||
+    thirdLoading ||
+    !data ||
+    !secondData ||
+    !thirdData ? null : (
     <PageContainer>
       <NavBar />
       <Jumbotron />
       <Content>
         <InnerContent>
-          <GamerRow title="Gamers" />
-          <GamesRow title="Most popular games" />
+          <Media query={{ maxWidth: 969 }}>
+            {matches => {
+              matches && setFirst(4)
+              return matches ? (
+                <Fragment>
+                  <TopSessionsRow
+                    title="Sessions"
+                    data={thirdData}
+                    first={first}
+                  />
+                  <GamerRow title="Gamers" data={secondData} first={first} />
+                  <GamesRow title="Games" data={data} first={first} />
+                </Fragment>
+              ) : null
+            }}
+          </Media>
+          <Media query={{ minWidth: 970, maxWidth: 1239 }}>
+            {matches => {
+              matches && setFirst(6)
+              return matches ? (
+                <Fragment>
+                  <TopSessionsRow
+                    title="Sessions"
+                    data={thirdData}
+                    first={first}
+                  />
+                  <GamerRow title="Gamers" data={secondData} first={first} />
+                  <GamesRow title="Games" data={data} first={first} />
+                </Fragment>
+              ) : null
+            }}
+          </Media>
+          <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
+            {matches => {
+              matches && setFirst(8)
+              return matches ? (
+                <Fragment>
+                  <TopSessionsRow
+                    title="Sessions"
+                    data={thirdData}
+                    first={first}
+                  />
+                  <GamerRow title="Gamers" data={secondData} first={first} />
+                  <GamesRow title="Games" data={data} first={first} />
+                </Fragment>
+              ) : null
+            }}
+          </Media>
+          <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
+            {matches => {
+              matches && setFirst(5)
+              return matches ? (
+                <Fragment>
+                  <TopSessionsRow
+                    title="Sessions"
+                    data={thirdData}
+                    first={first}
+                  />
+                  <GamerRow title="Gamers" data={secondData} first={first} />
+                  <GamesRow title="Games" data={data} first={first} />
+                </Fragment>
+              ) : null
+            }}
+          </Media>
+          <Media query={{ minWidth: 1780 }}>
+            {matches => {
+              matches && setFirst(6)
+              return matches ? (
+                <Fragment>
+                  <TopSessionsRow
+                    title="Sessions"
+                    data={thirdData}
+                    first={first}
+                  />
+                  <GamerRow title="Gamers" data={secondData} first={first} />
+                  <GamesRow title="Games" data={data} first={first} />
+                </Fragment>
+              ) : null
+            }}
+          </Media>
         </InnerContent>
       </Content>
       <Footer />

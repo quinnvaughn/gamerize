@@ -1,9 +1,9 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import styled from 'styled-components'
 
 // local imports
 import DefaultAvatar from '../default-avatar.png'
-import useDropdown from '../Hooks/useDropdown'
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import NavBarAvatarDropdown from './NavBarAvatarDropdown'
 
 const Avatar = styled.img`
@@ -38,12 +38,23 @@ const Content = styled.div`
 
 export default function NavBarAvatar(props) {
   const node = useRef()
-  const [dropdown, setDropdown] = useDropdown(node, true)
+  const [dropdown, setDropdown] = useState(false)
+  useOnOutsideClick(
+    node,
+    useCallback(() => {
+      setDropdown(false)
+    }, [])
+  )
   return (
-    <AvatarContainer ref={node}>
+    <AvatarContainer
+      ref={node}
+      onClick={async () => {
+        setDropdown(!dropdown)
+      }}
+    >
       <Content>
         <Avatar src={DefaultAvatar} alt="Avatar" />
-        {dropdown && <NavBarAvatarDropdown />}
+        {dropdown && <NavBarAvatarDropdown gamer={props.gamer} />}
       </Content>
     </AvatarContainer>
   )

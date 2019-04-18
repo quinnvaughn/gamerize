@@ -197,7 +197,7 @@ function Totals(props) {
               {content}
               {disabled && !isMe && (
                 <AppropriateGT>
-                  You must add a gamertag for{' '}
+                  {`You must add a gamertag for `}
                   {props.system === 'PC'
                     ? `the ${capitalize(props.launcher)} Launcher`
                     : displaySystem(props.system)}
@@ -238,8 +238,12 @@ function Totals(props) {
                 )}
               </Book>
               <NotCharged>
-                <NotChargedYet>You will not be charged yet</NotChargedYet>
+                <NotChargedYet>
+                  {/* Eventually change to : You will not be charged yet */}The
+                  alpha is free!
+                </NotChargedYet>
               </NotCharged>
+              {/* Don't need for alpha 
               {showTotals && (
                 <HowMuchYouPay>
                   <YouPay>
@@ -247,7 +251,7 @@ function Totals(props) {
                     how many players you have
                   </YouPay>
                 </HowMuchYouPay>
-              )}
+              )} */}
             </Fragment>
           )
         }}

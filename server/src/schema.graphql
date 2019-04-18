@@ -3,6 +3,7 @@
 type Query {
   me: User
   allGames(first: Int, orderBy: String): [Game!]!
+  allSessions(first: Int, orderBy: String): [GamingSession!]!
   getUser(username: String!): User!
   searchUsersForInvite(
     search: String!

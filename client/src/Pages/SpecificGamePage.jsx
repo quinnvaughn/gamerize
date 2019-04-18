@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
-import { capitalize, noUnderscores } from '../utils/Strings'
+import { noUnderscores, mapTags } from '../utils/Strings'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -109,7 +109,7 @@ export default function SpecificGamePage(props) {
         `}</Sessions>
         <Tags>
           {game.tags.map(tag => (
-            <Tag>{capitalize(tag)}</Tag>
+            <Tag>{mapTags(tag)}</Tag>
           ))}
         </Tags>
         <InnerContent>

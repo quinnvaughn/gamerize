@@ -75,15 +75,6 @@ const ExitContainer = styled.div`
   height: 3rem;
 `
 
-// Will have to fix to do only ones still available for today with filtering.
-const slotsReducer = (acc, cur) => {
-  if (dateFns.compareAsc(new Date(), cur.timeStart) === 1) {
-    return acc
-  } else return acc + (cur.slots - cur.players.length)
-}
-
-const slotsLeft = sessions.reduce(slotsReducer, 0)
-
 export default function SmallSelectionOptions({
   price,
   reviews,
@@ -93,6 +84,9 @@ export default function SmallSelectionOptions({
   game,
   refetch,
   close,
+  slotsLeftToday,
+  me,
+  launcher,
 }) {
   return (
     <Container>
@@ -118,10 +112,16 @@ export default function SmallSelectionOptions({
       <Subscribe to={[SessionsContainer]}>
         {session => (
           <Fragment>
-            <HowManySlots>{`${slotsLeft} slots left today`}</HowManySlots>
+            <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
             <SystemPicker system={system} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
-            <Totals price={price} refetch={refetch} />
+            <Totals
+              price={price}
+              refetch={refetch}
+              me={me}
+              launcher={launcher}
+              system={system}
+            />
           </Fragment>
         )}
       </Subscribe>

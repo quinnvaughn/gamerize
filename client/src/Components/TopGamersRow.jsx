@@ -1,10 +1,7 @@
-import React, { useState, Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import Media from 'react-media'
 import { FaChevronRight } from 'react-icons/fa'
-import { useQuery } from 'react-apollo-hooks'
-import gql from 'graphql-tag'
 
 // local imports
 import Gamer from './Gamer'
@@ -61,8 +58,7 @@ const ShowAllRight = styled(FaChevronRight)`
 
 // will do this different way with graphql but just to show 'Show All' do it this way for now.
 
-const map = (gamers, first, setFirst) => {
-  setFirst(first)
+const map = (gamers, first) => {
   return gamers.map((gamer, index) => {
     return (
       index <= first - 1 && (
@@ -77,69 +73,19 @@ const map = (gamers, first, setFirst) => {
   })
 }
 
-const GET_GAMERS = gql`
-  query($first: Int) {
-    getGamers(first: $first) {
-      name
-      username
-      occupations
-    }
-    totalGamers
-  }
-`
-
 export default function GamerRow(props) {
-  const [first, setFirst] = useState(4)
-  const { data, loading } = useQuery(GET_GAMERS, { variables: { first } })
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>
-      {loading ? null : (
-        <Fragment>
-          <Media query={{ maxWidth: 969 }}>
-            {matches =>
-              matches && (
-                <AllTheGamers>{map(data.getGamers, 4, setFirst)}</AllTheGamers>
-              )
-            }
-          </Media>
-          <Media query={{ minWidth: 970, maxWidth: 1239 }}>
-            {matches =>
-              matches && (
-                <AllTheGamers>{map(data.getGamers, 6, setFirst)}</AllTheGamers>
-              )
-            }
-          </Media>
-          <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
-            {matches =>
-              matches && (
-                <AllTheGamers>{map(data.getGamers, 8, setFirst)}</AllTheGamers>
-              )
-            }
-          </Media>
-          <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
-            {matches =>
-              matches && (
-                <AllTheGamers>{map(data.getGamers, 5, setFirst)}</AllTheGamers>
-              )
-            }
-          </Media>
-          <Media query={{ minWidth: 1780 }}>
-            {matches =>
-              matches && (
-                <AllTheGamers>{map(data.getGamers, 6, setFirst)}</AllTheGamers>
-              )
-            }
-          </Media>
-        </Fragment>
-      )}
-      {/* {first < data.getGamers.length && (
+      <AllTheGamers>{map(props.data.getGamers, props.first)}</AllTheGamers>
+      {props.first < props.data.getGamers.length && (
         <ShowAllContainer>
           <ShowAll to={`/gamers`}>
-            {`Show All Gamers (${data.getGamers.length})`} <ShowAllRight />
+            {`Show All Gamers (${props.data.getGamers.length})`}
+            <ShowAllRight />
           </ShowAll>
         </ShowAllContainer>
-      )} */}
+      )}
     </Container>
   )
 }

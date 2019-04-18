@@ -1,9 +1,3 @@
-#import User from './user.graphql'
-#import Game from './game.graphql'
-#import SessionReview from './sessionreview.graphql'
-#import TypeOfGame, System, PlayerOrSession from './enums.graphql'
-#import GamingTimeSlot from './gamingtimeslot.graphql'
-
 type GamingSession {
   id: ID! @unique
   gamers: [User!]! @relation(name: "MySessions")
