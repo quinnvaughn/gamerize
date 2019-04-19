@@ -6,12 +6,14 @@ import gql from 'graphql-tag'
 
 //local imports
 import GamerDay from '../Components/GamerDay'
+import GamerDashboardNav from '../Components/GamerDashboardNav'
 import GamerSessionCard from '../Components/GamerSessionCard'
 import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
 import BigGamerCalendar from '../Components/BigGamerCalendar'
 import GamerSelectedSession from '../Components/GamerSelectedSession'
 import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
 import NextSession from '../Components/NextSession'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -177,8 +179,11 @@ export default function GamerDashboardCalendar(props) {
     pollInterval: 5000,
   })
   const [state] = useStore(gamerSessionSelection)
-  return (
+  return loading ? (
+    <Loading gamer />
+  ) : (
     <PageContainer>
+      <GamerDashboardNav />
       <Content>
         <LeftSide>
           <SetButton
@@ -195,7 +200,7 @@ export default function GamerDashboardCalendar(props) {
           </SetButton>
           {dayOrMonth === MONTH ? (
             <BigGamerCalendar />
-          ) : loading ? null : (
+          ) : (
             data.me &&
             data.me.setup &&
             data.mySlotsToday && <GamerDay todaySessions={data.mySlotsToday} />
@@ -204,16 +209,14 @@ export default function GamerDashboardCalendar(props) {
         <RightSide>
           <Top>
             <SessionInfo>Time Slots Info</SessionInfo>
-            {loading
-              ? null
-              : data.me &&
-                data.me.sessionIsGoingOn &&
-                data.me.sessionIsGoingOn.goingOn === true && (
-                  <SessionsIsGoingOn
-                    refetch={refetch}
-                    currentSession={data.me.sessionIsGoingOn.session}
-                  />
-                )}
+            {data.me &&
+              data.me.sessionIsGoingOn &&
+              data.me.sessionIsGoingOn.goingOn === true && (
+                <SessionsIsGoingOn
+                  refetch={refetch}
+                  currentSession={data.me.sessionIsGoingOn.session}
+                />
+              )}
             <NextSession />
           </Top>
           <Bottom>
@@ -223,20 +226,18 @@ export default function GamerDashboardCalendar(props) {
               them to your calendar. Edit them in the sessions tab.
             </Info>
             <AllSessions>
-              {loading
-                ? null
-                : data.me &&
-                  data.me.sessions &&
-                  data.me.setup &&
-                  data.me.sessions.map((session, index) => (
-                    <GamerSessionCard
-                      session={session}
-                      key={session.id}
-                      setup={data.me.setup}
-                      last={index === data.me.sessions.length - 1}
-                      refetch={refetch}
-                    />
-                  ))}
+              {data.me &&
+                data.me.sessions &&
+                data.me.setup &&
+                data.me.sessions.map((session, index) => (
+                  <GamerSessionCard
+                    session={session}
+                    key={session.id}
+                    setup={data.me.setup}
+                    last={index === data.me.sessions.length - 1}
+                    refetch={refetch}
+                  />
+                ))}
             </AllSessions>
           </Bottom>
         </RightSide>

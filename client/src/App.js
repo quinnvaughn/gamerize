@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Suspense, Component } from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import { Provider } from 'unstated'
 import UNSTATED from 'unstated-debug'
@@ -12,6 +12,7 @@ import client from './ApolloClient'
 import routes from './routes'
 import GlobalStyle from './globalstyles'
 import ProtectedRoute from './Components/ProtectedRoute'
+import Loading from './Components/Loading'
 
 UNSTATED.logStateChanges = true
 
