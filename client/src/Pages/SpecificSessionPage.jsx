@@ -15,7 +15,7 @@ import SelectionOptions from '../Components/SelectionOptions'
 import Footer from '../Components/Footer'
 import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
-import NavBarWithScroll from '../Components/NavBarWithScroll'
+import NavBar from '../Components/NavBar'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
 import Modal from '../Components/Modal'
 import Calendar from '../Components/TimeSlotsCalendar'
@@ -28,6 +28,7 @@ import {
   mapGameType,
 } from '../utils/Strings'
 import { formatGamers } from '../utils/Strings'
+import Loading from '../Components/Loading'
 
 //data
 
@@ -343,12 +344,11 @@ export default function SpecificSessionPage(props) {
     }
   )
   const { data: thirdData, loading: thirdLoading } = useQuery(GET_ME)
-  return loading || secondLoading || thirdLoading ? null : (
+  return loading || secondLoading || thirdLoading ? (
+    <Loading />
+  ) : (
     <PageContainer>
-      <NavBarWithScroll
-      // visibleSection={currentSection}
-      // setVisible={setVisibleSection}
-      />
+      <NavBar />
       <BannerContainer>
         <Banner src={DefaultBanner} alt="Banner" />
       </BannerContainer>

@@ -3,7 +3,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 export default function useQueryNotBugged(...args) {
   const [notNullData, setNotNullData] = useState()
-  const { data, error, loading, fetchMore } = useQuery(...args)
+  const { data, error, loading, fetchMore, refetch } = useQuery(...args)
 
   useEffect(() => {
     if (!data) {
@@ -13,5 +13,5 @@ export default function useQueryNotBugged(...args) {
       setNotNullData(data)
     }
   }, [data])
-  return { data: notNullData, error, loading, fetchMore }
+  return { data: notNullData, error, loading, fetchMore, refetch }
 }

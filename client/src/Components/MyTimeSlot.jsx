@@ -184,7 +184,7 @@ export default function MyTimeSlot({
           key={`${counter}${uniquePlayers[counter]}`}
           to={`/users/${uniquePlayers[counter]}`}
         >
-          {counter === uniquePlayers.length - 1
+          {counter === uniquePlayers.length - 2
             ? `${uniquePlayers[counter]}`
             : `${uniquePlayers[counter]}, `}
         </Player>

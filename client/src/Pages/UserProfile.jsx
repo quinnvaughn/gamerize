@@ -17,6 +17,7 @@ import { noSpaces, capitalize } from '../utils/Strings'
 import FavoriteGame from '../Components/FavoriteGame'
 import useTitle from '../Hooks/useTitle'
 import AddFriendButton from '../Components/AddFriendButton'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -293,7 +294,9 @@ export default function UserProfile(props) {
   })
   const { data: secondData, loading: secondLoading } = useQuery(GET_ME)
   useTitle(`User Profile - Gamerize`)
-  return loading || secondLoading ? null : (
+  return loading || secondLoading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <GlobalStyle />

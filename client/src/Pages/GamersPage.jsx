@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 //local imports
 import NavBar from '../Components/NavBar'
 import DisplayGamers from '../Components/DisplayGamers'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -30,13 +33,32 @@ const Title = styled.h2`
   font-size: 3rem;
 `
 
+const GET_GAMERS = gql`
+  {
+    getGamers {
+      name
+      username
+      mostPlayedGames {
+        name
+      }
+      occupations {
+        name
+      }
+    }
+    totalGamers
+  }
+`
+
 export default function GamersPage(props) {
-  return (
+  const { data, loading } = useQuery(GET_GAMERS)
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>
         <Title>Explore gamers</Title>
-        <DisplayGamers />
+        <DisplayGamers data={data} />
       </Content>
     </PageContainer>
   )

@@ -6,6 +6,8 @@ import gql from 'graphql-tag'
 
 //local imports
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
+import GamerDashboardNav from '../Components/GamerDashboardNav'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -123,8 +125,11 @@ export default function GamerDashboardAccountEdit(props) {
   useEffect(() => {
     !loading && setSetup(data.me.setup)
   }, [data.me])
-  return loading ? null : (
+  return loading ? (
+    <Loading gamer />
+  ) : (
     <PageContainer>
+      <GamerDashboardNav />
       <Content>
         <GamerDashboardAccountNav />
         <OutsideContainer>

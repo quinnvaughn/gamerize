@@ -9,6 +9,7 @@ import MyTimeSlot from '../Components/MyTimeSlot'
 import NavBar from '../Components/NavBar'
 import MyInvite from '../Components/MyInvite'
 import MyInviteReceived from '../Components/MyInviteReceived'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -263,7 +264,9 @@ export default function UserSessionsPage(props) {
   }, {})
   let upcoming = !loading && data.myUpcomingBookings
   let previous = !loading && data.myPastBookings
-  return loading ? null : (
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>

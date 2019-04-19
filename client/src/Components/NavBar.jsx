@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
-import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
 import Media from 'react-media'
 import gql from 'graphql-tag'
+import { useQuery } from 'react-apollo-hooks'
 
 //local imports
 import NotificationBadge from './NotificationBadge'
@@ -120,7 +120,7 @@ function NavBar(props) {
   useEffect(() => {
     refetch()
   }, [token])
-  const gamer = !loading && data && data.me.role === 'GAMER'
+  const gamer = !loading && data && data.me && data.me.role === 'GAMER'
   return (
     <Container className="navbar">
       <SearchBar />

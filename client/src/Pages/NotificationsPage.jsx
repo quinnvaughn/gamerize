@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 //local imports
 import NavBar from '../Components/NavBar'
+import Loading from '../Components/Loading'
 import NotificationFriendRequest from '../Components/NotificationFriendRequest'
 import NotificationMiscellaneous from '../Components/NotificationMiscellaneous'
 import NotificationBookingInvite from '../Components/NotificationBookingInvite'
@@ -137,7 +138,14 @@ export default function NotificationsPage(props) {
   groups.DENIED_GAMER_REQUEST && misc.push(...groups.DENIED_GAMER_REQUEST)
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
-  return loading || secondLoading ? null : (
+  return loading || secondLoading ? (
+    <PageContainer>
+      <NavBar />
+      <Content>
+        <Loading />
+      </Content>
+    </PageContainer>
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>

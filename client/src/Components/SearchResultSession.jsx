@@ -79,7 +79,7 @@ export default function SearchResultSession(props) {
             <Gamer>{gamer.username}</Gamer>
           ))}
         </Gamers>
-        <Price>{`$${props.price}`}</Price>
+        {/* Don't need for alpha <Price>{`$${props.price}`}</Price> */}
       </InfoContainer>
     </Container>
   )

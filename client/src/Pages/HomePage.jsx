@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import Media from 'react-media'
 
 //local imports
+import Loading from '../Components/Loading'
 import NavBar from '../Components/NavBar'
 import GamerRow from '../Components/TopGamersRow'
 
@@ -98,12 +99,19 @@ export default function HomePage(props) {
       variables: { first },
     }
   )
-  return loading ||
+  const wait =
+    loading ||
     secondLoading ||
     thirdLoading ||
     !data ||
+    !data.allGames ||
     !secondData ||
-    !thirdData ? null : (
+    !secondData.getGamers ||
+    !thirdData ||
+    !thirdData.allSessions
+  return wait ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Jumbotron />

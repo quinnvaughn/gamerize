@@ -9,6 +9,7 @@ import EditProfileNav from '../Components/EditProfileNav'
 import NavBar from '../Components/NavBar'
 import { capitalize, formatGender } from '../utils/Strings'
 import GenderDropdown from '../Components/GenderDropdown'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -255,7 +256,9 @@ export default function GamerDashboardAccountEdit(props) {
       dispatch({ type: 'setRiot', payload: data.me.gamertags.pc.riot })
     }
   }, [data.me])
-  return loading ? null : (
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>

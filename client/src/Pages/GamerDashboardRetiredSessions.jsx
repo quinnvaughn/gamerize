@@ -8,6 +8,8 @@ import RetiredSessionCard from '../Components/RetiredSessionCard'
 import GamerDashboardSessionsNav from '../Components/GamerDashboardSessionsNav'
 import CreateSession from '../Components/CreateSession'
 import Modal from '../Components/Modal'
+import GamerDashboardNav from '../Components/GamerDashboardNav'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -95,8 +97,11 @@ export default function GamerDashboardSessions(props) {
   const { data: sessions, loading: secondLoading, refetch } = useQuery(
     GET_SESSIONS
   )
-  return loading || secondLoading ? null : (
+  return loading || secondLoading ? (
+    <Loading gamer />
+  ) : (
     <PageContainer>
+      <GamerDashboardNav />
       <Content>
         <Top>
           <YourSessions>Your Sessions</YourSessions>

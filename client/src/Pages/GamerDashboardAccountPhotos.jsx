@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
+import GamerDashboardNav from '../Components/GamerDashboardNav'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -62,6 +63,7 @@ const RowRight = styled.div`
 export default function GamerDashboardAccountPhotos(props) {
   return (
     <PageContainer>
+      <GamerDashboardNav />
       <Content>
         <GamerDashboardAccountNav />
         <OutsideContainer>

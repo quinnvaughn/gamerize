@@ -7,6 +7,7 @@ import { useQuery } from 'react-apollo-hooks'
 import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
 import { noUnderscores, mapTags } from '../utils/Strings'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -98,7 +99,9 @@ export default function SpecificGamePage(props) {
     variables: { name: noUnderscores(props.match.params.game) },
   })
   const { specificGame: game } = data
-  return loading ? null : (
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>

@@ -26,7 +26,7 @@ const AllTheSessions = styled.div`
   flex-wrap: wrap;
 `
 
-const map = (sessions, first) => {
+const map = (sessions, first, setFirst) => {
   return sessions.map((session, index) => {
     return (
       index <= first - 1 && (
@@ -46,7 +46,6 @@ const map = (sessions, first) => {
 }
 
 export default function TopSessionsRow(props) {
-  console.log(props)
   return (
     <Container>
       <RowTitle>{props.title}</RowTitle>

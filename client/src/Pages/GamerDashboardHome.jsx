@@ -6,6 +6,8 @@ import { useQuery, useMutation } from 'react-apollo-hooks'
 
 //local imports
 import GamerBookings from '../Components/GamerBookings'
+import GamerDashboardNav from '../Components/GamerDashboardNav'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -93,8 +95,11 @@ export default function GamerDashboardHome(props) {
       .groupBy(x => x.type)
       .value()
   const bookings = groups.BOOKED_TIMESLOT
-  return (
+  return loading ? (
+    <Loading gamer />
+  ) : (
     <PageContainer>
+      <GamerDashboardNav />
       <Content>
         <Top>
           <Home>Home</Home>
