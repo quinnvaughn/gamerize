@@ -38,6 +38,9 @@ const search = {
             { title_contains: undercaseSearch },
             { gamer_contains: undercaseSearch },
           ],
+          gamingSession: {
+            retired: false,
+          },
         },
         first: 7,
       })

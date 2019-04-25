@@ -1,5 +1,7 @@
 type GamingTimeSlot {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   startTime: DateTime!
   endTime: DateTime!
   gamingSession: GamingSession!

@@ -1,5 +1,7 @@
 type Notification {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   type: NotificationType!
   text: String!
   for: User! @relation(name: "NotificationFor")

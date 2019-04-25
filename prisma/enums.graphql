@@ -71,7 +71,6 @@ enum System {
 
 enum TypeOfGame {
   CUSTOM
-  MATCHMAKING
   CASUAL
   COMPETITIVE
 }

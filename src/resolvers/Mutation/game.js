@@ -7,6 +7,8 @@ const game = {
       name: input.name,
       tags: { set: input.tags },
       launcher: input.launcher,
+      picture: input.picture,
+      banner: input.banner,
     })
     await prisma.createGameIndex({
       name: lowercaseName,

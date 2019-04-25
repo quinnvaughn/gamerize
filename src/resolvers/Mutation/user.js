@@ -16,11 +16,21 @@ const user = {
       where: { id: userId },
       data: {
         gamertags: {
-          update: {
-            ...gts,
-            pc: {
-              update: {
-                ...pc,
+          upsert: {
+            update: {
+              ...gts,
+              pc: {
+                update: {
+                  ...pc,
+                },
+              },
+            },
+            create: {
+              ...gts,
+              pc: {
+                create: {
+                  ...pc,
+                },
               },
             },
           },

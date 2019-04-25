@@ -1,5 +1,7 @@
 type GamingSession {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   gamers: [User!]! @relation(name: "MySessions")
   creator: User! @relation(name: "GameSessionCreator")
   game: Game!
@@ -19,6 +21,8 @@ type GamingSession {
 ## Workaround for no case insensitive search in prisma yet.
 type GamingSessionIndex {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   title: String!
   gamer: String!
   game: String
@@ -26,10 +30,16 @@ type GamingSessionIndex {
 }
 
 type Requirement {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   msg: String!
 }
 
 type Discount {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   percentage: Int!
   threshold: Int!
   playerOrSession: PlayerOrSession!
