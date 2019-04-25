@@ -39,7 +39,7 @@ const ShowAll = styled(Link)`
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   padding-left: 0.8rem;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   text-decoration: none;
   align-self: flex-start;
@@ -52,7 +52,7 @@ const ShowAll = styled(Link)`
 const ShowAllRight = styled(FaChevronRight)`
   width: 1rem;
   height: 1rem;
-  color: #f10e0e;
+  color: #db1422;
   margin-left: 0.1rem;
 `
 
@@ -67,6 +67,7 @@ const map = (gamers, first) => {
           occupations={gamer.occupations}
           username={gamer.username}
           key={gamer.username}
+          profilePicture={gamer.profilePicture}
         />
       )
     )

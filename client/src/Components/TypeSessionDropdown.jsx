@@ -93,19 +93,15 @@ const ChevronUp = styled(FaChevronUp)`
   font-size: 1.4rem;
 `
 
-const types = ['CUSTOM', 'MATCHMAKING']
+const types = ['CUSTOM', 'CASUAL', 'COMPETITIVE']
 
 export default function TypeSessionDropdown(props) {
   const [open, setOpen] = useState(false)
   return (
     <Container>
       <Label>{props.label}</Label>
-      <SelectionContainer>
-        <Selection
-          onClick={() => setOpen(!open)}
-          value={capitalize(props.title)}
-          readOnly
-        />
+      <SelectionContainer onClick={() => setOpen(!open)}>
+        <Selection value={capitalize(props.title)} readOnly />
         {!open && <ChevronDown />}
         {open && <ChevronUp />}
         {open && (

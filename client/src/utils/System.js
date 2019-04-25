@@ -1,3 +1,5 @@
+import { capitalize } from './Strings'
+
 export const mapSystem = system => {
   switch (system) {
     case 'PC':
@@ -15,6 +17,10 @@ export const mapSystem = system => {
 
 export const mapLauncher = launcher => {
   return launcher.toLowerCase()
+}
+
+export const formatLauncher = launcher => {
+  return capitalize(launcher)
 }
 
 export const displaySystem = system => {

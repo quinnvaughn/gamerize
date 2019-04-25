@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import DefaultAvatar from '../default-avatar.png'
 import { noSpaces } from '../utils/Strings'
 import DynamicImage from './DynamicImage'
 
@@ -49,7 +48,7 @@ const StyledLink = styled(Link)`
   color: black;
   font-size: 1.6rem;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `
@@ -63,7 +62,7 @@ export default function Game(props) {
           state: { tags: props.tags, sessions: props.sessions },
         }}
       >
-        <DynamicImage src={DefaultAvatar} alt="Avatar" />
+        <DynamicImage src={props.picture} alt="Avatar" />
         <Name>{props.name}</Name>
         {props.full && (
           <Sessions>{`${props.numSessions} sessions available`}</Sessions>

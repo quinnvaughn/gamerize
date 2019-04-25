@@ -44,11 +44,11 @@ const Row = styled.div`
   border-top: ${props =>
     props.first
       ? props.current
-        ? '3px solid #f10e0e'
+        ? '3px solid #db1422'
         : '1px solid #dddfe2'
       : null};
   border-bottom: ${props =>
-    props.current && !props.first ? '3px solid #f10e0e' : '1px solid #dddfe2'};
+    props.current && !props.first ? '3px solid #db1422' : '1px solid #dddfe2'};
 `
 
 const Hour = styled.div`
@@ -59,7 +59,7 @@ const Hour = styled.div`
   font-size: 1.2rem;
   top: -0.8rem;
   position: absolute;
-  color: ${props => (props.current ? '#f10e0e' : 'black')};
+  color: ${props => (props.current ? '#db1422' : 'black')};
   font-weight: 600;
 `
 
@@ -81,9 +81,9 @@ const Session = styled(Link)`
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#f10e0e')};
+  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#db1422')};
   border: ${props =>
-    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #f10e0e'};
+    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #db1422'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;

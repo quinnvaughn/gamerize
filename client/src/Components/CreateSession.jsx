@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import GameSessionDropdown from './GameSessionDropdown'
 import SystemsSessionDropdown from './SystemsSessionDropdown'
 import TypeSessionDropdown from './TypeSessionDropdown'
+import { formatSystem } from '../utils/Strings'
 
 const Container = styled.div`
   width: 100%;
@@ -122,12 +123,12 @@ const SessionSlots = styled.input`
 `
 
 const CreateSessionButton = styled.button`
-  background: #f10e0e;
+  background: #db1422;
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
@@ -232,7 +233,7 @@ export default function CreateSession(props) {
       <SystemsSessionDropdown
         label={'System: '}
         dispatch={dispatch}
-        title={state.system}
+        title={formatSystem(state.system)}
       />
       <SlotsContainer>
         <Slots>Slots: </Slots>

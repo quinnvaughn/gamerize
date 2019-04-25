@@ -132,12 +132,12 @@ const ButtonContainer = styled.div`
 `
 
 const EditSession = styled.button`
-  background: #f10e0e;
+  background: #db1422;
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
@@ -147,10 +147,10 @@ const EditSession = styled.button`
 const DeleteSession = styled.button`
   background: #fff;
   padding: 1rem 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;

@@ -5,7 +5,7 @@ import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 //local imports
-import BecomeAGamerNav from '../Components/BecomeAGamerNav'
+import NavBar from '../Components/NavBar'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -121,7 +121,7 @@ const GetStarted = styled(Link)`
   font-size: 1.6rem;
   font-weight: 600;
   padding: 1rem 2.2rem;
-  background: #f10e0e;
+  background: #db1422;
 `
 
 const StopContainer = styled.div`
@@ -166,7 +166,7 @@ const GoBack = styled(Link)`
   font-size: 1.6rem;
   font-weight: 600;
   padding: 1rem 2.2rem;
-  background: #f10e0e;
+  background: #db1422;
 `
 
 const GET_ME = gql`
@@ -185,7 +185,7 @@ export default function BecomeAGamerIntroPage(props) {
   }, {})
   return (
     <PageContainer>
-      <BecomeAGamerNav />
+      <NavBar />
       {loading ? null : data.me && data.me.currentGamerRequest ? (
         <Content>
           <StopContainer>

@@ -56,10 +56,10 @@ const Types = styled.div`
 const TypeOfGamer = styled.button`
   border-radius: 4px;
   cursor: pointer;
-  background: ${props => (props.selected ? '#f10e0e' : '#fff')};
-  color: ${props => (props.selected ? '#fff' : '#f10e0e')};
+  background: ${props => (props.selected ? '#db1422' : '#fff')};
+  color: ${props => (props.selected ? '#fff' : '#db1422')};
   border: ${props =>
-    !props.selected ? '1px solid #f10e0e' : '1px solid transparent'};
+    !props.selected ? '1px solid #db1422' : '1px solid transparent'};
   padding: 1rem 1rem;
   margin-right: 1rem;
   margin-bottom: 1rem;
@@ -78,13 +78,13 @@ const Previous = styled(Link)`
 `
 
 const PreviousText = styled.span`
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   font-weight: 600;
 `
 
 const PreviousArrow = styled(FaChevronLeft)`
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   margin-right: 0.5rem;
 `
@@ -97,7 +97,7 @@ const Next = styled(Link)`
   font-size: 1.6rem;
   font-weight: 600;
   padding: 1rem 2.2rem;
-  background: ${props => (props.disabled ? '#dddfe2' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
 `
 
@@ -145,7 +145,7 @@ const YoursText = styled.textarea`
   font-size: 1.6rem;
   outline: none;
   :focus {
-    border: 1px solid #f10e0e;
+    border: 1px solid #db1422;
   }
 `
 

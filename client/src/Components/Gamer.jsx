@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
-import { noSpaces, capitalize } from '../utils/Strings'
+import { noSpaces, formatOccupation } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -61,7 +61,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `
@@ -93,13 +93,13 @@ export default function Gamer(props) {
   return (
     <Container>
       <StyledLink to={`/users/${noSpaces(props.username)}`}>
-        <DynamicImage src={DefaultAvatar} alt="Avatar" />
+        <DynamicImage src={props.profilePicture} alt="Avatar" />
         <Name>{props.name}</Name>
         <Occupations>
           {props.occupations.map((occupation, index) =>
             formatCommasOccupations(
               props.occupations,
-              capitalize(occupation),
+              formatOccupation(occupation),
               index
             )
           )}

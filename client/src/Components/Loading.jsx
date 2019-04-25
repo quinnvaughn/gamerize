@@ -5,6 +5,7 @@ import ReactLoading from 'react-loading'
 //local imports
 import NavBar from './NavBar'
 import GamerDashboardNav from './GamerDashboardNav'
+import AdminDashboardNav from './AdminDashboardNav'
 
 const Container = styled.div`
   width: 100%;
@@ -41,7 +42,21 @@ export default function Loading(props) {
         <Container>
           <ReactLoading
             type="bubbles"
-            color="#f10e0e"
+            color="#db1422"
+            width={100}
+            height={500}
+          />
+        </Container>
+      </Content>
+    </PageContainer>
+  ) : props.admin ? (
+    <PageContainer>
+      <AdminDashboardNav />
+      <Content>
+        <Container>
+          <ReactLoading
+            type="bubbles"
+            color="#db1422"
             width={100}
             height={500}
           />
@@ -55,7 +70,7 @@ export default function Loading(props) {
         <Container>
           <ReactLoading
             type="bubbles"
-            color="#f10e0e"
+            color="#db1422"
             width={100}
             height={500}
           />

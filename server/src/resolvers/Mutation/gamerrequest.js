@@ -72,11 +72,16 @@ const gamerrequest = {
     if (admin.role !== 'ADMIN') {
       throw AuthError('You are not an admin')
     }
+    const user = await ctx.prisma
+      .gamerRequest({
+        id: input.gamerRequestId,
+      })
+      .user()
     const deletedRequest = await ctx.prisma.deleteGamerRequest({
       id: input.gamerRequestId,
     })
     const notification = await ctx.prisma.createNotification({
-      type: 'DECLINED_GAMER_REQUEST',
+      type: 'DENIED_GAMER_REQUEST',
       text: `Unfortunately your gamer request was not accepted. However, you can keep applying as you get more popular.`,
       for: {
         connect: {
@@ -86,8 +91,8 @@ const gamerrequest = {
     })
 
     return deletedRequest && notification
-      ? { accepted: true }
-      : { accepted: false }
+      ? { declined: true }
+      : { declined: false }
   },
 }
 

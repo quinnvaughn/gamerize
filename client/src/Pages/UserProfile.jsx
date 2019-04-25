@@ -207,12 +207,12 @@ const Username = styled.div`
 `
 
 const BannerContainer = styled.div`
-  height: 40rem;
+  max-height: 50rem;
 `
 
 const Banner = styled.img`
   width: 100%;
-  max-height: 40rem;
+  max-height: 50rem;
 `
 
 const NegativeMargins = styled.div`
@@ -251,6 +251,8 @@ const GET_USER = gql`
       username
       numReviews
       areWeFriends
+      profilePicture
+      banner
       role
       sentFriendRequest
       sentMeAFriendRequest
@@ -301,7 +303,7 @@ export default function UserProfile(props) {
       <NavBar />
       <GlobalStyle />
       <BannerContainer>
-        <Banner src={DefaultBanner} alt="Banner" />
+        <Banner src={data.getUser.banner} alt="Banner" />
       </BannerContainer>
       <Content>
         <Media query={{ maxWidth: 1127 }}>
@@ -310,7 +312,10 @@ export default function UserProfile(props) {
               <LeftSide>
                 <ProfileInfoContainer>
                   <ProfilePictureContainer>
-                    <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
+                    <ProfilePicture
+                      src={data.getUser.profilePicture}
+                      alt="Profile Picture"
+                    />
                   </ProfilePictureContainer>
                   {/* <ReviewsContainer>
                     <NumReviews>{`${
@@ -319,7 +324,7 @@ export default function UserProfile(props) {
                     <ReviewRatingContainer>
                       <StarRatings
                         rating={data.getUser.reviewRating}
-                        starRatedColor="#f10e0e"
+                        starRatedColor="#db1422"
                         numberOfStars={5}
                         name="rating"
                         starDimension="14px"

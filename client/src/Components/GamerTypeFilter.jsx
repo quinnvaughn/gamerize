@@ -30,11 +30,11 @@ const ModalButton = styled.button`
   }
   :hover {
     cursor: pointer;
-    background: ${props => (props.show ? '#f10e0e' : 'rgb(244, 244, 244)')};
+    background: ${props => (props.show ? '#db1422' : 'rgb(244, 244, 244)')};
     border: ${props =>
-      props.show ? '1px solid #f10e0e' : '1px solid rgb(244, 244, 244)'};
+      props.show ? '1px solid #db1422' : '1px solid rgb(244, 244, 244)'};
   }
-  background: ${props => (props.show ? '#f10e0e' : 'white')};
+  background: ${props => (props.show ? '#db1422' : 'white')};
   color: ${props => (props.show ? 'white' : 'rgb(72,72,72)')};
 `
 

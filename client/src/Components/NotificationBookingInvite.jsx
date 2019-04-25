@@ -29,7 +29,7 @@ const Buttons = styled.div`
 
 const Accept = styled.button`
   margin-right: 1rem;
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
   padding: 1rem 1.4rem;
   color: #fff;
@@ -37,7 +37,7 @@ const Accept = styled.button`
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   position: relative;
   margin-bottom: 0.5rem;
@@ -46,12 +46,12 @@ const Accept = styled.button`
 const Decline = styled.button`
   background: #fff;
   padding: 1rem 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   position: relative;
 `
@@ -63,7 +63,7 @@ const User = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
-    color: #f10e0e;
+    color: #db1422;
     text-decoration: underline;
   }
 `

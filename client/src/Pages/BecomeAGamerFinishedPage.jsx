@@ -57,7 +57,7 @@ const Return = styled(Link)`
   font-size: 1.6rem;
   font-weight: 600;
   padding: 1rem 2.2rem;
-  background: #f10e0e;
+  background: #db1422;
 `
 
 export default function BecomeAGamerFinished(props) {

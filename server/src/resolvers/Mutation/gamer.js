@@ -10,6 +10,16 @@ const gamer = {
     })
     return updatedUser ? { updated: true } : { updated: false }
   },
+  async allowGamerToPlay(parent, _, ctx) {
+    const userId = getUserId(ctx)
+    const updatedUser = await ctx.prisma.updateUser({
+      where: { id: userId },
+      data: {
+        gamerIsSetup: true,
+      },
+    })
+    return updatedUser ? { allowed: true } : { allowed: false }
+  },
 }
 
 module.exports = { gamer }

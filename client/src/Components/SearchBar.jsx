@@ -55,9 +55,11 @@ const SEARCH_GAMERIZE = gql`
       game {
         tags
         name
+        picture
       }
       user {
         role
+        profilePicture
         numSessions
         username
         name
@@ -71,6 +73,7 @@ const SEARCH_GAMERIZE = gql`
         price
         creator {
           username
+          profilePicture
         }
         gamers {
           username
@@ -92,7 +95,7 @@ export default function SearchBar(props) {
   useOnOutsideClick(
     node,
     useCallback(() => {
-      setWidth(40)
+      setWidth(46)
       setOpen(false)
     }, [])
   )

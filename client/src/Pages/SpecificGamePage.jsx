@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import _ from 'lodash'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
+import { Image } from 'cloudinary-react'
 
 import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
@@ -38,6 +39,19 @@ const Content = styled.div`
   }
 `
 
+const HeaderContent = styled.div`
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  max-width: none;
+  overflow-anchor: none;
+  padding-bottom: 6rem;
+  @media (min-width: 1128px) {
+    margin: 0 auto;
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+`
+
 const InnerContent = styled.div`
   margin-left: -0.8rem;
   margin-right: -0.8rem;
@@ -52,17 +66,14 @@ const Tags = styled.div`
 `
 
 const Tag = styled.div`
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: black;
-  border: 1px solid #dddfe2;
-  padding: 0.4rem 0.6rem;
-  display: inline-block;
+  padding: 0.5rem;
+  background: #db1422;
   border-radius: 4px;
-  margin-right: 0.8rem;
-  :hover {
-    cursor: default;
-  }
+  font-weight: 600;
+  color: #fff;
+  display: inline-flex;
+  font-size: 1.4rem;
+  margin-right: 0.5rem;
 `
 
 const Sessions = styled.div`
@@ -72,11 +83,35 @@ const Sessions = styled.div`
   margin-bottom: 1.2rem;
 `
 
+const Header = styled.div`
+  height: 223px;
+  position: relative;
+`
+
+const Container = styled.div`
+  display: flex;
+  height: 223px;
+`
+
+const InfoContainer = styled.div`
+  margin-left: 1rem;
+`
+
+const Background = styled(Image)`
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  opacity: 0.6;
+  z-index: -1;
+`
+
 const GET_GAME = gql`
   query($name: String!) {
     specificGame(name: $name) {
       name
       tags
+      banner
+      picture
       numSessions
       sessions {
         system
@@ -86,6 +121,7 @@ const GET_GAME = gql`
         creator {
           username
           name
+          profilePicture
         }
         title
         price
@@ -104,17 +140,27 @@ export default function SpecificGamePage(props) {
   ) : (
     <PageContainer>
       <NavBar />
-      <Content>
-        <TitleOfGame>{`${game.name}`}</TitleOfGame>
-        <Sessions>{`${game.numSessions} ${
-          game.numSessions === 1 ? 'session' : 'sessions'
-        }
+      <Header>
+        <Background publicId={game.banner} />
+        <HeaderContent>
+          <Container>
+            <Image publicId={game.picture} width="200" />
+            <InfoContainer>
+              <TitleOfGame>{`${game.name}`}</TitleOfGame>
+              <Sessions>{`${game.numSessions} ${
+                game.numSessions === 1 ? 'session' : 'sessions'
+              }
         `}</Sessions>
-        <Tags>
-          {game.tags.map(tag => (
-            <Tag>{mapTags(tag)}</Tag>
-          ))}
-        </Tags>
+              <Tags>
+                {game.tags.map(tag => (
+                  <Tag>{mapTags(tag)}</Tag>
+                ))}
+              </Tags>
+            </InfoContainer>
+          </Container>
+        </HeaderContent>
+      </Header>
+      <Content>
         <InnerContent>
           <GamesRow name={game.name} sessions={game.sessions} />
         </InnerContent>

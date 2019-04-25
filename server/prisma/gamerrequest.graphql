@@ -3,6 +3,8 @@
 
 type GamerRequest {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
@@ -12,6 +14,8 @@ type GamerRequest {
 
 type SocialMedia {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   twitter: String
   facebook: String
   youtube: String

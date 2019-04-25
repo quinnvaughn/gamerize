@@ -55,7 +55,7 @@ const StyledLink = styled(Link)`
     margin-right: 0;
   }
   :hover {
-    border-bottom: 2px solid #f10e0e;
+    border-bottom: 2px solid #db1422;
   }
 `
 

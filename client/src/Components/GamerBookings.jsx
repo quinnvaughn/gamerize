@@ -27,7 +27,7 @@ const User = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
-    color: #f10e0e;
+    color: #db1422;
     text-decoration: underline;
   }
 `
@@ -70,7 +70,7 @@ const Close = styled(MdClose)`
   color: black;
   margin-right: 4rem;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `

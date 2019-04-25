@@ -1,14 +1,13 @@
 import React, { useRef, useState, useCallback } from 'react'
 import styled from 'styled-components'
+import { Image } from 'cloudinary-react'
 
 // local imports
 import DefaultAvatar from '../default-avatar.png'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import NavBarAvatarDropdown from './NavBarAvatarDropdown'
 
-const Avatar = styled.img`
-  width: 4rem;
-  height: 4rem;
+const Avatar = styled(Image)`
   border-radius: 50%;
   margin-right: 0.5rem;
 `
@@ -24,7 +23,7 @@ const AvatarContainer = styled.div`
   align-items: center;
   border-bottom: 2px solid transparent;
   :hover {
-    border-bottom: 2px solid #f10e0e;
+    border-bottom: 2px solid #db1422;
   }
 `
 
@@ -53,7 +52,13 @@ export default function NavBarAvatar(props) {
       }}
     >
       <Content>
-        <Avatar src={DefaultAvatar} alt="Avatar" />
+        <Avatar
+          publicId={props.profilePicture}
+          crop="scale"
+          gravity="face"
+          width="35"
+          height="35"
+        />
         {dropdown && <NavBarAvatarDropdown gamer={props.gamer} />}
       </Content>
     </AvatarContainer>

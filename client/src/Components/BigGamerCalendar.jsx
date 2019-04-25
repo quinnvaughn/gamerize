@@ -44,7 +44,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   color: black;
   :hover {
     transition: 0.25s ease-out;
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -55,7 +55,7 @@ const ChevronRight = styled(FaChevronRight)`
   color: black;
   :hover {
     transition: 0.25s ease-out;
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -105,7 +105,7 @@ const Cell = styled.div`
   border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
-  background: ${props => (props.current ? '#f10e0e' : '#fff')};
+  background: ${props => (props.current ? '#db1422' : '#fff')};
   :last-child {
     border-right: none;
   }

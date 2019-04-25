@@ -22,14 +22,14 @@ const Buttons = styled.div``
 
 const Confirm = styled.button`
   margin-right: 1rem;
-  background: #f10e0e;
+  background: #db1422;
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   position: relative;
 `
@@ -37,12 +37,12 @@ const Confirm = styled.button`
 const Deny = styled.button`
   background: #fff;
   padding: 1rem 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   position: relative;
 `
@@ -54,7 +54,7 @@ const User = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
-    color: #f10e0e;
+    color: #db1422;
     text-decoration: underline;
   }
 `

@@ -51,7 +51,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   :hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -137,14 +137,14 @@ const PickAllSlotsForTeam = styled.button`
   background: white;
   height: 4rem;
   padding: 0.6rem 0.8rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   :hover {
     border: 1px solid white;
-    background: #f10e0e;
+    background: #db1422;
     color: white;
   }
 `
@@ -152,20 +152,20 @@ const PickAllSlotsForMe = styled.button`
   background: white;
   height: 4rem;
   padding: 0.6rem 0.8rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   :hover {
     border: 1px solid white;
-    background: #f10e0e;
+    background: #db1422;
     color: white;
   }
 `
 
 const AddSessions = styled.button`
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
   padding: 1rem 1.4rem;
   color: #fff;
@@ -173,7 +173,7 @@ const AddSessions = styled.button`
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
 `
 
@@ -190,7 +190,7 @@ const Exit = styled(MdClose)`
   z-index: 1000;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 

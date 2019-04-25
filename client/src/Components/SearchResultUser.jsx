@@ -25,6 +25,7 @@ const PictureContainer = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  height: 100%;
   cursor: pointer;
 `
 
@@ -49,7 +50,7 @@ const Name = styled.div`
 
 const Gamer = styled.span`
   font-size: 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   margin-left: 0.5rem;
   cursor: pointer;
 `
@@ -60,7 +61,7 @@ const Top = styled.div`
 `
 
 const NumSessions = styled.div`
-  color: #f10e0e;
+  color: #db1422;
   font-weight: 600;
   font-size: 1.4rem;
   cursor: pointer;
@@ -70,7 +71,7 @@ export default function SearchResultUser(props) {
   return (
     <Container to={`/users/${props.username}`}>
       <PictureContainer>
-        <Image src={DefaultAvatar} alt="User" />
+        <Image src={props.profilePicture} alt="User" />
       </PictureContainer>
       <InfoContainer>
         <Top>
@@ -79,7 +80,9 @@ export default function SearchResultUser(props) {
         </Top>
         <Name>{props.name}</Name>
         {props.gamer && (
-          <NumSessions>{`${props.numSessions} sessions`}</NumSessions>
+          <NumSessions>{`${props.numSessions} ${
+            props.numSessions === 1 ? 'session' : 'sessions'
+          }`}</NumSessions>
         )}
       </InfoContainer>
     </Container>

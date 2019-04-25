@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
@@ -48,14 +48,14 @@ const SignupButton = styled.button`
   font-weight: 700;
   padding: 1rem 1.6rem;
   text-transform: uppercase;
-  background: #f10e0e;
+  background: #db1422;
   width: 100%;
   cursor: pointer;
 `
 
 const StyledLink = styled(Link)`
   margin-top: 2rem;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.4rem;
   cursor: pointer;
   text-decoration: none;
@@ -64,10 +64,24 @@ const StyledLink = styled(Link)`
   }
 `
 
+const SmallErrorMessage = styled.div`
+  margin-bottom: 0.2rem;
+  color: #db1422;
+  font-size: 1.2rem;
+`
+
+const ErrorMessage = styled.div`
+  margin-bottom: 0.8rem;
+  color: #db1422;
+  font-size: 1.6rem;
+  font-weight: 700;
+`
+
 const SIGNUP = gql`
   mutation($input: SignupInput!) {
     signup(input: $input) {
       token
+      error
     }
   }
 `
@@ -83,7 +97,7 @@ const signupSchema = yup.object().shape({
     .required('Password is required'),
   username: yup
     .string()
-    .min(2)
+    .min(2, 'Username must be at least 2 characters')
     .max(20, 'Username can be at most 20 characters')
     .required('Username is required'),
   name: yup.string().required('Name is required'),
@@ -91,6 +105,7 @@ const signupSchema = yup.object().shape({
 
 export default function SignUpPage(props) {
   const signup = useMutation(SIGNUP)
+  const [error, setError] = useState('')
   return (
     <Container>
       <Formik
@@ -100,12 +115,17 @@ export default function SignUpPage(props) {
           setSubmitting(true)
           const {
             data: {
-              signup: { token },
+              signup: { error, token },
             },
           } = await signup({ variables: { input: values } })
-          await localStorage.setItem('TOKEN', token)
-          setSubmitting(false)
-          props.history.push('/')
+          if (error) {
+            setError(error)
+            setSubmitting(false)
+          } else {
+            await localStorage.setItem('TOKEN', token)
+            setSubmitting(false)
+            await props.history.push('/user-onboarding/info')
+          }
         }}
       >
         {({
@@ -128,6 +148,9 @@ export default function SignUpPage(props) {
               value={values.email}
               required
             />
+            {touched.email && errors.email && (
+              <SmallErrorMessage>{errors.email}</SmallErrorMessage>
+            )}
             <Item
               type="password"
               placeholder="Password"
@@ -137,6 +160,9 @@ export default function SignUpPage(props) {
               value={values.password}
               required
             />
+            {touched.password && errors.password && (
+              <SmallErrorMessage>{errors.password}</SmallErrorMessage>
+            )}
             <Item
               type="text"
               placeholder="Username"
@@ -146,6 +172,9 @@ export default function SignUpPage(props) {
               value={values.username}
               required
             />
+            {touched.username && errors.username && (
+              <SmallErrorMessage>{errors.username}</SmallErrorMessage>
+            )}
             <Item
               type="text"
               placeholder="Full Name"
@@ -155,6 +184,10 @@ export default function SignUpPage(props) {
               value={values.name}
               required
             />
+            {touched.name && errors.name && (
+              <SmallErrorMessage>{errors.name}</SmallErrorMessage>
+            )}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
             <SignupButton type="submit" disabled={isSubmitting}>
               Sign Up
             </SignupButton>

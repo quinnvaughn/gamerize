@@ -12,10 +12,6 @@ export const capitalize = s =>
 export const singleOrPlural = (decider, word) =>
   (decider.length || Number(decider)) === 1 ? String(word) : `${String(word)}s`
 
-export const formatTags = tag => {
-  const words = tag.split('_')
-}
-
 export const uppercase = string => string.toUpperCase()
 
 export const formatSystem = system => {
@@ -37,6 +33,13 @@ export const formatGamers = gamers => {
     }
   })
   return str
+}
+
+export const formatOccupation = occupation => {
+  return occupation
+    .split('_')
+    .map(string => capitalize(string))
+    .join(' ')
 }
 
 export const formatGender = gender => {

@@ -23,26 +23,26 @@ const PendingOrRespond = styled.button`
 const Friends = styled.button`
   background: #fff;
   padding: 1rem 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   height: 4.1rem;
   position: relative;
 `
 
 const AddFriend = styled.button`
-  background: ${props => (props.friends ? '#fff' : '#f10e0e')};
+  background: ${props => (props.friends ? '#fff' : '#db1422')};
   padding: 1rem 1.4rem;
-  color: ${props => (props.friends ? '#f10e0e' : '#fff')};
+  color: ${props => (props.friends ? '#db1422' : '#fff')};
   cursor: pointer;
   outline: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   height: 4.1rem;
   position: relative;

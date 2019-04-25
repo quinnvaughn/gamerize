@@ -51,6 +51,7 @@ const GET_SESSIONS = gql`
       price
       title
       creator {
+        profilePicture
         name
         username
       }
@@ -67,6 +68,7 @@ const GET_GAMERS = gql`
       name
       username
       occupations
+      profilePicture
     }
     totalGamers
   }
@@ -78,6 +80,7 @@ const GET_GAMES = gql`
       name
       tags
       numSessions
+      picture
     }
     totalGames
   }

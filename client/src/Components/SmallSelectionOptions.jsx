@@ -59,7 +59,7 @@ const Exit = styled(MdClose)`
   z-index: 1000;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -100,7 +100,7 @@ export default function SmallSelectionOptions({
         {/* <RatingContainer>
           <StarRatings
             rating={reviews}
-            starRatedColor="#f10e0e"
+            starRatedColor="#db1422"
             numberOfStars={5}
             name="rating"
             starDimension="1.2rem"
