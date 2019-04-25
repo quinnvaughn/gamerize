@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { Image } from 'cloudinary-react'
 
 //local imports
-import DefaultGame from '../default-game.gif'
 import { noSpaces, mapTags } from '../utils/Strings'
 
 const Container = styled(Link)`
@@ -25,8 +25,9 @@ const PictureContainer = styled.div`
   cursor: pointer;
 `
 
-const Image = styled.img`
+const StyledImage = styled(Image)`
   width: 100%;
+  height: 100%;
   cursor: pointer;
 `
 
@@ -66,7 +67,7 @@ export default function SearchResultGame(props) {
   return (
     <Container to={`/games/${noSpaces(props.game)}`}>
       <PictureContainer>
-        <Image src={DefaultGame} alt="Game" />
+        <StyledImage publicId={props.picture} />
       </PictureContainer>
       <InfoContainer>
         <Game>{props.game}</Game>

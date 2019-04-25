@@ -64,7 +64,7 @@ const AddOne = styled.button`
   font-weight: 800;
   cursor: pointer;
   color: white;
-  background: #f10e0e;
+  background: #db1422;
   border-radius: 4px;
   padding: 1rem 2.2rem;
   height: 4.6rem;
@@ -78,13 +78,13 @@ const AddOne = styled.button`
 const AddBulk = styled.button`
   font-weight: 800;
   cursor: pointer;
-  color: #f10e0e;
+  color: #db1422;
   background: #fff;
   border-radius: 4px;
   padding: 1rem 2.2rem;
   height: 4.6rem;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   font-size: 1.6rem;
   line-height: 2.4rem;
 `
@@ -100,7 +100,7 @@ const Add = styled.button`
   font-weight: 800;
   cursor: pointer;
   color: white;
-  background: #f10e0e;
+  background: #db1422;
   border-radius: 4px;
   padding: 1rem 2.2rem;
   height: 4.6rem;
@@ -119,14 +119,14 @@ const Cancel = styled.div`
 
 const CancelText = styled.span`
   cursor: pointer;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   font-weight: 600;
 `
 
 const CancelArrow = styled(FaChevronLeft)`
   cursor: pointer;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   margin-right: 0.5rem;
 `
@@ -141,21 +141,21 @@ const Back = styled.div`
 
 const BackText = styled.span`
   cursor: pointer;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   font-weight: 600;
 `
 
 const BackArrow = styled(FaChevronLeft)`
   cursor: pointer;
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   margin-right: 0.5rem;
 `
 
 const ErrorMessage = styled.div`
   font-size: 1.6rem;
-  color: #f10e0e;
+  color: #db1422;
   font-weight: 700;
   margin-top: 1rem;
 `

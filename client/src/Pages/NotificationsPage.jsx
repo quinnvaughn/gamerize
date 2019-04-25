@@ -139,12 +139,7 @@ export default function NotificationsPage(props) {
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
   return loading || secondLoading ? (
-    <PageContainer>
-      <NavBar />
-      <Content>
-        <Loading />
-      </Content>
-    </PageContainer>
+    <Loading />
   ) : (
     <PageContainer>
       <NavBar />

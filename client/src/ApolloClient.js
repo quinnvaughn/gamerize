@@ -1,17 +1,17 @@
 import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 
-const httpLink = createHttpLink({
+const uploadLink = createUploadLink({
   uri: 'http://192.168.1.125:4000',
 })
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = localStorage.getItem('TOKEN')
-  // return the headers to the context so httpLink can read them
+  // return the headers to the context so link can read them
   return {
     headers: {
       ...headers,
@@ -28,7 +28,7 @@ const persistedLink = createPersistedQueryLink()
 // })
 
 const client = new ApolloClient({
-  link: authLink.concat(persistedLink.concat(httpLink)),
+  link: authLink.concat(persistedLink.concat(uploadLink)),
   cache: new InMemoryCache(),
 })
 

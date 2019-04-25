@@ -70,7 +70,7 @@ const SetButton = styled.button`
   outline: none;
   border: none;
   border-bottom: ${props =>
-    props.active ? '2px solid #f10e0e' : '2px solid transparent'};
+    props.active ? '2px solid #db1422' : '2px solid transparent'};
 `
 
 const Top = styled.div`
@@ -140,18 +140,18 @@ const MY_SESSIONS = gql`
         }
         goingOn
       }
-      sessions {
-        id
-        title
-        game {
-          name
-        }
-        gamers {
-          username
-        }
-        price
-        length
+    }
+    myGamingSessions {
+      id
+      title
+      game {
+        name
       }
+      gamers {
+        username
+      }
+      price
+      length
     }
     mySlotsToday {
       id
@@ -176,7 +176,7 @@ const MY_SESSIONS = gql`
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
-    pollInterval: 5000,
+    pollInterval: 2000,
   })
   const [state] = useStore(gamerSessionSelection)
   return loading ? (
@@ -226,15 +226,14 @@ export default function GamerDashboardCalendar(props) {
               them to your calendar. Edit them in the sessions tab.
             </Info>
             <AllSessions>
-              {data.me &&
-                data.me.sessions &&
+              {data.myGamingSessions &&
                 data.me.setup &&
-                data.me.sessions.map((session, index) => (
+                data.myGamingSessions.map((session, index) => (
                   <GamerSessionCard
                     session={session}
                     key={session.id}
                     setup={data.me.setup}
-                    last={index === data.me.sessions.length - 1}
+                    last={index === data.myGamingSessions.length - 1}
                     refetch={refetch}
                   />
                 ))}

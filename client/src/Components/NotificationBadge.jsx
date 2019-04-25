@@ -19,7 +19,7 @@ const Badge = styled.span`
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  background: #f10e0e;
+  background: #db1422;
   border-radius: 10px;
   top: -14px;
   right: -10px;

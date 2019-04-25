@@ -43,7 +43,7 @@ const ChevronLeft = styled(FaChevronLeft)`
   margin-right: 1rem;
   :hover {
     transition: 0.25s ease-out;
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -57,7 +57,7 @@ const Explore = styled.div`
 const Type = styled.div`
   font-size: 1.4rem;
   font-weight: 600;
-  color: #f10e0e;
+  color: #db1422;
 `
 
 const BigType = styled.div`
@@ -92,7 +92,7 @@ const More = styled.div`
 `
 
 const LoadMore = styled.div`
-  color: #f10e0e;
+  color: #db1422;
   font-weight: 600;
   font-size: 1.8rem;
   padding: 1.6rem 0;
@@ -122,7 +122,11 @@ const mapGames = (games, first) => {
   return games.map((game, index) => {
     return (
       index <= first - 1 && (
-        <SearchResultGame game={game.game.name} tags={game.game.tags} />
+        <SearchResultGame
+          game={game.game.name}
+          tags={game.game.tags}
+          picture={game.game.picture}
+        />
       )
     )
   })
@@ -135,6 +139,7 @@ const mapUsers = (users, first) => {
         <SearchResultUser
           username={user.user.username}
           name={user.user.name}
+          profilePicture={user.user.profilePicture}
           gamer={user.user.role === 'GAMER'}
           numSessions={user.user.numSessions}
         />
@@ -195,6 +200,7 @@ const MORE_SESSIONS = gql`
       price
       creator {
         username
+        profilePicture
       }
       gamers {
         username
@@ -269,6 +275,7 @@ const MORE_GAMES = gql`
     moreGames(search: $search, skip: $skip) {
       tags
       name
+      picture
     }
   }
 `
@@ -292,7 +299,11 @@ function GameMore(props) {
       {!loading &&
         data &&
         data.moreGames.map(game => (
-          <SearchResultGame game={game.name} tags={game.tags} />
+          <SearchResultGame
+            game={game.name}
+            tags={game.tags}
+            picture={game.picture}
+          />
         ))}
       {!loading && needMore && (
         <LoadMore
@@ -331,6 +342,7 @@ const MORE_USERS = gql`
       role
       numSessions
       username
+      profilePicture
       name
     }
   }

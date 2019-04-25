@@ -90,7 +90,7 @@ const Save = styled.button`
   border: 0;
   cursor: pointer;
   outline: 0;
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
   color: #fff;
   border-radius: 4px;

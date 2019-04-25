@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 //local imports
-import DefaultGame from '../default-game.gif'
 import { noSpaces } from '../utils/Strings'
 
 const Container = styled(Link)`
@@ -27,6 +26,7 @@ const PictureContainer = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  height: 100%;
   cursor: pointer;
 `
 
@@ -70,7 +70,7 @@ export default function SearchResultSession(props) {
       }`}
     >
       <PictureContainer>
-        <Image src={DefaultGame} alt="session" />
+        <Image src={props.creator.profilePicture} alt="session" />
       </PictureContainer>
       <InfoContainer>
         <Title>{props.title}</Title>

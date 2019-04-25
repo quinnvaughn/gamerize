@@ -26,7 +26,7 @@ const User = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
-    color: #f10e0e;
+    color: #db1422;
     text-decoration: underline;
   }
 `
@@ -38,7 +38,7 @@ const EditProfile = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
-    color: #f10e0e;
+    color: #db1422;
     text-decoration: underline;
   }
 `
@@ -48,7 +48,7 @@ const Close = styled(MdClose)`
   color: black;
   margin-right: 4rem;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `
@@ -67,7 +67,8 @@ export default function NotificationMiscellaneous({
   refetch,
 }) {
   const text =
-    notification.type !== 'ACCEPTED_GAMER_REQUEST' &&
+    notification.type !==
+      ('ACCEPTED_GAMER_REQUEST' || 'DENIED_GAMER_REQUEST') &&
     notification.text
       .split(' ')
       .splice(1)
@@ -80,17 +81,19 @@ export default function NotificationMiscellaneous({
   return (
     <Container last={last}>
       <TextContainer>
-        {notification.type !== 'ACCEPTED_GAMER_REQUEST' ? (
+        {notification.type === 'ACCEPTED_GAMER_REQUEST' ? (
+          <Text>
+            {`${acceptedGamerRequestText}. `}
+            <EditProfile to="/gamer-dashboard/sessions/active">
+              {`${acceptedGamerLink}.`}
+            </EditProfile>
+          </Text>
+        ) : notification.type === 'DENIED_GAMER_REQUEST' ? (
+          <Text>{notification.text}</Text>
+        ) : (
           <Text>
             <User to={`/users/${username}`}>{username}</User>
             {` ${text}`}
-          </Text>
-        ) : (
-          <Text>
-            {`${acceptedGamerRequestText}. `}
-            <EditProfile to="/gamer-dashboard/sessions">
-              {`${acceptedGamerLink}.`}
-            </EditProfile>
           </Text>
         )}
       </TextContainer>

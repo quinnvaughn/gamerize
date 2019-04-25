@@ -26,7 +26,7 @@ const AllTheSessions = styled.div`
   flex-wrap: wrap;
 `
 
-const map = (sessions, first, setFirst) => {
+const map = (sessions, first) => {
   return sessions.map((session, index) => {
     return (
       index <= first - 1 && (
@@ -39,6 +39,7 @@ const map = (sessions, first, setFirst) => {
           price={session.price}
           key={session.id}
           title={session.title}
+          profilePicture={session.creator.profilePicture}
         />
       )
     )

@@ -33,7 +33,7 @@ const ProgressBar = styled.div`
 
 const Filler = styled.div`
   width: ${props => `${props.progress}%`};
-  background: #f10e0e;
+  background: #db1422;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
   height: 100%;

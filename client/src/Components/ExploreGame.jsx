@@ -40,7 +40,7 @@ const StyledLink = styled(Link)`
   color: black;
   font-size: 1.6rem;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `

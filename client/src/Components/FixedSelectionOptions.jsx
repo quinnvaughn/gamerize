@@ -33,7 +33,7 @@ const Book = styled.button`
   font-weight: 800;
   cursor: pointer;
   color: white;
-  background: #f10e0e;
+  background: #db1422;
   border-radius: 4px;
   padding: 1rem 2.2rem;
   height: 4.6rem;
@@ -81,7 +81,7 @@ export default function FixedSelectionOptions(props) {
           {/* <RatingContainer>
             <StarRatings
               rating={props.reviews}
-              starRatedColor="#f10e0e"
+              starRatedColor="#db1422"
               numberOfStars={5}
               name="rating"
               starDimension="1.2rem"

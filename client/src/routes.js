@@ -14,6 +14,11 @@ import BecomeAGamerFinished from './Pages/BecomeAGamerFinishedPage'
 import GamerDashboard from './Pages/GamerDashboard'
 import NotificationsPage from './Pages/NotificationsPage'
 import EditProfileInfoPage from './Pages/EditProfileInfoPage'
+import EditProfilePhotosPage from './Pages/EditProfilePhotosPage'
+import UserOnboardingInfoPage from './Pages/UserOnboardingInfoPage'
+import UserOnboardingNeedToKnowPage from './Pages/UserOnboardingNeedToKnowPage'
+import AdminDashboard from './Pages/AdminDashboard'
+import GamerOnboarding from './Pages/GamerOnboarding'
 
 const routes = [
   {
@@ -64,6 +69,14 @@ const routes = [
     component: GamerDashboard,
   },
   {
+    path: '/gamer-onboarding',
+    component: GamerOnboarding,
+  },
+  {
+    path: '/admin-dashboard',
+    component: AdminDashboard,
+  },
+  {
     path: '/users/:user',
     component: UserProfile,
   },
@@ -74,6 +87,16 @@ const routes = [
   {
     path: '/sign-up',
     component: SignUpPage,
+  },
+  {
+    path: '/user-onboarding/info',
+    component: UserOnboardingInfoPage,
+    protected: true,
+  },
+  {
+    path: '/user-onboarding/need-to-know',
+    component: UserOnboardingNeedToKnowPage,
+    protected: true,
   },
   {
     path: '/sessions',
@@ -90,6 +113,11 @@ const routes = [
     path: '/profile/edit',
     protected: true,
     component: EditProfileInfoPage,
+  },
+  {
+    path: '/profile/photos',
+    protected: true,
+    component: EditProfilePhotosPage,
   },
 ]
 

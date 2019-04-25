@@ -4,6 +4,7 @@
 type SessionReview {
   id: ID! @unique
   createdAt: DateTime!
+  updatedAt: DateTime!
   user: User!
   session: GamingSession!
   text: String!
@@ -13,6 +14,8 @@ type SessionReview {
 ## until Prisma gets case insensitive search
 type SessionReviewIndex {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   text: String!
   sessionReview: SessionReview!
 }

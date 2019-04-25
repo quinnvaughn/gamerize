@@ -83,13 +83,13 @@ const Previous = styled(Link)`
 `
 
 const PreviousText = styled.span`
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   font-weight: 600;
 `
 
 const PreviousArrow = styled(FaChevronLeft)`
-  color: #f10e0e;
+  color: #db1422;
   font-size: 1.6rem;
   margin-right: 0.5rem;
 `
@@ -103,7 +103,7 @@ const Finish = styled.button`
   cursor: pointer;
   font-weight: 600;
   padding: 1rem 2.2rem;
-  background: ${props => (props.disabled ? '#dddfe2' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
   border: none;
   :focus {

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik } from 'formik'
+import { spawn } from 'child_process'
 
 const Container = styled.div`
   display: flex;
@@ -48,14 +49,14 @@ const LoginButton = styled.button`
   font-weight: 700;
   padding: 1rem 1.6rem;
   text-transform: uppercase;
-  background: #f10e0e;
+  background: #db1422;
   width: 100%;
   cursor: pointer;
 `
 
 const StyledLink = styled(Link)`
   margin-top: 2rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   font-size: 1.4rem;
   text-decoration: none;
@@ -64,10 +65,24 @@ const StyledLink = styled(Link)`
   }
 `
 
+const SmallErrorMessage = styled.div`
+  margin-bottom: 0.2rem;
+  color: #db1422;
+  font-size: 1.2rem;
+`
+
+const ErrorMessage = styled.div`
+  margin-bottom: 0.8rem;
+  color: #db1422;
+  font-size: 1.6rem;
+  font-weight: 700;
+`
+
 const LOGIN = gql`
   mutation($input: LoginInput!) {
     login(input: $input) {
       token
+      error
     }
   }
 `
@@ -85,6 +100,7 @@ const loginSchema = yup.object().shape({
 
 export default function LoginPage(props) {
   const login = useMutation(LOGIN)
+  const [error, setError] = useState('')
   return (
     <Container>
       <Formik
@@ -94,12 +110,17 @@ export default function LoginPage(props) {
           setSubmitting(true)
           const {
             data: {
-              login: { token },
+              login: { error, token },
             },
           } = await login({ variables: { input: values } })
+          if (error) {
+            setError(error)
+            setSubmitting(false)
+          } else {
           await localStorage.setItem('TOKEN', token)
           setSubmitting(false)
           props.history.push('/')
+          }
         }}
       >
         {({
@@ -122,6 +143,7 @@ export default function LoginPage(props) {
               value={values.email}
               required
             />
+            {touched.email && errors.email && <SmallErrorMessage>{errors.email}</SmallErrorMessage>}
             <Item
               type="password"
               placeholder="Password"
@@ -131,6 +153,8 @@ export default function LoginPage(props) {
               value={values.password}
               required
             />
+            {touched.password && errors.password && <SmallErrorMessage>{errors.password}</SmallErrorMessage>}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
             <LoginButton type="submit">Login</LoginButton>
             <StyledLink to="/sign-up">Sign up</StyledLink>
           </LoginForm>

@@ -22,7 +22,7 @@ const Container = styled.div`
 
 const Check = styled(FaCheck)`
   font-size: 1.6rem;
-  color: #f10e0e;
+  color: #db1422;
 `
 
 export default function Slot(props) {

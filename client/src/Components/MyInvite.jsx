@@ -161,12 +161,12 @@ const InvitesContainer = styled.div`
 `
 
 const SendInvite = styled.button`
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
@@ -176,10 +176,10 @@ const SendInvite = styled.button`
 const CancelSlot = styled.button`
   background: #fff;
   padding: 1rem 1.4rem;
-  color: #f10e0e;
+  color: #db1422;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;

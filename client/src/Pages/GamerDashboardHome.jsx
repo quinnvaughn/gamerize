@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import _ from 'lodash'
@@ -89,11 +89,13 @@ export default function GamerDashboardHome(props) {
     }
     notifications()
   }, {})
-  const groups =
-    !loading &&
-    _(data.myGamerNotifications)
-      .groupBy(x => x.type)
-      .value()
+  const groups = useMemo(
+    () =>
+      !loading &&
+      _(data.myGamerNotifications)
+        .groupBy(x => x.type)
+        .value()
+  )
   const bookings = groups.BOOKED_TIMESLOT
   return loading ? (
     <Loading gamer />

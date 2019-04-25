@@ -82,12 +82,12 @@ const TypeGame = styled.span`
 
 const UnretireSession = styled.button`
   margin-top: 1rem;
-  background: #f10e0e;
+  background: #db1422;
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #f10e0e;
+  border: 1px solid #db1422;
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;

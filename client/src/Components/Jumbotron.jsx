@@ -1,30 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import HomeTitle from './HomeTitle'
+import { Image } from 'cloudinary-react'
 
 const TitleContainer = styled.div`
   width: 100%;
+  height: 900px;
   position: relative;
-  padding-top: 2rem;
-  padding-left: 8rem;
-  padding-bottom: 4rem;
-
-  @media (max-width: 1127px) {
-    padding-left: 2.4rem;
-  }
 `
 
-// const Img = styled.img`
-//   width: 100%;
-//   height: 100%;
-//   opacity: 0.6;
-// `
+const Img = styled(Image)``
 
 export default function Jumbotron(props) {
   return (
     <TitleContainer>
-      {/* <Img src={GamingJumbotron} alt="Gaming Jumbotron" /> */}
-      <HomeTitle text="Play with your favorite gamers" />
+      <Img
+        height="900"
+        crop="scale"
+        width="100%"
+        publicId="https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_jumbotron.jpg"
+        alt="Gaming Jumbotron"
+      />
     </TitleContainer>
   )
 }

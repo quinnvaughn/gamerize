@@ -13,16 +13,18 @@ export default function GamesRow(props) {
   return (
     <Row>
       {props.sessions.map(session => (
-          <Session 
-          username={session.creator.username} 
-          game={props.name} 
+        <Session
+          username={session.creator.username}
+          game={props.name}
           id={session.id}
-          title={session.title} 
-          name={session.creator.name} 
-          system={session.system} 
-          price={session.price} 
-          reviews={session.reviewRating} 
-          numReviews={session.numReviews}/>
+          title={session.title}
+          name={session.creator.name}
+          system={session.system}
+          price={session.price}
+          reviews={session.reviewRating}
+          profilePicture={session.creator.profilePicture}
+          numReviews={session.numReviews}
+        />
       ))}
     </Row>
   )

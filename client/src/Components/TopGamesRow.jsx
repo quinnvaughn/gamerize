@@ -39,7 +39,7 @@ const ShowAll = styled(Link)`
   padding-bottom: 0.4rem;
   margin-top: 2rem;
   font-size: 1.6rem;
-  color: #f10e0e;
+  color: #db1422;
   text-decoration: none;
   padding-left: 0.8rem;
   align-self: flex-start;
@@ -52,7 +52,7 @@ const ShowAll = styled(Link)`
 const ShowAllRight = styled(FaChevronRight)`
   width: 1rem;
   height: 1rem;
-  color: #f10e0e;
+  color: #db1422;
   margin-left: 0.1rem;
 `
 
@@ -65,6 +65,7 @@ const map = (games, first) => {
           key={game.name}
           tags={game.tags}
           full
+          picture={game.picture}
           numSessions={game.numSessions}
         />
       )

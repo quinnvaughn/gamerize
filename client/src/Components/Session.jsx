@@ -3,9 +3,8 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import StarRatings from 'react-star-ratings'
 
-import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
-import { noSpaces } from '../utils/Strings'
+import { noSpaces, formatSystem } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -90,7 +89,7 @@ const NumReviews = styled.span`
 `
 const Reviews = styled.span`
   font-size: 1.2rem;
-  color: #f10e0e;
+  color: #db1422;
   margin-right: 0.5rem;
   font-weight: 600;
 `
@@ -102,7 +101,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
     cursor: pointer;
   }
 `
@@ -119,20 +118,20 @@ export default function Session(props) {
       <StyledLink
         to={`/users/${props.username}/${noSpaces(props.game)}/${props.id}`}
       >
-        <DynamicImage src={DefaultAvatar} />
+        <DynamicImage src={props.profilePicture} />
         <TitleContainer>
           <Title>{props.title}</Title>
         </TitleContainer>
         <Name>{props.name}</Name>
         <Systems>
-          <System>{props.system}</System>
+          <System>{formatSystem(props.system)}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
         {/* <Bottom>
           <Reviews>{props.reviews}</Reviews>
           <StarRatings
             rating={props.reviews}
-            starRatedColor="#f10e0e"
+            starRatedColor="#db1422"
             numberOfStars={5}
             name="rating"
             starDimension="14px"

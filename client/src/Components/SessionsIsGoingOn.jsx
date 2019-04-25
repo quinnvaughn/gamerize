@@ -38,7 +38,7 @@ const AddButton = styled.button`
   border: 0;
   cursor: pointer;
   outline: 0;
-  background: #f10e0e;
+  background: #db1422;
   color: #fff;
   border-radius: 4px;
   margin-right: 0.5rem;

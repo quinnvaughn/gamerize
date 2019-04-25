@@ -11,24 +11,28 @@ const auth = {
       username,
     })
     if (alreadyUsername) {
-      throw new Error('Username already exists')
+      return { error: 'Username already exists' }
     }
     const alreadyEmail = await prisma.userIndex({
       email,
     })
     if (alreadyEmail) {
-      throw new Error('Email is already in use')
+      return { error: 'Email is already in use' }
     }
     const user = await prisma.createUser({
       ...input,
+      profilePicture:
+        'https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_default_avatar.jpg',
+      banner:
+        'https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_default_banner.jpg',
       password,
-    })
-
-    await prisma.createUserIndex({
-      email,
-      username,
-      name,
-      user: { connect: { id: user.id } },
+      index: {
+        create: {
+          email,
+          username,
+          name,
+        },
+      },
     })
 
     return {
@@ -45,11 +49,11 @@ const auth = {
   ) {
     const user = await prisma.user({ email })
     if (!user) {
-      throw new Error(`No user found for email: ${email}`)
+      return {error: `No user found for email: ${email}`}
     }
     const passwordValid = await bcrypt.compare(password, user.password)
     if (!passwordValid) {
-      throw new Error('Invalid password')
+      return {error: 'Invalid password'}
     }
     return {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),

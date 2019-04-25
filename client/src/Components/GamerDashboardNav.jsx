@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
+import { Image } from 'cloudinary-react'
 import gql from 'graphql-tag'
 
 //local imports
@@ -42,10 +43,10 @@ const StyledLink = styled(NavLink)`
     margin-right: 0;
   }
   :hover {
-    border-bottom: 2px solid #f10e0e;
+    border-bottom: 2px solid #db1422;
   }
   &.active {
-    border-bottom: 2px solid #f10e0e;
+    border-bottom: 2px solid #db1422;
   }
 `
 
@@ -54,18 +55,29 @@ const NotificationContainer = styled.div`
   cursor: pointer;
 `
 
+const Icon = styled(Image)`
+  margin-right: 2.4rem;
+  cursor: pointer;
+`
+
 const GET_MY_NOTIFICATIONS = gql`
   {
     numGamerNotifications
   }
 `
-
-export default function GamerDashboardNav(props) {
+function GamerDashboardNav(props) {
   const { data, loading } = useQuery(GET_MY_NOTIFICATIONS, {
     pollInterval: 1000,
   })
   return loading ? null : (
     <Container>
+      <Icon
+        publicId="gamerize_logo.png"
+        height="80"
+        onClick={async () => {
+          await props.history.push('/')
+        }}
+      />
       <StyledLink to="/gamer-dashboard/home">
         <NotificationContainer>
           <NotificationBadge count={data.numGamerNotifications} />
@@ -92,3 +104,5 @@ export default function GamerDashboardNav(props) {
     </Container>
   )
 }
+
+export default withRouter(GamerDashboardNav)

@@ -6,13 +6,20 @@ const cron = require('node-cron')
 //local data
 const resolvers = require('./resolvers')
 
-const typeDefs = gql(importSchema('./src/schema.graphql'))
+const basicDefs = gql(importSchema('./src/schema.graphql'))
+
+const mutationDefs = gql`
+  extend type Mutation {
+    uploadProfilePicture(file: Upload!): UploadProfilePicturePayload!
+    uploadBanner(file: Upload!): UploadBannerPayload!
+  }
+`
 
 const prisma = new Prisma({
   endpoint: 'http://192.168.1.125:4466',
 })
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs: [basicDefs, mutationDefs],
   resolvers,
   context: request => {
     return {

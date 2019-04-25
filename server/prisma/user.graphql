@@ -1,10 +1,14 @@
 type User {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   gender: Gender! @default(value: "MALE")
   email: String! @unique
   username: String! @unique
   password: String!
-  gamerIsSetUp: Boolean! @default(value: false)
+  profilePicture: String
+  banner: String
+  gamerIsSetup: Boolean! @default(value: false)
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
@@ -20,6 +24,7 @@ type User {
   friends: [User!]!
   gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)
   role: Role! @default(value: "USER")
+  index: UserIndex! @relation(name: "UserIndex", onDelete: CASCADE)
 }
 
 enum Gender {
@@ -37,14 +42,20 @@ enum Role {
 ## Workaround for no case insensitive search in prisma yet.
 type UserIndex {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   email: String! @unique
   username: String! @unique
   name: String!
-  user: User!
+  user: User! @relation(name: "UserIndex", onDelete: SET_NULL)
 }
 
 type BookedPlayer {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  #
+  #
   player: User!
   booking: Booking! @relation(name: "BookingPlayers", onDelete: SET_NULL)
   timeslot: GamingTimeSlot!
@@ -53,6 +64,8 @@ type BookedPlayer {
 
 type GamerTag {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   user: User! @relation(name: "UserGamerTags", onDelete: SET_NULL)
   ## Playstation Network
   psn: String
@@ -66,6 +79,8 @@ type GamerTag {
 
 type PCLauncher {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   gamerTag: GamerTag! @relation(name: "PCLauncher", onDelete: SET_NULL)
   epic: String
   steam: String

@@ -30,9 +30,13 @@ const { Notification } = require('./Type/Notification')
 const { FriendRequest } = require('./Type/FriendRequest')
 const { GamerTag } = require('./Type/GamerTag')
 const { Game } = require('./Type/Game')
+const { photos } = require('./Mutation/photos')
+const { admin } = require('./Query/admin')
+const { GamerRequest } = require('./Type/GamerRequest')
 
 module.exports = {
   Query: {
+    ...admin,
     ...search,
     ...notificationQuery,
     ...friendRequestQuery,
@@ -45,6 +49,7 @@ module.exports = {
     ...timeSlotQuery,
   },
   Mutation: {
+    ...photos,
     ...user,
     ...gamer,
     ...gamerrequest,
@@ -57,6 +62,7 @@ module.exports = {
     ...game,
     ...gamingsession,
   },
+  GamerRequest,
   Game,
   GamerTag,
   User,

@@ -126,7 +126,7 @@ const SetButton = styled.button`
   outline: none;
   border: none;
   border-bottom: ${props =>
-    props.active ? '2px solid #f10e0e' : '2px solid transparent'};
+    props.active ? '2px solid #db1422' : '2px solid transparent'};
 `
 
 const MY_SESSIONS = gql`

@@ -64,7 +64,7 @@ const Book = styled.button`
   cursor: pointer;
   flex: 1;
   color: white;
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   line-height: 2.4rem;
   padding: 1rem 2.2rem;

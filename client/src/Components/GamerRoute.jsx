@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import { useQuery } from 'react-apollo-hooks'
 
 const GET_GAMER_STATUS = gql`
   {

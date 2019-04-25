@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import Media from 'react-media'
 import gql from 'graphql-tag'
+import { Image } from 'cloudinary-react'
 import { useQuery } from 'react-apollo-hooks'
 
 //local imports
@@ -57,7 +58,7 @@ const StyledLink = styled(Link)`
     margin-right: 0;
   }
   :hover {
-    border-bottom: 2px solid #f10e0e;
+    border-bottom: 2px solid #db1422;
   }
 `
 
@@ -66,7 +67,16 @@ const NotificationContainer = styled.div`
   cursor: pointer;
 `
 
-const Empty = styled.div``
+const Left = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+`
+
+const Icon = styled(Image)`
+  margin-right: 2.4rem;
+  cursor: pointer;
+`
 
 const notSignedInLinks = [
   {
@@ -101,6 +111,7 @@ const GET_ME = gql`
       name
       username
       role
+      profilePicture
     }
   }
 `
@@ -123,13 +134,25 @@ function NavBar(props) {
   const gamer = !loading && data && data.me && data.me.role === 'GAMER'
   return (
     <Container className="navbar">
-      <SearchBar />
+      <Left>
+        <Icon
+          publicId="gamerize_logo.png"
+          height="80"
+          onClick={async () => {
+            await props.history.push('/')
+          }}
+        />
+        <SearchBar />
+      </Left>
       {loading || secondLoading ? null : (
         <Media query={{ maxWidth: 1127 }}>
           {matches =>
             matches && !_.isEmpty(data) ? (
               <Links>
-                <NavBarAvatar gamer={gamer} />
+                <NavBarAvatar
+                  gamer={gamer}
+                  profilePicture={data.me.profilePicture}
+                />
               </Links>
             ) : (
               <Links>
@@ -150,6 +173,18 @@ function NavBar(props) {
                             to={'/gamer-dashboard/home'}
                           >
                             {`Gamer Dashboard`}
+                          </StyledLink>
+                        )
+                      } else if (
+                        link.path === '/become-a-gamer' &&
+                        data.me.role === 'ADMIN'
+                      ) {
+                        return (
+                          <StyledLink
+                            key={link.text}
+                            to={'/admin-dashboard/home'}
+                          >
+                            {`Admin Dashboard`}
                           </StyledLink>
                         )
                       } else if (link.path === '/notifications') {
@@ -178,7 +213,12 @@ function NavBar(props) {
                         )
                       }
                     })}
-                {!_.isEmpty(data) && !_.isEmpty(data.me) && <NavBarAvatar />}
+                {!_.isEmpty(data) && !_.isEmpty(data.me) && (
+                  <NavBarAvatar
+                    gamer={gamer}
+                    profilePicture={data.me.profilePicture}
+                  />
+                )}
               </Links>
             )
           }
@@ -188,4 +228,4 @@ function NavBar(props) {
   )
 }
 
-export default withRouter(NavBar)
+export default memo(withRouter(NavBar))

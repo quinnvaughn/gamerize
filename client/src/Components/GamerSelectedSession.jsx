@@ -20,7 +20,7 @@ const Exit = styled(MdClose)`
   z-index: 1000;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -82,7 +82,7 @@ const Cancel = styled.button`
   outline: 0;
   padding: 1rem;
   color: #fff;
-  background: ${props => (props.disabled ? '#dddfe2' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
   cursor: pointer;
   border-radius: 4px;
   border: none;

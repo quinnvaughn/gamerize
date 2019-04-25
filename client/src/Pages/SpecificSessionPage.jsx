@@ -27,7 +27,7 @@ import {
   singleOrPlural,
   mapGameType,
 } from '../utils/Strings'
-import { formatGamers } from '../utils/Strings'
+import { formatGamers, formatSystem } from '../utils/Strings'
 import Loading from '../Components/Loading'
 
 //data
@@ -82,7 +82,7 @@ const GamerLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    color: #f10e0e;
+    color: #db1422;
   }
 `
 
@@ -269,6 +269,7 @@ const GET_SPECIFIC_SESSION = gql`
       system
       creator {
         setup
+        banner
       }
       game {
         name
@@ -350,7 +351,7 @@ export default function SpecificSessionPage(props) {
     <PageContainer>
       <NavBar />
       <BannerContainer>
-        <Banner src={DefaultBanner} alt="Banner" />
+        <Banner src={data.getSpecificSession.creator.banner} alt="Banner" />
       </BannerContainer>
       <Content>
         <LeftSide>
@@ -381,7 +382,9 @@ export default function SpecificSessionPage(props) {
                 </Flex>
                 <Flex>
                   <TypeOfContent>System</TypeOfContent>
-                  <Systems>{data.getSpecificSession.system}</Systems>
+                  <Systems>
+                    {formatSystem(data.getSpecificSession.system)}
+                  </Systems>
                 </Flex>
                 <Flex>
                   <TypeOfContent>Game Length</TypeOfContent>

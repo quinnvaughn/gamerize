@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
+import _ from 'lodash'
 
 //local imports
 import EditProfileNav from '../Components/EditProfileNav'
@@ -10,6 +11,7 @@ import NavBar from '../Components/NavBar'
 import { capitalize, formatGender } from '../utils/Strings'
 import GenderDropdown from '../Components/GenderDropdown'
 import Loading from '../Components/Loading'
+import useQueryNotBugged from '../Hooks/useQueryNotBugged'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -112,7 +114,7 @@ const Save = styled.button`
   border: 0;
   cursor: pointer;
   outline: 0;
-  background: ${props => (props.disabled ? '#ebebeb' : '#f10e0e')};
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   pointer-events: ${props => props.disabled && 'none'};
   color: #fff;
   border-radius: 4px;
@@ -219,7 +221,7 @@ const initialState = {
   bethesda: '',
   itch: '',
   windows: '',
-  setGender: null,
+  gender: null,
   saving: false,
   saved: false,
 }
@@ -229,31 +231,37 @@ export default function GamerDashboardAccountEdit(props) {
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
-    if (loading) {
-    } else {
+    if (!_.isNil(data) && !_.isNil(data.me)) {
       dispatch({ type: 'setFirstName', payload: data.me.name.split(' ')[0] })
       dispatch({ type: 'setLastName', payload: data.me.name.split(' ')[1] })
-      dispatch({
-        type: 'setAboutMe',
-        payload: data.me.aboutMe,
-      })
       dispatch({ type: 'setGender', payload: data.me.gender })
-      dispatch({ type: 'setPSN', payload: data.me.gamertags.psn })
-      dispatch({ type: 'setNSO', payload: data.me.gamertags.nso })
-      dispatch({ type: 'setXBL', payload: data.me.gamertags.xbl })
-      dispatch({ type: 'setEpic', payload: data.me.gamertags.pc.epic })
-      dispatch({ type: 'setOrigin', payload: data.me.gamertags.pc.origin })
-      dispatch({ type: 'setSteam', payload: data.me.gamertags.pc.steam })
-      dispatch({ type: 'setGog', payload: data.me.gamertags.pc.gog })
-      dispatch({
-        type: 'setBattlenet',
-        payload: data.me.gamertags.pc.battlenet,
-      })
-      dispatch({ type: 'setUplay', payload: data.me.gamertags.pc.uplay })
-      dispatch({ type: 'setBethesda', payload: data.me.gamertags.pc.bethesda })
-      dispatch({ type: 'setItch', payload: data.me.gamertags.pc.itch })
-      dispatch({ type: 'setWindows', payload: data.me.gamertags.pc.windows })
-      dispatch({ type: 'setRiot', payload: data.me.gamertags.pc.riot })
+      if (!_.isNil(data.me.aboutMe)) {
+        dispatch({
+          type: 'setAboutMe',
+          payload: data.me.aboutMe,
+        })
+      }
+      if (!_.isNil(data.me.gamertags)) {
+        dispatch({ type: 'setPSN', payload: data.me.gamertags.psn })
+        dispatch({ type: 'setNSO', payload: data.me.gamertags.nso })
+        dispatch({ type: 'setXBL', payload: data.me.gamertags.xbl })
+        dispatch({ type: 'setEpic', payload: data.me.gamertags.pc.epic })
+        dispatch({ type: 'setOrigin', payload: data.me.gamertags.pc.origin })
+        dispatch({ type: 'setSteam', payload: data.me.gamertags.pc.steam })
+        dispatch({ type: 'setGog', payload: data.me.gamertags.pc.gog })
+        dispatch({
+          type: 'setBattlenet',
+          payload: data.me.gamertags.pc.battlenet,
+        })
+        dispatch({ type: 'setUplay', payload: data.me.gamertags.pc.uplay })
+        dispatch({
+          type: 'setBethesda',
+          payload: data.me.gamertags.pc.bethesda,
+        })
+        dispatch({ type: 'setItch', payload: data.me.gamertags.pc.itch })
+        dispatch({ type: 'setWindows', payload: data.me.gamertags.pc.windows })
+        dispatch({ type: 'setRiot', payload: data.me.gamertags.pc.riot })
+      }
     }
   }, [data.me])
   return loading ? (

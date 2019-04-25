@@ -30,6 +30,9 @@ const gamingsession = {
     return await prisma.gamingSessions({
       orderBy: orderBy ? orderBy : 'title_ASC',
       first,
+      where: {
+        retired: false,
+      },
     })
   },
 }
