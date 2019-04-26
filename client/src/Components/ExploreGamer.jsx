@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
-import { noSpaces, capitalize } from '../utils/Strings'
+import { noSpaces, formatOccupation } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -61,7 +61,7 @@ const StyledLink = styled(Link)`
 `
 
 const Occupation = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: black;
 `
@@ -87,13 +87,13 @@ export default function ExploreGamer(props) {
   return (
     <Container>
       <StyledLink to={`/users/${noSpaces(props.username)}`}>
-        <DynamicImage src={DefaultAvatar} alt="Avatar" />
+        <DynamicImage src={props.profilePicture} alt="Avatar" />
         <Name>{props.name}</Name>
         <Occupations>
           {props.occupations.map((occupation, index) =>
             formatCommasOccupations(
               props.occupations,
-              capitalize(occupation),
+              formatOccupation(occupation),
               index
             )
           )}

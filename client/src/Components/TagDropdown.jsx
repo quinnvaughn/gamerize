@@ -143,8 +143,8 @@ const tags = [
 ]
 
 export default function TagDropdown(props) {
-  const node = useRef()
   const [open, setOpen] = useState(false)
+  const node = useRef()
   useOnOutsideClick(node, () => {
     setOpen(false)
   })

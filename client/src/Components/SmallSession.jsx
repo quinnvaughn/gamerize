@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import StarRatings from 'react-star-ratings'
 
-import DefaultAvatar from '../default-avatar.png'
 import DynamicImage from './DynamicImage'
+import { formatSystem } from '../utils/Strings'
 
 const Container = styled.div`
   display: flex;
@@ -111,13 +111,13 @@ export default function SmallSession(props) {
   return (
     <Container width={props.width}>
       <StyledLink to={`/users/${props.username}/${props.game}/${props.id}`}>
-        <DynamicImage src={DefaultAvatar} />
+        <DynamicImage src={props.profilePicture} />
         <TitleContainer>
           <Title>{props.title}</Title>
         </TitleContainer>
         <Name>{props.name}</Name>
         <Systems>
-          <System>{props.system}</System>
+          <System>{formatSystem(props.system)}</System>
         </Systems>
         <Price>{`Starting at $${props.price} a game`}</Price>
         {/* <Bottom>

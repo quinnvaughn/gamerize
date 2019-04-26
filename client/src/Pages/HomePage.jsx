@@ -59,6 +59,7 @@ const GET_SESSIONS = gql`
         name
       }
     }
+    totalSessions
   }
 `
 
@@ -69,6 +70,9 @@ const GET_GAMERS = gql`
       username
       occupations
       profilePicture
+      mostPlayedGames {
+        name
+      }
     }
     totalGamers
   }

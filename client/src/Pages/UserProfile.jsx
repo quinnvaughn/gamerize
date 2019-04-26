@@ -12,8 +12,7 @@ import DefaultAvatar from '../default-avatar.png'
 import SmallSession from '../Components/SmallSession'
 import GamerAvailability from '../Components/GamerAvailability'
 import UserProfileReviews from '../Components/UserProfileReviews'
-import DefaultBanner from '../default-banner.png'
-import { noSpaces, capitalize } from '../utils/Strings'
+import { noSpaces, formatOccupation } from '../utils/Strings'
 import FavoriteGame from '../Components/FavoriteGame'
 import useTitle from '../Hooks/useTitle'
 import AddFriendButton from '../Components/AddFriendButton'
@@ -86,7 +85,6 @@ const ProfilePictureContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #dddfe2;
 `
 
 const ProfileInfoContainer = styled.div`
@@ -263,6 +261,7 @@ const GET_USER = gql`
       }
       mostPlayedGames {
         name
+        picture
       }
       sessions {
         id
@@ -350,7 +349,9 @@ export default function UserProfile(props) {
                     <Username>@{data.getUser.username}</Username>
                     <Occupations>
                       {data.getUser.occupations.map(job => (
-                        <Occupation key={job}>{capitalize(job)}</Occupation>
+                        <Occupation key={job}>
+                          {formatOccupation(job)}
+                        </Occupation>
                       ))}
                     </Occupations>
                   </SmallLeft>
@@ -380,7 +381,7 @@ export default function UserProfile(props) {
                   </Row>
                   <Occupations>
                     {data.getUser.occupations.map(job => (
-                      <Occupation key={job}>{capitalize(job)}</Occupation>
+                      <Occupation key={job}>{formatOccupation(job)}</Occupation>
                     ))}
                   </Occupations>
                 </Fragment>
@@ -393,7 +394,11 @@ export default function UserProfile(props) {
             <FavoriteGamesTitle>Most played games</FavoriteGamesTitle>
             <FavoriteGameContainer>
               {_.map(data.getUser.mostPlayedGames, game => (
-                <FavoriteGame game={game.name} key={game.name} />
+                <FavoriteGame
+                  game={game.name}
+                  key={game.name}
+                  picture={game.picture}
+                />
               ))}
             </FavoriteGameContainer>
           </FavoriteGames>
@@ -412,6 +417,7 @@ export default function UserProfile(props) {
                       name={session.game.name}
                       system={session.system}
                       price={session.price}
+                      profilePicture={data.getUser.profilePicture}
                       reviewRating={session.reviewRating}
                       numReviews={session.numReviews}
                     />

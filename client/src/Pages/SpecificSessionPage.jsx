@@ -24,7 +24,7 @@ import TimeSlotSession from '../Components/TimeSlotSession'
 import {
   noUnderscores,
   capitalize,
-  singleOrPlural,
+  formatOccupation,
   mapGameType,
 } from '../utils/Strings'
 import { formatGamers, formatSystem } from '../utils/Strings'
@@ -270,6 +270,10 @@ const GET_SPECIFIC_SESSION = gql`
       creator {
         setup
         banner
+        username
+        profilePicture
+        occupations
+        name
       }
       game {
         name
@@ -360,17 +364,26 @@ export default function SpecificSessionPage(props) {
               <TitleContainer>
                 <Title>{data.getSpecificSession.title}</Title>
               </TitleContainer>
-              {/* <GamerContainer>
-                <GamerLink to={`/users/${gamer.username}`}>
-                  <Avatar src={DefaultAvatar} alt="Avatar" />
-                  <Gamer>{`${gamer.name}`}</Gamer>
+              <GamerContainer>
+                <GamerLink
+                  to={`/users/${data.getSpecificSession.creator.username}`}
+                >
+                  <Avatar
+                    src={data.getSpecificSession.creator.profilePicture}
+                    alt="Avatar"
+                  />
+                  <Gamer>{`${data.getSpecificSession.creator.name}`}</Gamer>
                 </GamerLink>
                 <Occupations>
-                  {gamer.occupations.map(occupation => (
-                    <Occupation key={occupation}>{occupation}</Occupation>
-                  ))}
+                  {data.getSpecificSession.creator.occupations.map(
+                    occupation => (
+                      <Occupation key={occupation}>
+                        {formatOccupation(occupation)}
+                      </Occupation>
+                    )
+                  )}
                 </Occupations>
-              </GamerContainer> */}
+              </GamerContainer>
             </TopContainer>
             <MiddleContainer>
               <FlexHalf>

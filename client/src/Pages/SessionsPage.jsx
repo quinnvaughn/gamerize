@@ -4,7 +4,7 @@ import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 //local imports
 import NavBar from '../Components/NavBar'
-import DisplayGames from '../Components/DisplayGames'
+import DisplaySessions from '../Components/DisplaySessions'
 import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
@@ -33,29 +33,36 @@ const Title = styled.h2`
   font-size: 3rem;
 `
 
-const GET_GAMES = gql`
-  query($orderBy: String) {
-    allGames(orderBy: $orderBy) {
-      name
-      tags
-      numSessions
-      picture
+const GET_SESSIONS = gql`
+  query {
+    allSessions {
+      id
+      system
+      price
+      title
+      creator {
+        profilePicture
+        name
+        username
+      }
+      game {
+        name
+      }
     }
+    totalSessions
   }
 `
 
-export default function GamesPage(props) {
-  const { data, loading } = useQuery(GET_GAMES, {
-    variables: { orderBy: 'numSessions_DESC' },
-  })
+export default function SessionsPage(props) {
+  const { data, loading } = useQuery(GET_SESSIONS)
   return loading ? (
     <Loading />
   ) : (
     <PageContainer>
       <NavBar />
       <Content>
-        <Title>Explore games</Title>
-        <DisplayGames data={data} />
+        <Title>Explore sessions</Title>
+        <DisplaySessions data={data} />
       </Content>
     </PageContainer>
   )

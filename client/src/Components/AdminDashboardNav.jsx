@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
+import { Image } from 'cloudinary-react'
 
 const Container = styled.div`
   height: 8rem;
@@ -44,28 +45,26 @@ const StyledLink = styled(NavLink)`
   }
 `
 
-export default function AdminDashboardNav(props) {
+const Icon = styled(Image)`
+  margin-right: 2.4rem;
+  cursor: pointer;
+`
+
+function AdminDashboardNav(props) {
   return (
     <Container>
+      <Icon
+        publicId="gamerize_logo.png"
+        height="80"
+        onClick={async () => {
+          await props.history.push('/')
+        }}
+      />
       <StyledLink to="/admin-dashboard/home">Home</StyledLink>
       <StyledLink to="/admin-dashboard/stats">Stats</StyledLink>
       <StyledLink to="/admin-dashboard/games">Games</StyledLink>
-      {/* <StyledLink
-        to="/admin-dashboard/sessions/active"
-        isActive={(_, { pathname }) =>
-          pathname.match(`/admin-dashboard/sessions/d*`)
-        }
-      >
-        Sessions
-      </StyledLink>
-      <StyledLink
-        to="/admin-dashboard/account/edit"
-        isActive={(_, { pathname }) =>
-          pathname.match(`/admin-dashboard/account/d*`)
-        }
-      >
-        Account
-      </StyledLink> */}
     </Container>
   )
 }
+
+export default withRouter(AdminDashboardNav)

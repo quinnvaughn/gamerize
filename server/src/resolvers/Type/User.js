@@ -82,7 +82,8 @@ const User = {
         gamingSessionsConnection(where: {
           gamers_some: {
             id: "${parent.id}"
-          }
+          },
+          retired: false
         }) {
           aggregate {
             count
@@ -108,6 +109,7 @@ const User = {
           gamingSession {
             game {
               name
+              picture
             }
           }
         }
@@ -118,12 +120,13 @@ const User = {
     gamingTimeSlots
       .map(({ gamingSession }) => gamingSession.game)
       .forEach(v => {
-        res[v.name] = (res[v.name] || 0) + 1
+        res[v.name] = { count: (res[v.name] || 0) + 1, picture: v.picture }
       })
     return Object.keys(res)
       .map(key => ({
+        picture: res[key].picture,
         name: key,
-        count: res[key],
+        count: res[key].count,
       }))
       .sort((a, b) => {
         return b.count - a.count

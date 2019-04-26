@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 //local imports
 import DynamicImage from './DynamicImage'
-import DefaultGame from '../default-game.gif'
 import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
@@ -45,7 +44,7 @@ export default function FavoriteGame(props) {
   return (
     <Container>
       <StyledLink to={`/games/${noSpaces(props.game)}`}>
-        <DynamicImage src={DefaultGame} alt={props.game} />
+        <DynamicImage src={props.picture} alt={props.game} />
         <FavoriteGameTitle>{props.game}</FavoriteGameTitle>
       </StyledLink>
     </Container>

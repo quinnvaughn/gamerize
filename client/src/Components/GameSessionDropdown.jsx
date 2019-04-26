@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
+
+//local imports
+
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const SelectionContainer = styled.div`
   display: inline-flex;
@@ -103,15 +107,15 @@ const SEARCH_GAMES = gql`
 export default function GameSessionDropdown(props) {
   const [open, setOpen] = useState(false)
   const { data, loading } = useQuery(SEARCH_GAMES)
+  const node = useRef()
+  useOnOutsideClick(node, () => {
+    setOpen(false)
+  })
   return (
     <Container>
       <Label>{props.label}</Label>
-      <SelectionContainer>
-        <Selection
-          onClick={() => setOpen(!open)}
-          value={props.title}
-          readOnly
-        />
+      <SelectionContainer onClick={() => setOpen(!open)} ref={node}>
+        <Selection value={props.title} readOnly />
         {!open && <ChevronDown />}
         {open && <ChevronUp />}
         {open && (
