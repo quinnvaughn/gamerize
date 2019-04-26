@@ -67,6 +67,7 @@ const map = (gamers, first) => {
           occupations={gamer.occupations}
           username={gamer.username}
           key={gamer.username}
+          mostPlayedGames={gamer.mostPlayedGames}
           profilePicture={gamer.profilePicture}
         />
       )
@@ -79,7 +80,8 @@ export default function GamerRow(props) {
     <Container>
       <RowTitle>{props.title}</RowTitle>
       <AllTheGamers>{map(props.data.getGamers, props.first)}</AllTheGamers>
-      {props.first < props.data.getGamers.length && (
+      {//props.first < props.data.getGamers.length && (
+      props.data.getGamers.length >= 1 && (
         <ShowAllContainer>
           <ShowAll to={`/gamers`}>
             {`Show All Gamers (${props.data.getGamers.length})`}

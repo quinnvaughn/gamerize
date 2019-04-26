@@ -76,6 +76,12 @@ const System = styled.span`
   color: black;
 `
 
+const Game = styled.span`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: black;
+`
+
 const Price = styled.p`
   font-size: 1.4rem;
   font-weight: 400;
@@ -106,19 +112,14 @@ const StyledLink = styled(Link)`
   }
 `
 
-const Game = styled.span`
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: black;
-`
-
 const Bottom = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
 `
 
-export default function Session(props) {
+export default function ExploreSession(props) {
+  console.log(props.game)
   return (
     <Container>
       <StyledLink

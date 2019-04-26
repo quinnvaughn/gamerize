@@ -54,10 +54,12 @@ export default function ExploreGame(props) {
           state: { tags: props.tags, numSessions: props.numSessions },
         }}
       >
-        <DynamicImage src={DefaultAvatar} alt="Avatar" />
+        <DynamicImage src={props.picture} alt="Avatar" />
         <Name>{props.name}</Name>
         {props.full && (
-          <Sessions>{`${props.numSessions} sessions available`}</Sessions>
+          <Sessions>{`${props.numSessions} ${
+            props.numSessions === 1 ? 'session' : 'sessions'
+          } available`}</Sessions>
         )}
       </StyledLink>
     </Container>

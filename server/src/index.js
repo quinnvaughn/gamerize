@@ -35,7 +35,7 @@ const numSessions = cron.schedule('*/30 * * * * *', async () => {
       games {
         id
         numSessions
-        sessions {
+        sessions(where: {retired: false}) {
           id
         }
       }

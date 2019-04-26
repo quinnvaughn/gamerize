@@ -96,7 +96,7 @@ const signedInLinks = [
   },
   {
     text: 'Sessions',
-    path: '/sessions',
+    path: '/my-sessions',
   },
   {
     text: 'Notifications',

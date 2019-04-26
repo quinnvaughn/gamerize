@@ -19,6 +19,7 @@ import UserOnboardingInfoPage from './Pages/UserOnboardingInfoPage'
 import UserOnboardingNeedToKnowPage from './Pages/UserOnboardingNeedToKnowPage'
 import AdminDashboard from './Pages/AdminDashboard'
 import GamerOnboarding from './Pages/GamerOnboarding'
+import SessionsPage from './Pages/SessionsPage'
 
 const routes = [
   {
@@ -99,10 +100,14 @@ const routes = [
     protected: true,
   },
   {
-    path: '/sessions',
+    path: '/my-sessions',
     protected: true,
     exact: true,
     component: UserSessionsPage,
+  },
+  {
+    path: '/sessions',
+    component: SessionsPage,
   },
   {
     path: '/notifications',

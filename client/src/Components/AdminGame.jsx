@@ -40,6 +40,11 @@ const Tag = styled.span`
   margin-right: 0.5rem;
 `
 
+const NumSessions = styled.div`
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+`
+
 export default function AdminGame(props) {
   return (
     <Container>
@@ -51,6 +56,9 @@ export default function AdminGame(props) {
           <Tag>{mapTags(tag)}</Tag>
         ))}
       </TagsContainer>
+      <NumSessions>
+        {props.numSessions} {props.numSessions === 1 ? 'Session' : 'Sessions'}
+      </NumSessions>
     </Container>
   )
 }

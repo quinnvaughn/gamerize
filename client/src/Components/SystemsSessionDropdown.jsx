@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 //local imports
 import { formatSystem } from '../utils/Strings'
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const SelectionContainer = styled.div`
   display: inline-flex;
@@ -97,15 +98,15 @@ const systems = ['PC', 'XBOX_ONE', 'PS4', 'NINTENDO_SWITCH']
 
 export default function SystemsSessionDropdown(props) {
   const [open, setOpen] = useState(false)
+  const node = useRef()
+  useOnOutsideClick(node, () => {
+    setOpen(false)
+  })
   return (
     <Container>
       <Label>{props.label}</Label>
-      <SelectionContainer>
-        <Selection
-          onClick={() => setOpen(!open)}
-          value={props.title}
-          readOnly
-        />
+      <SelectionContainer onClick={() => setOpen(!open)} ref={node}>
+        <Selection value={props.title} readOnly />
         {!open && <ChevronDown />}
         {open && <ChevronUp />}
         {open && (

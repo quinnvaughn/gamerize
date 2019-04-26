@@ -38,10 +38,9 @@ const GET_GAMERS = gql`
     getGamers {
       name
       username
+      occupations
+      profilePicture
       mostPlayedGames {
-        name
-      }
-      occupations {
         name
       }
     }

@@ -11,6 +11,7 @@ type Query {
   ): [User!]!
   totalGames: Int!
   totalGamers: Int!
+  totalSessions: Int!
   getSpecificSession(sessionId: String!): GamingSession!
   mySlotsToday: [GamingTimeSlot!]!
   specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
@@ -489,6 +490,7 @@ type User {
 
 type MostPlayedGames {
   name: String!
+  picture: String
   count: Int!
 }
 

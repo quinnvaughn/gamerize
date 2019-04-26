@@ -26,6 +26,7 @@ export default function DisplayGamers(props) {
         {props.data.getGamers.map(gamer => (
           <ExploreGamer
             name={gamer.name}
+            profilePicture={gamer.profilePicture}
             occupations={gamer.occupations}
             mostPlayedGames={gamer.mostPlayedGames}
             username={gamer.username}

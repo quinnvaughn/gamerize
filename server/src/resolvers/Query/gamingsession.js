@@ -35,6 +35,12 @@ const gamingsession = {
       },
     })
   },
+  async totalSessions(parent, _, { prisma }) {
+    return await prisma
+      .gamingSessionsConnection({ where: { retired: false } })
+      .aggregate()
+      .count()
+  },
 }
 
 module.exports = { gamingsession }
