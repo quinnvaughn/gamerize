@@ -1,0 +1,9 @@
+databases:
+  default:
+    connector: postgres
+    host: dokku-postgres-prisma-server-db
+    port: 5432
+    user: postgres
+    password: 1fec82e0690cc59925b62e6287909296
+    migrations: true
+    rawAccess: true
