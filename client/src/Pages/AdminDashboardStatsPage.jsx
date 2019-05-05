@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import AdminDashboardNav from '../Components/AdminDashboardNav'
-import GamerRequestRow from '../Components/GamerRequestRow'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import Loading from '../Components/Loading'
-import GamerRequestTableColumns from '../Components/GamerRequestTableColumns'
+
+import { currencyFormat } from '../utils/Strings'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -50,6 +50,8 @@ const STATISTICS = gql`
   {
     numUsers
     numGamers
+    numTimeslotsBooked
+    ourTakeHome
     numSessionsPlayed
     numSessionsPlayedToday
   }
@@ -69,6 +71,10 @@ export default function AdminDashboardStatsPage(props) {
           <Data>{data.numUsers}</Data>
           <Title>Number of Gamers</Title>
           <Data>{data.numGamers}</Data>
+          <Title>Number of Timeslots Booked</Title>
+          <Data>{data.numTimeslotsBooked}</Data>
+          <Title>Our Take Home</Title>
+          <Data>{currencyFormat(data.ourTakeHome)}</Data>
           <Title>Number of Sessions Played</Title>
           <Data>{data.numSessionsPlayed}</Data>
           <Title>Number of Sessions Played Today</Title>

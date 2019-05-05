@@ -36,13 +36,22 @@ const NavBarAvatarDropdown = memo(function NavBarAvatarDropdown(props) {
       {matches =>
         matches ? (
           <Dropdown>
-            {!props.gamer && (
+            {!props.gamer && !props.admin && (
               <DropdownOption
                 onClick={async () => {
                   await props.history.push('/become-a-gamer')
                 }}
               >
                 Become a Gamer
+              </DropdownOption>
+            )}
+            {props.admin && (
+              <DropdownOption
+                onClick={async () => {
+                  await props.history.push('/admin-dashboard/home')
+                }}
+              >
+                Admin Dashboard
               </DropdownOption>
             )}
             {props.gamer && (

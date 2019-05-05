@@ -176,7 +176,8 @@ const timeslot = {
     if (!gamers) {
       return {
         created: false,
-        msg: 'You cannot add an individual session to not your own session',
+        errorMsg:
+          'You cannot add an individual session to not your own session',
       }
     }
     const numTimes = Math.floor(
@@ -185,8 +186,8 @@ const timeslot = {
           sessionLength
       )
     )
-
     let counterStart = input.startTime
+    let successMsg = []
     const endTime = addMinutes(input.startTime, sessionLength)
     let counterEnd = endTime
     let sessions = []
@@ -222,7 +223,6 @@ const timeslot = {
       }
     }
     if (sessions.length > 0) {
-      let successMsg = []
       const dateFormat = 'h:mm aa'
       for (const session in sessions) {
         successMsg = [
@@ -238,6 +238,7 @@ const timeslot = {
       return {
         created: false,
         errorMsg: 'Unable to add any times. Please try again',
+        successMsg,
         overlaps,
         sessions,
       }
@@ -282,24 +283,28 @@ const timeslot = {
           .gamingTimeSlot({ id: session.id })
           .gamingSession()
           .game()
+        let playerIds = []
         for (const { player } of players) {
+          const includes = playerIds.includes(player.id)
+          if (!includes) playerIds.push(player.id)
           const timeFormat = 'h:mm aa'
           const formattedOldStartTime = dateFns.format(
             session.startTime,
             timeFormat
           )
           const formattedNewStartTime = dateFns.format(startTime, timeFormat)
-          await ctx.prisma.createNotification({
-            for: {
-              connect: {
-                id: player.id,
+          if (!includes)
+            await ctx.prisma.createNotification({
+              for: {
+                connect: {
+                  id: player.id,
+                },
               },
-            },
-            type: 'GAMER_PUSHED_BACK_SLOT',
-            text: `${gamer.username} pushed back the session for ${
-              game.name
-            } at ${formattedOldStartTime} ${timeAdded} minutes to ${formattedNewStartTime}`,
-          })
+              type: 'GAMER_PUSHED_BACK_SLOT',
+              text: `${gamer.username} pushed back the session for ${
+                game.name
+              } at ${formattedOldStartTime} ${timeAdded} minutes to ${formattedNewStartTime}`,
+            })
         }
         await ctx.prisma.updateGamingTimeSlot({
           where: { id: session.id },
@@ -400,6 +405,15 @@ const timeslot = {
     let timeslotsBought = []
     const user = await ctx.prisma.user({ id: userId })
     for (const timeslot of input.timeSlots) {
+      const timeslotPlayers = []
+      _.times(timeslot.slots, () =>
+        timeslotPlayers.push({
+          player: {
+            connect: { id: userId },
+          },
+          timeslot: { connect: { id: timeslot.timeSlotId } },
+        })
+      )
       const timeslotBought = await ctx.prisma.createBooking({
         total: timeslot.total,
         numSlots: timeslot.slots,
@@ -415,10 +429,7 @@ const timeslot = {
           },
         },
         players: {
-          create: {
-            timeslot: { connect: { id: timeslot.timeSlotId } },
-            player: { connect: { id: userId } },
-          },
+          create: timeslotPlayers,
         },
       })
       const players = await ctx.prisma

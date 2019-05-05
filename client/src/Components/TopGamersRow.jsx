@@ -80,15 +80,12 @@ export default function GamerRow(props) {
     <Container>
       <RowTitle>{props.title}</RowTitle>
       <AllTheGamers>{map(props.data.getGamers, props.first)}</AllTheGamers>
-      {//props.first < props.data.getGamers.length && (
-      props.data.getGamers.length >= 1 && (
-        <ShowAllContainer>
-          <ShowAll to={`/gamers`}>
-            {`Show All Gamers (${props.data.getGamers.length})`}
-            <ShowAllRight />
-          </ShowAll>
-        </ShowAllContainer>
-      )}
+      <ShowAllContainer>
+        <ShowAll to={`/gamers`}>
+          {`Show All Gamers (${props.data.getGamers.length})`}
+          <ShowAllRight />
+        </ShowAll>
+      </ShowAllContainer>
     </Container>
   )
 }

@@ -58,12 +58,12 @@ const Length = styled.div`
 
 export default function GamerSessionCardFront({
   session,
-  dispatch,
+  setState,
   setup,
   last,
 }) {
   return (
-    <Card onClick={() => dispatch({ type: 'flip', payload: true })} last={last}>
+    <Card onClick={() => setState('BACK')} last={last}>
       <SessionTitle>{session.title}</SessionTitle>
       <Game>{session.game.name}</Game>
       <Gamers>

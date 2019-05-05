@@ -27,7 +27,7 @@ export const formatSystem = system => {
 export const formatGamers = gamers => {
   let str = ''
   gamers.forEach((gamer, index) => {
-    str += capitalize(noUnderscores(gamer.username))
+    str += gamer.username
     if (index !== gamers.length - 1) {
       str += ', '
     }
@@ -97,4 +97,8 @@ export const mapGameType = type => {
     default:
       return capitalize(type)
   }
+}
+
+export const currencyFormat = num => {
+  return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }

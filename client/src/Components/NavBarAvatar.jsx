@@ -59,7 +59,9 @@ export default function NavBarAvatar(props) {
           width="35"
           height="35"
         />
-        {dropdown && <NavBarAvatarDropdown gamer={props.gamer} />}
+        {dropdown && (
+          <NavBarAvatarDropdown gamer={props.gamer} admin={props.admin} />
+        )}
       </Content>
     </AvatarContainer>
   )

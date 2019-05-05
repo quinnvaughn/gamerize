@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import { useMutation } from 'react-apollo-hooks'
@@ -198,31 +198,41 @@ const CREATE_BULK_GAMING_TIME_SLOTS = gql`
   }
 `
 
+const dateFormat = 'MM/DD/YYYY'
+
 //TODO: Still need to fix time changing. Need to fix messages on bulk add.
 export default function GamerSessionCardBack({
-  state,
+  error,
+  success,
+  setError,
+  setSuccess,
   session,
-  dispatch,
+  setState,
   refetch,
   last,
 }) {
+  const [side, setSide] = useState(null)
+  const [day, setDay] = useState(dateFns.format(new Date(), dateFormat))
+  const [startTime, setStartTime] = useState(null)
+  const [endTime, setEndTime] = useState(null)
   const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
   const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
+  console.log(startTime)
   return (
     <Card back last={last}>
-      {state.addState === null && (
+      {side === null && (
         <Fragment>
           <Buttons>
             <AddOne
               onClick={e => {
-                dispatch({ type: 'addState', payload: 'one' })
+                setSide('ONE')
               }}
             >
               Add One
             </AddOne>
             <AddBulk
               onClick={e => {
-                dispatch({ type: 'addState', payload: 'bulk' })
+                setSide('BULK')
               }}
             >
               Add Bulk
@@ -230,7 +240,7 @@ export default function GamerSessionCardBack({
           </Buttons>
           <Back
             onClick={() => {
-              dispatch({ type: 'flip', payload: false })
+              setState('FRONT')
             }}
           >
             <BackArrow />
@@ -238,74 +248,47 @@ export default function GamerSessionCardBack({
           </Back>
         </Fragment>
       )}
-      {state.addState === 'one' && (
+      {side === 'ONE' && (
         <OneAdd>
           <AddOneTop>
             <LabelAndDay>
               <Label>Select Day</Label>
-              <SelectDayForSession
-                type="setAddDay"
-                dispatch={dispatch}
-                state={state}
-              />
+              <SelectDayForSession day={day} setDay={setDay} />
             </LabelAndDay>
             <LabelAndPicker>
               <Label>Start Time</Label>
-              <TimePicker
-                type="setAddOne"
-                dispatch={dispatch}
-                state={state.addOne}
-              />
+              <TimePicker setTime={setStartTime} day={day} />
             </LabelAndPicker>
           </AddOneTop>
           <MessageContainer>
-            {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
-            {state.successMsg && (
-              <SuccessMessage>{state.successMsg}</SuccessMessage>
-            )}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {success && <SuccessMessage>{success}</SuccessMessage>}
           </MessageContainer>
           <SelectionButtons>
             <Cancel
               onClick={() => {
-                dispatch({ type: 'addState', payload: null })
+                setSide(null)
               }}
             >
               <CancelArrow />
               <CancelText>Cancel</CancelText>
             </Cancel>
             <Add
-              disabled={state.loading}
+              // disabled={state.loading}
               onClick={async () => {
-                dispatch({ type: 'setSuccessMsg', payload: null })
-                dispatch({ type: 'setErrorMsg', payload: null })
-                const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
-                const { hour, minutes, period } = state.addOne
-                const [hours, _, seconds] = convertTo24Hours(
-                  `${hour}:${minutes} ${period}`
-                )
-                const [year, month, day] = convertToDay(state.day)
-                const startTime = dateFns.format(
-                  new Date(year, month, day, hours, minutes, seconds),
-                  dateFormat
-                )
                 const input = { startTime, gamingSessionId: session.id }
-                dispatch({ type: 'loading', payload: true })
                 const { data } = await createGamingSlot({
                   variables: { input },
                 })
-                console.log(data)
-                // dispatch({ type: 'loading', payload: false })
-                // data.createGamingSlot.successMsg &&
-                //   dispatch({
-                //     type: 'setSuccessMsg',
-                //     payload: data.createGamingSlot.successMsg,
-                //   })
-                // data.createGamingSlot.errorMsg &&
-                //   dispatch({
-                //     type: 'setErrorMsg',
-                //     payload: data.createGamingSlot.errorMsg,
-                //   })
+                data.createGamingTimeSlot.successMsg &&
+                  setSuccess(data.createGamingTimeSlot.successMsg)
+                data.createGamingTimeSlot.errorMsg &&
+                  setError(data.createGamingTimeSlot.errorMsg)
                 refetch()
+                setTimeout(() => {
+                  setSuccess(null)
+                  setError(null)
+                }, 2000)
               }}
             >
               Add Session
@@ -313,45 +296,33 @@ export default function GamerSessionCardBack({
           </SelectionButtons>
         </OneAdd>
       )}
-      {state.addState === 'bulk' && (
+      {side === 'BULK' && (
         <BulkAdd>
           <BulkAddTop>
             <LabelAndDay>
               <Label>Select Day</Label>
-              <SelectDayForSession
-                type="setAddDay"
-                dispatch={dispatch}
-                state={state}
-              />
+              <SelectDayForSession day={day} setDay={setDay} />
             </LabelAndDay>
             <LabelAndPicker>
               <Label>Start Time</Label>
-              <TimePicker
-                type="setAddBulkStart"
-                dispatch={dispatch}
-                state={state.addBulk.start}
-              />
+              <TimePicker setTime={setStartTime} />
             </LabelAndPicker>
             <LabelAndPicker>
               <Label>End Time</Label>
-              <TimePicker
-                type="setAddBulkEnd"
-                dispatch={dispatch}
-                state={state.addBulk.end}
-              />
+              <TimePicker setTime={setEndTime} endTime />
             </LabelAndPicker>
             <MessageContainer>
-              {state.errorMsg && <ErrorMessage>{state.errorMsg}</ErrorMessage>}
-              {state.successMsg &&
-                state.successMsg.map(msg => (
-                  <SuccessMessage>{msg}</SuccessMessage>
+              {error && <ErrorMessage>{error}</ErrorMessage>}
+              {success &&
+                success.map(success => (
+                  <SuccessMessage>{success}</SuccessMessage>
                 ))}
             </MessageContainer>
           </BulkAddTop>
           <SelectionButtons>
             <Cancel
               onClick={() => {
-                dispatch({ type: 'addState', payload: null })
+                setSide(null)
               }}
             >
               <CancelArrow />
@@ -359,51 +330,23 @@ export default function GamerSessionCardBack({
             </Cancel>
             <Add
               onClick={async () => {
-                dispatch({ type: 'setSuccessMsg', payload: null })
-                dispatch({ type: 'setErrorMsg', payload: null })
-                const dateFormat = 'YYYY-MM-DDTHH:mm:ssZ'
-                const { hour, minutes, period } = state.addBulk.start
-                const {
-                  hour: hourEnd,
-                  minutes: minutesEnd,
-                  period: periodEnd,
-                } = state.addBulk.end
-                const [hours, _, seconds] = convertTo24Hours(
-                  `${hour}:${minutes} ${period}`
-                )
-                const [hoursEnd, __, secondsEnd] = convertTo24Hours(
-                  `${hourEnd}:${minutesEnd} ${periodEnd}`
-                )
-                const [year, month, day] = convertToDay(state.day)
-                const startTime = dateFns.format(
-                  new Date(year, month, day, hours, minutes, seconds),
-                  dateFormat
-                )
-                const endTime = dateFns.format(
-                  new Date(year, month, day, hoursEnd, minutesEnd, secondsEnd),
-                  dateFormat
-                )
                 const input = {
                   startTime,
                   endTime,
                   gamingSessionId: session.id,
                 }
-                dispatch({ type: 'loading', payload: true })
                 const { data } = await createBulkGamingSlots({
                   variables: { input },
                 })
-                dispatch({ type: 'loading', payload: false })
-                data.createBulkGamingSlots.successMsg &&
-                  dispatch({
-                    type: 'setSuccessMsg',
-                    payload: data.createBulkGamingSlots.successMsg,
-                  })
-                data.createBulkGamingSlots.errorMsg &&
-                  dispatch({
-                    type: 'setErrorMsg',
-                    payload: data.createBulkGamingSlots.errorMsg,
-                  })
+                data.createBulkGamingTimeSlots.successMsg &&
+                  setSuccess(data.createBulkGamingTimeSlots.successMsg)
+                data.createBulkGamingTimeSlots.errorMsg &&
+                  setError(data.createBulkGamingTimeSlots.errorMsg)
                 refetch()
+                setTimeout(() => {
+                  setSuccess(null)
+                  setError(null)
+                }, 2000)
               }}
             >
               Add Sessions

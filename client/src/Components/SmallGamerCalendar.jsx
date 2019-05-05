@@ -208,8 +208,8 @@ function GamerCalendar(props) {
     const dateFormat = 'MM/DD/YYYY'
 
     const day = dateFns.format(inputDay, dateFormat)
-    props.dispatch({ type: 'setDropdown', payload: false })
-    props.dispatch({ type: 'setDate', payload: day })
+    props.setDropdown(false)
+    props.setDate(day)
   }
 
   const nextMonth = () => {
