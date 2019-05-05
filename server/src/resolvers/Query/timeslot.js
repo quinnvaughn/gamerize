@@ -14,17 +14,29 @@ const timeslot = {
       },
     })
   },
-  async thatDaySessions(parent, { day }, ctx) {
+  async thatDaySessions(parent, { day, today }, ctx) {
     const userId = getUserId(ctx)
-    return await ctx.prisma.gamingTimeSlots({
-      where: {
-        AND: [
-          { gamers_some: { id: userId } },
-          { startTime_gte: dateFns.startOfDay(new Date(day)) },
-          { startTime_lte: dateFns.endOfDay(new Date(day)) },
-        ],
-      },
-    })
+    if (today) {
+      return await ctx.prisma.gamingTimeSlots({
+        where: {
+          AND: [
+            { gamers_some: { id: userId } },
+            { startTime_gte: dateFns.startOfDay(new Date()) },
+            { startTime_lte: dateFns.endOfDay(new Date()) },
+          ],
+        },
+      })
+    } else {
+      return await ctx.prisma.gamingTimeSlots({
+        where: {
+          AND: [
+            { gamers_some: { id: userId } },
+            { startTime_gte: dateFns.startOfDay(new Date(day)) },
+            { startTime_lte: dateFns.endOfDay(new Date(day)) },
+          ],
+        },
+      })
+    }
   },
   async gamerSessionsSpecificDay(parent, { day, gamer }, ctx) {
     return await ctx.prisma.gamingTimeSlots({

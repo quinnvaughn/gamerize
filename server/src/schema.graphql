@@ -15,7 +15,7 @@ type Query {
   getSpecificSession(sessionId: String!): GamingSession!
   mySlotsToday: [GamingTimeSlot!]!
   specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
-  thatDaySessions(day: DateTime!): [GamingTimeSlot!]!
+  thatDaySessions(day: DateTime, today: Boolean): [GamingTimeSlot!]!
   myUpcomingBookings: [Booking!]!
   myPastBookings: [Booking!]!
   myGamingSessions: [GamingSession!]!

@@ -8,7 +8,6 @@ import gql from 'graphql-tag'
 import { MdClose } from 'react-icons/md'
 import { withRouter } from 'react-router-dom'
 
-import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
 
 const Container = styled.div`
@@ -34,14 +33,9 @@ const Header = styled.div`
   font-weight: 700;
   color: black;
   justify-content: space-between;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 3rem;
-  left: 0;
-  z-index: 9999;
   max-width: inherit;
+  position: sticky;
   align-items: center;
-  height: 11.75rem;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -59,6 +53,7 @@ const ChevronLeft = styled(FaChevronLeft)`
 const Day = styled.span`
   font-size: 3rem;
   cursor: default;
+  margin-left: ${props => props.day && '-4rem'};
 `
 
 //For formatting.
@@ -92,8 +87,6 @@ const Hour = styled.div`
   position: absolute;
   color: ${props => (props.current ? '#db1422' : 'black')};
   font-weight: 600;
-  padding-top: 14.75rem;
-  margin-top: -14.75rem;
 `
 
 const Sessions = styled.div`
@@ -101,7 +94,6 @@ const Sessions = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 0;
   font-size: 1.6rem;
   margin-left: 5rem;
   margin-right: 4rem;
@@ -110,13 +102,13 @@ const Sessions = styled.div`
 const Session = styled.div`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full
+    props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full ? '#dddfe2' : '#db1422')};
+  color: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
   border: ${props =>
-    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #db1422'};
+    props.disabled ? '2px solid rgb(255, 255, 255)' : '1px solid #db1422'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
@@ -125,9 +117,10 @@ const Session = styled.div`
   border-radius: 0.4rem;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
-  pointer-events: ${props => (props.full || props.disabled) && 'none'};
+  pointer-events: ${props => props.disabled && 'none'};
   :hover {
     background: #f99f9f;
   }
@@ -152,18 +145,14 @@ const ExitContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   padding-right: 1rem;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
   background: #fff;
-  height: 3rem;
 `
 
 const GAMER_SESSIONS_SPECIFIC_DAY = gql`
   query($day: DateTime!, $gamer: String!) {
     gamerSessionsSpecificDay(day: $day, gamer: $gamer) {
       startTime
+      endTime
       length
       slots
       id
@@ -184,17 +173,20 @@ const GAMER_SESSIONS_SPECIFIC_DAY = gql`
 `
 
 function TimeSlotHours(props) {
-  useEffect(() => {
-    const element = document.getElementById('currentCalendar')
-    element && element.scrollIntoView()
-    window.parent.scrollTo(0, 0)
-  }, {})
   const { data, loading } = useQuery(GAMER_SESSIONS_SPECIFIC_DAY, {
     variables: {
       day: props.day,
       gamer: props.match.params.user,
     },
   })
+  useEffect(() => {
+    const element = document.getElementById('currentCalendar')
+    element && element.scrollIntoView()
+    setTimeout(() => {
+      window.scrollBy(0, -30)
+    }, 500)
+    window.parent.scrollTo(0, 0)
+  }, [data])
   const renderHeader = () => {
     const dateFormat = 'MMMM Do, YYYY'
 
@@ -271,15 +263,16 @@ function TimeSlotHours(props) {
                 {sessions.map(session => (
                   <Session
                     key={session.startTime}
-                    height={session.length}
+                    height={dateFns.differenceInMinutes(
+                      session.endTime,
+                      session.startTime
+                    )}
                     full={session.players.length === session.slots}
                     startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
                       container.setSelectedSession(session)
                     }}
-                    disabled={
-                      dateFns.compareAsc(new Date(), session.startTime) === 1
-                    }
+                    disabled={session.passed}
                   >
                     {`${session.slots - session.players.length} ${
                       session.slots - session.players.length === 1

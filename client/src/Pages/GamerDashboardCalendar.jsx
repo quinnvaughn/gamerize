@@ -103,7 +103,47 @@ const MONTH = 'MONTH'
 
 const TODAY = 'TODAY'
 
-const MY_SESSIONS = gql`
+const MY_GAMING_SESSIONS = gql`
+  {
+    myGamingSessions {
+      id
+      title
+      game {
+        name
+      }
+      gamers {
+        username
+      }
+      price
+      length
+    }
+  }
+`
+
+const SLOTS_TODAY = gql`
+  query($today: Boolean) {
+    thatDaySessions(today: $today) {
+      id
+      startTime
+      endTime
+      slots
+      finished
+      players {
+        player {
+          id
+          username
+        }
+      }
+      gamingSession {
+        length
+        game {
+          name
+        }
+      }
+    }
+  }
+`
+const ME = gql`
   {
     me {
       id
@@ -141,45 +181,29 @@ const MY_SESSIONS = gql`
         goingOn
       }
     }
-    myGamingSessions {
-      id
-      title
-      game {
-        name
-      }
-      gamers {
-        username
-      }
-      price
-      length
-    }
-    mySlotsToday {
-      id
-      startTime
-      endTime
-      slots
-      finished
-      players {
-        player {
-          username
-        }
-      }
-      gamingSession {
-        length
-        game {
-          name
-        }
-      }
-    }
   }
 `
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
-  const { data, loading, refetch } = useQuery(MY_SESSIONS, {
-    pollInterval: 2000,
+  const { data, loading, refetch } = useQuery(ME, {
+    pollInterval: 1000,
+  })
+  const {
+    data: secondData,
+    loading: secondLoading,
+    refetch: secondRefetch,
+  } = useQuery(MY_GAMING_SESSIONS, { pollInterval: 1000 })
+  const {
+    data: thirdData,
+    loading: thirdLoading,
+    refetch: thirdRefetch,
+  } = useQuery(SLOTS_TODAY, {
+    variables: { today: true },
+    pollInterval: 1000,
+    skip: dayOrMonth === 'MONTH',
   })
   const [state] = useStore(gamerSessionSelection)
-  return loading ? (
+  return loading || secondLoading || thirdLoading ? (
     <Loading gamer />
   ) : (
     <PageContainer>
@@ -203,7 +227,10 @@ export default function GamerDashboardCalendar(props) {
           ) : (
             data.me &&
             data.me.setup &&
-            data.mySlotsToday && <GamerDay todaySessions={data.mySlotsToday} />
+            thirdData &&
+            thirdData.thatDaySessions && (
+              <GamerDay todaySessions={thirdData.thatDaySessions} />
+            )
           )}
         </LeftSide>
         <RightSide>
@@ -226,14 +253,14 @@ export default function GamerDashboardCalendar(props) {
               them to your calendar. Edit them in the sessions tab.
             </Info>
             <AllSessions>
-              {data.myGamingSessions &&
+              {secondData.myGamingSessions &&
                 data.me.setup &&
-                data.myGamingSessions.map((session, index) => (
+                secondData.myGamingSessions.map((session, index) => (
                   <GamerSessionCard
                     session={session}
                     key={session.id}
                     setup={data.me.setup}
-                    last={index === data.myGamingSessions.length - 1}
+                    last={index === secondData.myGamingSessions.length - 1}
                     refetch={refetch}
                   />
                 ))}
