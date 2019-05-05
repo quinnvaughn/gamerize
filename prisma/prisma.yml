@@ -1,4 +1,4 @@
-endpoint: http://localhost:4466
+endpoint: http://206.189.239.225:4466 # change it later
 datamodel:
   - user.graphql
   - gamerrequest.graphql

@@ -31,6 +31,8 @@ type Query {
   numGamerRequests: Int!
   numGamers: Int!
   numUsers: Int!
+  numTimeslotsBooked: Int!
+  ourTakeHome: Int!
   numSessionsPlayed: Int!
   numSessionsPlayedToday: Int!
   numGamerNotifications: Int!
