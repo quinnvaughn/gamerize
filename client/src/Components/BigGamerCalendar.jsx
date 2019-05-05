@@ -136,15 +136,17 @@ const Row = styled.div`
 `
 
 const THAT_DAY_SESSIONS = gql`
-  query($day: DateTime!) {
-    thatDaySessions(day: $day) {
+  query($day: DateTime, $today: Boolean) {
+    thatDaySessions(day: $day, today: $today) {
       id
       startTime
       endTime
       slots
+      finished
       players {
         player {
           id
+          username
         }
       }
       gamingSession {
@@ -166,6 +168,7 @@ function BigGamerCalendar(props) {
     variables: {
       day: selectedDay,
     },
+    pollInterval: 1000,
   })
 
   const renderHeader = () => {
@@ -216,11 +219,7 @@ function BigGamerCalendar(props) {
         const cloneDay = day
         days.push(
           <Cell
-            disabled={
-              !dateFns.isSameMonth(day, monthStart) ||
-              (dateFns.isBefore(day, currentDay) &&
-                !dateFns.isSameDay(day, currentDay))
-            }
+            disabled={!dateFns.isSameMonth(day, monthStart)}
             key={cloneDay}
             onClick={() => onDateClick(dateFns.parse(cloneDay))}
             current={dateFns.isSameDay(day, currentDay)}

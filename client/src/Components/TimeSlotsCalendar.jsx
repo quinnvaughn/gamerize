@@ -93,30 +93,30 @@ const Cell = styled.div`
   flex-basis: 0;
   max-width: 100%;
   position: relative;
-  height: 9.6rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 6rem;
   border-right: 1px solid #dddfe2;
   overflow: hidden;
   cursor: pointer;
-  background: #fff;
+  background: ${props => (props.current ? '#db1422' : '#fff')};
   :last-child {
     border-right: none;
   }
-  color: ${props => (props.disabled ? '#dddfe2' : 'black')};
+  :hover {
+    cursor: pointer;
+    background: ${props => !props.current && !props.disabled && '#dddfe2'};
+  }
+  color: ${props =>
+    props.disabled ? '#dddfe2' : props.current ? 'white' : 'black'};
   pointer-events: ${props => props.disabled && 'none'};
 `
 
 const Number = styled.span`
-  position: absolute;
-  font-size: 1.2rem;
-  width: ${props => props.current && '2.4rem'};
-  line-height: ${props => props.current && '2.4rem'};
-  border-radius: ${props => props.current && '50%'};
-  text-align: ${props => props.current && 'center'};
-  background: ${props => props.current && '#db1422'};
-  color: ${props => props.current && 'white'};
-  top: 0.75rem;
-  right: 0.75rem;
   font-weight: 700;
+  cursor: pointer;
 `
 
 const Row = styled.div`
@@ -209,10 +209,9 @@ class Calendar extends Component {
             disabled={!dateFns.isSameMonth(day, monthStart)}
             key={cloneDay}
             onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+            current={dateFns.isSameDay(day, currentDay)}
           >
-            <Number current={dateFns.isSameDay(day, currentDay)}>
-              {formattedDate}
-            </Number>
+            <Number>{formattedDate}</Number>
           </Cell>
         )
         day = dateFns.addDays(day, 1)

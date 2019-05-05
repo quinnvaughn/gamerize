@@ -45,6 +45,7 @@ const Header = styled.div`
   color: black;
   justify-content: space-between;
   max-width: inherit;
+  position: sticky;
   align-items: center;
 `
 
@@ -166,7 +167,8 @@ export default function GamerDay(props) {
   }, 60000)
   useEffect(() => {
     const element = document.getElementById('current')
-    element && element.scrollIntoView()
+    // scroll to your element
+    element && element.scrollIntoView(true)
     window.parent.scrollTo(0, 0)
   }, {})
   const renderHeader = () => {
@@ -256,7 +258,10 @@ export default function GamerDay(props) {
                 full={session.players.length === session.slots}
                 startTime={dateFns.getMinutes(session.startTime)}
                 onClick={() => {
-                  dispatch({ type: 'setSelectedSession', payload: session })
+                  dispatch({
+                    type: 'setSelectedSession',
+                    payload: session,
+                  })
                 }}
                 disabled={session.finished}
               >
