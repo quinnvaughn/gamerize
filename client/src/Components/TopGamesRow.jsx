@@ -77,13 +77,11 @@ export default function GamesRow(props) {
     <Container>
       <RowTitle>{props.title}</RowTitle>
       <AllTheGames>{map(props.data.allGames, props.first)}</AllTheGames>
-      {props.first >= 1 && (
-        <ShowAllContainer>
-          <ShowAll to={`/games`}>
-            {`Show All Games (${props.data.totalGames})`} <ShowAllRight />
-          </ShowAll>
-        </ShowAllContainer>
-      )}
+      <ShowAllContainer>
+        <ShowAll to={`/games`}>
+          {`Show All Games (${props.data.totalGames})`} <ShowAllRight />
+        </ShowAll>
+      </ShowAllContainer>
     </Container>
   )
 }

@@ -132,6 +132,7 @@ function NavBar(props) {
     refetch()
   }, [token])
   const gamer = !loading && data && data.me && data.me.role === 'GAMER'
+  const admin = !loading && data && data.me && data.me.role === 'ADMIN'
   return (
     <Container className="navbar">
       <Left>
@@ -150,6 +151,7 @@ function NavBar(props) {
             matches && !_.isEmpty(data) ? (
               <Links>
                 <NavBarAvatar
+                  admin={admin}
                   gamer={gamer}
                   profilePicture={data.me.profilePicture}
                 />

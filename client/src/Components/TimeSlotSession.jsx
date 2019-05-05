@@ -13,6 +13,7 @@ import SlotOptionsDropdown from './SlotOptionsDropdown'
 import { noUnderscores } from '../utils/Strings'
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
+import { formatSystem } from '../utils/Strings'
 
 const Container = styled.div`
   display: block;
@@ -68,6 +69,12 @@ const Title = styled.span`
 `
 
 const Date = styled.span`
+  font-size: 2rem;
+  font-weight: 600;
+  cursor: default;
+`
+
+const System = styled.span`
   font-size: 2rem;
   font-weight: 600;
   cursor: default;
@@ -234,14 +241,14 @@ function TimeSlotSession(props) {
     element.scrollTop = 0
   }, {})
   const { system, game } = props.selectedSession.gamingSession
-  const disabled = !props.me
+  const isMe = props.match.params.user === props.me.username
+  const disabled = isMe
     ? true
     : props.me.gamertags
     ? system === 'PC'
       ? !props.me.gamertags[mapSystem(system)][mapLauncher(game.launcher)]
       : !props.me.gamertags[mapSystem(system)]
     : true
-  const isMe = props.match.params.user === props.me.username
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
     const endTime = 'h:mm a'
@@ -250,7 +257,7 @@ function TimeSlotSession(props) {
         <ChevronLeft onClick={props.goBack} />
         <Center>
           <Title>{`${props.gamer} - ${noUnderscores(props.game)}`}</Title>
-          {/* Add system when have that data. */}
+          <System>{formatSystem(props.system)}</System>
           <Date>
             {dateFns.format(props.selectedSession.startTime, dateFormat)}
           </Date>

@@ -339,13 +339,13 @@ const GET_ME = gql`
 export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: { sessionId: props.match.params.id },
-    pollInterval: 5000,
+    pollInterval: 500,
   })
   const { data: secondData, loading: secondLoading, refetch } = useQuery(
     GET_SLOTS_TODAY,
     {
       variables: { sessionId: props.match.params.id },
-      pollInterval: 5000,
+      pollInterval: 500,
     }
   )
   const { data: thirdData, loading: thirdLoading } = useQuery(GET_ME)
@@ -501,6 +501,7 @@ export default function SpecificSessionPage(props) {
                   me={thirdData.me}
                   selectedSession={sessions.state.selectedSession}
                   gamer={formatGamers(data.getSpecificSession.gamers)}
+                  system={data.getSpecificSession.system}
                   game={data.getSpecificSession.game.name}
                   goBack={() => sessions.goBack()}
                   close={() => {

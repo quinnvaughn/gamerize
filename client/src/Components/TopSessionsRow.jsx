@@ -82,13 +82,11 @@ export default function TopSessionsRow(props) {
       <AllTheSessions>
         {map(props.data.allSessions, props.first)}
       </AllTheSessions>
-      {props.first >= 1 && (
-        <ShowAllContainer>
-          <ShowAll to={`/sessions`}>
-            {`Show All Sessions (${props.data.totalSessions})`} <ShowAllRight />
-          </ShowAll>
-        </ShowAllContainer>
-      )}
+      <ShowAllContainer>
+        <ShowAll to={`/sessions`}>
+          {`Show All Sessions (${props.data.totalSessions})`} <ShowAllRight />
+        </ShowAll>
+      </ShowAllContainer>
     </Container>
   )
 }
