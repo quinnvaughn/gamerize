@@ -1,3 +1,4 @@
+managementApiSecret: gamerize-is-awesome
 databases:
   default:
     connector: postgres
