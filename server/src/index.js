@@ -16,7 +16,8 @@ const mutationDefs = gql`
 `
 
 const prisma = new Prisma({
-  endpoint: 'http://192.168.1.125:4466',
+  endpoint: process.env.PRISMA_ENDPOINT || 'http://192.168.1.125:4466',
+  secret: process.env.PRISMA_SECRET || null,
 })
 const server = new ApolloServer({
   typeDefs: [basicDefs, mutationDefs],

@@ -1,4 +1,5 @@
-endpoint: http://206.189.239.225:4466 # change it later
+endpoint: ${env:PRISMA_ENDPOINT} # change it later
+secret: ${env:PRISMA_SECRET}
 datamodel:
   - user.graphql
   - gamerrequest.graphql
@@ -15,8 +16,5 @@ datamodel:
 generate:
   - generator: javascript-client
     output: ../src/generated/prisma-client/
-
-hooks:
-  post-deploy:
-    - graphql get-schema --project prisma
-    - graphql prepare
+  - generator: graphql-schema
+    output: ../src/generated/prisma.graphql

@@ -90,17 +90,23 @@ const signupSchema = yup.object().shape({
   email: yup
     .string()
     .email('Email is not valid')
+    .trim()
     .required('Email is required'),
   password: yup
     .string()
+    .trim()
     .min(6, 'Password must be at least 6 characters')
     .required('Password is required'),
   username: yup
     .string()
     .min(2, 'Username must be at least 2 characters')
     .max(20, 'Username can be at most 20 characters')
+    .trim()
     .required('Username is required'),
-  name: yup.string().required('Name is required'),
+  name: yup
+    .string()
+    .trim()
+    .required('Name is required'),
 })
 
 export default function SignUpPage(props) {
