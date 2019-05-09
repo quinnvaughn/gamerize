@@ -5,7 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 
 const uploadLink = createUploadLink({
-  uri: 'http://192.168.1.125:4000',
+  uri: 'http://206.189.239.225:4000/',
 })
 
 const authLink = setContext((_, { headers }) => {
