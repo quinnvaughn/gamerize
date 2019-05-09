@@ -57,7 +57,10 @@ const processUpload = async upload => {
 }
 const noSpaces = string => string.replace(/ /g, '_')
 
+const hasWhiteSpace = string => /\s/g.test(string)
+
 module.exports = {
+  hasWhiteSpace,
   noSpaces,
   getUserId,
   AuthError,

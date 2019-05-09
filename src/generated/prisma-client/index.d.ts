@@ -1402,7 +1402,7 @@ export type UserOrderByInput =
   | "role_ASC"
   | "role_DESC";
 
-export type TypeOfGame = "CUSTOM" | "MATCHMAKING" | "CASUAL" | "COMPETITIVE";
+export type TypeOfGame = "CUSTOM" | "CASUAL" | "COMPETITIVE";
 
 export type System = "PS4" | "PC" | "XBOX_ONE" | "NINTENDO_SWITCH";
 

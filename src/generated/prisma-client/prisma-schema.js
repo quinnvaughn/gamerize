@@ -5431,7 +5431,6 @@ enum Tags {
 
 enum TypeOfGame {
   CUSTOM
-  MATCHMAKING
   CASUAL
   COMPETITIVE
 }
