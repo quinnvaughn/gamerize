@@ -22,7 +22,6 @@ const { search } = require('./Query/search')
 const { GamingSession } = require('./Type/GamingSession')
 const { GamingTimeSlot } = require('./Type/GamingTimeSlot')
 const { User } = require('./Type/User')
-const { Node } = require('./Type/Node')
 const { BookedPlayer } = require('./Type/BookedPlayer')
 const { BookingInvite } = require('./Type/BookingInvite')
 const { Booking } = require('./Type/Booking')
@@ -67,7 +66,6 @@ module.exports = {
   GamerTag,
   User,
   Notification,
-  Node,
   GamingSession,
   GamingTimeSlot,
   BookedPlayer,
