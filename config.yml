@@ -1,9 +1,9 @@
 databases:
   default:
     connector: postgres
-    host: dokku-postgres-prisma-server-db
+    host: gamerize-db.ced0losplrxx.us-east-2.rds.amazonaws.com
     port: 5432
-    user: postgres
-    password: 1fec82e0690cc59925b62e6287909296
+    user: quinn
+    password: wecSZfc3ZLHyC4u
     migrations: true
     rawAccess: true
