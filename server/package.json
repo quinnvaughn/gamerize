@@ -18,7 +18,7 @@
     "node-cron": "^2.0.3",
     "prisma-client-lib": "1.28.0",
     "promise-all": "^1.0.0",
-    "prisma": "1.28.0"
+    "prisma": "1.30"
   },
   "devDependencies": {
     "dotenv": "6.2.0",
