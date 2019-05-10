@@ -10,7 +10,7 @@ html {
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     margin: 0 !important;
     padding: 0;
-    overflow-x:hidden;
+    overflow-x:hidden !important;
     position: relative;
     height: 100vh;
     width: 100vw;
