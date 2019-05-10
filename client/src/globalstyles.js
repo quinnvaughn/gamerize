@@ -3,11 +3,12 @@ import { createGlobalStyle } from 'styled-components'
 const GlobalStyle = createGlobalStyle`
 html {
   font-size: 62.5%;
+  margin: 0 !important;
 }
   body {
     @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700, 800, 900');
     font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    margin: 0;
+    margin: 0 !important;
     padding: 0;
     overflow-x:hidden;
     position: relative;
