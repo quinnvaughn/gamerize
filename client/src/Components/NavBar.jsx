@@ -148,7 +148,7 @@ function NavBar(props) {
       {loading || secondLoading ? null : (
         <Media query={{ maxWidth: 1127 }}>
           {matches =>
-            matches && !_.isEmpty(data) ? (
+            matches && !_.isEmpty(data) && data.me ? (
               <Links>
                 <NavBarAvatar
                   admin={admin}
