@@ -104,6 +104,7 @@ const GET_INFO = gql`
   {
     me {
       setup
+      id
     }
   }
 `
