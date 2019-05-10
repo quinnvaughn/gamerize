@@ -5,7 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 
 const uploadLink = createUploadLink({
-  uri: 'http://206.189.239.225:4000/',
+  uri: 'https://server.gamerize.io',
 })
 
 const authLink = setContext((_, { headers }) => {
