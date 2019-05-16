@@ -5,7 +5,6 @@ import { Subscribe } from 'unstated'
 import { Link } from 'react-router-dom'
 
 // local imports
-import exampleSessions from '../data/sessions'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { noSpaces } from '../utils/Strings'
 
@@ -77,25 +76,26 @@ const Sessions = styled.div`
 const Session = styled(Link)`
   height: ${props => `${20 / (6 / props.height)}px`};
   background: ${props =>
-    props.full || props.disabled
+    props.disabled
       ? 'repeating-linear-gradient(45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)'
       : '#fccfcf'};
   width: 100%;
-  color: ${props => (props.full || props.disabled ? '#dddfe2' : '#db1422')};
+  color: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
   border: ${props =>
-    props.full ? '2px solid rgb(255, 255, 255)' : '1px solid #db1422'};
+    props.disabled ? '2px solid rgb(255, 255, 255)' : '1px solid #db1422'};
   cursor: pointer;
   font-weight: 600;
   position: absolute;
-  box-sizing: border-box;
+  z-index: 10;
   display: flex;
   border-radius: 0.4rem;
   align-items: center;
   text-decoration: none;
   justify-content: center;
+  flex-direction: column;
   top: ${props => `${(props.startTime / 60) * 100}%`};
   transition: 0.15s ease-out;
-  pointer-events: ${props => (props.full || props.disabled) && 'none'};
+  pointer-events: ${props => props.disabled && 'none'};
   :hover {
     background: #f99f9f;
   }
@@ -118,20 +118,22 @@ const Availability = styled.div`
   margin-bottom: 1rem;
 `
 
-const GamerAvailability = React.memo(function(props) {
-  const element = document.getElementById('current')
+export default function GamerAvailability(props) {
+  console.log(props)
   useEffect(() => {
-    element.scrollIntoView()
+    const element = document.getElementById('current')
+    // scroll to your element
+    element && element.scrollIntoView(true)
     window.parent.scrollTo(0, 0)
-  }, [element])
+  }, {})
   const renderHours = () => {
     const dateFormat = 'ha'
     const hours = []
     let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
-      const sessions = exampleSessions.filter(
-        session => dateFns.getHours(session.timeStart) === i
+      const sessions = props.sessions.filter(
+        session => dateFns.getHours(session.startTime) === i
       )
 
       hours.push(
@@ -183,28 +185,33 @@ const GamerAvailability = React.memo(function(props) {
           <Subscribe to={[SessionsContainer]}>
             {container => (
               <Sessions>
-                {sessions.map(session => (
-                  <Session
-                    key={session.timeStart}
-                    height={session.length}
-                    full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.timeStart)}
-                    onClick={() => {
-                      container.setShowModal(true)
-                      container.setSelectedSession(session)
-                    }}
-                    to={`/users/${props.username}/${noSpaces(session.game)}`}
-                    disabled={
-                      dateFns.compareAsc(new Date(), session.timeStart) === 1
-                    }
-                  >
-                    {`${session.slots - session.players.length} ${
-                      session.slots - session.players.length === 1
-                        ? 'spot'
-                        : 'spots'
-                    } left - ${session.game}`}
-                  </Session>
-                ))}
+                {sessions.map(session => {
+                  return (
+                    <Session
+                      key={session.startTime}
+                      height={dateFns.differenceInMinutes(
+                        session.endTime,
+                        session.startTime
+                      )}
+                      full={session.players.length === session.slots}
+                      startTime={dateFns.getMinutes(session.startTime)}
+                      onClick={() => {
+                        container.setShowModal(true)
+                        container.setSelectedSession(session)
+                      }}
+                      to={`/users/${props.username}/${noSpaces(
+                        session.gamingSession.game.name
+                      )}/${session.gamingSession.id}`}
+                      disabled={session.passed || session.full}
+                    >
+                      {`${session.slots - session.players.length} ${
+                        session.slots - session.players.length === 1
+                          ? 'spot'
+                          : 'spots'
+                      } left - ${session.gamingSession.game.name}`}
+                    </Session>
+                  )
+                })}
               </Sessions>
             )}
           </Subscribe>
@@ -220,6 +227,4 @@ const GamerAvailability = React.memo(function(props) {
       <Container>{renderHours()}</Container>
     </AvailabilityContainer>
   )
-})
-
-export default GamerAvailability
+}

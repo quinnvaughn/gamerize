@@ -141,7 +141,7 @@ export default function GamerDashboardHome(props) {
             ))}
         </Section>
         <Stripe onClick={async () => {
-          const {data} = await logIntoStripe() 
+          const {data} = await logIntoStripe()
           window.location = data.logIntoStripe.url
         }}>Log into Stripe</Stripe>
       </Content>

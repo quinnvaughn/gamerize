@@ -296,6 +296,7 @@ const GET_SLOTS_TODAY = gql`
       id
       passed
       gamingSession {
+        id
         system
         game {
           launcher
