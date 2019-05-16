@@ -51,6 +51,19 @@ const SectionTitle = styled.div`
   border-bottom: 1px solid black;
 `
 
+const Stripe = styled.button`
+margin-top: 4rem;
+  background: #db1422;
+  padding: 1rem 1.4rem;
+  color: #fff;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid #db1422;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
 const MY_NOTIFICATIONS = gql`
   {
     myGamerNotifications {
@@ -78,11 +91,20 @@ const VIEW_NOTIFICATIONS = gql`
   }
 `
 
+const LOG_INTO_STRIPE = gql`
+  mutation {
+    logIntoStripe {
+      url
+    }
+  }
+`
+
 export default function GamerDashboardHome(props) {
   const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
-    pollInterval: 1000,
+    pollInterval: 500,
   })
   const viewGamerNotifications = useMutation(VIEW_NOTIFICATIONS)
+  const logIntoStripe = useMutation(LOG_INTO_STRIPE)
   useEffect(() => {
     async function notifications() {
       await viewGamerNotifications()
@@ -118,6 +140,10 @@ export default function GamerDashboardHome(props) {
               />
             ))}
         </Section>
+        <Stripe onClick={async () => {
+          const {data} = await logIntoStripe()
+          window.location = data.logIntoStripe.url
+        }}>Log into Stripe</Stripe>
       </Content>
     </PageContainer>
   )

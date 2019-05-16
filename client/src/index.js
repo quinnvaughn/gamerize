@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, hydrate } from 'react-dom'
 import App from './App'
-import 'normalize.css'
 import * as serviceWorker from './serviceWorker'
 
 const rootElement = document.getElementById('root')

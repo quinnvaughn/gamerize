@@ -42,6 +42,7 @@ const routes = [
 const GET_IS_SETUP = gql`
   {
     me {
+      id
       gamerIsSetup
     }
   }

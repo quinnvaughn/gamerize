@@ -11,7 +11,7 @@ import NavBar from '../Components/NavBar'
 import { capitalize, formatGender } from '../utils/Strings'
 import GenderDropdown from '../Components/GenderDropdown'
 import Loading from '../Components/Loading'
-import useQueryNotBugged from '../Hooks/useQueryNotBugged'
+import PaymentMethods from '../Components/PaymentMethods'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -130,7 +130,15 @@ const GET_INFO = gql`
       id
       name
       aboutMe
+      email
       gender
+      savedCards {
+        brand
+        lastFour
+        cardId
+        id
+        default
+      }
       gamertags {
         psn
         xbl
@@ -321,6 +329,18 @@ export default function GamerDashboardAccountEdit(props) {
                   <GenderDropdown title={state.gender} dispatch={dispatch} />
                 </RowRight>
               </Row>
+            </Body>
+          </Container>
+          <Container>
+            <Top>
+              <Title>Payment Options</Title>
+            </Top>
+            <Body>
+              <PaymentMethods
+                savedCards={data.me.savedCards}
+                email={data.me.email}
+                refetch={refetch}
+              />
             </Body>
           </Container>
           <Container>

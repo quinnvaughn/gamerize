@@ -156,6 +156,7 @@ const GAMER_SESSIONS_SPECIFIC_DAY = gql`
       length
       slots
       id
+      full
       passed
       gamingSession {
         system
@@ -272,7 +273,7 @@ function TimeSlotHours(props) {
                     onClick={() => {
                       container.setSelectedSession(session)
                     }}
-                    disabled={session.passed}
+                    disabled={session.passed || session.full}
                   >
                     {`${session.slots - session.players.length} ${
                       session.slots - session.players.length === 1

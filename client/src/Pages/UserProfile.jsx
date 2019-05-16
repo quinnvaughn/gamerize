@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
 import gql from 'graphql-tag'
+import dateFns from 'date-fns'
 import Media from 'react-media'
 import StarRatings from 'react-star-ratings'
 
@@ -36,8 +37,7 @@ const Content = styled.div`
   font-size: 1.6rem;
   margin: 0 auto;
   margin-top: 2rem !important;
-  display: flex
-
+  display: flex;
   width: 100%;
   @media (max-width: 1127px) {
     flex-direction: column;
@@ -289,13 +289,47 @@ const GET_ME = gql`
   }
 `
 
+const GET_GAMER_AVAILABILITY = gql`
+  query($day: DateTime!, $gamer: String!) {
+    gamerSessionsSpecificDay(day: $day, gamer: $gamer) {
+      id
+      startTime
+      endTime
+      slots
+      passed
+      full
+      players {
+        player {
+          id
+          username
+        }
+      }
+      gamingSession {
+        id
+        length
+        game {
+          name
+        }
+      }
+    }
+  }
+`
+
 export default function UserProfile(props) {
+  const dayFormat = 'M/D/YY'
+  const day = dateFns.format(new Date(), dayFormat)
   const { data, loading, refetch } = useQuery(GET_USER, {
     variables: { username: props.match.params.user },
   })
   const { data: secondData, loading: secondLoading } = useQuery(GET_ME)
+  const { data: thirdData, loading: thirdLoading } = useQuery(
+    GET_GAMER_AVAILABILITY,
+    {
+      variables: { gamer: props.match.params.user, day },
+    }
+  )
   useTitle(`User Profile - Gamerize`)
-  return loading || secondLoading ? (
+  return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : (
     <PageContainer>
@@ -306,8 +340,8 @@ export default function UserProfile(props) {
       </BannerContainer>
       <Content>
         <Media query={{ maxWidth: 1127 }}>
-          {matches =>
-            matches ? null : (
+          {matches => {
+            return matches ? null : (
               <LeftSide>
                 <ProfileInfoContainer>
                   <ProfilePictureContainer>
@@ -337,12 +371,12 @@ export default function UserProfile(props) {
                 </ProfileInfoContainer>
               </LeftSide>
             )
-          }
+          }}
         </Media>
         <RightSide>
           <Media query={{ maxWidth: 1127 }}>
-            {matches =>
-              matches ? (
+            {matches => {
+              return matches ? (
                 <SmallContainer>
                   <SmallLeft>
                     <Name>{data.getUser.name}</Name>
@@ -356,7 +390,10 @@ export default function UserProfile(props) {
                     </Occupations>
                   </SmallLeft>
                   <SmallRight>
-                    <ProfilePicture src={DefaultAvatar} alt="Profile Picture" />
+                    <ProfilePicture
+                      src={data.getUser.profilePicture}
+                      alt="Profile Picture"
+                    />
                   </SmallRight>
                 </SmallContainer>
               ) : (
@@ -386,7 +423,7 @@ export default function UserProfile(props) {
                   </Occupations>
                 </Fragment>
               )
-            }
+            }}
           </Media>
           <AboutMe>About me</AboutMe>
           <AboutMeParagraph>{data.getUser.aboutMe}</AboutMeParagraph>
@@ -426,6 +463,12 @@ export default function UserProfile(props) {
               </NegativeMargins>
             </Sessions>
           )}
+          <GamerAvailability
+            day={new Date()}
+            name={data.getUser.name}
+            username={data.getUser.username}
+            sessions={thirdData.gamerSessionsSpecificDay}
+          />
         </RightSide>
       </Content>
     </PageContainer>
@@ -437,7 +480,11 @@ export default function UserProfile(props) {
             day={new Date()}
             name={data.getUser.name}
             username={data.getUser.username}
-          />
+            sessions={thirdData.gamerSessionsSpecificDay}/> */
+}
+
+{
+  /*
           <UserProfileReviews
             reviews={data.getUser.reviews}
             name={data.getUser.name}

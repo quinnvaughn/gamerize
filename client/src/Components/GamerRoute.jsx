@@ -6,6 +6,7 @@ import { useQuery } from 'react-apollo-hooks'
 const GET_GAMER_STATUS = gql`
   {
     me {
+      id
       role
     }
   }

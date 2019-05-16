@@ -28,13 +28,18 @@ const User = {
     return await prisma.user({ id: parent.id }).gamertags()
   },
   sessions: async (parent, _, ctx) => {
-    return await ctx.prisma.user({ id: parent.id }).sessions()
+    return await ctx.prisma
+      .user({ id: parent.id })
+      .sessions({ where: { retired: false } })
   },
   timeSlots: async (parent, _, ctx) => {
     return await ctx.prisma.user({ id: parent.id }).timeSlots()
   },
   timeSlotsBooked: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).timeSlotsBooked()
+  },
+  savedCards: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).savedCards()
   },
   sentMeAFriendRequest: async (parent, _, ctx) => {
     try {

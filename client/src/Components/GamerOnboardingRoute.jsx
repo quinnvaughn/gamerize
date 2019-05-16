@@ -16,7 +16,6 @@ export default function GamerOnboardingRoute({
   ...rest
 }) {
   const { data, loading } = useQuery(GET_GAMER_STATUS)
-  console.log(!loading && data)
   return loading ? null : (
     <Route
       {...rest}

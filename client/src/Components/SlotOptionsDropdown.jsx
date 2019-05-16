@@ -1,9 +1,11 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useRef } from 'react'
 import styled from 'styled-components'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { Subscribe } from 'unstated'
 import _ from 'lodash'
+
+import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const Container = styled.div`
   width: 100%;
@@ -64,8 +66,12 @@ const ChevronUp = styled(FaChevronUp)`
 
 export default function SlotOptionsDropdown(props) {
   const [open, setOpen] = useState(false)
+  const node = useRef()
+  useOnOutsideClick(node, () => {
+    setOpen(false)
+  })
   return (
-    <Container>
+    <Container ref={node}>
       <SelectionButton
         onClick={() => {
           setOpen(!open)

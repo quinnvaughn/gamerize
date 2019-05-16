@@ -6,6 +6,7 @@ import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { LastLocationProvider } from 'react-router-last-location'
 import { CloudinaryContext } from 'cloudinary-react'
+import {StripeProvider} from 'react-stripe-elements';
 
 //local imports
 import ScrollToTop from './Components/ScrollToTop'
@@ -21,6 +22,7 @@ class App extends Component {
         <ApolloHooksProvider client={client}>
           <BrowserRouter>
             <LastLocationProvider>
+              <StripeProvider apiKey={`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`}>
               <Provider>
                 <ScrollToTop>
                   <GlobalStyle />
@@ -47,6 +49,7 @@ class App extends Component {
                   </CloudinaryContext>
                 </ScrollToTop>
               </Provider>
+              </StripeProvider>
             </LastLocationProvider>
           </BrowserRouter>
         </ApolloHooksProvider>
