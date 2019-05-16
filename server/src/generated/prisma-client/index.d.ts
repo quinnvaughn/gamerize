@@ -31,6 +31,7 @@ export interface Exists {
   notification: (where?: NotificationWhereInput) => Promise<boolean>;
   pCLauncher: (where?: PCLauncherWhereInput) => Promise<boolean>;
   requirement: (where?: RequirementWhereInput) => Promise<boolean>;
+  savedCard: (where?: SavedCardWhereInput) => Promise<boolean>;
   sessionReview: (where?: SessionReviewWhereInput) => Promise<boolean>;
   sessionReviewIndex: (
     where?: SessionReviewIndexWhereInput
@@ -408,6 +409,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => RequirementConnectionPromise;
+  savedCard: (where: SavedCardWhereUniqueInput) => SavedCardPromise;
+  savedCards: (
+    args?: {
+      where?: SavedCardWhereInput;
+      orderBy?: SavedCardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SavedCard>;
+  savedCardsConnection: (
+    args?: {
+      where?: SavedCardWhereInput;
+      orderBy?: SavedCardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SavedCardConnectionPromise;
   sessionReview: (where: SessionReviewWhereUniqueInput) => SessionReviewPromise;
   sessionReviews: (
     args?: {
@@ -845,6 +869,25 @@ export interface Prisma {
   deleteManyRequirements: (
     where?: RequirementWhereInput
   ) => BatchPayloadPromise;
+  createSavedCard: (data: SavedCardCreateInput) => SavedCardPromise;
+  updateSavedCard: (
+    args: { data: SavedCardUpdateInput; where: SavedCardWhereUniqueInput }
+  ) => SavedCardPromise;
+  updateManySavedCards: (
+    args: {
+      data: SavedCardUpdateManyMutationInput;
+      where?: SavedCardWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertSavedCard: (
+    args: {
+      where: SavedCardWhereUniqueInput;
+      create: SavedCardCreateInput;
+      update: SavedCardUpdateInput;
+    }
+  ) => SavedCardPromise;
+  deleteSavedCard: (where: SavedCardWhereUniqueInput) => SavedCardPromise;
+  deleteManySavedCards: (where?: SavedCardWhereInput) => BatchPayloadPromise;
   createSessionReview: (data: SessionReviewCreateInput) => SessionReviewPromise;
   updateSessionReview: (
     args: {
@@ -1009,6 +1052,9 @@ export interface Subscription {
   requirement: (
     where?: RequirementSubscriptionWhereInput
   ) => RequirementSubscriptionPayloadSubscription;
+  savedCard: (
+    where?: SavedCardSubscriptionWhereInput
+  ) => SavedCardSubscriptionPayloadSubscription;
   sessionReview: (
     where?: SessionReviewSubscriptionWhereInput
   ) => SessionReviewSubscriptionPayloadSubscription;
@@ -1050,28 +1096,6 @@ export type BookingInviteOrderByInput =
 
 export type PlayerOrSession = "PLAYER" | "SESSION";
 
-export type BookedPlayerOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type UserIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "name_ASC"
-  | "name_DESC";
-
 export type NotificationType =
   | "CANCELLED_BOOKING"
   | "CANCELLED_TIMESLOT"
@@ -1087,6 +1111,28 @@ export type NotificationType =
   | "FRIEND_CANCELLED_THEIR_SLOT"
   | "ACCEPTED_TIMESLOT_INVITE"
   | "ACCEPTED_FRIEND_REQUEST";
+
+export type UserIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "name_ASC"
+  | "name_DESC";
+
+export type BookedPlayerOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type Gender = "MALE" | "FEMALE" | "OTHER";
 
@@ -1218,19 +1264,21 @@ export type GameOrderByInput =
 
 export type Role = "USER" | "GAMER" | "ADMIN";
 
-export type NotificationOrderByInput =
+export type SavedCardOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "cardId_ASC"
+  | "cardId_DESC"
+  | "default_ASC"
+  | "default_DESC"
+  | "lastFour_ASC"
+  | "lastFour_DESC"
+  | "brand_ASC"
+  | "brand_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "text_ASC"
-  | "text_DESC"
-  | "viewed_ASC"
-  | "viewed_DESC";
+  | "updatedAt_DESC";
 
 export type SessionReviewOrderByInput =
   | "id_ASC"
@@ -1244,25 +1292,7 @@ export type SessionReviewOrderByInput =
   | "rating_ASC"
   | "rating_DESC";
 
-export type SocialMediaOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "twitter_ASC"
-  | "twitter_DESC"
-  | "facebook_ASC"
-  | "facebook_DESC"
-  | "youtube_ASC"
-  | "youtube_DESC"
-  | "instagram_ASC"
-  | "instagram_DESC"
-  | "twitch_ASC"
-  | "twitch_DESC"
-  | "snapchat_ASC"
-  | "snapchat_DESC";
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type Tags =
   | "ACTION"
@@ -1300,31 +1330,15 @@ export type Tags =
   | "SURVIVAL"
   | "VISUAL_NOVEL";
 
-export type Occupations =
-  | "CELEBRITY"
-  | "INFLUENCER"
-  | "ENTERTAINER"
-  | "STREAMER"
-  | "YOUTUBER"
-  | "MEDIA"
-  | "SPORTS_PERSONALITY"
-  | "INTERNET_PERSONALITY"
-  | "ATHLETE"
-  | "PROFESIONAL_GAMER"
-  | "ACTOR"
-  | "COMEDIAN"
-  | "ROCK_STAR"
-  | "RAPPER"
-  | "SINGER"
-  | "MUSICIAN"
-  | "POLITICIAN"
-  | "DJ"
-  | "MUSIC_PRODUCER"
-  | "ENTREPRENEUR"
-  | "ARTIST"
-  | "ACTRESS"
-  | "MODEL"
-  | "ADULT_PERFORMER";
+export type SessionReviewIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "text_ASC"
+  | "text_DESC";
 
 export type Launcher =
   | "EPIC"
@@ -1338,17 +1352,19 @@ export type Launcher =
   | "WINDOWS"
   | "RIOT";
 
-export type GameIndexOrderByInput =
+export type GamerTagOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "launcher_ASC"
-  | "launcher_DESC";
+  | "psn_ASC"
+  | "psn_DESC"
+  | "xbl_ASC"
+  | "xbl_DESC"
+  | "nso_ASC"
+  | "nso_DESC";
 
 export type GamingSessionOrderByInput =
   | "id_ASC"
@@ -1391,6 +1407,10 @@ export type UserOrderByInput =
   | "profilePicture_DESC"
   | "banner_ASC"
   | "banner_DESC"
+  | "connectedStripeId_ASC"
+  | "connectedStripeId_DESC"
+  | "customerStripeId_ASC"
+  | "customerStripeId_DESC"
   | "gamerIsSetup_ASC"
   | "gamerIsSetup_DESC"
   | "name_ASC"
@@ -1406,6 +1426,78 @@ export type TypeOfGame = "CUSTOM" | "CASUAL" | "COMPETITIVE";
 
 export type System = "PS4" | "PC" | "XBOX_ONE" | "NINTENDO_SWITCH";
 
+export type GameIndexOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "launcher_ASC"
+  | "launcher_DESC";
+
+export type Occupations =
+  | "CELEBRITY"
+  | "INFLUENCER"
+  | "ENTERTAINER"
+  | "STREAMER"
+  | "YOUTUBER"
+  | "MEDIA"
+  | "SPORTS_PERSONALITY"
+  | "INTERNET_PERSONALITY"
+  | "ATHLETE"
+  | "PROFESIONAL_GAMER"
+  | "ACTOR"
+  | "COMEDIAN"
+  | "ROCK_STAR"
+  | "RAPPER"
+  | "SINGER"
+  | "MUSICIAN"
+  | "POLITICIAN"
+  | "DJ"
+  | "MUSIC_PRODUCER"
+  | "ENTREPRENEUR"
+  | "ARTIST"
+  | "ACTRESS"
+  | "MODEL"
+  | "ADULT_PERFORMER";
+
+export type SocialMediaOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "twitter_ASC"
+  | "twitter_DESC"
+  | "facebook_ASC"
+  | "facebook_DESC"
+  | "youtube_ASC"
+  | "youtube_DESC"
+  | "instagram_ASC"
+  | "instagram_DESC"
+  | "twitch_ASC"
+  | "twitch_DESC"
+  | "snapchat_ASC"
+  | "snapchat_DESC";
+
+export type NotificationOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "type_ASC"
+  | "type_DESC"
+  | "text_ASC"
+  | "text_DESC"
+  | "viewed_ASC"
+  | "viewed_DESC";
+
 export type FriendRequestOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -1414,44 +1506,21 @@ export type FriendRequestOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type GamerTagOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "psn_ASC"
-  | "psn_DESC"
-  | "xbl_ASC"
-  | "xbl_DESC"
-  | "nso_ASC"
-  | "nso_DESC";
-
-export type SessionReviewIndexOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "text_ASC"
-  | "text_DESC";
-
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export interface SessionReviewUpdateWithWhereUniqueWithoutUserInput {
-  where: SessionReviewWhereUniqueInput;
-  data: SessionReviewUpdateWithoutUserDataInput;
+export interface UserUpdateOneRequiredWithoutInvitesInput {
+  create?: UserCreateWithoutInvitesInput;
+  update?: UserUpdateWithoutInvitesDataInput;
+  upsert?: UserUpsertWithoutInvitesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export type BookedPlayerWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface DiscountUpdateManyWithWhereNestedInput {
-  where: DiscountScalarWhereInput;
-  data: DiscountUpdateManyDataInput;
+export interface DiscountUpsertWithWhereUniqueNestedInput {
+  where: DiscountWhereUniqueInput;
+  update: DiscountUpdateDataInput;
+  create: DiscountCreateInput;
 }
 
 export interface DiscountWhereInput {
@@ -1510,10 +1579,60 @@ export interface DiscountWhereInput {
   NOT?: DiscountWhereInput[] | DiscountWhereInput;
 }
 
-export interface DiscountUpdateManyDataInput {
+export interface DiscountScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   percentage?: Int;
+  percentage_not?: Int;
+  percentage_in?: Int[] | Int;
+  percentage_not_in?: Int[] | Int;
+  percentage_lt?: Int;
+  percentage_lte?: Int;
+  percentage_gt?: Int;
+  percentage_gte?: Int;
   threshold?: Int;
+  threshold_not?: Int;
+  threshold_in?: Int[] | Int;
+  threshold_not_in?: Int[] | Int;
+  threshold_lt?: Int;
+  threshold_lte?: Int;
+  threshold_gt?: Int;
+  threshold_gte?: Int;
   playerOrSession?: PlayerOrSession;
+  playerOrSession_not?: PlayerOrSession;
+  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
+  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
+  AND?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+  OR?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
+  NOT?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
 }
 
 export interface RequirementWhereInput {
@@ -1566,28 +1685,9 @@ export interface RequirementWhereInput {
   NOT?: RequirementWhereInput[] | RequirementWhereInput;
 }
 
-export interface GamingTimeSlotUpdateManyWithoutGamingSessionInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamingSessionInput[]
-    | GamingTimeSlotCreateWithoutGamingSessionInput;
-  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-  disconnect?:
-    | GamingTimeSlotWhereUniqueInput[]
-    | GamingTimeSlotWhereUniqueInput;
-  update?:
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput[]
-    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput;
-  upsert?:
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput[]
-    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput;
-  deleteMany?:
-    | GamingTimeSlotScalarWhereInput[]
-    | GamingTimeSlotScalarWhereInput;
-  updateMany?:
-    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
-    | GamingTimeSlotUpdateManyWithWhereNestedInput;
+export interface DiscountUpdateManyWithWhereNestedInput {
+  where: DiscountScalarWhereInput;
+  data: DiscountUpdateManyDataInput;
 }
 
 export interface GameWhereInput {
@@ -1683,34 +1783,58 @@ export interface GameWhereInput {
   NOT?: GameWhereInput[] | GameWhereInput;
 }
 
-export interface BookingInviteCreateOneWithoutNotificationInput {
-  create?: BookingInviteCreateWithoutNotificationInput;
-  connect?: BookingInviteWhereUniqueInput;
-}
-
-export interface GameUpsertNestedInput {
-  update: GameUpdateDataInput;
-  create: GameCreateInput;
-}
-
-export interface BookingInviteCreateWithoutNotificationInput {
-  startTime: DateTimeInput;
-  booking: BookingCreateOneWithoutInvitesInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  from: UserCreateOneWithoutInvitesInput;
-  sent: Boolean;
-  accepted?: Boolean;
-}
-
-export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  data: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
-}
-
 export interface BookedPlayerUpdateInput {
   player?: UserUpdateOneRequiredInput;
   booking?: BookingUpdateOneRequiredWithoutPlayersInput;
   timeslot?: GamingTimeSlotUpdateOneRequiredWithoutPlayersInput;
+}
+
+export interface SocialMediaCreateInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface DiscountUpdateManyDataInput {
+  percentage?: Int;
+  threshold?: Int;
+  playerOrSession?: PlayerOrSession;
+}
+
+export interface UserUpdateDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
 }
 
 export interface GamerTagWhereInput {
@@ -1793,11 +1917,8 @@ export interface GamerTagWhereInput {
   NOT?: GamerTagWhereInput[] | GamerTagWhereInput;
 }
 
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
+export interface UserUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
 }
 
 export interface SessionReviewWhereInput {
@@ -1860,27 +1981,94 @@ export interface SessionReviewWhereInput {
   NOT?: SessionReviewWhereInput[] | SessionReviewWhereInput;
 }
 
-export interface UserUpdateDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+export interface GamingSessionUpdateManyWithoutGamersInput {
+  create?:
+    | GamingSessionCreateWithoutGamersInput[]
+    | GamingSessionCreateWithoutGamersInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface SavedCardWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  cardId?: String;
+  cardId_not?: String;
+  cardId_in?: String[] | String;
+  cardId_not_in?: String[] | String;
+  cardId_lt?: String;
+  cardId_lte?: String;
+  cardId_gt?: String;
+  cardId_gte?: String;
+  cardId_contains?: String;
+  cardId_not_contains?: String;
+  cardId_starts_with?: String;
+  cardId_not_starts_with?: String;
+  cardId_ends_with?: String;
+  cardId_not_ends_with?: String;
+  default?: Boolean;
+  default_not?: Boolean;
+  lastFour?: String;
+  lastFour_not?: String;
+  lastFour_in?: String[] | String;
+  lastFour_not_in?: String[] | String;
+  lastFour_lt?: String;
+  lastFour_lte?: String;
+  lastFour_gt?: String;
+  lastFour_gte?: String;
+  lastFour_contains?: String;
+  lastFour_not_contains?: String;
+  lastFour_starts_with?: String;
+  lastFour_not_starts_with?: String;
+  lastFour_ends_with?: String;
+  lastFour_not_ends_with?: String;
+  brand?: String;
+  brand_not?: String;
+  brand_in?: String[] | String;
+  brand_not_in?: String[] | String;
+  brand_lt?: String;
+  brand_lte?: String;
+  brand_gt?: String;
+  brand_gte?: String;
+  brand_contains?: String;
+  brand_not_contains?: String;
+  brand_starts_with?: String;
+  brand_not_starts_with?: String;
+  brand_ends_with?: String;
+  brand_not_ends_with?: String;
+  AND?: SavedCardWhereInput[] | SavedCardWhereInput;
+  OR?: SavedCardWhereInput[] | SavedCardWhereInput;
+  NOT?: SavedCardWhereInput[] | SavedCardWhereInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGamersDataInput;
 }
 
 export interface FriendRequestWhereInput {
@@ -1922,89 +2110,20 @@ export interface FriendRequestWhereInput {
   NOT?: FriendRequestWhereInput[] | FriendRequestWhereInput;
 }
 
-export interface UserUpdateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface NotificationWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  type?: NotificationType;
-  type_not?: NotificationType;
-  type_in?: NotificationType[] | NotificationType;
-  type_not_in?: NotificationType[] | NotificationType;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  for?: UserWhereInput;
-  friendRequest?: FriendRequestWhereInput;
-  bookingInvite?: BookingInviteWhereInput;
-  booking?: BookingWhereInput;
-  friend?: UserWhereInput;
-  viewed?: Boolean;
-  viewed_not?: Boolean;
-  AND?: NotificationWhereInput[] | NotificationWhereInput;
-  OR?: NotificationWhereInput[] | NotificationWhereInput;
-  NOT?: NotificationWhereInput[] | NotificationWhereInput;
-}
-
-export interface GamingSessionUpdateManyWithoutGamersInput {
-  create?:
-    | GamingSessionCreateWithoutGamersInput[]
-    | GamingSessionCreateWithoutGamersInput;
-  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  update?:
-    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput[]
-    | GamingSessionUpdateWithWhereUniqueWithoutGamersInput;
-  upsert?:
-    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput[]
-    | GamingSessionUpsertWithWhereUniqueWithoutGamersInput;
-  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  updateMany?:
-    | GamingSessionUpdateManyWithWhereNestedInput[]
-    | GamingSessionUpdateManyWithWhereNestedInput;
+export interface GamingSessionUpdateWithoutGamersDataInput {
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface SessionReviewSubscriptionWhereInput {
@@ -2024,9 +2143,31 @@ export interface SessionReviewSubscriptionWhereInput {
     | SessionReviewSubscriptionWhereInput;
 }
 
-export interface GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
-  where: GamingSessionWhereUniqueInput;
-  data: GamingSessionUpdateWithoutGamersDataInput;
+export interface GameUpdateOneRequiredWithoutSessionsInput {
+  create?: GameCreateWithoutSessionsInput;
+  update?: GameUpdateWithoutSessionsDataInput;
+  upsert?: GameUpsertWithoutSessionsInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface RequirementSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RequirementWhereInput;
+  AND?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
+  OR?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
+  NOT?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
+}
+
+export interface GameUpdateWithoutSessionsDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  launcher?: Launcher;
+  numSessions?: Int;
+  picture?: String;
+  banner?: String;
 }
 
 export interface PCLauncherSubscriptionWhereInput {
@@ -2040,20 +2181,8 @@ export interface PCLauncherSubscriptionWhereInput {
   NOT?: PCLauncherSubscriptionWhereInput[] | PCLauncherSubscriptionWhereInput;
 }
 
-export interface GamingSessionUpdateWithoutGamersDataInput {
-  creator?: UserUpdateOneRequiredInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-  retired?: Boolean;
+export interface GameUpdatetagsInput {
+  set?: Tags[] | Tags;
 }
 
 export interface GamingTimeSlotSubscriptionWhereInput {
@@ -2073,11 +2202,9 @@ export interface GamingTimeSlotSubscriptionWhereInput {
     | GamingTimeSlotSubscriptionWhereInput;
 }
 
-export interface GameUpdateOneRequiredWithoutSessionsInput {
-  create?: GameCreateWithoutSessionsInput;
-  update?: GameUpdateWithoutSessionsDataInput;
-  upsert?: GameUpsertWithoutSessionsInput;
-  connect?: GameWhereUniqueInput;
+export interface GameUpsertWithoutSessionsInput {
+  update: GameUpdateWithoutSessionsDataInput;
+  create: GameCreateWithoutSessionsInput;
 }
 
 export interface GamingSessionSubscriptionWhereInput {
@@ -2095,69 +2222,6 @@ export interface GamingSessionSubscriptionWhereInput {
   NOT?:
     | GamingSessionSubscriptionWhereInput[]
     | GamingSessionSubscriptionWhereInput;
-}
-
-export interface GameUpdateWithoutSessionsDataInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  launcher?: Launcher;
-  numSessions?: Int;
-  picture?: String;
-  banner?: String;
-}
-
-export interface GamerRequestSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GamerRequestWhereInput;
-  AND?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
-  OR?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
-  NOT?:
-    | GamerRequestSubscriptionWhereInput[]
-    | GamerRequestSubscriptionWhereInput;
-}
-
-export interface GameUpdatetagsInput {
-  set?: Tags[] | Tags;
-}
-
-export interface GameSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GameWhereInput;
-  AND?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
-  OR?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
-  NOT?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
-}
-
-export interface GameUpsertWithoutSessionsInput {
-  update: GameUpdateWithoutSessionsDataInput;
-  create: GameCreateWithoutSessionsInput;
-}
-
-export interface FriendRequestSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FriendRequestWhereInput;
-  AND?:
-    | FriendRequestSubscriptionWhereInput[]
-    | FriendRequestSubscriptionWhereInput;
-  OR?:
-    | FriendRequestSubscriptionWhereInput[]
-    | FriendRequestSubscriptionWhereInput;
-  NOT?:
-    | FriendRequestSubscriptionWhereInput[]
-    | FriendRequestSubscriptionWhereInput;
 }
 
 export interface SessionReviewUpdateManyWithoutSessionInput {
@@ -2180,6 +2244,69 @@ export interface SessionReviewUpdateManyWithoutSessionInput {
     | SessionReviewUpdateManyWithWhereNestedInput;
 }
 
+export interface GamerRequestSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamerRequestWhereInput;
+  AND?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  OR?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+  NOT?:
+    | GamerRequestSubscriptionWhereInput[]
+    | GamerRequestSubscriptionWhereInput;
+}
+
+export interface SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput;
+  data: SessionReviewUpdateWithoutSessionDataInput;
+}
+
+export interface GameSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GameWhereInput;
+  AND?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+  OR?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+  NOT?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput;
+}
+
+export interface SessionReviewUpdateWithoutSessionDataInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
+}
+
+export interface FriendRequestSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FriendRequestWhereInput;
+  AND?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+  OR?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+  NOT?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+}
+
+export interface UserUpdateOneRequiredWithoutReviewsInput {
+  create?: UserCreateWithoutReviewsInput;
+  update?: UserUpdateWithoutReviewsDataInput;
+  upsert?: UserUpsertWithoutReviewsInput;
+  connect?: UserWhereUniqueInput;
+}
+
 export interface BookingInviteSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -2197,9 +2324,29 @@ export interface BookingInviteSubscriptionWhereInput {
     | BookingInviteSubscriptionWhereInput;
 }
 
-export interface SessionReviewUpdateWithWhereUniqueWithoutSessionInput {
-  where: SessionReviewWhereUniqueInput;
-  data: SessionReviewUpdateWithoutSessionDataInput;
+export interface UserUpdateWithoutReviewsDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
 }
 
 export interface BookingSubscriptionWhereInput {
@@ -2211,59 +2358,6 @@ export interface BookingSubscriptionWhereInput {
   AND?: BookingSubscriptionWhereInput[] | BookingSubscriptionWhereInput;
   OR?: BookingSubscriptionWhereInput[] | BookingSubscriptionWhereInput;
   NOT?: BookingSubscriptionWhereInput[] | BookingSubscriptionWhereInput;
-}
-
-export interface SessionReviewUpdateWithoutSessionDataInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
-
-export interface UserIndexUpdateManyMutationInput {
-  email?: String;
-  username?: String;
-  name?: String;
-}
-
-export interface UserUpdateOneRequiredWithoutReviewsInput {
-  create?: UserCreateWithoutReviewsInput;
-  update?: UserUpdateWithoutReviewsDataInput;
-  upsert?: UserUpsertWithoutReviewsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutIndexInput {
-  update: UserUpdateWithoutIndexDataInput;
-  create: UserCreateWithoutIndexInput;
-}
-
-export interface UserUpdateWithoutReviewsDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
-}
-
-export interface UserUpdateOneRequiredWithoutIndexInput {
-  create?: UserCreateWithoutIndexInput;
-  update?: UserUpdateWithoutIndexDataInput;
-  upsert?: UserUpsertWithoutIndexInput;
-  connect?: UserWhereUniqueInput;
 }
 
 export interface GamingTimeSlotUpdateManyWithoutGamersInput {
@@ -2288,6 +2382,46 @@ export interface GamingTimeSlotUpdateManyWithoutGamersInput {
   updateMany?:
     | GamingTimeSlotUpdateManyWithWhereNestedInput[]
     | GamingTimeSlotUpdateManyWithWhereNestedInput;
+}
+
+export interface UserIndexUpdateManyMutationInput {
+  email?: String;
+  username?: String;
+  name?: String;
+}
+
+export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  data: GamingTimeSlotUpdateWithoutGamersDataInput;
+}
+
+export interface UserUpsertWithoutIndexInput {
+  update: UserUpdateWithoutIndexDataInput;
+  create: UserCreateWithoutIndexInput;
+}
+
+export interface GamingTimeSlotUpdateWithoutGamersDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  bookings?: BookingUpdateManyWithoutTimeslotInput;
+  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface UserUpdateOneRequiredWithoutIndexInput {
+  create?: UserCreateWithoutIndexInput;
+  update?: UserUpdateWithoutIndexDataInput;
+  upsert?: UserUpsertWithoutIndexInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface GamingSessionUpdateOneRequiredWithoutTimeslotsInput {
+  create?: GamingSessionCreateWithoutTimeslotsInput;
+  update?: GamingSessionUpdateWithoutTimeslotsDataInput;
+  upsert?: GamingSessionUpsertWithoutTimeslotsInput;
+  connect?: GamingSessionWhereUniqueInput;
 }
 
 export interface BookedPlayerWhereInput {
@@ -2329,70 +2463,6 @@ export interface BookedPlayerWhereInput {
   NOT?: BookedPlayerWhereInput[] | BookedPlayerWhereInput;
 }
 
-export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  data: GamingTimeSlotUpdateWithoutGamersDataInput;
-}
-
-export interface UserCreateWithoutIndexInput {
-  gender?: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-  friends?: UserCreateManyInput;
-  gamertags?: GamerTagCreateOneWithoutUserInput;
-  role?: Role;
-}
-
-export interface GamingTimeSlotUpdateWithoutGamersDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  bookings?: BookingUpdateManyWithoutTimeslotInput;
-  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export type GameWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface GamingSessionUpdateOneRequiredWithoutTimeslotsInput {
-  create?: GamingSessionCreateWithoutTimeslotsInput;
-  update?: GamingSessionUpdateWithoutTimeslotsDataInput;
-  upsert?: GamingSessionUpsertWithoutTimeslotsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface UserUpdateManyMutationInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  setup?: Int;
-  role?: Role;
-}
-
 export interface GamingSessionUpdateWithoutTimeslotsDataInput {
   gamers?: UserUpdateManyWithoutSessionsInput;
   creator?: UserUpdateOneRequiredInput;
@@ -2409,13 +2479,29 @@ export interface GamingSessionUpdateWithoutTimeslotsDataInput {
   retired?: Boolean;
 }
 
-export interface SocialMediaUpdateManyMutationInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface UserCreateWithoutIndexInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+  friends?: UserCreateManyInput;
+  gamertags?: GamerTagCreateOneWithoutUserInput;
+  role?: Role;
 }
 
 export interface UserUpdateManyWithoutSessionsInput {
@@ -2436,6 +2522,87 @@ export interface UserUpdateManyWithoutSessionsInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
+export type GameWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutSessionsDataInput;
+}
+
+export interface UserUpdateManyMutationInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  setup?: Int;
+  role?: Role;
+}
+
+export interface UserUpdateWithoutSessionsDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export interface SocialMediaUpdateManyMutationInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
+}
+
+export interface BookingInviteUpdateManyWithoutFromInput {
+  create?:
+    | BookingInviteCreateWithoutFromInput[]
+    | BookingInviteCreateWithoutFromInput;
+  delete?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  set?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  disconnect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+  update?:
+    | BookingInviteUpdateWithWhereUniqueWithoutFromInput[]
+    | BookingInviteUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | BookingInviteUpsertWithWhereUniqueWithoutFromInput[]
+    | BookingInviteUpsertWithWhereUniqueWithoutFromInput;
+  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  updateMany?:
+    | BookingInviteUpdateManyWithWhereNestedInput[]
+    | BookingInviteUpdateManyWithWhereNestedInput;
+}
+
 export interface SocialMediaUpdateInput {
   twitter?: String;
   facebook?: String;
@@ -2445,9 +2612,9 @@ export interface SocialMediaUpdateInput {
   snapchat?: String;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutSessionsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutSessionsDataInput;
+export interface BookingInviteUpdateWithWhereUniqueWithoutFromInput {
+  where: BookingInviteWhereUniqueInput;
+  data: BookingInviteUpdateWithoutFromDataInput;
 }
 
 export interface BookingWhereInput {
@@ -2523,67 +2690,6 @@ export interface BookingWhereInput {
   NOT?: BookingWhereInput[] | BookingWhereInput;
 }
 
-export interface UserUpdateWithoutSessionsDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
-}
-
-export interface SessionReviewUpsertNestedInput {
-  update: SessionReviewUpdateDataInput;
-  create: SessionReviewCreateInput;
-}
-
-export interface BookingInviteUpdateManyWithoutFromInput {
-  create?:
-    | BookingInviteCreateWithoutFromInput[]
-    | BookingInviteCreateWithoutFromInput;
-  delete?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-  set?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-  disconnect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-  update?:
-    | BookingInviteUpdateWithWhereUniqueWithoutFromInput[]
-    | BookingInviteUpdateWithWhereUniqueWithoutFromInput;
-  upsert?:
-    | BookingInviteUpsertWithWhereUniqueWithoutFromInput[]
-    | BookingInviteUpsertWithWhereUniqueWithoutFromInput;
-  deleteMany?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  updateMany?:
-    | BookingInviteUpdateManyWithWhereNestedInput[]
-    | BookingInviteUpdateManyWithWhereNestedInput;
-}
-
-export type GamerRequestWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface BookingInviteUpdateWithWhereUniqueWithoutFromInput {
-  where: BookingInviteWhereUniqueInput;
-  data: BookingInviteUpdateWithoutFromDataInput;
-}
-
-export interface SessionReviewIndexUpdateInput {
-  text?: String;
-  sessionReview?: SessionReviewUpdateOneRequiredInput;
-}
-
 export interface BookingInviteUpdateWithoutFromDataInput {
   startTime?: DateTimeInput;
   booking?: BookingUpdateOneRequiredWithoutInvitesInput;
@@ -2591,6 +2697,55 @@ export interface BookingInviteUpdateWithoutFromDataInput {
   sent?: Boolean;
   accepted?: Boolean;
   notification?: NotificationUpdateOneWithoutBookingInviteInput;
+}
+
+export interface SessionReviewUpsertNestedInput {
+  update: SessionReviewUpdateDataInput;
+  create: SessionReviewCreateInput;
+}
+
+export interface BookingUpdateOneRequiredWithoutInvitesInput {
+  create?: BookingCreateWithoutInvitesInput;
+  update?: BookingUpdateWithoutInvitesDataInput;
+  upsert?: BookingUpsertWithoutInvitesInput;
+  connect?: BookingWhereUniqueInput;
+}
+
+export type GamerRequestWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface BookingUpdateWithoutInvitesDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  players?: BookedPlayerUpdateManyWithoutBookingInput;
+  total?: Float;
+  bookee?: UserUpdateOneRequiredInput;
+  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput;
+  cancelled?: Boolean;
+  notifications?: NotificationUpdateManyWithoutBookingInput;
+}
+
+export interface SessionReviewIndexUpdateInput {
+  text?: String;
+  sessionReview?: SessionReviewUpdateOneRequiredInput;
+}
+
+export interface BookedPlayerUpdateManyWithoutBookingInput {
+  create?:
+    | BookedPlayerCreateWithoutBookingInput[]
+    | BookedPlayerCreateWithoutBookingInput;
+  delete?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  set?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  disconnect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+  update?:
+    | BookedPlayerUpdateWithWhereUniqueWithoutBookingInput[]
+    | BookedPlayerUpdateWithWhereUniqueWithoutBookingInput;
+  upsert?:
+    | BookedPlayerUpsertWithWhereUniqueWithoutBookingInput[]
+    | BookedPlayerUpsertWithWhereUniqueWithoutBookingInput;
+  deleteMany?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
 }
 
 export interface SocialMediaWhereInput {
@@ -2713,11 +2868,9 @@ export interface SocialMediaWhereInput {
   NOT?: SocialMediaWhereInput[] | SocialMediaWhereInput;
 }
 
-export interface BookingUpdateOneRequiredWithoutInvitesInput {
-  create?: BookingCreateWithoutInvitesInput;
-  update?: BookingUpdateWithoutInvitesDataInput;
-  upsert?: BookingUpsertWithoutInvitesInput;
-  connect?: BookingWhereUniqueInput;
+export interface BookedPlayerUpdateWithWhereUniqueWithoutBookingInput {
+  where: BookedPlayerWhereUniqueInput;
+  data: BookedPlayerUpdateWithoutBookingDataInput;
 }
 
 export interface SessionReviewCreateOneInput {
@@ -2725,15 +2878,9 @@ export interface SessionReviewCreateOneInput {
   connect?: SessionReviewWhereUniqueInput;
 }
 
-export interface BookingUpdateWithoutInvitesDataInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  players?: BookedPlayerUpdateManyWithoutBookingInput;
-  total?: Float;
-  bookee?: UserUpdateOneRequiredInput;
-  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput;
-  cancelled?: Boolean;
-  notifications?: NotificationUpdateManyWithoutBookingInput;
+export interface BookedPlayerUpdateWithoutBookingDataInput {
+  player?: UserUpdateOneRequiredInput;
+  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutPlayersInput;
 }
 
 export interface SessionReviewUpdateManyMutationInput {
@@ -2741,21 +2888,11 @@ export interface SessionReviewUpdateManyMutationInput {
   rating?: Int;
 }
 
-export interface BookedPlayerUpdateManyWithoutBookingInput {
-  create?:
-    | BookedPlayerCreateWithoutBookingInput[]
-    | BookedPlayerCreateWithoutBookingInput;
-  delete?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  set?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  disconnect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-  update?:
-    | BookedPlayerUpdateWithWhereUniqueWithoutBookingInput[]
-    | BookedPlayerUpdateWithWhereUniqueWithoutBookingInput;
-  upsert?:
-    | BookedPlayerUpsertWithWhereUniqueWithoutBookingInput[]
-    | BookedPlayerUpsertWithWhereUniqueWithoutBookingInput;
-  deleteMany?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+export interface GamingTimeSlotUpdateOneRequiredWithoutPlayersInput {
+  create?: GamingTimeSlotCreateWithoutPlayersInput;
+  update?: GamingTimeSlotUpdateWithoutPlayersDataInput;
+  upsert?: GamingTimeSlotUpsertWithoutPlayersInput;
+  connect?: GamingTimeSlotWhereUniqueInput;
 }
 
 export interface UserWhereInput {
@@ -2863,6 +3000,34 @@ export interface UserWhereInput {
   banner_not_starts_with?: String;
   banner_ends_with?: String;
   banner_not_ends_with?: String;
+  connectedStripeId?: String;
+  connectedStripeId_not?: String;
+  connectedStripeId_in?: String[] | String;
+  connectedStripeId_not_in?: String[] | String;
+  connectedStripeId_lt?: String;
+  connectedStripeId_lte?: String;
+  connectedStripeId_gt?: String;
+  connectedStripeId_gte?: String;
+  connectedStripeId_contains?: String;
+  connectedStripeId_not_contains?: String;
+  connectedStripeId_starts_with?: String;
+  connectedStripeId_not_starts_with?: String;
+  connectedStripeId_ends_with?: String;
+  connectedStripeId_not_ends_with?: String;
+  customerStripeId?: String;
+  customerStripeId_not?: String;
+  customerStripeId_in?: String[] | String;
+  customerStripeId_not_in?: String[] | String;
+  customerStripeId_lt?: String;
+  customerStripeId_lte?: String;
+  customerStripeId_gt?: String;
+  customerStripeId_gte?: String;
+  customerStripeId_contains?: String;
+  customerStripeId_not_contains?: String;
+  customerStripeId_starts_with?: String;
+  customerStripeId_not_starts_with?: String;
+  customerStripeId_ends_with?: String;
+  customerStripeId_not_ends_with?: String;
   gamerIsSetup?: Boolean;
   gamerIsSetup_not?: Boolean;
   name?: String;
@@ -2902,6 +3067,9 @@ export interface UserWhereInput {
   invites_every?: BookingInviteWhereInput;
   invites_some?: BookingInviteWhereInput;
   invites_none?: BookingInviteWhereInput;
+  savedCards_every?: SavedCardWhereInput;
+  savedCards_some?: SavedCardWhereInput;
+  savedCards_none?: SavedCardWhereInput;
   invitesReceived_every?: BookingInviteWhereInput;
   invitesReceived_some?: BookingInviteWhereInput;
   invitesReceived_none?: BookingInviteWhereInput;
@@ -2930,47 +3098,6 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface BookedPlayerUpdateWithWhereUniqueWithoutBookingInput {
-  where: BookedPlayerWhereUniqueInput;
-  data: BookedPlayerUpdateWithoutBookingDataInput;
-}
-
-export interface SessionReviewCreateInput {
-  user: UserCreateOneWithoutReviewsInput;
-  session: GamingSessionCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
-}
-
-export interface BookedPlayerUpdateWithoutBookingDataInput {
-  player?: UserUpdateOneRequiredInput;
-  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutPlayersInput;
-}
-
-export type GamingSessionWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingTimeSlotUpdateOneRequiredWithoutPlayersInput {
-  create?: GamingTimeSlotCreateWithoutPlayersInput;
-  update?: GamingTimeSlotUpdateWithoutPlayersDataInput;
-  upsert?: GamingTimeSlotUpsertWithoutPlayersInput;
-  connect?: GamingTimeSlotWhereUniqueInput;
-}
-
-export interface PCLauncherUpdateManyMutationInput {
-  epic?: String;
-  steam?: String;
-  origin?: String;
-  gog?: String;
-  battlenet?: String;
-  uplay?: String;
-  bethesda?: String;
-  itch?: String;
-  windows?: String;
-  riot?: String;
-}
-
 export interface GamingTimeSlotUpdateWithoutPlayersDataInput {
   startTime?: DateTimeInput;
   endTime?: DateTimeInput;
@@ -2981,9 +3108,12 @@ export interface GamingTimeSlotUpdateWithoutPlayersDataInput {
   slots?: Int;
 }
 
-export type GamingSessionIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface SessionReviewCreateInput {
+  user: UserCreateOneWithoutReviewsInput;
+  session: GamingSessionCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
+}
 
 export interface UserUpdateManyWithoutTimeSlotsInput {
   create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
@@ -3001,6 +3131,87 @@ export interface UserUpdateManyWithoutTimeSlotsInput {
   updateMany?:
     | UserUpdateManyWithWhereNestedInput[]
     | UserUpdateManyWithWhereNestedInput;
+}
+
+export type GamingSessionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutTimeSlotsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTimeSlotsDataInput;
+}
+
+export interface UserUpdateWithoutSavedCardsDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export interface UserUpdateWithoutTimeSlotsDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export type GamingSessionIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SavedCardUpdateManyWithoutUserInput {
+  create?: SavedCardCreateWithoutUserInput[] | SavedCardCreateWithoutUserInput;
+  delete?: SavedCardWhereUniqueInput[] | SavedCardWhereUniqueInput;
+  connect?: SavedCardWhereUniqueInput[] | SavedCardWhereUniqueInput;
+  set?: SavedCardWhereUniqueInput[] | SavedCardWhereUniqueInput;
+  disconnect?: SavedCardWhereUniqueInput[] | SavedCardWhereUniqueInput;
+  update?:
+    | SavedCardUpdateWithWhereUniqueWithoutUserInput[]
+    | SavedCardUpdateWithWhereUniqueWithoutUserInput;
+  upsert?:
+    | SavedCardUpsertWithWhereUniqueWithoutUserInput[]
+    | SavedCardUpsertWithWhereUniqueWithoutUserInput;
+  deleteMany?: SavedCardScalarWhereInput[] | SavedCardScalarWhereInput;
+  updateMany?:
+    | SavedCardUpdateManyWithWhereNestedInput[]
+    | SavedCardUpdateManyWithWhereNestedInput;
 }
 
 export interface GamingSessionIndexWhereInput {
@@ -3082,9 +3293,153 @@ export interface GamingSessionIndexWhereInput {
   NOT?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutTimeSlotsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutTimeSlotsDataInput;
+export interface SavedCardUpdateWithWhereUniqueWithoutUserInput {
+  where: SavedCardWhereUniqueInput;
+  data: SavedCardUpdateWithoutUserDataInput;
+}
+
+export interface UserCreateWithoutSavedCardsInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+  friends?: UserCreateManyInput;
+  gamertags?: GamerTagCreateOneWithoutUserInput;
+  role?: Role;
+  index: UserIndexCreateOneWithoutUserInput;
+}
+
+export interface SavedCardUpdateWithoutUserDataInput {
+  cardId?: String;
+  default?: Boolean;
+  lastFour?: String;
+  brand?: String;
+}
+
+export interface SavedCardCreateInput {
+  user: UserCreateOneWithoutSavedCardsInput;
+  cardId: String;
+  default: Boolean;
+  lastFour: String;
+  brand: String;
+}
+
+export interface SavedCardUpsertWithWhereUniqueWithoutUserInput {
+  where: SavedCardWhereUniqueInput;
+  update: SavedCardUpdateWithoutUserDataInput;
+  create: SavedCardCreateWithoutUserInput;
+}
+
+export interface RequirementUpdateManyMutationInput {
+  msg?: String;
+}
+
+export interface SavedCardScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  cardId?: String;
+  cardId_not?: String;
+  cardId_in?: String[] | String;
+  cardId_not_in?: String[] | String;
+  cardId_lt?: String;
+  cardId_lte?: String;
+  cardId_gt?: String;
+  cardId_gte?: String;
+  cardId_contains?: String;
+  cardId_not_contains?: String;
+  cardId_starts_with?: String;
+  cardId_not_starts_with?: String;
+  cardId_ends_with?: String;
+  cardId_not_ends_with?: String;
+  default?: Boolean;
+  default_not?: Boolean;
+  lastFour?: String;
+  lastFour_not?: String;
+  lastFour_in?: String[] | String;
+  lastFour_not_in?: String[] | String;
+  lastFour_lt?: String;
+  lastFour_lte?: String;
+  lastFour_gt?: String;
+  lastFour_gte?: String;
+  lastFour_contains?: String;
+  lastFour_not_contains?: String;
+  lastFour_starts_with?: String;
+  lastFour_not_starts_with?: String;
+  lastFour_ends_with?: String;
+  lastFour_not_ends_with?: String;
+  brand?: String;
+  brand_not?: String;
+  brand_in?: String[] | String;
+  brand_not_in?: String[] | String;
+  brand_lt?: String;
+  brand_lte?: String;
+  brand_gt?: String;
+  brand_gte?: String;
+  brand_contains?: String;
+  brand_not_contains?: String;
+  brand_starts_with?: String;
+  brand_not_starts_with?: String;
+  brand_ends_with?: String;
+  brand_not_ends_with?: String;
+  AND?: SavedCardScalarWhereInput[] | SavedCardScalarWhereInput;
+  OR?: SavedCardScalarWhereInput[] | SavedCardScalarWhereInput;
+  NOT?: SavedCardScalarWhereInput[] | SavedCardScalarWhereInput;
+}
+
+export interface PCLauncherUpdateManyMutationInput {
+  epic?: String;
+  steam?: String;
+  origin?: String;
+  gog?: String;
+  battlenet?: String;
+  uplay?: String;
+  bethesda?: String;
+  itch?: String;
+  windows?: String;
+  riot?: String;
+}
+
+export interface SavedCardUpdateManyWithWhereNestedInput {
+  where: SavedCardScalarWhereInput;
+  data: SavedCardUpdateManyDataInput;
+}
+
+export interface GamerTagUpsertWithoutPcInput {
+  update: GamerTagUpdateWithoutPcDataInput;
+  create: GamerTagCreateWithoutPcInput;
+}
+
+export interface SavedCardUpdateManyDataInput {
+  cardId?: String;
+  default?: Boolean;
+  lastFour?: String;
+  brand?: String;
 }
 
 export interface GamerTagUpdateOneRequiredWithoutPcInput {
@@ -3092,35 +3447,6 @@ export interface GamerTagUpdateOneRequiredWithoutPcInput {
   update?: GamerTagUpdateWithoutPcDataInput;
   upsert?: GamerTagUpsertWithoutPcInput;
   connect?: GamerTagWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutTimeSlotsDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
-}
-
-export interface GamerTagCreateWithoutPcInput {
-  user: UserCreateOneWithoutGamertagsInput;
-  psn?: String;
-  xbl?: String;
-  nso?: String;
 }
 
 export interface BookingInviteUpdateManyWithoutToInput {
@@ -3143,9 +3469,18 @@ export interface BookingInviteUpdateManyWithoutToInput {
     | BookingInviteUpdateManyWithWhereNestedInput;
 }
 
-export interface GamerTagCreateOneWithoutPcInput {
-  create?: GamerTagCreateWithoutPcInput;
-  connect?: GamerTagWhereUniqueInput;
+export interface PCLauncherUpdateInput {
+  gamerTag?: GamerTagUpdateOneRequiredWithoutPcInput;
+  epic?: String;
+  steam?: String;
+  origin?: String;
+  gog?: String;
+  battlenet?: String;
+  uplay?: String;
+  bethesda?: String;
+  itch?: String;
+  windows?: String;
+  riot?: String;
 }
 
 export interface BookingInviteUpdateWithWhereUniqueWithoutToInput {
@@ -3153,10 +3488,9 @@ export interface BookingInviteUpdateWithWhereUniqueWithoutToInput {
   data: BookingInviteUpdateWithoutToDataInput;
 }
 
-export interface NotificationUpdateManyMutationInput {
-  type?: NotificationType;
-  text?: String;
-  viewed?: Boolean;
+export interface GamerTagCreateOneWithoutPcInput {
+  create?: GamerTagCreateWithoutPcInput;
+  connect?: GamerTagWhereUniqueInput;
 }
 
 export interface BookingInviteUpdateWithoutToDataInput {
@@ -3166,6 +3500,15 @@ export interface BookingInviteUpdateWithoutToDataInput {
   sent?: Boolean;
   accepted?: Boolean;
   notification?: NotificationUpdateOneWithoutBookingInviteInput;
+}
+
+export type RequirementWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SocialMediaUpsertNestedInput {
+  update: SocialMediaUpdateDataInput;
+  create: SocialMediaCreateInput;
 }
 
 export interface NotificationUpdateInput {
@@ -3179,20 +3522,6 @@ export interface NotificationUpdateInput {
   viewed?: Boolean;
 }
 
-export interface UserUpdateOneRequiredWithoutInvitesInput {
-  create?: UserCreateWithoutInvitesInput;
-  update?: UserUpdateWithoutInvitesDataInput;
-  upsert?: UserUpsertWithoutInvitesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  length?: Int;
-  slots?: Int;
-}
-
 export interface UserUpdateWithoutInvitesDataInput {
   gender?: Gender;
   email?: String;
@@ -3200,12 +3529,15 @@ export interface UserUpdateWithoutInvitesDataInput {
   password?: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup?: Boolean;
   occupations?: UserUpdateoccupationsInput;
   name?: String;
   aboutMe?: String;
   sessions?: GamingSessionUpdateManyWithoutGamersInput;
   timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
   invitesReceived?: BookingInviteUpdateManyWithoutToInput;
   setup?: Int;
   reviews?: SessionReviewUpdateManyWithoutUserInput;
@@ -3215,16 +3547,9 @@ export interface UserUpdateWithoutInvitesDataInput {
   index?: UserIndexUpdateOneRequiredWithoutUserInput;
 }
 
-export interface GamingTimeSlotUpdateInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  gamers?: UserUpdateManyWithoutTimeSlotsInput;
-  bookings?: BookingUpdateManyWithoutTimeslotInput;
-  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
-  length?: Int;
-  slots?: Int;
-}
+export type SavedCardWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface SessionReviewUpdateManyWithoutUserInput {
   create?:
@@ -3246,22 +3571,23 @@ export interface SessionReviewUpdateManyWithoutUserInput {
     | SessionReviewUpdateManyWithWhereNestedInput;
 }
 
-export interface GamingSessionIndexUpdateManyMutationInput {
-  title?: String;
-  gamer?: String;
-  game?: String;
+export interface GamingTimeSlotUpdateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  gamers?: UserUpdateManyWithoutTimeSlotsInput;
+  bookings?: BookingUpdateManyWithoutTimeslotInput;
+  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
+  length?: Int;
+  slots?: Int;
 }
 
-export interface SocialMediaCreateInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface SessionReviewUpdateWithWhereUniqueWithoutUserInput {
+  where: SessionReviewWhereUniqueInput;
+  data: SessionReviewUpdateWithoutUserDataInput;
 }
 
-export type RequirementWhereUniqueInput = AtLeastOne<{
+export type SessionReviewWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
@@ -3271,11 +3597,9 @@ export interface SessionReviewUpdateWithoutUserDataInput {
   rating?: Int;
 }
 
-export interface GamingSessionUpdateOneRequiredInput {
-  create?: GamingSessionCreateInput;
-  update?: GamingSessionUpdateDataInput;
-  upsert?: GamingSessionUpsertNestedInput;
-  connect?: GamingSessionWhereUniqueInput;
+export interface GamingSessionUpsertNestedInput {
+  update: GamingSessionUpdateDataInput;
+  create: GamingSessionCreateInput;
 }
 
 export interface GamingSessionUpdateOneRequiredWithoutReviewsInput {
@@ -3285,7 +3609,7 @@ export interface GamingSessionUpdateOneRequiredWithoutReviewsInput {
   connect?: GamingSessionWhereUniqueInput;
 }
 
-export type SessionReviewWhereUniqueInput = AtLeastOne<{
+export type SessionReviewIndexWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
@@ -3303,40 +3627,6 @@ export interface GamingSessionUpdateWithoutReviewsDataInput {
   discounts?: DiscountUpdateManyInput;
   timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
   retired?: Boolean;
-}
-
-export interface GamingSessionIndexCreateInput {
-  title: String;
-  gamer: String;
-  game?: String;
-  gamingSession: GamingSessionCreateOneInput;
-}
-
-export interface RequirementUpdateManyInput {
-  create?: RequirementCreateInput[] | RequirementCreateInput;
-  update?:
-    | RequirementUpdateWithWhereUniqueNestedInput[]
-    | RequirementUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | RequirementUpsertWithWhereUniqueNestedInput[]
-    | RequirementUpsertWithWhereUniqueNestedInput;
-  delete?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
-  connect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
-  set?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
-  disconnect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
-  deleteMany?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
-  updateMany?:
-    | RequirementUpdateManyWithWhereNestedInput[]
-    | RequirementUpdateManyWithWhereNestedInput;
-}
-
-export type SessionReviewIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface RequirementUpdateWithWhereUniqueNestedInput {
-  where: RequirementWhereUniqueInput;
-  data: RequirementUpdateDataInput;
 }
 
 export interface SessionReviewIndexWhereInput {
@@ -3390,14 +3680,63 @@ export interface SessionReviewIndexWhereInput {
   NOT?: SessionReviewIndexWhereInput[] | SessionReviewIndexWhereInput;
 }
 
+export interface RequirementUpdateManyInput {
+  create?: RequirementCreateInput[] | RequirementCreateInput;
+  update?:
+    | RequirementUpdateWithWhereUniqueNestedInput[]
+    | RequirementUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | RequirementUpsertWithWhereUniqueNestedInput[]
+    | RequirementUpsertWithWhereUniqueNestedInput;
+  delete?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
+  connect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
+  set?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
+  disconnect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
+  deleteMany?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
+  updateMany?:
+    | RequirementUpdateManyWithWhereNestedInput[]
+    | RequirementUpdateManyWithWhereNestedInput;
+}
+
+export interface GamingSessionCreateOneInput {
+  create?: GamingSessionCreateInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface RequirementUpdateWithWhereUniqueNestedInput {
+  where: RequirementWhereUniqueInput;
+  data: RequirementUpdateDataInput;
+}
+
+export interface GamingSessionUpdateManyMutationInput {
+  title?: String;
+  length?: Int;
+  price?: Float;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  retired?: Boolean;
+}
+
 export interface RequirementUpdateDataInput {
   msg?: String;
 }
 
-export interface GamerTagUpdateManyMutationInput {
-  psn?: String;
-  xbl?: String;
-  nso?: String;
+export interface GamingSessionUpdateInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
 }
 
 export interface RequirementUpsertWithWhereUniqueNestedInput {
@@ -3406,26 +3745,10 @@ export interface RequirementUpsertWithWhereUniqueNestedInput {
   create: RequirementCreateInput;
 }
 
-export interface UserUpdateWithoutGamertagsDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+export interface GamerTagUpdateManyMutationInput {
+  psn?: String;
+  xbl?: String;
+  nso?: String;
 }
 
 export interface RequirementScalarWhereInput {
@@ -3478,6 +3801,17 @@ export interface RequirementScalarWhereInput {
   NOT?: RequirementScalarWhereInput[] | RequirementScalarWhereInput;
 }
 
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  username?: String;
+}>;
+
+export interface RequirementUpdateManyWithWhereNestedInput {
+  where: RequirementScalarWhereInput;
+  data: RequirementUpdateManyDataInput;
+}
+
 export interface UserUpdateOneRequiredWithoutGamertagsInput {
   create?: UserCreateWithoutGamertagsInput;
   update?: UserUpdateWithoutGamertagsDataInput;
@@ -3485,38 +3819,11 @@ export interface UserUpdateOneRequiredWithoutGamertagsInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface RequirementUpdateManyWithWhereNestedInput {
-  where: RequirementScalarWhereInput;
-  data: RequirementUpdateManyDataInput;
-}
-
-export interface UserCreateWithoutGamertagsInput {
-  gender?: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-  friends?: UserCreateManyInput;
-  role?: Role;
-  index: UserIndexCreateOneWithoutUserInput;
-}
-
 export interface RequirementUpdateManyDataInput {
   msg?: String;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export type UserIndexWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   email?: String;
   username?: String;
@@ -3540,9 +3847,9 @@ export interface DiscountUpdateManyInput {
     | DiscountUpdateManyWithWhereNestedInput;
 }
 
-export interface GamerRequestUpdateManyMutationInput {
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
+export interface UserCreateOneWithoutGamertagsInput {
+  create?: UserCreateWithoutGamertagsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface DiscountUpdateWithWhereUniqueNestedInput {
@@ -3550,92 +3857,15 @@ export interface DiscountUpdateWithWhereUniqueNestedInput {
   data: DiscountUpdateDataInput;
 }
 
-export type UserIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  username?: String;
-}>;
+export interface GamerRequestUpdateManyMutationInput {
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+}
 
 export interface DiscountUpdateDataInput {
   percentage?: Int;
   threshold?: Int;
   playerOrSession?: PlayerOrSession;
-}
-
-export interface SocialMediaUpdateOneRequiredInput {
-  create?: SocialMediaCreateInput;
-  update?: SocialMediaUpdateDataInput;
-  upsert?: SocialMediaUpsertNestedInput;
-  connect?: SocialMediaWhereUniqueInput;
-}
-
-export interface DiscountUpsertWithWhereUniqueNestedInput {
-  where: DiscountWhereUniqueInput;
-  update: DiscountUpdateDataInput;
-  create: DiscountCreateInput;
-}
-
-export interface GamerRequestUpdateInput {
-  user?: UserUpdateOneRequiredInput;
-  occupations?: GamerRequestUpdateoccupationsInput;
-  addToOccupations?: String;
-  socialMedia?: SocialMediaUpdateOneRequiredInput;
-}
-
-export interface DiscountScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  percentage?: Int;
-  percentage_not?: Int;
-  percentage_in?: Int[] | Int;
-  percentage_not_in?: Int[] | Int;
-  percentage_lt?: Int;
-  percentage_lte?: Int;
-  percentage_gt?: Int;
-  percentage_gte?: Int;
-  threshold?: Int;
-  threshold_not?: Int;
-  threshold_in?: Int[] | Int;
-  threshold_not_in?: Int[] | Int;
-  threshold_lt?: Int;
-  threshold_lte?: Int;
-  threshold_gt?: Int;
-  threshold_gte?: Int;
-  playerOrSession?: PlayerOrSession;
-  playerOrSession_not?: PlayerOrSession;
-  playerOrSession_in?: PlayerOrSession[] | PlayerOrSession;
-  playerOrSession_not_in?: PlayerOrSession[] | PlayerOrSession;
-  AND?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-  OR?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
-  NOT?: DiscountScalarWhereInput[] | DiscountScalarWhereInput;
 }
 
 export interface BookedPlayerCreateInput {
@@ -3644,9 +3874,13 @@ export interface BookedPlayerCreateInput {
   timeslot: GamingTimeSlotCreateOneWithoutPlayersInput;
 }
 
-export interface SocialMediaCreateOneInput {
-  create?: SocialMediaCreateInput;
-  connect?: SocialMediaWhereUniqueInput;
+export interface SocialMediaUpdateDataInput {
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
 }
 
 export interface UserCreateInput {
@@ -3656,6 +3890,8 @@ export interface UserCreateInput {
   password: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup?: Boolean;
   occupations?: UserCreateoccupationsInput;
   name: String;
@@ -3663,6 +3899,7 @@ export interface UserCreateInput {
   sessions?: GamingSessionCreateManyWithoutGamersInput;
   timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
   invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
   invitesReceived?: BookingInviteCreateManyWithoutToInput;
   setup?: Int;
   reviews?: SessionReviewCreateManyWithoutUserInput;
@@ -3672,8 +3909,11 @@ export interface UserCreateInput {
   index: UserIndexCreateOneWithoutUserInput;
 }
 
-export interface GamerRequestCreateoccupationsInput {
-  set?: Occupations[] | Occupations;
+export interface SocialMediaUpdateOneRequiredInput {
+  create?: SocialMediaCreateInput;
+  update?: SocialMediaUpdateDataInput;
+  upsert?: SocialMediaUpsertNestedInput;
+  connect?: SocialMediaWhereUniqueInput;
 }
 
 export interface GamingSessionCreateManyWithoutGamersInput {
@@ -3948,6 +4188,66 @@ export interface GameCreatetagsInput {
   set?: Tags[] | Tags;
 }
 
+export interface GamingTimeSlotUpdateManyWithoutGamingSessionInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamingSessionInput[]
+    | GamingTimeSlotCreateWithoutGamingSessionInput;
+  delete?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  set?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+  disconnect?:
+    | GamingTimeSlotWhereUniqueInput[]
+    | GamingTimeSlotWhereUniqueInput;
+  update?:
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput[]
+    | GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput;
+  upsert?:
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput[]
+    | GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput;
+  deleteMany?:
+    | GamingTimeSlotScalarWhereInput[]
+    | GamingTimeSlotScalarWhereInput;
+  updateMany?:
+    | GamingTimeSlotUpdateManyWithWhereNestedInput[]
+    | GamingTimeSlotUpdateManyWithWhereNestedInput;
+}
+
+export interface SessionReviewCreateWithoutSessionInput {
+  user: UserCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
+}
+
+export interface GamingTimeSlotUpdateWithWhereUniqueWithoutGamingSessionInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  data: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
+}
+
+export interface UserCreateWithoutReviewsInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  friends?: UserCreateManyInput;
+  gamertags?: GamerTagCreateOneWithoutUserInput;
+  role?: Role;
+  index: UserIndexCreateOneWithoutUserInput;
+}
+
 export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
   startTime?: DateTimeInput;
   endTime?: DateTimeInput;
@@ -3958,10 +4258,14 @@ export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
   slots?: Int;
 }
 
-export interface SessionReviewCreateWithoutSessionInput {
-  user: UserCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
+export interface GamingTimeSlotCreateWithoutGamersInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
+  bookings?: BookingCreateManyWithoutTimeslotInput;
+  players?: BookedPlayerCreateManyWithoutTimeslotInput;
+  length: Int;
+  slots: Int;
 }
 
 export interface BookingUpdateManyWithoutTimeslotInput {
@@ -3984,54 +4288,6 @@ export interface BookingUpdateManyWithoutTimeslotInput {
     | BookingUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateWithoutReviewsInput {
-  gender?: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  setup?: Int;
-  friends?: UserCreateManyInput;
-  gamertags?: GamerTagCreateOneWithoutUserInput;
-  role?: Role;
-  index: UserIndexCreateOneWithoutUserInput;
-}
-
-export interface BookingUpdateWithWhereUniqueWithoutTimeslotInput {
-  where: BookingWhereUniqueInput;
-  data: BookingUpdateWithoutTimeslotDataInput;
-}
-
-export interface GamingTimeSlotCreateWithoutGamersInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
-  bookings?: BookingCreateManyWithoutTimeslotInput;
-  players?: BookedPlayerCreateManyWithoutTimeslotInput;
-  length: Int;
-  slots: Int;
-}
-
-export interface BookingUpdateWithoutTimeslotDataInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  players?: BookedPlayerUpdateManyWithoutBookingInput;
-  total?: Float;
-  bookee?: UserUpdateOneRequiredInput;
-  invites?: BookingInviteUpdateManyWithoutBookingInput;
-  cancelled?: Boolean;
-  notifications?: NotificationUpdateManyWithoutBookingInput;
-}
-
 export interface GamingSessionCreateWithoutTimeslotsInput {
   gamers?: UserCreateManyWithoutSessionsInput;
   creator: UserCreateOneInput;
@@ -4046,6 +4302,56 @@ export interface GamingSessionCreateWithoutTimeslotsInput {
   requirements?: RequirementCreateManyInput;
   discounts?: DiscountCreateManyInput;
   retired?: Boolean;
+}
+
+export interface BookingUpdateWithWhereUniqueWithoutTimeslotInput {
+  where: BookingWhereUniqueInput;
+  data: BookingUpdateWithoutTimeslotDataInput;
+}
+
+export interface UserCreateWithoutSessionsInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+  friends?: UserCreateManyInput;
+  gamertags?: GamerTagCreateOneWithoutUserInput;
+  role?: Role;
+  index: UserIndexCreateOneWithoutUserInput;
+}
+
+export interface BookingUpdateWithoutTimeslotDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  players?: BookedPlayerUpdateManyWithoutBookingInput;
+  total?: Float;
+  bookee?: UserUpdateOneRequiredInput;
+  invites?: BookingInviteUpdateManyWithoutBookingInput;
+  cancelled?: Boolean;
+  notifications?: NotificationUpdateManyWithoutBookingInput;
+}
+
+export interface BookingInviteCreateWithoutFromInput {
+  startTime: DateTimeInput;
+  booking: BookingCreateOneWithoutInvitesInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  sent: Boolean;
+  accepted?: Boolean;
+  notification?: NotificationCreateOneWithoutBookingInviteInput;
 }
 
 export interface BookingInviteUpdateManyWithoutBookingInput {
@@ -4068,51 +4374,6 @@ export interface BookingInviteUpdateManyWithoutBookingInput {
     | BookingInviteUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateWithoutSessionsInput {
-  gender?: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-  friends?: UserCreateManyInput;
-  gamertags?: GamerTagCreateOneWithoutUserInput;
-  role?: Role;
-  index: UserIndexCreateOneWithoutUserInput;
-}
-
-export interface BookingInviteUpdateWithWhereUniqueWithoutBookingInput {
-  where: BookingInviteWhereUniqueInput;
-  data: BookingInviteUpdateWithoutBookingDataInput;
-}
-
-export interface BookingInviteCreateWithoutFromInput {
-  startTime: DateTimeInput;
-  booking: BookingCreateOneWithoutInvitesInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  sent: Boolean;
-  accepted?: Boolean;
-  notification?: NotificationCreateOneWithoutBookingInviteInput;
-}
-
-export interface BookingInviteUpdateWithoutBookingDataInput {
-  startTime?: DateTimeInput;
-  to?: UserUpdateOneWithoutInvitesReceivedInput;
-  from?: UserUpdateOneRequiredWithoutInvitesInput;
-  sent?: Boolean;
-  accepted?: Boolean;
-  notification?: NotificationUpdateOneWithoutBookingInviteInput;
-}
-
 export interface BookingCreateWithoutInvitesInput {
   numSlots: Int;
   numPlayers: Int;
@@ -4124,13 +4385,9 @@ export interface BookingCreateWithoutInvitesInput {
   notifications?: NotificationCreateManyWithoutBookingInput;
 }
 
-export interface UserUpdateOneWithoutInvitesReceivedInput {
-  create?: UserCreateWithoutInvitesReceivedInput;
-  update?: UserUpdateWithoutInvitesReceivedDataInput;
-  upsert?: UserUpsertWithoutInvitesReceivedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface BookingInviteUpdateWithWhereUniqueWithoutBookingInput {
+  where: BookingInviteWhereUniqueInput;
+  data: BookingInviteUpdateWithoutBookingDataInput;
 }
 
 export interface BookedPlayerCreateWithoutBookingInput {
@@ -4138,26 +4395,13 @@ export interface BookedPlayerCreateWithoutBookingInput {
   timeslot: GamingTimeSlotCreateOneWithoutPlayersInput;
 }
 
-export interface UserUpdateWithoutInvitesReceivedDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+export interface BookingInviteUpdateWithoutBookingDataInput {
+  startTime?: DateTimeInput;
+  to?: UserUpdateOneWithoutInvitesReceivedInput;
+  from?: UserUpdateOneRequiredWithoutInvitesInput;
+  sent?: Boolean;
+  accepted?: Boolean;
+  notification?: NotificationUpdateOneWithoutBookingInviteInput;
 }
 
 export interface GamingTimeSlotCreateWithoutPlayersInput {
@@ -4168,6 +4412,72 @@ export interface GamingTimeSlotCreateWithoutPlayersInput {
   bookings?: BookingCreateManyWithoutTimeslotInput;
   length: Int;
   slots: Int;
+}
+
+export interface UserUpdateOneWithoutInvitesReceivedInput {
+  create?: UserCreateWithoutInvitesReceivedInput;
+  update?: UserUpdateWithoutInvitesReceivedDataInput;
+  upsert?: UserUpsertWithoutInvitesReceivedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutTimeSlotsInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+  friends?: UserCreateManyInput;
+  gamertags?: GamerTagCreateOneWithoutUserInput;
+  role?: Role;
+  index: UserIndexCreateOneWithoutUserInput;
+}
+
+export interface UserUpdateWithoutInvitesReceivedDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export interface SavedCardCreateWithoutUserInput {
+  cardId: String;
+  default: Boolean;
+  lastFour: String;
+  brand: String;
 }
 
 export interface UserUpdateManyInput {
@@ -4188,33 +4498,6 @@ export interface UserUpdateManyInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateWithoutTimeSlotsInput {
-  gender?: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserCreateoccupationsInput;
-  name: String;
-  aboutMe?: String;
-  sessions?: GamingSessionCreateManyWithoutGamersInput;
-  invites?: BookingInviteCreateManyWithoutFromInput;
-  invitesReceived?: BookingInviteCreateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewCreateManyWithoutUserInput;
-  friends?: UserCreateManyInput;
-  gamertags?: GamerTagCreateOneWithoutUserInput;
-  role?: Role;
-  index: UserIndexCreateOneWithoutUserInput;
-}
-
-export interface UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateDataInput;
-}
-
 export interface BookingInviteCreateWithoutToInput {
   startTime: DateTimeInput;
   booking: BookingCreateOneWithoutInvitesInput;
@@ -4224,10 +4507,9 @@ export interface BookingInviteCreateWithoutToInput {
   notification?: NotificationCreateOneWithoutBookingInviteInput;
 }
 
-export interface UserUpsertWithWhereUniqueNestedInput {
+export interface UserUpdateWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput;
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
+  data: UserUpdateDataInput;
 }
 
 export interface UserCreateWithoutInvitesInput {
@@ -4237,12 +4519,15 @@ export interface UserCreateWithoutInvitesInput {
   password: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup?: Boolean;
   occupations?: UserCreateoccupationsInput;
   name: String;
   aboutMe?: String;
   sessions?: GamingSessionCreateManyWithoutGamersInput;
   timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
   invitesReceived?: BookingInviteCreateManyWithoutToInput;
   setup?: Int;
   reviews?: SessionReviewCreateManyWithoutUserInput;
@@ -4250,6 +4535,18 @@ export interface UserCreateWithoutInvitesInput {
   gamertags?: GamerTagCreateOneWithoutUserInput;
   role?: Role;
   index: UserIndexCreateOneWithoutUserInput;
+}
+
+export interface UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface SessionReviewCreateWithoutUserInput {
+  session: GamingSessionCreateOneWithoutReviewsInput;
+  text: String;
+  rating: Int;
 }
 
 export interface UserScalarWhereInput {
@@ -4357,6 +4654,34 @@ export interface UserScalarWhereInput {
   banner_not_starts_with?: String;
   banner_ends_with?: String;
   banner_not_ends_with?: String;
+  connectedStripeId?: String;
+  connectedStripeId_not?: String;
+  connectedStripeId_in?: String[] | String;
+  connectedStripeId_not_in?: String[] | String;
+  connectedStripeId_lt?: String;
+  connectedStripeId_lte?: String;
+  connectedStripeId_gt?: String;
+  connectedStripeId_gte?: String;
+  connectedStripeId_contains?: String;
+  connectedStripeId_not_contains?: String;
+  connectedStripeId_starts_with?: String;
+  connectedStripeId_not_starts_with?: String;
+  connectedStripeId_ends_with?: String;
+  connectedStripeId_not_ends_with?: String;
+  customerStripeId?: String;
+  customerStripeId_not?: String;
+  customerStripeId_in?: String[] | String;
+  customerStripeId_not_in?: String[] | String;
+  customerStripeId_lt?: String;
+  customerStripeId_lte?: String;
+  customerStripeId_gt?: String;
+  customerStripeId_gte?: String;
+  customerStripeId_contains?: String;
+  customerStripeId_not_contains?: String;
+  customerStripeId_starts_with?: String;
+  customerStripeId_not_starts_with?: String;
+  customerStripeId_ends_with?: String;
+  customerStripeId_not_ends_with?: String;
   gamerIsSetup?: Boolean;
   gamerIsSetup_not?: Boolean;
   name?: String;
@@ -4404,17 +4729,6 @@ export interface UserScalarWhereInput {
   NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
 }
 
-export interface SessionReviewCreateWithoutUserInput {
-  session: GamingSessionCreateOneWithoutReviewsInput;
-  text: String;
-  rating: Int;
-}
-
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
-}
-
 export interface GamingSessionCreateWithoutReviewsInput {
   gamers?: UserCreateManyWithoutSessionsInput;
   creator: UserCreateOneInput;
@@ -4431,6 +4745,15 @@ export interface GamingSessionCreateWithoutReviewsInput {
   retired?: Boolean;
 }
 
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface RequirementCreateInput {
+  msg: String;
+}
+
 export interface UserUpdateManyDataInput {
   gender?: Gender;
   email?: String;
@@ -4438,6 +4761,8 @@ export interface UserUpdateManyDataInput {
   password?: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup?: Boolean;
   occupations?: UserUpdateoccupationsInput;
   name?: String;
@@ -4446,8 +4771,10 @@ export interface UserUpdateManyDataInput {
   role?: Role;
 }
 
-export interface RequirementCreateInput {
-  msg: String;
+export interface DiscountCreateInput {
+  percentage: Int;
+  threshold: Int;
+  playerOrSession: PlayerOrSession;
 }
 
 export interface GamerTagUpdateOneWithoutUserInput {
@@ -4457,19 +4784,6 @@ export interface GamerTagUpdateOneWithoutUserInput {
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: GamerTagWhereUniqueInput;
-}
-
-export interface DiscountCreateInput {
-  percentage: Int;
-  threshold: Int;
-  playerOrSession: PlayerOrSession;
-}
-
-export interface GamerTagUpdateWithoutUserDataInput {
-  psn?: String;
-  xbl?: String;
-  nso?: String;
-  pc?: PCLauncherUpdateOneWithoutGamerTagInput;
 }
 
 export interface GamingTimeSlotCreateWithoutGamingSessionInput {
@@ -4482,13 +4796,11 @@ export interface GamingTimeSlotCreateWithoutGamingSessionInput {
   slots: Int;
 }
 
-export interface PCLauncherUpdateOneWithoutGamerTagInput {
-  create?: PCLauncherCreateWithoutGamerTagInput;
-  update?: PCLauncherUpdateWithoutGamerTagDataInput;
-  upsert?: PCLauncherUpsertWithoutGamerTagInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PCLauncherWhereUniqueInput;
+export interface GamerTagUpdateWithoutUserDataInput {
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+  pc?: PCLauncherUpdateOneWithoutGamerTagInput;
 }
 
 export interface BookingCreateWithoutTimeslotInput {
@@ -4500,6 +4812,24 @@ export interface BookingCreateWithoutTimeslotInput {
   invites?: BookingInviteCreateManyWithoutBookingInput;
   cancelled?: Boolean;
   notifications?: NotificationCreateManyWithoutBookingInput;
+}
+
+export interface PCLauncherUpdateOneWithoutGamerTagInput {
+  create?: PCLauncherCreateWithoutGamerTagInput;
+  update?: PCLauncherUpdateWithoutGamerTagDataInput;
+  upsert?: PCLauncherUpsertWithoutGamerTagInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: PCLauncherWhereUniqueInput;
+}
+
+export interface BookingInviteCreateWithoutBookingInput {
+  startTime: DateTimeInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  from: UserCreateOneWithoutInvitesInput;
+  sent: Boolean;
+  accepted?: Boolean;
+  notification?: NotificationCreateOneWithoutBookingInviteInput;
 }
 
 export interface PCLauncherUpdateWithoutGamerTagDataInput {
@@ -4515,20 +4845,6 @@ export interface PCLauncherUpdateWithoutGamerTagDataInput {
   riot?: String;
 }
 
-export interface BookingInviteCreateWithoutBookingInput {
-  startTime: DateTimeInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  from: UserCreateOneWithoutInvitesInput;
-  sent: Boolean;
-  accepted?: Boolean;
-  notification?: NotificationCreateOneWithoutBookingInviteInput;
-}
-
-export interface PCLauncherUpsertWithoutGamerTagInput {
-  update: PCLauncherUpdateWithoutGamerTagDataInput;
-  create: PCLauncherCreateWithoutGamerTagInput;
-}
-
 export interface UserCreateWithoutInvitesReceivedInput {
   gender?: Gender;
   email: String;
@@ -4536,6 +4852,8 @@ export interface UserCreateWithoutInvitesReceivedInput {
   password: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup?: Boolean;
   occupations?: UserCreateoccupationsInput;
   name: String;
@@ -4543,6 +4861,7 @@ export interface UserCreateWithoutInvitesReceivedInput {
   sessions?: GamingSessionCreateManyWithoutGamersInput;
   timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
   invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
   setup?: Int;
   reviews?: SessionReviewCreateManyWithoutUserInput;
   friends?: UserCreateManyInput;
@@ -4551,14 +4870,24 @@ export interface UserCreateWithoutInvitesReceivedInput {
   index: UserIndexCreateOneWithoutUserInput;
 }
 
-export interface GamerTagUpsertWithoutUserInput {
-  update: GamerTagUpdateWithoutUserDataInput;
-  create: GamerTagCreateWithoutUserInput;
+export interface PCLauncherUpsertWithoutGamerTagInput {
+  update: PCLauncherUpdateWithoutGamerTagDataInput;
+  create: PCLauncherCreateWithoutGamerTagInput;
 }
 
 export interface GamerTagCreateOneWithoutUserInput {
   create?: GamerTagCreateWithoutUserInput;
   connect?: GamerTagWhereUniqueInput;
+}
+
+export interface GamerTagUpsertWithoutUserInput {
+  update: GamerTagUpdateWithoutUserDataInput;
+  create: GamerTagCreateWithoutUserInput;
+}
+
+export interface PCLauncherCreateOneWithoutGamerTagInput {
+  create?: PCLauncherCreateWithoutGamerTagInput;
+  connect?: PCLauncherWhereUniqueInput;
 }
 
 export interface UserIndexUpdateOneRequiredWithoutUserInput {
@@ -4568,9 +4897,9 @@ export interface UserIndexUpdateOneRequiredWithoutUserInput {
   connect?: UserIndexWhereUniqueInput;
 }
 
-export interface PCLauncherCreateOneWithoutGamerTagInput {
-  create?: PCLauncherCreateWithoutGamerTagInput;
-  connect?: PCLauncherWhereUniqueInput;
+export interface UserIndexCreateOneWithoutUserInput {
+  create?: UserIndexCreateWithoutUserInput;
+  connect?: UserIndexWhereUniqueInput;
 }
 
 export interface UserIndexUpdateWithoutUserDataInput {
@@ -4579,9 +4908,9 @@ export interface UserIndexUpdateWithoutUserDataInput {
   name?: String;
 }
 
-export interface UserIndexCreateOneWithoutUserInput {
-  create?: UserIndexCreateWithoutUserInput;
-  connect?: UserIndexWhereUniqueInput;
+export interface NotificationCreateOneWithoutBookingInviteInput {
+  create?: NotificationCreateWithoutBookingInviteInput;
+  connect?: NotificationWhereUniqueInput;
 }
 
 export interface UserIndexUpsertWithoutUserInput {
@@ -4589,9 +4918,9 @@ export interface UserIndexUpsertWithoutUserInput {
   create: UserIndexCreateWithoutUserInput;
 }
 
-export interface NotificationCreateOneWithoutBookingInviteInput {
-  create?: NotificationCreateWithoutBookingInviteInput;
-  connect?: NotificationWhereUniqueInput;
+export interface FriendRequestCreateOneWithoutNotificationInput {
+  create?: FriendRequestCreateWithoutNotificationInput;
+  connect?: FriendRequestWhereUniqueInput;
 }
 
 export interface UserUpsertWithoutInvitesReceivedInput {
@@ -4599,9 +4928,9 @@ export interface UserUpsertWithoutInvitesReceivedInput {
   create: UserCreateWithoutInvitesReceivedInput;
 }
 
-export interface FriendRequestCreateOneWithoutNotificationInput {
-  create?: FriendRequestCreateWithoutNotificationInput;
-  connect?: FriendRequestWhereUniqueInput;
+export interface BookingCreateOneWithoutNotificationsInput {
+  create?: BookingCreateWithoutNotificationsInput;
+  connect?: BookingWhereUniqueInput;
 }
 
 export interface NotificationUpdateOneWithoutBookingInviteInput {
@@ -4613,9 +4942,9 @@ export interface NotificationUpdateOneWithoutBookingInviteInput {
   connect?: NotificationWhereUniqueInput;
 }
 
-export interface BookingCreateOneWithoutNotificationsInput {
-  create?: BookingCreateWithoutNotificationsInput;
-  connect?: BookingWhereUniqueInput;
+export interface GamingTimeSlotCreateOneWithoutBookingsInput {
+  create?: GamingTimeSlotCreateWithoutBookingsInput;
+  connect?: GamingTimeSlotWhereUniqueInput;
 }
 
 export interface NotificationUpdateWithoutBookingInviteDataInput {
@@ -4628,9 +4957,11 @@ export interface NotificationUpdateWithoutBookingInviteDataInput {
   viewed?: Boolean;
 }
 
-export interface GamingTimeSlotCreateOneWithoutBookingsInput {
-  create?: GamingTimeSlotCreateWithoutBookingsInput;
-  connect?: GamingTimeSlotWhereUniqueInput;
+export interface BookedPlayerCreateManyWithoutTimeslotInput {
+  create?:
+    | BookedPlayerCreateWithoutTimeslotInput[]
+    | BookedPlayerCreateWithoutTimeslotInput;
+  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
 }
 
 export interface FriendRequestUpdateOneWithoutNotificationInput {
@@ -4642,11 +4973,9 @@ export interface FriendRequestUpdateOneWithoutNotificationInput {
   connect?: FriendRequestWhereUniqueInput;
 }
 
-export interface BookedPlayerCreateManyWithoutTimeslotInput {
-  create?:
-    | BookedPlayerCreateWithoutTimeslotInput[]
-    | BookedPlayerCreateWithoutTimeslotInput;
-  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+export interface BookingCreateOneWithoutPlayersInput {
+  create?: BookingCreateWithoutPlayersInput;
+  connect?: BookingWhereUniqueInput;
 }
 
 export interface FriendRequestUpdateWithoutNotificationDataInput {
@@ -4654,9 +4983,11 @@ export interface FriendRequestUpdateWithoutNotificationDataInput {
   from?: UserUpdateOneRequiredInput;
 }
 
-export interface BookingCreateOneWithoutPlayersInput {
-  create?: BookingCreateWithoutPlayersInput;
-  connect?: BookingWhereUniqueInput;
+export interface NotificationCreateManyWithoutBookingInput {
+  create?:
+    | NotificationCreateWithoutBookingInput[]
+    | NotificationCreateWithoutBookingInput;
+  connect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
 }
 
 export interface FriendRequestUpsertWithoutNotificationInput {
@@ -4664,11 +4995,9 @@ export interface FriendRequestUpsertWithoutNotificationInput {
   create: FriendRequestCreateWithoutNotificationInput;
 }
 
-export interface NotificationCreateManyWithoutBookingInput {
-  create?:
-    | NotificationCreateWithoutBookingInput[]
-    | NotificationCreateWithoutBookingInput;
-  connect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
+export interface BookingInviteCreateOneWithoutNotificationInput {
+  create?: BookingInviteCreateWithoutNotificationInput;
+  connect?: BookingInviteWhereUniqueInput;
 }
 
 export interface BookingUpdateOneWithoutNotificationsInput {
@@ -4718,6 +5047,77 @@ export interface GamingTimeSlotUpdateOneRequiredWithoutBookingsInput {
   update?: GamingTimeSlotUpdateWithoutBookingsDataInput;
   upsert?: GamingTimeSlotUpsertWithoutBookingsInput;
   connect?: GamingTimeSlotWhereUniqueInput;
+}
+
+export interface NotificationWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  type?: NotificationType;
+  type_not?: NotificationType;
+  type_in?: NotificationType[] | NotificationType;
+  type_not_in?: NotificationType[] | NotificationType;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  for?: UserWhereInput;
+  friendRequest?: FriendRequestWhereInput;
+  bookingInvite?: BookingInviteWhereInput;
+  booking?: BookingWhereInput;
+  friend?: UserWhereInput;
+  viewed?: Boolean;
+  viewed_not?: Boolean;
+  AND?: NotificationWhereInput[] | NotificationWhereInput;
+  OR?: NotificationWhereInput[] | NotificationWhereInput;
+  NOT?: NotificationWhereInput[] | NotificationWhereInput;
+}
+
+export interface GamingTimeSlotUpdateWithoutBookingsDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
+  gamers?: UserUpdateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
+  length?: Int;
+  slots?: Int;
 }
 
 export interface BookingInviteWhereInput {
@@ -4772,33 +5172,6 @@ export interface BookingInviteWhereInput {
   NOT?: BookingInviteWhereInput[] | BookingInviteWhereInput;
 }
 
-export interface GamingTimeSlotUpdateWithoutBookingsDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  gamingSession?: GamingSessionUpdateOneRequiredWithoutTimeslotsInput;
-  gamers?: UserUpdateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerUpdateManyWithoutTimeslotInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export interface NotificationSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: NotificationWhereInput;
-  AND?:
-    | NotificationSubscriptionWhereInput[]
-    | NotificationSubscriptionWhereInput;
-  OR?:
-    | NotificationSubscriptionWhereInput[]
-    | NotificationSubscriptionWhereInput;
-  NOT?:
-    | NotificationSubscriptionWhereInput[]
-    | NotificationSubscriptionWhereInput;
-}
-
 export interface BookedPlayerUpdateManyWithoutTimeslotInput {
   create?:
     | BookedPlayerCreateWithoutTimeslotInput[]
@@ -4816,15 +5189,21 @@ export interface BookedPlayerUpdateManyWithoutTimeslotInput {
   deleteMany?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
 }
 
-export interface GamerTagSubscriptionWhereInput {
+export interface GamingSessionIndexSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: GamerTagWhereInput;
-  AND?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
-  OR?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
-  NOT?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
+  node?: GamingSessionIndexWhereInput;
+  AND?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  OR?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
+  NOT?:
+    | GamingSessionIndexSubscriptionWhereInput[]
+    | GamingSessionIndexSubscriptionWhereInput;
 }
 
 export interface BookedPlayerUpdateWithWhereUniqueWithoutTimeslotInput {
@@ -4832,18 +5211,32 @@ export interface BookedPlayerUpdateWithWhereUniqueWithoutTimeslotInput {
   data: BookedPlayerUpdateWithoutTimeslotDataInput;
 }
 
-export type BookingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface GameIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GameIndexWhereInput;
+  AND?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  OR?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+  NOT?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
+}
 
 export interface BookedPlayerUpdateWithoutTimeslotDataInput {
   player?: UserUpdateOneRequiredInput;
   booking?: BookingUpdateOneRequiredWithoutPlayersInput;
 }
 
-export type BookingInviteWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface DiscountSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DiscountWhereInput;
+  AND?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+  OR?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+  NOT?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+}
 
 export interface BookingUpdateOneRequiredWithoutPlayersInput {
   create?: BookingCreateWithoutPlayersInput;
@@ -4852,9 +5245,22 @@ export interface BookingUpdateOneRequiredWithoutPlayersInput {
   connect?: BookingWhereUniqueInput;
 }
 
-export type DiscountWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface BookedPlayerSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BookedPlayerWhereInput;
+  AND?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+  OR?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+  NOT?:
+    | BookedPlayerSubscriptionWhereInput[]
+    | BookedPlayerSubscriptionWhereInput;
+}
 
 export interface BookingUpdateWithoutPlayersDataInput {
   numSlots?: Int;
@@ -4867,9 +5273,30 @@ export interface BookingUpdateWithoutPlayersDataInput {
   notifications?: NotificationUpdateManyWithoutBookingInput;
 }
 
-export type FriendRequestWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserUpdateWithoutIndexDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+}
 
 export interface NotificationUpdateManyWithoutBookingInput {
   create?:
@@ -4891,9 +5318,11 @@ export interface NotificationUpdateManyWithoutBookingInput {
     | NotificationUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateOneWithoutIndexInput {
-  create?: UserCreateWithoutIndexInput;
-  connect?: UserWhereUniqueInput;
+export interface UserIndexUpdateInput {
+  email?: String;
+  username?: String;
+  name?: String;
+  user?: UserUpdateOneRequiredWithoutIndexInput;
 }
 
 export interface NotificationUpdateWithWhereUniqueWithoutBookingInput {
@@ -4901,27 +5330,11 @@ export interface NotificationUpdateWithWhereUniqueWithoutBookingInput {
   data: NotificationUpdateWithoutBookingDataInput;
 }
 
-export interface UserUpdateInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+export interface UserIndexCreateInput {
+  email: String;
+  username: String;
+  name: String;
+  user: UserCreateOneWithoutIndexInput;
 }
 
 export interface NotificationUpdateWithoutBookingDataInput {
@@ -4934,70 +5347,9 @@ export interface NotificationUpdateWithoutBookingDataInput {
   viewed?: Boolean;
 }
 
-export interface GameIndexWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  launcher?: String;
-  launcher_not?: String;
-  launcher_in?: String[] | String;
-  launcher_not_in?: String[] | String;
-  launcher_lt?: String;
-  launcher_lte?: String;
-  launcher_gt?: String;
-  launcher_gte?: String;
-  launcher_contains?: String;
-  launcher_not_contains?: String;
-  launcher_starts_with?: String;
-  launcher_not_starts_with?: String;
-  launcher_ends_with?: String;
-  launcher_not_ends_with?: String;
-  game?: GameWhereInput;
-  AND?: GameIndexWhereInput[] | GameIndexWhereInput;
-  OR?: GameIndexWhereInput[] | GameIndexWhereInput;
-  NOT?: GameIndexWhereInput[] | GameIndexWhereInput;
-}
+export type GameIndexWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface BookingInviteUpdateOneWithoutNotificationInput {
   create?: BookingInviteCreateWithoutNotificationInput;
@@ -5008,11 +5360,8 @@ export interface BookingInviteUpdateOneWithoutNotificationInput {
   connect?: BookingInviteWhereUniqueInput;
 }
 
-export interface SessionReviewUpdateDataInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+export interface SessionReviewIndexUpdateManyMutationInput {
   text?: String;
-  rating?: Int;
 }
 
 export interface BookingInviteUpdateWithoutNotificationDataInput {
@@ -5024,7 +5373,19 @@ export interface BookingInviteUpdateWithoutNotificationDataInput {
   accepted?: Boolean;
 }
 
-export interface GamerRequestWhereInput {
+export interface SessionReviewUpdateOneRequiredInput {
+  create?: SessionReviewCreateInput;
+  update?: SessionReviewUpdateDataInput;
+  upsert?: SessionReviewUpsertNestedInput;
+  connect?: SessionReviewWhereUniqueInput;
+}
+
+export interface BookingInviteUpsertWithoutNotificationInput {
+  update: BookingInviteUpdateWithoutNotificationDataInput;
+  create: BookingInviteCreateWithoutNotificationInput;
+}
+
+export interface GamingTimeSlotWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -5055,35 +5416,51 @@ export interface GamerRequestWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
-  user?: UserWhereInput;
-  addToOccupations?: String;
-  addToOccupations_not?: String;
-  addToOccupations_in?: String[] | String;
-  addToOccupations_not_in?: String[] | String;
-  addToOccupations_lt?: String;
-  addToOccupations_lte?: String;
-  addToOccupations_gt?: String;
-  addToOccupations_gte?: String;
-  addToOccupations_contains?: String;
-  addToOccupations_not_contains?: String;
-  addToOccupations_starts_with?: String;
-  addToOccupations_not_starts_with?: String;
-  addToOccupations_ends_with?: String;
-  addToOccupations_not_ends_with?: String;
-  socialMedia?: SocialMediaWhereInput;
-  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
-}
-
-export interface BookingInviteUpsertWithoutNotificationInput {
-  update: BookingInviteUpdateWithoutNotificationDataInput;
-  create: BookingInviteCreateWithoutNotificationInput;
-}
-
-export interface SessionReviewIndexCreateInput {
-  text: String;
-  sessionReview: SessionReviewCreateOneInput;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  endTime?: DateTimeInput;
+  endTime_not?: DateTimeInput;
+  endTime_in?: DateTimeInput[] | DateTimeInput;
+  endTime_not_in?: DateTimeInput[] | DateTimeInput;
+  endTime_lt?: DateTimeInput;
+  endTime_lte?: DateTimeInput;
+  endTime_gt?: DateTimeInput;
+  endTime_gte?: DateTimeInput;
+  gamingSession?: GamingSessionWhereInput;
+  gamers_every?: UserWhereInput;
+  gamers_some?: UserWhereInput;
+  gamers_none?: UserWhereInput;
+  bookings_every?: BookingWhereInput;
+  bookings_some?: BookingWhereInput;
+  bookings_none?: BookingWhereInput;
+  players_every?: BookedPlayerWhereInput;
+  players_some?: BookedPlayerWhereInput;
+  players_none?: BookedPlayerWhereInput;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  slots?: Int;
+  slots_not?: Int;
+  slots_in?: Int[] | Int;
+  slots_not_in?: Int[] | Int;
+  slots_lt?: Int;
+  slots_lte?: Int;
+  slots_gt?: Int;
+  slots_gte?: Int;
+  AND?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+  OR?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+  NOT?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
 }
 
 export interface UserUpdateOneInput {
@@ -5095,20 +5472,20 @@ export interface UserUpdateOneInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface SessionReviewUpdateInput {
-  user?: UserUpdateOneRequiredWithoutReviewsInput;
-  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
-  text?: String;
-  rating?: Int;
-}
+export type GamerTagWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface UserUpsertNestedInput {
   update: UserUpdateDataInput;
   create: UserCreateInput;
 }
 
-export interface RequirementUpdateInput {
-  msg?: String;
+export interface SavedCardUpdateManyMutationInput {
+  cardId?: String;
+  default?: Boolean;
+  lastFour?: String;
+  brand?: String;
 }
 
 export interface NotificationUpsertWithWhereUniqueWithoutBookingInput {
@@ -5117,11 +5494,11 @@ export interface NotificationUpsertWithWhereUniqueWithoutBookingInput {
   create: NotificationCreateWithoutBookingInput;
 }
 
-export interface GamerTagUpdateWithoutPcDataInput {
-  user?: UserUpdateOneRequiredWithoutGamertagsInput;
-  psn?: String;
-  xbl?: String;
-  nso?: String;
+export interface UserUpdateOneRequiredWithoutSavedCardsInput {
+  create?: UserCreateWithoutSavedCardsInput;
+  update?: UserUpdateWithoutSavedCardsDataInput;
+  upsert?: UserUpsertWithoutSavedCardsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface NotificationScalarWhereInput {
@@ -5178,1321 +5555,6 @@ export interface NotificationScalarWhereInput {
   AND?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
   OR?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
   NOT?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
-}
-
-export interface PCLauncherUpdateInput {
-  gamerTag?: GamerTagUpdateOneRequiredWithoutPcInput;
-  epic?: String;
-  steam?: String;
-  origin?: String;
-  gog?: String;
-  battlenet?: String;
-  uplay?: String;
-  bethesda?: String;
-  itch?: String;
-  windows?: String;
-  riot?: String;
-}
-
-export interface NotificationUpdateManyWithWhereNestedInput {
-  where: NotificationScalarWhereInput;
-  data: NotificationUpdateManyDataInput;
-}
-
-export interface PCLauncherCreateInput {
-  gamerTag: GamerTagCreateOneWithoutPcInput;
-  epic?: String;
-  steam?: String;
-  origin?: String;
-  gog?: String;
-  battlenet?: String;
-  uplay?: String;
-  bethesda?: String;
-  itch?: String;
-  windows?: String;
-  riot?: String;
-}
-
-export interface NotificationUpdateManyDataInput {
-  type?: NotificationType;
-  text?: String;
-  viewed?: Boolean;
-}
-
-export interface NotificationCreateInput {
-  type: NotificationType;
-  text: String;
-  for: UserCreateOneInput;
-  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
-  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
-  booking?: BookingCreateOneWithoutNotificationsInput;
-  friend?: UserCreateOneInput;
-  viewed?: Boolean;
-}
-
-export interface BookingUpsertWithoutPlayersInput {
-  update: BookingUpdateWithoutPlayersDataInput;
-  create: BookingCreateWithoutPlayersInput;
-}
-
-export interface GamingTimeSlotCreateInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
-  gamers?: UserCreateManyWithoutTimeSlotsInput;
-  bookings?: BookingCreateManyWithoutTimeslotInput;
-  players?: BookedPlayerCreateManyWithoutTimeslotInput;
-  length: Int;
-  slots: Int;
-}
-
-export interface BookedPlayerUpsertWithWhereUniqueWithoutTimeslotInput {
-  where: BookedPlayerWhereUniqueInput;
-  update: BookedPlayerUpdateWithoutTimeslotDataInput;
-  create: BookedPlayerCreateWithoutTimeslotInput;
-}
-
-export interface GamingSessionUpdateDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  creator?: UserUpdateOneRequiredInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-  retired?: Boolean;
-}
-
-export interface BookedPlayerScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-  OR?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-  NOT?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
-}
-
-export interface GamingSessionCreateOneInput {
-  create?: GamingSessionCreateInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpsertWithoutBookingsInput {
-  update: GamingTimeSlotUpdateWithoutBookingsDataInput;
-  create: GamingTimeSlotCreateWithoutBookingsInput;
-}
-
-export interface GamingSessionUpdateInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  creator?: UserUpdateOneRequiredInput;
-  game?: GameUpdateOneRequiredWithoutSessionsInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-  retired?: Boolean;
-}
-
-export interface BookingUpsertWithoutNotificationsInput {
-  update: BookingUpdateWithoutNotificationsDataInput;
-  create: BookingCreateWithoutNotificationsInput;
-}
-
-export interface UserUpsertWithoutGamertagsInput {
-  update: UserUpdateWithoutGamertagsDataInput;
-  create: UserCreateWithoutGamertagsInput;
-}
-
-export interface NotificationUpsertWithoutBookingInviteInput {
-  update: NotificationUpdateWithoutBookingInviteDataInput;
-  create: NotificationCreateWithoutBookingInviteInput;
-}
-
-export interface GamerTagUpdateInput {
-  user?: UserUpdateOneRequiredWithoutGamertagsInput;
-  psn?: String;
-  xbl?: String;
-  nso?: String;
-  pc?: PCLauncherUpdateOneWithoutGamerTagInput;
-}
-
-export interface BookingInviteUpsertWithWhereUniqueWithoutBookingInput {
-  where: BookingInviteWhereUniqueInput;
-  update: BookingInviteUpdateWithoutBookingDataInput;
-  create: BookingInviteCreateWithoutBookingInput;
-}
-
-export interface GamerTagCreateInput {
-  user: UserCreateOneWithoutGamertagsInput;
-  psn?: String;
-  xbl?: String;
-  nso?: String;
-  pc?: PCLauncherCreateOneWithoutGamerTagInput;
-}
-
-export interface BookingInviteScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  sent?: Boolean;
-  sent_not?: Boolean;
-  accepted?: Boolean;
-  accepted_not?: Boolean;
-  AND?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  OR?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-  NOT?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
-}
-
-export interface SocialMediaUpdateDataInput {
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
-}
-
-export interface BookingInviteUpdateManyWithWhereNestedInput {
-  where: BookingInviteScalarWhereInput;
-  data: BookingInviteUpdateManyDataInput;
-}
-
-export interface UserCreateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface BookingInviteUpdateManyDataInput {
-  startTime?: DateTimeInput;
-  sent?: Boolean;
-  accepted?: Boolean;
-}
-
-export interface GameCreateWithoutSessionsInput {
-  name: String;
-  tags?: GameCreatetagsInput;
-  launcher: Launcher;
-  numSessions?: Int;
-  picture: String;
-  banner: String;
-}
-
-export interface BookingUpsertWithWhereUniqueWithoutTimeslotInput {
-  where: BookingWhereUniqueInput;
-  update: BookingUpdateWithoutTimeslotDataInput;
-  create: BookingCreateWithoutTimeslotInput;
-}
-
-export interface UserCreateOneWithoutReviewsInput {
-  create?: UserCreateWithoutReviewsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface BookingScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  numSlots?: Int;
-  numSlots_not?: Int;
-  numSlots_in?: Int[] | Int;
-  numSlots_not_in?: Int[] | Int;
-  numSlots_lt?: Int;
-  numSlots_lte?: Int;
-  numSlots_gt?: Int;
-  numSlots_gte?: Int;
-  numPlayers?: Int;
-  numPlayers_not?: Int;
-  numPlayers_in?: Int[] | Int;
-  numPlayers_not_in?: Int[] | Int;
-  numPlayers_lt?: Int;
-  numPlayers_lte?: Int;
-  numPlayers_gt?: Int;
-  numPlayers_gte?: Int;
-  total?: Float;
-  total_not?: Float;
-  total_in?: Float[] | Float;
-  total_not_in?: Float[] | Float;
-  total_lt?: Float;
-  total_lte?: Float;
-  total_gt?: Float;
-  total_gte?: Float;
-  cancelled?: Boolean;
-  cancelled_not?: Boolean;
-  AND?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-  OR?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-  NOT?: BookingScalarWhereInput[] | BookingScalarWhereInput;
-}
-
-export interface GamingSessionCreateOneWithoutTimeslotsInput {
-  create?: GamingSessionCreateWithoutTimeslotsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface BookingUpdateManyWithWhereNestedInput {
-  where: BookingScalarWhereInput;
-  data: BookingUpdateManyDataInput;
-}
-
-export interface BookingInviteCreateManyWithoutFromInput {
-  create?:
-    | BookingInviteCreateWithoutFromInput[]
-    | BookingInviteCreateWithoutFromInput;
-  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-}
-
-export interface BookingUpdateManyDataInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  total?: Float;
-  cancelled?: Boolean;
-}
-
-export interface BookedPlayerCreateManyWithoutBookingInput {
-  create?:
-    | BookedPlayerCreateWithoutBookingInput[]
-    | BookedPlayerCreateWithoutBookingInput;
-  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  update: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
-  create: GamingTimeSlotCreateWithoutGamingSessionInput;
-}
-
-export interface UserCreateManyWithoutTimeSlotsInput {
-  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface GamingTimeSlotScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  endTime?: DateTimeInput;
-  endTime_not?: DateTimeInput;
-  endTime_in?: DateTimeInput[] | DateTimeInput;
-  endTime_not_in?: DateTimeInput[] | DateTimeInput;
-  endTime_lt?: DateTimeInput;
-  endTime_lte?: DateTimeInput;
-  endTime_gt?: DateTimeInput;
-  endTime_gte?: DateTimeInput;
-  length?: Int;
-  length_not?: Int;
-  length_in?: Int[] | Int;
-  length_not_in?: Int[] | Int;
-  length_lt?: Int;
-  length_lte?: Int;
-  length_gt?: Int;
-  length_gte?: Int;
-  slots?: Int;
-  slots_not?: Int;
-  slots_in?: Int[] | Int;
-  slots_not_in?: Int[] | Int;
-  slots_lt?: Int;
-  slots_lte?: Int;
-  slots_gt?: Int;
-  slots_gte?: Int;
-  AND?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
-  OR?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
-  NOT?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
-}
-
-export interface UserCreateOneWithoutInvitesInput {
-  create?: UserCreateWithoutInvitesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpdateManyWithWhereNestedInput {
-  where: GamingTimeSlotScalarWhereInput;
-  data: GamingTimeSlotUpdateManyDataInput;
-}
-
-export interface GamingSessionCreateOneWithoutReviewsInput {
-  create?: GamingSessionCreateWithoutReviewsInput;
-  connect?: GamingSessionWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpdateManyDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  length?: Int;
-  slots?: Int;
-}
-
-export interface DiscountCreateManyInput {
-  create?: DiscountCreateInput[] | DiscountCreateInput;
-  connect?: DiscountWhereUniqueInput[] | DiscountWhereUniqueInput;
-}
-
-export interface GamingSessionUpsertWithoutReviewsInput {
-  update: GamingSessionUpdateWithoutReviewsDataInput;
-  create: GamingSessionCreateWithoutReviewsInput;
-}
-
-export interface BookingCreateManyWithoutTimeslotInput {
-  create?:
-    | BookingCreateWithoutTimeslotInput[]
-    | BookingCreateWithoutTimeslotInput;
-  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
-}
-
-export interface SessionReviewUpsertWithWhereUniqueWithoutUserInput {
-  where: SessionReviewWhereUniqueInput;
-  update: SessionReviewUpdateWithoutUserDataInput;
-  create: SessionReviewCreateWithoutUserInput;
-}
-
-export interface UserCreateOneWithoutInvitesReceivedInput {
-  create?: UserCreateWithoutInvitesReceivedInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface SessionReviewScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  rating?: Int;
-  rating_not?: Int;
-  rating_in?: Int[] | Int;
-  rating_not_in?: Int[] | Int;
-  rating_lt?: Int;
-  rating_lte?: Int;
-  rating_gt?: Int;
-  rating_gte?: Int;
-  AND?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  OR?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-  NOT?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
-}
-
-export interface GamerTagCreateWithoutUserInput {
-  psn?: String;
-  xbl?: String;
-  nso?: String;
-  pc?: PCLauncherCreateOneWithoutGamerTagInput;
-}
-
-export interface SessionReviewUpdateManyWithWhereNestedInput {
-  where: SessionReviewScalarWhereInput;
-  data: SessionReviewUpdateManyDataInput;
-}
-
-export interface UserIndexCreateWithoutUserInput {
-  email: String;
-  username: String;
-  name: String;
-}
-
-export interface SessionReviewUpdateManyDataInput {
-  text?: String;
-  rating?: Int;
-}
-
-export interface FriendRequestCreateWithoutNotificationInput {
-  to: UserCreateOneInput;
-  from: UserCreateOneInput;
-}
-
-export interface UserUpsertWithoutInvitesInput {
-  update: UserUpdateWithoutInvitesDataInput;
-  create: UserCreateWithoutInvitesInput;
-}
-
-export interface GamingTimeSlotCreateWithoutBookingsInput {
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
-  gamers?: UserCreateManyWithoutTimeSlotsInput;
-  players?: BookedPlayerCreateManyWithoutTimeslotInput;
-  length: Int;
-  slots: Int;
-}
-
-export interface BookingInviteUpsertWithWhereUniqueWithoutToInput {
-  where: BookingInviteWhereUniqueInput;
-  update: BookingInviteUpdateWithoutToDataInput;
-  create: BookingInviteCreateWithoutToInput;
-}
-
-export interface BookingCreateWithoutPlayersInput {
-  numSlots: Int;
-  numPlayers: Int;
-  total: Float;
-  bookee: UserCreateOneInput;
-  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
-  invites?: BookingInviteCreateManyWithoutBookingInput;
-  cancelled?: Boolean;
-  notifications?: NotificationCreateManyWithoutBookingInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutTimeSlotsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutTimeSlotsDataInput;
-  create: UserCreateWithoutTimeSlotsInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface GamingTimeSlotUpsertWithoutPlayersInput {
-  update: GamingTimeSlotUpdateWithoutPlayersDataInput;
-  create: GamingTimeSlotCreateWithoutPlayersInput;
-}
-
-export interface RequirementSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RequirementWhereInput;
-  AND?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
-  OR?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
-  NOT?: RequirementSubscriptionWhereInput[] | RequirementSubscriptionWhereInput;
-}
-
-export interface BookedPlayerUpsertWithWhereUniqueWithoutBookingInput {
-  where: BookedPlayerWhereUniqueInput;
-  update: BookedPlayerUpdateWithoutBookingDataInput;
-  create: BookedPlayerCreateWithoutBookingInput;
-}
-
-export interface GameIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GameIndexWhereInput;
-  AND?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-  OR?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-  NOT?: GameIndexSubscriptionWhereInput[] | GameIndexSubscriptionWhereInput;
-}
-
-export interface BookingUpsertWithoutInvitesInput {
-  update: BookingUpdateWithoutInvitesDataInput;
-  create: BookingCreateWithoutInvitesInput;
-}
-
-export interface BookedPlayerSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BookedPlayerWhereInput;
-  AND?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-  OR?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-  NOT?:
-    | BookedPlayerSubscriptionWhereInput[]
-    | BookedPlayerSubscriptionWhereInput;
-}
-
-export interface BookingInviteUpsertWithWhereUniqueWithoutFromInput {
-  where: BookingInviteWhereUniqueInput;
-  update: BookingInviteUpdateWithoutFromDataInput;
-  create: BookingInviteCreateWithoutFromInput;
-}
-
-export interface UserIndexUpdateInput {
-  email?: String;
-  username?: String;
-  name?: String;
-  user?: UserUpdateOneRequiredWithoutIndexInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutSessionsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutSessionsDataInput;
-  create: UserCreateWithoutSessionsInput;
-}
-
-export type GameIndexWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingSessionUpsertWithoutTimeslotsInput {
-  update: GamingSessionUpdateWithoutTimeslotsDataInput;
-  create: GamingSessionCreateWithoutTimeslotsInput;
-}
-
-export interface SessionReviewUpdateOneRequiredInput {
-  create?: SessionReviewCreateInput;
-  update?: SessionReviewUpdateDataInput;
-  upsert?: SessionReviewUpsertNestedInput;
-  connect?: SessionReviewWhereUniqueInput;
-}
-
-export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput {
-  where: GamingTimeSlotWhereUniqueInput;
-  update: GamingTimeSlotUpdateWithoutGamersDataInput;
-  create: GamingTimeSlotCreateWithoutGamersInput;
-}
-
-export type GamerTagWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpsertWithoutReviewsInput {
-  update: UserUpdateWithoutReviewsDataInput;
-  create: UserCreateWithoutReviewsInput;
-}
-
-export interface GamerTagUpsertWithoutPcInput {
-  update: GamerTagUpdateWithoutPcDataInput;
-  create: GamerTagCreateWithoutPcInput;
-}
-
-export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
-  where: SessionReviewWhereUniqueInput;
-  update: SessionReviewUpdateWithoutSessionDataInput;
-  create: SessionReviewCreateWithoutSessionInput;
-}
-
-export type GamingTimeSlotWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
-  where: GamingSessionWhereUniqueInput;
-  update: GamingSessionUpdateWithoutGamersDataInput;
-  create: GamingSessionCreateWithoutGamersInput;
-}
-
-export type PCLauncherWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GamingSessionScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  length?: Int;
-  length_not?: Int;
-  length_in?: Int[] | Int;
-  length_not_in?: Int[] | Int;
-  length_lt?: Int;
-  length_lte?: Int;
-  length_gt?: Int;
-  length_gte?: Int;
-  price?: Float;
-  price_not?: Float;
-  price_in?: Float[] | Float;
-  price_not_in?: Float[] | Float;
-  price_lt?: Float;
-  price_lte?: Float;
-  price_gt?: Float;
-  price_gte?: Float;
-  system?: System;
-  system_not?: System;
-  system_in?: System[] | System;
-  system_not_in?: System[] | System;
-  type?: TypeOfGame;
-  type_not?: TypeOfGame;
-  type_in?: TypeOfGame[] | TypeOfGame;
-  type_not_in?: TypeOfGame[] | TypeOfGame;
-  slots?: Int;
-  slots_not?: Int;
-  slots_in?: Int[] | Int;
-  slots_not_in?: Int[] | Int;
-  slots_lt?: Int;
-  slots_lte?: Int;
-  slots_gt?: Int;
-  slots_gte?: Int;
-  retired?: Boolean;
-  retired_not?: Boolean;
-  AND?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  OR?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  NOT?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-}
-
-export interface GamingSessionIndexUpdateInput {
-  title?: String;
-  gamer?: String;
-  game?: String;
-  gamingSession?: GamingSessionUpdateOneRequiredInput;
-}
-
-export interface GamingSessionUpdateManyWithWhereNestedInput {
-  where: GamingSessionScalarWhereInput;
-  data: GamingSessionUpdateManyDataInput;
-}
-
-export interface GamingSessionCreateInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  creator: UserCreateOneInput;
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  system: System;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
-  retired?: Boolean;
-}
-
-export interface GamingSessionUpdateManyDataInput {
-  title?: String;
-  length?: Int;
-  price?: Float;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  retired?: Boolean;
-}
-
-export interface UserCreateOneWithoutGamertagsInput {
-  create?: UserCreateWithoutGamertagsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GamerRequestCreateInput {
-  user: UserCreateOneInput;
-  occupations?: GamerRequestCreateoccupationsInput;
-  addToOccupations?: String;
-  socialMedia: SocialMediaCreateOneInput;
-}
-
-export interface GamerRequestUpdateoccupationsInput {
-  set?: Occupations[] | Occupations;
-}
-
-export interface GameIndexUpdateManyMutationInput {
-  name?: String;
-  launcher?: String;
-  tags?: GameIndexUpdatetagsInput;
-}
-
-export interface GamingSessionCreateWithoutGamersInput {
-  creator: UserCreateOneInput;
-  game: GameCreateOneWithoutSessionsInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  system: System;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
-  retired?: Boolean;
-}
-
-export interface BookingCreateInput {
-  numSlots: Int;
-  numPlayers: Int;
-  players?: BookedPlayerCreateManyWithoutBookingInput;
-  total: Float;
-  bookee: UserCreateOneInput;
-  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
-  invites?: BookingInviteCreateManyWithoutBookingInput;
-  cancelled?: Boolean;
-  notifications?: NotificationCreateManyWithoutBookingInput;
-}
-
-export interface GamingTimeSlotCreateManyWithoutGamersInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamersInput[]
-    | GamingTimeSlotCreateWithoutGamersInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-}
-
-export interface BookingUpdateInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  players?: BookedPlayerUpdateManyWithoutBookingInput;
-  total?: Float;
-  bookee?: UserUpdateOneRequiredInput;
-  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput;
-  invites?: BookingInviteUpdateManyWithoutBookingInput;
-  cancelled?: Boolean;
-  notifications?: NotificationUpdateManyWithoutBookingInput;
-}
-
-export interface BookingCreateOneWithoutInvitesInput {
-  create?: BookingCreateWithoutInvitesInput;
-  connect?: BookingWhereUniqueInput;
-}
-
-export interface BookingUpdateManyMutationInput {
-  numSlots?: Int;
-  numPlayers?: Int;
-  total?: Float;
-  cancelled?: Boolean;
-}
-
-export interface BookingInviteCreateManyWithoutToInput {
-  create?:
-    | BookingInviteCreateWithoutToInput[]
-    | BookingInviteCreateWithoutToInput;
-  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-}
-
-export interface BookingInviteCreateInput {
-  startTime: DateTimeInput;
-  booking: BookingCreateOneWithoutInvitesInput;
-  to?: UserCreateOneWithoutInvitesReceivedInput;
-  from: UserCreateOneWithoutInvitesInput;
-  sent: Boolean;
-  accepted?: Boolean;
-  notification?: NotificationCreateOneWithoutBookingInviteInput;
-}
-
-export interface RequirementCreateManyInput {
-  create?: RequirementCreateInput[] | RequirementCreateInput;
-  connect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
-}
-
-export interface BookingInviteUpdateInput {
-  startTime?: DateTimeInput;
-  booking?: BookingUpdateOneRequiredWithoutInvitesInput;
-  to?: UserUpdateOneWithoutInvitesReceivedInput;
-  from?: UserUpdateOneRequiredWithoutInvitesInput;
-  sent?: Boolean;
-  accepted?: Boolean;
-  notification?: NotificationUpdateOneWithoutBookingInviteInput;
-}
-
-export interface BookingInviteCreateManyWithoutBookingInput {
-  create?:
-    | BookingInviteCreateWithoutBookingInput[]
-    | BookingInviteCreateWithoutBookingInput;
-  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
-}
-
-export interface BookingInviteUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  sent?: Boolean;
-  accepted?: Boolean;
-}
-
-export interface PCLauncherCreateWithoutGamerTagInput {
-  epic?: String;
-  steam?: String;
-  origin?: String;
-  gog?: String;
-  battlenet?: String;
-  uplay?: String;
-  bethesda?: String;
-  itch?: String;
-  windows?: String;
-  riot?: String;
-}
-
-export interface DiscountUpdateInput {
-  percentage?: Int;
-  threshold?: Int;
-  playerOrSession?: PlayerOrSession;
-}
-
-export interface BookingCreateWithoutNotificationsInput {
-  numSlots: Int;
-  numPlayers: Int;
-  players?: BookedPlayerCreateManyWithoutBookingInput;
-  total: Float;
-  bookee: UserCreateOneInput;
-  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
-  invites?: BookingInviteCreateManyWithoutBookingInput;
-  cancelled?: Boolean;
-}
-
-export interface DiscountUpdateManyMutationInput {
-  percentage?: Int;
-  threshold?: Int;
-  playerOrSession?: PlayerOrSession;
-}
-
-export interface NotificationCreateWithoutBookingInput {
-  type: NotificationType;
-  text: String;
-  for: UserCreateOneInput;
-  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
-  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
-  friend?: UserCreateOneInput;
-  viewed?: Boolean;
-}
-
-export interface FriendRequestCreateInput {
-  to: UserCreateOneInput;
-  from: UserCreateOneInput;
-  notification: NotificationCreateOneWithoutFriendRequestInput;
-}
-
-export interface GamingSessionIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GamingSessionIndexWhereInput;
-  AND?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-  OR?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-  NOT?:
-    | GamingSessionIndexSubscriptionWhereInput[]
-    | GamingSessionIndexSubscriptionWhereInput;
-}
-
-export interface NotificationCreateOneWithoutFriendRequestInput {
-  create?: NotificationCreateWithoutFriendRequestInput;
-  connect?: NotificationWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutIndexDataInput {
-  gender?: Gender;
-  email?: String;
-  username?: String;
-  password?: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup?: Boolean;
-  occupations?: UserUpdateoccupationsInput;
-  name?: String;
-  aboutMe?: String;
-  sessions?: GamingSessionUpdateManyWithoutGamersInput;
-  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
-  invites?: BookingInviteUpdateManyWithoutFromInput;
-  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
-  setup?: Int;
-  reviews?: SessionReviewUpdateManyWithoutUserInput;
-  friends?: UserUpdateManyInput;
-  gamertags?: GamerTagUpdateOneWithoutUserInput;
-  role?: Role;
-}
-
-export interface NotificationCreateWithoutFriendRequestInput {
-  type: NotificationType;
-  text: String;
-  for: UserCreateOneInput;
-  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
-  booking?: BookingCreateOneWithoutNotificationsInput;
-  friend?: UserCreateOneInput;
-  viewed?: Boolean;
-}
-
-export interface SessionReviewIndexUpdateManyMutationInput {
-  text?: String;
-}
-
-export interface FriendRequestUpdateInput {
-  to?: UserUpdateOneRequiredInput;
-  from?: UserUpdateOneRequiredInput;
-  notification?: NotificationUpdateOneRequiredWithoutFriendRequestInput;
-}
-
-export interface RequirementUpdateManyMutationInput {
-  msg?: String;
-}
-
-export interface NotificationUpdateOneRequiredWithoutFriendRequestInput {
-  create?: NotificationCreateWithoutFriendRequestInput;
-  update?: NotificationUpdateWithoutFriendRequestDataInput;
-  upsert?: NotificationUpsertWithoutFriendRequestInput;
-  connect?: NotificationWhereUniqueInput;
-}
-
-export type NotificationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface NotificationUpdateWithoutFriendRequestDataInput {
-  type?: NotificationType;
-  text?: String;
-  for?: UserUpdateOneRequiredInput;
-  bookingInvite?: BookingInviteUpdateOneWithoutNotificationInput;
-  booking?: BookingUpdateOneWithoutNotificationsInput;
-  friend?: UserUpdateOneInput;
-  viewed?: Boolean;
-}
-
-export interface GamingSessionUpdateManyMutationInput {
-  title?: String;
-  length?: Int;
-  price?: Float;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  retired?: Boolean;
-}
-
-export interface NotificationUpsertWithoutFriendRequestInput {
-  update: NotificationUpdateWithoutFriendRequestDataInput;
-  create: NotificationCreateWithoutFriendRequestInput;
-}
-
-export interface SocialMediaUpsertNestedInput {
-  update: SocialMediaUpdateDataInput;
-  create: SocialMediaCreateInput;
-}
-
-export interface GameCreateInput {
-  name: String;
-  tags?: GameCreatetagsInput;
-  sessions?: GamingSessionCreateManyWithoutGameInput;
-  launcher: Launcher;
-  numSessions?: Int;
-  picture: String;
-  banner: String;
-}
-
-export interface SessionReviewCreateManyWithoutSessionInput {
-  create?:
-    | SessionReviewCreateWithoutSessionInput[]
-    | SessionReviewCreateWithoutSessionInput;
-  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
-}
-
-export interface GamingSessionCreateManyWithoutGameInput {
-  create?:
-    | GamingSessionCreateWithoutGameInput[]
-    | GamingSessionCreateWithoutGameInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-}
-
-export interface GamingTimeSlotCreateOneWithoutPlayersInput {
-  create?: GamingTimeSlotCreateWithoutPlayersInput;
-  connect?: GamingTimeSlotWhereUniqueInput;
-}
-
-export interface GamingSessionCreateWithoutGameInput {
-  gamers?: UserCreateManyWithoutSessionsInput;
-  creator: UserCreateOneInput;
-  title: String;
-  length: Int;
-  price: Float;
-  reviews?: SessionReviewCreateManyWithoutSessionInput;
-  system: System;
-  type: TypeOfGame;
-  slots: Int;
-  requirements?: RequirementCreateManyInput;
-  discounts?: DiscountCreateManyInput;
-  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
-  retired?: Boolean;
-}
-
-export interface GamingTimeSlotCreateManyWithoutGamingSessionInput {
-  create?:
-    | GamingTimeSlotCreateWithoutGamingSessionInput[]
-    | GamingTimeSlotCreateWithoutGamingSessionInput;
-  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
-}
-
-export interface GameUpdateInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  sessions?: GamingSessionUpdateManyWithoutGameInput;
-  launcher?: Launcher;
-  numSessions?: Int;
-  picture?: String;
-  banner?: String;
-}
-
-export interface NotificationCreateWithoutBookingInviteInput {
-  type: NotificationType;
-  text: String;
-  for: UserCreateOneInput;
-  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
-  booking?: BookingCreateOneWithoutNotificationsInput;
-  friend?: UserCreateOneInput;
-  viewed?: Boolean;
-}
-
-export interface GamingSessionUpdateManyWithoutGameInput {
-  create?:
-    | GamingSessionCreateWithoutGameInput[]
-    | GamingSessionCreateWithoutGameInput;
-  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
-  update?:
-    | GamingSessionUpdateWithWhereUniqueWithoutGameInput[]
-    | GamingSessionUpdateWithWhereUniqueWithoutGameInput;
-  upsert?:
-    | GamingSessionUpsertWithWhereUniqueWithoutGameInput[]
-    | GamingSessionUpsertWithWhereUniqueWithoutGameInput;
-  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
-  updateMany?:
-    | GamingSessionUpdateManyWithWhereNestedInput[]
-    | GamingSessionUpdateManyWithWhereNestedInput;
-}
-
-export interface SessionReviewIndexSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SessionReviewIndexWhereInput;
-  AND?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-  OR?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-  NOT?:
-    | SessionReviewIndexSubscriptionWhereInput[]
-    | SessionReviewIndexSubscriptionWhereInput;
-}
-
-export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
-  where: GamingSessionWhereUniqueInput;
-  data: GamingSessionUpdateWithoutGameDataInput;
-}
-
-export interface UserIndexCreateInput {
-  email: String;
-  username: String;
-  name: String;
-  user: UserCreateOneWithoutIndexInput;
-}
-
-export interface GamingSessionUpdateWithoutGameDataInput {
-  gamers?: UserUpdateManyWithoutSessionsInput;
-  creator?: UserUpdateOneRequiredInput;
-  title?: String;
-  length?: Int;
-  price?: Float;
-  reviews?: SessionReviewUpdateManyWithoutSessionInput;
-  system?: System;
-  type?: TypeOfGame;
-  slots?: Int;
-  requirements?: RequirementUpdateManyInput;
-  discounts?: DiscountUpdateManyInput;
-  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
-  retired?: Boolean;
 }
 
 export interface GamingSessionWhereInput {
@@ -6596,93 +5658,245 @@ export interface GamingSessionWhereInput {
   NOT?: GamingSessionWhereInput[] | GamingSessionWhereInput;
 }
 
-export interface GamingSessionUpsertWithWhereUniqueWithoutGameInput {
-  where: GamingSessionWhereUniqueInput;
-  update: GamingSessionUpdateWithoutGameDataInput;
-  create: GamingSessionCreateWithoutGameInput;
+export interface NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput;
+  data: NotificationUpdateManyDataInput;
+}
+
+export type GamingTimeSlotWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface NotificationUpdateManyDataInput {
+  type?: NotificationType;
+  text?: String;
+  viewed?: Boolean;
+}
+
+export type NotificationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface BookingUpsertWithoutPlayersInput {
+  update: BookingUpdateWithoutPlayersDataInput;
+  create: BookingCreateWithoutPlayersInput;
+}
+
+export type PCLauncherWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface BookedPlayerUpsertWithWhereUniqueWithoutTimeslotInput {
+  where: BookedPlayerWhereUniqueInput;
+  update: BookedPlayerUpdateWithoutTimeslotDataInput;
+  create: BookedPlayerCreateWithoutTimeslotInput;
+}
+
+export interface PCLauncherCreateInput {
+  gamerTag: GamerTagCreateOneWithoutPcInput;
+  epic?: String;
+  steam?: String;
+  origin?: String;
+  gog?: String;
+  battlenet?: String;
+  uplay?: String;
+  bethesda?: String;
+  itch?: String;
+  windows?: String;
+  riot?: String;
+}
+
+export interface BookedPlayerScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+  OR?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+  NOT?: BookedPlayerScalarWhereInput[] | BookedPlayerScalarWhereInput;
+}
+
+export interface NotificationCreateInput {
+  type: NotificationType;
+  text: String;
+  for: UserCreateOneInput;
+  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
+  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
+  booking?: BookingCreateOneWithoutNotificationsInput;
+  friend?: UserCreateOneInput;
+  viewed?: Boolean;
+}
+
+export interface GamingTimeSlotUpsertWithoutBookingsInput {
+  update: GamingTimeSlotUpdateWithoutBookingsDataInput;
+  create: GamingTimeSlotCreateWithoutBookingsInput;
+}
+
+export interface GamingTimeSlotCreateInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
+  gamers?: UserCreateManyWithoutTimeSlotsInput;
+  bookings?: BookingCreateManyWithoutTimeslotInput;
+  players?: BookedPlayerCreateManyWithoutTimeslotInput;
+  length: Int;
+  slots: Int;
+}
+
+export interface BookingUpsertWithoutNotificationsInput {
+  update: BookingUpdateWithoutNotificationsDataInput;
+  create: BookingCreateWithoutNotificationsInput;
+}
+
+export interface GamingSessionUpdateDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  game?: GameUpdateOneRequiredWithoutSessionsInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
+}
+
+export interface NotificationUpsertWithoutBookingInviteInput {
+  update: NotificationUpdateWithoutBookingInviteDataInput;
+  create: NotificationCreateWithoutBookingInviteInput;
+}
+
+export interface GamingSessionIndexUpdateInput {
+  title?: String;
+  gamer?: String;
+  game?: String;
+  gamingSession?: GamingSessionUpdateOneRequiredInput;
+}
+
+export interface BookingInviteUpsertWithWhereUniqueWithoutBookingInput {
+  where: BookingInviteWhereUniqueInput;
+  update: BookingInviteUpdateWithoutBookingDataInput;
+  create: BookingInviteCreateWithoutBookingInput;
 }
 
 export type SocialMediaWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface GameUpdateManyMutationInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  launcher?: Launcher;
-  numSessions?: Int;
-  picture?: String;
-  banner?: String;
+export interface BookingInviteScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  sent?: Boolean;
+  sent_not?: Boolean;
+  accepted?: Boolean;
+  accepted_not?: Boolean;
+  AND?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  OR?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
+  NOT?: BookingInviteScalarWhereInput[] | BookingInviteScalarWhereInput;
 }
 
-export interface UserCreateManyWithoutSessionsInput {
-  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface UserUpsertWithoutGamertagsInput {
+  update: UserUpdateWithoutGamertagsDataInput;
+  create: UserCreateWithoutGamertagsInput;
 }
 
-export interface GameIndexCreateInput {
-  name: String;
-  launcher?: String;
-  tags?: GameIndexCreatetagsInput;
-  game: GameCreateOneInput;
+export interface BookingInviteUpdateManyWithWhereNestedInput {
+  where: BookingInviteScalarWhereInput;
+  data: BookingInviteUpdateManyDataInput;
 }
 
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface GamerTagUpdateInput {
+  user?: UserUpdateOneRequiredWithoutGamertagsInput;
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+  pc?: PCLauncherUpdateOneWithoutGamerTagInput;
 }
 
-export interface GameIndexCreatetagsInput {
-  set?: String[] | String;
+export interface BookingInviteUpdateManyDataInput {
+  startTime?: DateTimeInput;
+  sent?: Boolean;
+  accepted?: Boolean;
 }
 
-export interface DiscountSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DiscountWhereInput;
-  AND?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
-  OR?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
-  NOT?: DiscountSubscriptionWhereInput[] | DiscountSubscriptionWhereInput;
+export interface GamerTagCreateInput {
+  user: UserCreateOneWithoutGamertagsInput;
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+  pc?: PCLauncherCreateOneWithoutGamerTagInput;
 }
 
-export interface GameCreateOneInput {
-  create?: GameCreateInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface GamingSessionUpsertNestedInput {
-  update: GamingSessionUpdateDataInput;
-  create: GamingSessionCreateInput;
-}
-
-export interface GameUpdateDataInput {
-  name?: String;
-  tags?: GameUpdatetagsInput;
-  sessions?: GamingSessionUpdateManyWithoutGameInput;
-  launcher?: Launcher;
-  numSessions?: Int;
-  picture?: String;
-  banner?: String;
-}
-
-export interface GameUpdateOneRequiredInput {
-  create?: GameCreateInput;
-  update?: GameUpdateDataInput;
-  upsert?: GameUpsertNestedInput;
-  connect?: GameWhereUniqueInput;
-}
-
-export interface GameIndexUpdatetagsInput {
-  set?: String[] | String;
-}
-
-export interface GameIndexUpdateInput {
-  name?: String;
-  launcher?: String;
-  tags?: GameIndexUpdatetagsInput;
-  game?: GameUpdateOneRequiredInput;
+export interface BookingUpsertWithWhereUniqueWithoutTimeslotInput {
+  where: BookingWhereUniqueInput;
+  update: BookingUpdateWithoutTimeslotDataInput;
+  create: BookingCreateWithoutTimeslotInput;
 }
 
 export interface UserCreateOneInput {
@@ -6690,7 +5904,122 @@ export interface UserCreateOneInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface GamingTimeSlotWhereInput {
+export interface BookingScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  numSlots?: Int;
+  numSlots_not?: Int;
+  numSlots_in?: Int[] | Int;
+  numSlots_not_in?: Int[] | Int;
+  numSlots_lt?: Int;
+  numSlots_lte?: Int;
+  numSlots_gt?: Int;
+  numSlots_gte?: Int;
+  numPlayers?: Int;
+  numPlayers_not?: Int;
+  numPlayers_in?: Int[] | Int;
+  numPlayers_not_in?: Int[] | Int;
+  numPlayers_lt?: Int;
+  numPlayers_lte?: Int;
+  numPlayers_gt?: Int;
+  numPlayers_gte?: Int;
+  total?: Float;
+  total_not?: Float;
+  total_in?: Float[] | Float;
+  total_not_in?: Float[] | Float;
+  total_lt?: Float;
+  total_lte?: Float;
+  total_gt?: Float;
+  total_gte?: Float;
+  cancelled?: Boolean;
+  cancelled_not?: Boolean;
+  AND?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+  OR?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+  NOT?: BookingScalarWhereInput[] | BookingScalarWhereInput;
+}
+
+export interface GamingSessionCreateWithoutGamersInput {
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
+}
+
+export interface BookingUpdateManyWithWhereNestedInput {
+  where: BookingScalarWhereInput;
+  data: BookingUpdateManyDataInput;
+}
+
+export interface SessionReviewCreateManyWithoutSessionInput {
+  create?:
+    | SessionReviewCreateWithoutSessionInput[]
+    | SessionReviewCreateWithoutSessionInput;
+  connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+}
+
+export interface BookingUpdateManyDataInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  total?: Float;
+  cancelled?: Boolean;
+}
+
+export interface GamingTimeSlotCreateManyWithoutGamersInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamersInput[]
+    | GamingTimeSlotCreateWithoutGamersInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+}
+
+export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamingSessionInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  update: GamingTimeSlotUpdateWithoutGamingSessionDataInput;
+  create: GamingTimeSlotCreateWithoutGamingSessionInput;
+}
+
+export interface UserCreateManyWithoutSessionsInput {
+  create?: UserCreateWithoutSessionsInput[] | UserCreateWithoutSessionsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface GamingTimeSlotScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -6737,16 +6066,6 @@ export interface GamingTimeSlotWhereInput {
   endTime_lte?: DateTimeInput;
   endTime_gt?: DateTimeInput;
   endTime_gte?: DateTimeInput;
-  gamingSession?: GamingSessionWhereInput;
-  gamers_every?: UserWhereInput;
-  gamers_some?: UserWhereInput;
-  gamers_none?: UserWhereInput;
-  bookings_every?: BookingWhereInput;
-  bookings_some?: BookingWhereInput;
-  bookings_none?: BookingWhereInput;
-  players_every?: BookedPlayerWhereInput;
-  players_some?: BookedPlayerWhereInput;
-  players_none?: BookedPlayerWhereInput;
   length?: Int;
   length_not?: Int;
   length_in?: Int[] | Int;
@@ -6763,14 +6082,709 @@ export interface GamingTimeSlotWhereInput {
   slots_lte?: Int;
   slots_gt?: Int;
   slots_gte?: Int;
-  AND?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
-  OR?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
-  NOT?: GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput;
+  AND?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
+  OR?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
+  NOT?: GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput;
 }
 
-export interface BookedPlayerCreateWithoutTimeslotInput {
-  player: UserCreateOneInput;
-  booking: BookingCreateOneWithoutPlayersInput;
+export interface BookingCreateOneWithoutInvitesInput {
+  create?: BookingCreateWithoutInvitesInput;
+  connect?: BookingWhereUniqueInput;
+}
+
+export interface GamingTimeSlotUpdateManyWithWhereNestedInput {
+  where: GamingTimeSlotScalarWhereInput;
+  data: GamingTimeSlotUpdateManyDataInput;
+}
+
+export interface GamingTimeSlotCreateOneWithoutPlayersInput {
+  create?: GamingTimeSlotCreateWithoutPlayersInput;
+  connect?: GamingTimeSlotWhereUniqueInput;
+}
+
+export interface GamingTimeSlotUpdateManyDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface SavedCardCreateManyWithoutUserInput {
+  create?: SavedCardCreateWithoutUserInput[] | SavedCardCreateWithoutUserInput;
+  connect?: SavedCardWhereUniqueInput[] | SavedCardWhereUniqueInput;
+}
+
+export interface GamingSessionUpsertWithoutReviewsInput {
+  update: GamingSessionUpdateWithoutReviewsDataInput;
+  create: GamingSessionCreateWithoutReviewsInput;
+}
+
+export interface UserCreateOneWithoutInvitesInput {
+  create?: UserCreateWithoutInvitesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SessionReviewUpsertWithWhereUniqueWithoutUserInput {
+  where: SessionReviewWhereUniqueInput;
+  update: SessionReviewUpdateWithoutUserDataInput;
+  create: SessionReviewCreateWithoutUserInput;
+}
+
+export interface GamingSessionCreateOneWithoutReviewsInput {
+  create?: GamingSessionCreateWithoutReviewsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface SessionReviewScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  rating?: Int;
+  rating_not?: Int;
+  rating_in?: Int[] | Int;
+  rating_not_in?: Int[] | Int;
+  rating_lt?: Int;
+  rating_lte?: Int;
+  rating_gt?: Int;
+  rating_gte?: Int;
+  AND?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  OR?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+  NOT?: SessionReviewScalarWhereInput[] | SessionReviewScalarWhereInput;
+}
+
+export interface DiscountCreateManyInput {
+  create?: DiscountCreateInput[] | DiscountCreateInput;
+  connect?: DiscountWhereUniqueInput[] | DiscountWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyWithWhereNestedInput {
+  where: SessionReviewScalarWhereInput;
+  data: SessionReviewUpdateManyDataInput;
+}
+
+export interface BookingCreateManyWithoutTimeslotInput {
+  create?:
+    | BookingCreateWithoutTimeslotInput[]
+    | BookingCreateWithoutTimeslotInput;
+  connect?: BookingWhereUniqueInput[] | BookingWhereUniqueInput;
+}
+
+export interface SessionReviewUpdateManyDataInput {
+  text?: String;
+  rating?: Int;
+}
+
+export interface UserCreateOneWithoutInvitesReceivedInput {
+  create?: UserCreateWithoutInvitesReceivedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutInvitesInput {
+  update: UserUpdateWithoutInvitesDataInput;
+  create: UserCreateWithoutInvitesInput;
+}
+
+export interface GamerTagCreateWithoutUserInput {
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+  pc?: PCLauncherCreateOneWithoutGamerTagInput;
+}
+
+export interface BookingInviteUpsertWithWhereUniqueWithoutToInput {
+  where: BookingInviteWhereUniqueInput;
+  update: BookingInviteUpdateWithoutToDataInput;
+  create: BookingInviteCreateWithoutToInput;
+}
+
+export interface UserIndexCreateWithoutUserInput {
+  email: String;
+  username: String;
+  name: String;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutTimeSlotsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTimeSlotsDataInput;
+  create: UserCreateWithoutTimeSlotsInput;
+}
+
+export interface FriendRequestCreateWithoutNotificationInput {
+  to: UserCreateOneInput;
+  from: UserCreateOneInput;
+}
+
+export interface GamingTimeSlotUpsertWithoutPlayersInput {
+  update: GamingTimeSlotUpdateWithoutPlayersDataInput;
+  create: GamingTimeSlotCreateWithoutPlayersInput;
+}
+
+export interface GamingTimeSlotCreateWithoutBookingsInput {
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  gamingSession: GamingSessionCreateOneWithoutTimeslotsInput;
+  gamers?: UserCreateManyWithoutTimeSlotsInput;
+  players?: BookedPlayerCreateManyWithoutTimeslotInput;
+  length: Int;
+  slots: Int;
+}
+
+export interface BookedPlayerUpsertWithWhereUniqueWithoutBookingInput {
+  where: BookedPlayerWhereUniqueInput;
+  update: BookedPlayerUpdateWithoutBookingDataInput;
+  create: BookedPlayerCreateWithoutBookingInput;
+}
+
+export interface BookingCreateWithoutPlayersInput {
+  numSlots: Int;
+  numPlayers: Int;
+  total: Float;
+  bookee: UserCreateOneInput;
+  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
+  invites?: BookingInviteCreateManyWithoutBookingInput;
+  cancelled?: Boolean;
+  notifications?: NotificationCreateManyWithoutBookingInput;
+}
+
+export interface BookingUpsertWithoutInvitesInput {
+  update: BookingUpdateWithoutInvitesDataInput;
+  create: BookingCreateWithoutInvitesInput;
+}
+
+export interface BookingInviteCreateWithoutNotificationInput {
+  startTime: DateTimeInput;
+  booking: BookingCreateOneWithoutInvitesInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  from: UserCreateOneWithoutInvitesInput;
+  sent: Boolean;
+  accepted?: Boolean;
+}
+
+export interface BookingInviteUpsertWithWhereUniqueWithoutFromInput {
+  where: BookingInviteWhereUniqueInput;
+  update: BookingInviteUpdateWithoutFromDataInput;
+  create: BookingInviteCreateWithoutFromInput;
+}
+
+export interface SessionReviewIndexSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SessionReviewIndexWhereInput;
+  AND?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  OR?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+  NOT?:
+    | SessionReviewIndexSubscriptionWhereInput[]
+    | SessionReviewIndexSubscriptionWhereInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutSessionsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutSessionsDataInput;
+  create: UserCreateWithoutSessionsInput;
+}
+
+export interface NotificationSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: NotificationWhereInput;
+  AND?:
+    | NotificationSubscriptionWhereInput[]
+    | NotificationSubscriptionWhereInput;
+  OR?:
+    | NotificationSubscriptionWhereInput[]
+    | NotificationSubscriptionWhereInput;
+  NOT?:
+    | NotificationSubscriptionWhereInput[]
+    | NotificationSubscriptionWhereInput;
+}
+
+export interface GamingSessionUpsertWithoutTimeslotsInput {
+  update: GamingSessionUpdateWithoutTimeslotsDataInput;
+  create: GamingSessionCreateWithoutTimeslotsInput;
+}
+
+export type BookingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GamingTimeSlotUpsertWithWhereUniqueWithoutGamersInput {
+  where: GamingTimeSlotWhereUniqueInput;
+  update: GamingTimeSlotUpdateWithoutGamersDataInput;
+  create: GamingTimeSlotCreateWithoutGamersInput;
+}
+
+export type DiscountWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpsertWithoutReviewsInput {
+  update: UserUpdateWithoutReviewsDataInput;
+  create: UserCreateWithoutReviewsInput;
+}
+
+export interface UserCreateOneWithoutIndexInput {
+  create?: UserCreateWithoutIndexInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SessionReviewUpsertWithWhereUniqueWithoutSessionInput {
+  where: SessionReviewWhereUniqueInput;
+  update: SessionReviewUpdateWithoutSessionDataInput;
+  create: SessionReviewCreateWithoutSessionInput;
+}
+
+export interface GameIndexWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  launcher?: String;
+  launcher_not?: String;
+  launcher_in?: String[] | String;
+  launcher_not_in?: String[] | String;
+  launcher_lt?: String;
+  launcher_lte?: String;
+  launcher_gt?: String;
+  launcher_gte?: String;
+  launcher_contains?: String;
+  launcher_not_contains?: String;
+  launcher_starts_with?: String;
+  launcher_not_starts_with?: String;
+  launcher_ends_with?: String;
+  launcher_not_ends_with?: String;
+  game?: GameWhereInput;
+  AND?: GameIndexWhereInput[] | GameIndexWhereInput;
+  OR?: GameIndexWhereInput[] | GameIndexWhereInput;
+  NOT?: GameIndexWhereInput[] | GameIndexWhereInput;
+}
+
+export interface GamingSessionUpsertWithWhereUniqueWithoutGamersInput {
+  where: GamingSessionWhereUniqueInput;
+  update: GamingSessionUpdateWithoutGamersDataInput;
+  create: GamingSessionCreateWithoutGamersInput;
+}
+
+export interface GamerRequestWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  user?: UserWhereInput;
+  addToOccupations?: String;
+  addToOccupations_not?: String;
+  addToOccupations_in?: String[] | String;
+  addToOccupations_not_in?: String[] | String;
+  addToOccupations_lt?: String;
+  addToOccupations_lte?: String;
+  addToOccupations_gt?: String;
+  addToOccupations_gte?: String;
+  addToOccupations_contains?: String;
+  addToOccupations_not_contains?: String;
+  addToOccupations_starts_with?: String;
+  addToOccupations_not_starts_with?: String;
+  addToOccupations_ends_with?: String;
+  addToOccupations_not_ends_with?: String;
+  socialMedia?: SocialMediaWhereInput;
+  AND?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  OR?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+  NOT?: GamerRequestWhereInput[] | GamerRequestWhereInput;
+}
+
+export interface GamingSessionScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  length?: Int;
+  length_not?: Int;
+  length_in?: Int[] | Int;
+  length_not_in?: Int[] | Int;
+  length_lt?: Int;
+  length_lte?: Int;
+  length_gt?: Int;
+  length_gte?: Int;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  system?: System;
+  system_not?: System;
+  system_in?: System[] | System;
+  system_not_in?: System[] | System;
+  type?: TypeOfGame;
+  type_not?: TypeOfGame;
+  type_in?: TypeOfGame[] | TypeOfGame;
+  type_not_in?: TypeOfGame[] | TypeOfGame;
+  slots?: Int;
+  slots_not?: Int;
+  slots_in?: Int[] | Int;
+  slots_not_in?: Int[] | Int;
+  slots_lt?: Int;
+  slots_lte?: Int;
+  slots_gt?: Int;
+  slots_gte?: Int;
+  retired?: Boolean;
+  retired_not?: Boolean;
+  AND?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  OR?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  NOT?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+}
+
+export interface SessionReviewUpdateInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
+}
+
+export interface GamingSessionUpdateManyWithWhereNestedInput {
+  where: GamingSessionScalarWhereInput;
+  data: GamingSessionUpdateManyDataInput;
+}
+
+export interface SavedCardUpdateInput {
+  user?: UserUpdateOneRequiredWithoutSavedCardsInput;
+  cardId?: String;
+  default?: Boolean;
+  lastFour?: String;
+  brand?: String;
+}
+
+export interface GamingSessionUpdateManyDataInput {
+  title?: String;
+  length?: Int;
+  price?: Float;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  retired?: Boolean;
+}
+
+export interface RequirementUpdateInput {
+  msg?: String;
+}
+
+export interface GamerRequestUpdateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface GamerTagCreateWithoutPcInput {
+  user: UserCreateOneWithoutGamertagsInput;
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+}
+
+export interface GamerRequestUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  occupations?: GamerRequestUpdateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia?: SocialMediaUpdateOneRequiredInput;
+}
+
+export interface GamingTimeSlotUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  length?: Int;
+  slots?: Int;
+}
+
+export interface BookingCreateInput {
+  numSlots: Int;
+  numPlayers: Int;
+  players?: BookedPlayerCreateManyWithoutBookingInput;
+  total: Float;
+  bookee: UserCreateOneInput;
+  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
+  invites?: BookingInviteCreateManyWithoutBookingInput;
+  cancelled?: Boolean;
+  notifications?: NotificationCreateManyWithoutBookingInput;
+}
+
+export interface GamingSessionUpdateOneRequiredInput {
+  create?: GamingSessionCreateInput;
+  update?: GamingSessionUpdateDataInput;
+  upsert?: GamingSessionUpsertNestedInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface BookingUpdateInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  players?: BookedPlayerUpdateManyWithoutBookingInput;
+  total?: Float;
+  bookee?: UserUpdateOneRequiredInput;
+  timeslot?: GamingTimeSlotUpdateOneRequiredWithoutBookingsInput;
+  invites?: BookingInviteUpdateManyWithoutBookingInput;
+  cancelled?: Boolean;
+  notifications?: NotificationUpdateManyWithoutBookingInput;
+}
+
+export interface GamingSessionCreateInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  game: GameCreateOneWithoutSessionsInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
+}
+
+export interface BookingUpdateManyMutationInput {
+  numSlots?: Int;
+  numPlayers?: Int;
+  total?: Float;
+  cancelled?: Boolean;
+}
+
+export interface UserCreateWithoutGamertagsInput {
+  gender?: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserCreateoccupationsInput;
+  name: String;
+  aboutMe?: String;
+  sessions?: GamingSessionCreateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotCreateManyWithoutGamersInput;
+  invites?: BookingInviteCreateManyWithoutFromInput;
+  savedCards?: SavedCardCreateManyWithoutUserInput;
+  invitesReceived?: BookingInviteCreateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewCreateManyWithoutUserInput;
+  friends?: UserCreateManyInput;
+  role?: Role;
+  index: UserIndexCreateOneWithoutUserInput;
+}
+
+export interface BookingInviteCreateInput {
+  startTime: DateTimeInput;
+  booking: BookingCreateOneWithoutInvitesInput;
+  to?: UserCreateOneWithoutInvitesReceivedInput;
+  from: UserCreateOneWithoutInvitesInput;
+  sent: Boolean;
+  accepted?: Boolean;
+  notification?: NotificationCreateOneWithoutBookingInviteInput;
+}
+
+export interface UserCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface BookingInviteUpdateInput {
+  startTime?: DateTimeInput;
+  booking?: BookingUpdateOneRequiredWithoutInvitesInput;
+  to?: UserUpdateOneWithoutInvitesReceivedInput;
+  from?: UserUpdateOneRequiredWithoutInvitesInput;
+  sent?: Boolean;
+  accepted?: Boolean;
+  notification?: NotificationUpdateOneWithoutBookingInviteInput;
+}
+
+export interface UserCreateOneWithoutReviewsInput {
+  create?: UserCreateWithoutReviewsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface BookingInviteUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  sent?: Boolean;
+  accepted?: Boolean;
+}
+
+export interface BookingInviteCreateManyWithoutFromInput {
+  create?:
+    | BookingInviteCreateWithoutFromInput[]
+    | BookingInviteCreateWithoutFromInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+}
+
+export interface DiscountUpdateInput {
+  percentage?: Int;
+  threshold?: Int;
+  playerOrSession?: PlayerOrSession;
+}
+
+export interface UserCreateManyWithoutTimeSlotsInput {
+  create?: UserCreateWithoutTimeSlotsInput[] | UserCreateWithoutTimeSlotsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface DiscountUpdateManyMutationInput {
+  percentage?: Int;
+  threshold?: Int;
+  playerOrSession?: PlayerOrSession;
 }
 
 export interface SessionReviewCreateManyWithoutUserInput {
@@ -6778,6 +6792,466 @@ export interface SessionReviewCreateManyWithoutUserInput {
     | SessionReviewCreateWithoutUserInput[]
     | SessionReviewCreateWithoutUserInput;
   connect?: SessionReviewWhereUniqueInput[] | SessionReviewWhereUniqueInput;
+}
+
+export interface FriendRequestCreateInput {
+  to: UserCreateOneInput;
+  from: UserCreateOneInput;
+  notification: NotificationCreateOneWithoutFriendRequestInput;
+}
+
+export interface GamingTimeSlotCreateManyWithoutGamingSessionInput {
+  create?:
+    | GamingTimeSlotCreateWithoutGamingSessionInput[]
+    | GamingTimeSlotCreateWithoutGamingSessionInput;
+  connect?: GamingTimeSlotWhereUniqueInput[] | GamingTimeSlotWhereUniqueInput;
+}
+
+export interface NotificationCreateOneWithoutFriendRequestInput {
+  create?: NotificationCreateWithoutFriendRequestInput;
+  connect?: NotificationWhereUniqueInput;
+}
+
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface NotificationCreateWithoutFriendRequestInput {
+  type: NotificationType;
+  text: String;
+  for: UserCreateOneInput;
+  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
+  booking?: BookingCreateOneWithoutNotificationsInput;
+  friend?: UserCreateOneInput;
+  viewed?: Boolean;
+}
+
+export interface NotificationCreateWithoutBookingInviteInput {
+  type: NotificationType;
+  text: String;
+  for: UserCreateOneInput;
+  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
+  booking?: BookingCreateOneWithoutNotificationsInput;
+  friend?: UserCreateOneInput;
+  viewed?: Boolean;
+}
+
+export interface FriendRequestUpdateInput {
+  to?: UserUpdateOneRequiredInput;
+  from?: UserUpdateOneRequiredInput;
+  notification?: NotificationUpdateOneRequiredWithoutFriendRequestInput;
+}
+
+export interface BookedPlayerCreateWithoutTimeslotInput {
+  player: UserCreateOneInput;
+  booking: BookingCreateOneWithoutPlayersInput;
+}
+
+export interface NotificationUpdateOneRequiredWithoutFriendRequestInput {
+  create?: NotificationCreateWithoutFriendRequestInput;
+  update?: NotificationUpdateWithoutFriendRequestDataInput;
+  upsert?: NotificationUpsertWithoutFriendRequestInput;
+  connect?: NotificationWhereUniqueInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface NotificationUpdateWithoutFriendRequestDataInput {
+  type?: NotificationType;
+  text?: String;
+  for?: UserUpdateOneRequiredInput;
+  bookingInvite?: BookingInviteUpdateOneWithoutNotificationInput;
+  booking?: BookingUpdateOneWithoutNotificationsInput;
+  friend?: UserUpdateOneInput;
+  viewed?: Boolean;
+}
+
+export interface GamerTagSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GamerTagWhereInput;
+  AND?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
+  OR?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
+  NOT?: GamerTagSubscriptionWhereInput[] | GamerTagSubscriptionWhereInput;
+}
+
+export interface NotificationUpsertWithoutFriendRequestInput {
+  update: NotificationUpdateWithoutFriendRequestDataInput;
+  create: NotificationCreateWithoutFriendRequestInput;
+}
+
+export type FriendRequestWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GameCreateInput {
+  name: String;
+  tags?: GameCreatetagsInput;
+  sessions?: GamingSessionCreateManyWithoutGameInput;
+  launcher: Launcher;
+  numSessions?: Int;
+  picture: String;
+  banner: String;
+}
+
+export interface SessionReviewUpdateDataInput {
+  user?: UserUpdateOneRequiredWithoutReviewsInput;
+  session?: GamingSessionUpdateOneRequiredWithoutReviewsInput;
+  text?: String;
+  rating?: Int;
+}
+
+export interface GamingSessionCreateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutSavedCardsInput {
+  update: UserUpdateWithoutSavedCardsDataInput;
+  create: UserCreateWithoutSavedCardsInput;
+}
+
+export interface GamingSessionCreateWithoutGameInput {
+  gamers?: UserCreateManyWithoutSessionsInput;
+  creator: UserCreateOneInput;
+  title: String;
+  length: Int;
+  price: Float;
+  reviews?: SessionReviewCreateManyWithoutSessionInput;
+  system: System;
+  type: TypeOfGame;
+  slots: Int;
+  requirements?: RequirementCreateManyInput;
+  discounts?: DiscountCreateManyInput;
+  timeslots?: GamingTimeSlotCreateManyWithoutGamingSessionInput;
+  retired?: Boolean;
+}
+
+export interface GamerTagUpdateWithoutPcDataInput {
+  user?: UserUpdateOneRequiredWithoutGamertagsInput;
+  psn?: String;
+  xbl?: String;
+  nso?: String;
+}
+
+export interface GameUpdateInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+  launcher?: Launcher;
+  numSessions?: Int;
+  picture?: String;
+  banner?: String;
+}
+
+export interface GamingSessionIndexUpdateManyMutationInput {
+  title?: String;
+  gamer?: String;
+  game?: String;
+}
+
+export interface GamingSessionUpdateManyWithoutGameInput {
+  create?:
+    | GamingSessionCreateWithoutGameInput[]
+    | GamingSessionCreateWithoutGameInput;
+  delete?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  connect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  set?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  disconnect?: GamingSessionWhereUniqueInput[] | GamingSessionWhereUniqueInput;
+  update?:
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpdateWithWhereUniqueWithoutGameInput;
+  upsert?:
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput[]
+    | GamingSessionUpsertWithWhereUniqueWithoutGameInput;
+  deleteMany?: GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput;
+  updateMany?:
+    | GamingSessionUpdateManyWithWhereNestedInput[]
+    | GamingSessionUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithoutGamertagsDataInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  data: GamingSessionUpdateWithoutGameDataInput;
+}
+
+export interface GameCreateWithoutSessionsInput {
+  name: String;
+  tags?: GameCreatetagsInput;
+  launcher: Launcher;
+  numSessions?: Int;
+  picture: String;
+  banner: String;
+}
+
+export interface GamingSessionUpdateWithoutGameDataInput {
+  gamers?: UserUpdateManyWithoutSessionsInput;
+  creator?: UserUpdateOneRequiredInput;
+  title?: String;
+  length?: Int;
+  price?: Float;
+  reviews?: SessionReviewUpdateManyWithoutSessionInput;
+  system?: System;
+  type?: TypeOfGame;
+  slots?: Int;
+  requirements?: RequirementUpdateManyInput;
+  discounts?: DiscountUpdateManyInput;
+  timeslots?: GamingTimeSlotUpdateManyWithoutGamingSessionInput;
+  retired?: Boolean;
+}
+
+export interface BookedPlayerCreateManyWithoutBookingInput {
+  create?:
+    | BookedPlayerCreateWithoutBookingInput[]
+    | BookedPlayerCreateWithoutBookingInput;
+  connect?: BookedPlayerWhereUniqueInput[] | BookedPlayerWhereUniqueInput;
+}
+
+export interface GamingSessionUpsertWithWhereUniqueWithoutGameInput {
+  where: GamingSessionWhereUniqueInput;
+  update: GamingSessionUpdateWithoutGameDataInput;
+  create: GamingSessionCreateWithoutGameInput;
+}
+
+export interface RequirementCreateManyInput {
+  create?: RequirementCreateInput[] | RequirementCreateInput;
+  connect?: RequirementWhereUniqueInput[] | RequirementWhereUniqueInput;
+}
+
+export interface GameUpdateManyMutationInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  launcher?: Launcher;
+  numSessions?: Int;
+  picture?: String;
+  banner?: String;
+}
+
+export interface PCLauncherCreateWithoutGamerTagInput {
+  epic?: String;
+  steam?: String;
+  origin?: String;
+  gog?: String;
+  battlenet?: String;
+  uplay?: String;
+  bethesda?: String;
+  itch?: String;
+  windows?: String;
+  riot?: String;
+}
+
+export interface GameIndexCreateInput {
+  name: String;
+  launcher?: String;
+  tags?: GameIndexCreatetagsInput;
+  game: GameCreateOneInput;
+}
+
+export interface NotificationCreateWithoutBookingInput {
+  type: NotificationType;
+  text: String;
+  for: UserCreateOneInput;
+  friendRequest?: FriendRequestCreateOneWithoutNotificationInput;
+  bookingInvite?: BookingInviteCreateOneWithoutNotificationInput;
+  friend?: UserCreateOneInput;
+  viewed?: Boolean;
+}
+
+export interface GameIndexCreatetagsInput {
+  set?: String[] | String;
+}
+
+export type BookingInviteWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface GameCreateOneInput {
+  create?: GameCreateInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface SessionReviewIndexCreateInput {
+  text: String;
+  sessionReview: SessionReviewCreateOneInput;
+}
+
+export interface GameIndexUpdateInput {
+  name?: String;
+  launcher?: String;
+  tags?: GameIndexUpdatetagsInput;
+  game?: GameUpdateOneRequiredInput;
+}
+
+export interface NotificationUpdateManyMutationInput {
+  type?: NotificationType;
+  text?: String;
+  viewed?: Boolean;
+}
+
+export interface GameIndexUpdatetagsInput {
+  set?: String[] | String;
+}
+
+export interface BookingInviteCreateManyWithoutToInput {
+  create?:
+    | BookingInviteCreateWithoutToInput[]
+    | BookingInviteCreateWithoutToInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
+}
+
+export interface GameUpdateOneRequiredInput {
+  create?: GameCreateInput;
+  update?: GameUpdateDataInput;
+  upsert?: GameUpsertNestedInput;
+  connect?: GameWhereUniqueInput;
+}
+
+export interface BookingCreateWithoutNotificationsInput {
+  numSlots: Int;
+  numPlayers: Int;
+  players?: BookedPlayerCreateManyWithoutBookingInput;
+  total: Float;
+  bookee: UserCreateOneInput;
+  timeslot: GamingTimeSlotCreateOneWithoutBookingsInput;
+  invites?: BookingInviteCreateManyWithoutBookingInput;
+  cancelled?: Boolean;
+}
+
+export interface GameUpdateDataInput {
+  name?: String;
+  tags?: GameUpdatetagsInput;
+  sessions?: GamingSessionUpdateManyWithoutGameInput;
+  launcher?: Launcher;
+  numSessions?: Int;
+  picture?: String;
+  banner?: String;
+}
+
+export interface UserUpdateInput {
+  gender?: Gender;
+  email?: String;
+  username?: String;
+  password?: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup?: Boolean;
+  occupations?: UserUpdateoccupationsInput;
+  name?: String;
+  aboutMe?: String;
+  sessions?: GamingSessionUpdateManyWithoutGamersInput;
+  timeSlots?: GamingTimeSlotUpdateManyWithoutGamersInput;
+  invites?: BookingInviteUpdateManyWithoutFromInput;
+  savedCards?: SavedCardUpdateManyWithoutUserInput;
+  invitesReceived?: BookingInviteUpdateManyWithoutToInput;
+  setup?: Int;
+  reviews?: SessionReviewUpdateManyWithoutUserInput;
+  friends?: UserUpdateManyInput;
+  gamertags?: GamerTagUpdateOneWithoutUserInput;
+  role?: Role;
+  index?: UserIndexUpdateOneRequiredWithoutUserInput;
+}
+
+export interface GameUpsertNestedInput {
+  update: GameUpdateDataInput;
+  create: GameCreateInput;
+}
+
+export interface GamingSessionIndexCreateInput {
+  title: String;
+  gamer: String;
+  game?: String;
+  gamingSession: GamingSessionCreateOneInput;
+}
+
+export interface SocialMediaCreateOneInput {
+  create?: SocialMediaCreateInput;
+  connect?: SocialMediaWhereUniqueInput;
+}
+
+export interface GamerRequestCreateoccupationsInput {
+  set?: Occupations[] | Occupations;
+}
+
+export interface GamerRequestCreateInput {
+  user: UserCreateOneInput;
+  occupations?: GamerRequestCreateoccupationsInput;
+  addToOccupations?: String;
+  socialMedia: SocialMediaCreateOneInput;
+}
+
+export interface GameIndexUpdateManyMutationInput {
+  name?: String;
+  launcher?: String;
+  tags?: GameIndexUpdatetagsInput;
+}
+
+export interface GamingSessionCreateOneWithoutTimeslotsInput {
+  create?: GamingSessionCreateWithoutTimeslotsInput;
+  connect?: GamingSessionWhereUniqueInput;
+}
+
+export interface UserCreateOneWithoutSavedCardsInput {
+  create?: UserCreateWithoutSavedCardsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SavedCardSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SavedCardWhereInput;
+  AND?: SavedCardSubscriptionWhereInput[] | SavedCardSubscriptionWhereInput;
+  OR?: SavedCardSubscriptionWhereInput[] | SavedCardSubscriptionWhereInput;
+  NOT?: SavedCardSubscriptionWhereInput[] | SavedCardSubscriptionWhereInput;
+}
+
+export interface BookingInviteCreateManyWithoutBookingInput {
+  create?:
+    | BookingInviteCreateWithoutBookingInput[]
+    | BookingInviteCreateWithoutBookingInput;
+  connect?: BookingInviteWhereUniqueInput[] | BookingInviteWhereUniqueInput;
 }
 
 export interface NodeNode {
@@ -7367,6 +7841,8 @@ export interface User {
   password: String;
   profilePicture?: String;
   banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
   gamerIsSetup: Boolean;
   occupations: Occupations[];
   name: String;
@@ -7385,6 +7861,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   password: () => Promise<String>;
   profilePicture: () => Promise<String>;
   banner: () => Promise<String>;
+  connectedStripeId: () => Promise<String>;
+  customerStripeId: () => Promise<String>;
   gamerIsSetup: () => Promise<Boolean>;
   occupations: () => Promise<Occupations[]>;
   name: () => Promise<String>;
@@ -7415,6 +7893,17 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     args?: {
       where?: BookingInviteWhereInput;
       orderBy?: BookingInviteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  savedCards: <T = FragmentableArray<SavedCard>>(
+    args?: {
+      where?: SavedCardWhereInput;
+      orderBy?: SavedCardOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -7473,6 +7962,8 @@ export interface UserSubscription
   password: () => Promise<AsyncIterator<String>>;
   profilePicture: () => Promise<AsyncIterator<String>>;
   banner: () => Promise<AsyncIterator<String>>;
+  connectedStripeId: () => Promise<AsyncIterator<String>>;
+  customerStripeId: () => Promise<AsyncIterator<String>>;
   gamerIsSetup: () => Promise<AsyncIterator<Boolean>>;
   occupations: () => Promise<AsyncIterator<Occupations[]>>;
   name: () => Promise<AsyncIterator<String>>;
@@ -7503,6 +7994,17 @@ export interface UserSubscription
     args?: {
       where?: BookingInviteWhereInput;
       orderBy?: BookingInviteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  savedCards: <T = Promise<AsyncIterator<SavedCardSubscription>>>(
+    args?: {
+      where?: SavedCardWhereInput;
+      orderBy?: SavedCardOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -7746,22 +8248,22 @@ export interface AggregateBookingSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface RequirementEdge {
-  node: Requirement;
+export interface SavedCardEdge {
+  node: SavedCard;
   cursor: String;
 }
 
-export interface RequirementEdgePromise
-  extends Promise<RequirementEdge>,
+export interface SavedCardEdgePromise
+  extends Promise<SavedCardEdge>,
     Fragmentable {
-  node: <T = RequirementPromise>() => T;
+  node: <T = SavedCardPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface RequirementEdgeSubscription
-  extends Promise<AsyncIterator<RequirementEdge>>,
+export interface SavedCardEdgeSubscription
+  extends Promise<AsyncIterator<SavedCardEdge>>,
     Fragmentable {
-  node: <T = RequirementSubscription>() => T;
+  node: <T = SavedCardSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -7790,18 +8292,18 @@ export interface BookingInviteSubscriptionPayloadSubscription
   previousValues: <T = BookingInvitePreviousValuesSubscription>() => T;
 }
 
-export interface AggregatePCLauncher {
+export interface AggregateRequirement {
   count: Int;
 }
 
-export interface AggregatePCLauncherPromise
-  extends Promise<AggregatePCLauncher>,
+export interface AggregateRequirementPromise
+  extends Promise<AggregateRequirement>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregatePCLauncherSubscription
-  extends Promise<AsyncIterator<AggregatePCLauncher>>,
+export interface AggregateRequirementSubscription
+  extends Promise<AsyncIterator<AggregateRequirement>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -7837,25 +8339,25 @@ export interface BookingInvitePreviousValuesSubscription
   accepted: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface PCLauncherConnection {
+export interface RequirementConnection {
   pageInfo: PageInfo;
-  edges: PCLauncherEdge[];
+  edges: RequirementEdge[];
 }
 
-export interface PCLauncherConnectionPromise
-  extends Promise<PCLauncherConnection>,
+export interface RequirementConnectionPromise
+  extends Promise<RequirementConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PCLauncherEdge>>() => T;
-  aggregate: <T = AggregatePCLauncherPromise>() => T;
+  edges: <T = FragmentableArray<RequirementEdge>>() => T;
+  aggregate: <T = AggregateRequirementPromise>() => T;
 }
 
-export interface PCLauncherConnectionSubscription
-  extends Promise<AsyncIterator<PCLauncherConnection>>,
+export interface RequirementConnectionSubscription
+  extends Promise<AsyncIterator<RequirementConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PCLauncherEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePCLauncherSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RequirementEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRequirementSubscription>() => T;
 }
 
 export interface BookingEdge {
@@ -7875,20 +8377,23 @@ export interface BookingEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateNotification {
-  count: Int;
+export interface PCLauncherEdge {
+  node: PCLauncher;
+  cursor: String;
 }
 
-export interface AggregateNotificationPromise
-  extends Promise<AggregateNotification>,
+export interface PCLauncherEdgePromise
+  extends Promise<PCLauncherEdge>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = PCLauncherPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateNotificationSubscription
-  extends Promise<AsyncIterator<AggregateNotification>>,
+export interface PCLauncherEdgeSubscription
+  extends Promise<AsyncIterator<PCLauncherEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = PCLauncherSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface DiscountSubscriptionPayload {
@@ -7916,25 +8421,68 @@ export interface DiscountSubscriptionPayloadSubscription
   previousValues: <T = DiscountPreviousValuesSubscription>() => T;
 }
 
-export interface NotificationConnection {
-  pageInfo: PageInfo;
-  edges: NotificationEdge[];
+export interface UserPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  gender: Gender;
+  email: String;
+  username: String;
+  password: String;
+  profilePicture?: String;
+  banner?: String;
+  connectedStripeId?: String;
+  customerStripeId?: String;
+  gamerIsSetup: Boolean;
+  occupations: Occupations[];
+  name: String;
+  aboutMe?: String;
+  setup?: Int;
+  role: Role;
 }
 
-export interface NotificationConnectionPromise
-  extends Promise<NotificationConnection>,
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<NotificationEdge>>() => T;
-  aggregate: <T = AggregateNotificationPromise>() => T;
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  gender: () => Promise<Gender>;
+  email: () => Promise<String>;
+  username: () => Promise<String>;
+  password: () => Promise<String>;
+  profilePicture: () => Promise<String>;
+  banner: () => Promise<String>;
+  connectedStripeId: () => Promise<String>;
+  customerStripeId: () => Promise<String>;
+  gamerIsSetup: () => Promise<Boolean>;
+  occupations: () => Promise<Occupations[]>;
+  name: () => Promise<String>;
+  aboutMe: () => Promise<String>;
+  setup: () => Promise<Int>;
+  role: () => Promise<Role>;
 }
 
-export interface NotificationConnectionSubscription
-  extends Promise<AsyncIterator<NotificationConnection>>,
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<NotificationEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateNotificationSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
+  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  profilePicture: () => Promise<AsyncIterator<String>>;
+  banner: () => Promise<AsyncIterator<String>>;
+  connectedStripeId: () => Promise<AsyncIterator<String>>;
+  customerStripeId: () => Promise<AsyncIterator<String>>;
+  gamerIsSetup: () => Promise<AsyncIterator<Boolean>>;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  name: () => Promise<AsyncIterator<String>>;
+  aboutMe: () => Promise<AsyncIterator<String>>;
+  setup: () => Promise<AsyncIterator<Int>>;
+  role: () => Promise<AsyncIterator<Role>>;
 }
 
 export interface DiscountPreviousValues {
@@ -7968,22 +8516,22 @@ export interface DiscountPreviousValuesSubscription
   playerOrSession: () => Promise<AsyncIterator<PlayerOrSession>>;
 }
 
-export interface GamingTimeSlotEdge {
-  node: GamingTimeSlot;
+export interface NotificationEdge {
+  node: Notification;
   cursor: String;
 }
 
-export interface GamingTimeSlotEdgePromise
-  extends Promise<GamingTimeSlotEdge>,
+export interface NotificationEdgePromise
+  extends Promise<NotificationEdge>,
     Fragmentable {
-  node: <T = GamingTimeSlotPromise>() => T;
+  node: <T = NotificationPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GamingTimeSlotEdgeSubscription
-  extends Promise<AsyncIterator<GamingTimeSlotEdge>>,
+export interface NotificationEdgeSubscription
+  extends Promise<AsyncIterator<NotificationEdge>>,
     Fragmentable {
-  node: <T = GamingTimeSlotSubscription>() => T;
+  node: <T = NotificationSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -8008,18 +8556,18 @@ export interface BookingConnectionSubscription
   aggregate: <T = AggregateBookingSubscription>() => T;
 }
 
-export interface AggregateGamingSessionIndex {
+export interface AggregateGamingTimeSlot {
   count: Int;
 }
 
-export interface AggregateGamingSessionIndexPromise
-  extends Promise<AggregateGamingSessionIndex>,
+export interface AggregateGamingTimeSlotPromise
+  extends Promise<AggregateGamingTimeSlot>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateGamingSessionIndexSubscription
-  extends Promise<AsyncIterator<AggregateGamingSessionIndex>>,
+export interface AggregateGamingTimeSlotSubscription
+  extends Promise<AsyncIterator<AggregateGamingTimeSlot>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -8049,27 +8597,25 @@ export interface FriendRequestSubscriptionPayloadSubscription
   previousValues: <T = FriendRequestPreviousValuesSubscription>() => T;
 }
 
-export interface GamingSessionIndexConnection {
+export interface GamingTimeSlotConnection {
   pageInfo: PageInfo;
-  edges: GamingSessionIndexEdge[];
+  edges: GamingTimeSlotEdge[];
 }
 
-export interface GamingSessionIndexConnectionPromise
-  extends Promise<GamingSessionIndexConnection>,
+export interface GamingTimeSlotConnectionPromise
+  extends Promise<GamingTimeSlotConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamingSessionIndexEdge>>() => T;
-  aggregate: <T = AggregateGamingSessionIndexPromise>() => T;
+  edges: <T = FragmentableArray<GamingTimeSlotEdge>>() => T;
+  aggregate: <T = AggregateGamingTimeSlotPromise>() => T;
 }
 
-export interface GamingSessionIndexConnectionSubscription
-  extends Promise<AsyncIterator<GamingSessionIndexConnection>>,
+export interface GamingTimeSlotConnectionSubscription
+  extends Promise<AsyncIterator<GamingTimeSlotConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<GamingSessionIndexEdgeSubscription>>
-  >() => T;
-  aggregate: <T = AggregateGamingSessionIndexSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamingTimeSlotEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamingTimeSlotSubscription>() => T;
 }
 
 export interface FriendRequestPreviousValues {
@@ -8094,20 +8640,23 @@ export interface FriendRequestPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateGamingSession {
-  count: Int;
+export interface GamingSessionIndexEdge {
+  node: GamingSessionIndex;
+  cursor: String;
 }
 
-export interface AggregateGamingSessionPromise
-  extends Promise<AggregateGamingSession>,
+export interface GamingSessionIndexEdgePromise
+  extends Promise<GamingSessionIndexEdge>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = GamingSessionIndexPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateGamingSessionSubscription
-  extends Promise<AsyncIterator<AggregateGamingSession>>,
+export interface GamingSessionIndexEdgeSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = GamingSessionIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateBookedPlayer {
@@ -8126,25 +8675,37 @@ export interface AggregateBookedPlayerSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface GamingSessionConnection {
-  pageInfo: PageInfo;
-  edges: GamingSessionEdge[];
+export interface GamingSessionIndex {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  title: String;
+  gamer: String;
+  game?: String;
 }
 
-export interface GamingSessionConnectionPromise
-  extends Promise<GamingSessionConnection>,
+export interface GamingSessionIndexPromise
+  extends Promise<GamingSessionIndex>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamingSessionEdge>>() => T;
-  aggregate: <T = AggregateGamingSessionPromise>() => T;
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  title: () => Promise<String>;
+  gamer: () => Promise<String>;
+  game: () => Promise<String>;
+  gamingSession: <T = GamingSessionPromise>() => T;
 }
 
-export interface GamingSessionConnectionSubscription
-  extends Promise<AsyncIterator<GamingSessionConnection>>,
+export interface GamingSessionIndexSubscription
+  extends Promise<AsyncIterator<GamingSessionIndex>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GamingSessionEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGamingSessionSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  title: () => Promise<AsyncIterator<String>>;
+  gamer: () => Promise<AsyncIterator<String>>;
+  game: () => Promise<AsyncIterator<String>>;
+  gamingSession: <T = GamingSessionSubscription>() => T;
 }
 
 export interface GameSubscriptionPayload {
@@ -8172,22 +8733,22 @@ export interface GameSubscriptionPayloadSubscription
   previousValues: <T = GamePreviousValuesSubscription>() => T;
 }
 
-export interface GamerTagEdge {
-  node: GamerTag;
+export interface GamingSessionEdge {
+  node: GamingSession;
   cursor: String;
 }
 
-export interface GamerTagEdgePromise
-  extends Promise<GamerTagEdge>,
+export interface GamingSessionEdgePromise
+  extends Promise<GamingSessionEdge>,
     Fragmentable {
-  node: <T = GamerTagPromise>() => T;
+  node: <T = GamingSessionPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GamerTagEdgeSubscription
-  extends Promise<AsyncIterator<GamerTagEdge>>,
+export interface GamingSessionEdgeSubscription
+  extends Promise<AsyncIterator<GamingSessionEdge>>,
     Fragmentable {
-  node: <T = GamerTagSubscription>() => T;
+  node: <T = GamingSessionSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -8231,18 +8792,18 @@ export interface GamePreviousValuesSubscription
   banner: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGamerRequest {
+export interface AggregateGamerTag {
   count: Int;
 }
 
-export interface AggregateGamerRequestPromise
-  extends Promise<AggregateGamerRequest>,
+export interface AggregateGamerTagPromise
+  extends Promise<AggregateGamerTag>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateGamerRequestSubscription
-  extends Promise<AsyncIterator<AggregateGamerRequest>>,
+export interface AggregateGamerTagSubscription
+  extends Promise<AsyncIterator<AggregateGamerTag>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -8266,25 +8827,25 @@ export interface BookedPlayerEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GamerRequestConnection {
+export interface GamerTagConnection {
   pageInfo: PageInfo;
-  edges: GamerRequestEdge[];
+  edges: GamerTagEdge[];
 }
 
-export interface GamerRequestConnectionPromise
-  extends Promise<GamerRequestConnection>,
+export interface GamerTagConnectionPromise
+  extends Promise<GamerTagConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamerRequestEdge>>() => T;
-  aggregate: <T = AggregateGamerRequestPromise>() => T;
+  edges: <T = FragmentableArray<GamerTagEdge>>() => T;
+  aggregate: <T = AggregateGamerTagPromise>() => T;
 }
 
-export interface GamerRequestConnectionSubscription
-  extends Promise<AsyncIterator<GamerRequestConnection>>,
+export interface GamerTagConnectionSubscription
+  extends Promise<AsyncIterator<GamerTagConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GamerRequestEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGamerRequestSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamerTagEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamerTagSubscription>() => T;
 }
 
 export interface GameIndexSubscriptionPayload {
@@ -8312,36 +8873,23 @@ export interface GameIndexSubscriptionPayloadSubscription
   previousValues: <T = GameIndexPreviousValuesSubscription>() => T;
 }
 
-export interface GamerRequest {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  occupations: Occupations[];
-  addToOccupations?: String;
+export interface GamerRequestEdge {
+  node: GamerRequest;
+  cursor: String;
 }
 
-export interface GamerRequestPromise
-  extends Promise<GamerRequest>,
+export interface GamerRequestEdgePromise
+  extends Promise<GamerRequestEdge>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  user: <T = UserPromise>() => T;
-  occupations: () => Promise<Occupations[]>;
-  addToOccupations: () => Promise<String>;
-  socialMedia: <T = SocialMediaPromise>() => T;
+  node: <T = GamerRequestPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface GamerRequestSubscription
-  extends Promise<AsyncIterator<GamerRequest>>,
+export interface GamerRequestEdgeSubscription
+  extends Promise<AsyncIterator<GamerRequestEdge>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  user: <T = UserSubscription>() => T;
-  occupations: () => Promise<AsyncIterator<Occupations[]>>;
-  addToOccupations: () => Promise<AsyncIterator<String>>;
-  socialMedia: <T = SocialMediaSubscription>() => T;
+  node: <T = GamerRequestSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GameIndexPreviousValues {
@@ -8375,23 +8923,42 @@ export interface GameIndexPreviousValuesSubscription
   tags: () => Promise<AsyncIterator<String[]>>;
 }
 
-export interface GameIndexEdge {
-  node: GameIndex;
-  cursor: String;
+export interface SocialMedia {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  twitter?: String;
+  facebook?: String;
+  youtube?: String;
+  instagram?: String;
+  twitch?: String;
+  snapchat?: String;
 }
 
-export interface GameIndexEdgePromise
-  extends Promise<GameIndexEdge>,
-    Fragmentable {
-  node: <T = GameIndexPromise>() => T;
-  cursor: () => Promise<String>;
+export interface SocialMediaPromise extends Promise<SocialMedia>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  twitter: () => Promise<String>;
+  facebook: () => Promise<String>;
+  youtube: () => Promise<String>;
+  instagram: () => Promise<String>;
+  twitch: () => Promise<String>;
+  snapchat: () => Promise<String>;
 }
 
-export interface GameIndexEdgeSubscription
-  extends Promise<AsyncIterator<GameIndexEdge>>,
+export interface SocialMediaSubscription
+  extends Promise<AsyncIterator<SocialMedia>>,
     Fragmentable {
-  node: <T = GameIndexSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  twitter: () => Promise<AsyncIterator<String>>;
+  facebook: () => Promise<AsyncIterator<String>>;
+  youtube: () => Promise<AsyncIterator<String>>;
+  instagram: () => Promise<AsyncIterator<String>>;
+  twitch: () => Promise<AsyncIterator<String>>;
+  snapchat: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PageInfo {
@@ -8417,35 +8984,20 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GameIndex {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  launcher?: String;
-  tags: String[];
+export interface AggregateGameIndex {
+  count: Int;
 }
 
-export interface GameIndexPromise extends Promise<GameIndex>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  launcher: () => Promise<String>;
-  tags: () => Promise<String[]>;
-  game: <T = GamePromise>() => T;
-}
-
-export interface GameIndexSubscription
-  extends Promise<AsyncIterator<GameIndex>>,
+export interface AggregateGameIndexPromise
+  extends Promise<AggregateGameIndex>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  launcher: () => Promise<AsyncIterator<String>>;
-  tags: () => Promise<AsyncIterator<String[]>>;
-  game: <T = GameSubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGameIndexSubscription
+  extends Promise<AsyncIterator<AggregateGameIndex>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamerRequestSubscriptionPayload {
@@ -8473,21 +9025,25 @@ export interface GamerRequestSubscriptionPayloadSubscription
   previousValues: <T = GamerRequestPreviousValuesSubscription>() => T;
 }
 
-export interface GameEdge {
-  node: Game;
-  cursor: String;
+export interface GameIndexConnection {
+  pageInfo: PageInfo;
+  edges: GameIndexEdge[];
 }
 
-export interface GameEdgePromise extends Promise<GameEdge>, Fragmentable {
-  node: <T = GamePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface GameEdgeSubscription
-  extends Promise<AsyncIterator<GameEdge>>,
+export interface GameIndexConnectionPromise
+  extends Promise<GameIndexConnection>,
     Fragmentable {
-  node: <T = GameSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GameIndexEdge>>() => T;
+  aggregate: <T = AggregateGameIndexPromise>() => T;
+}
+
+export interface GameIndexConnectionSubscription
+  extends Promise<AsyncIterator<GameIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GameIndexEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGameIndexSubscription>() => T;
 }
 
 export interface GamerRequestPreviousValues {
@@ -8518,29 +9074,20 @@ export interface GamerRequestPreviousValuesSubscription
   addToOccupations: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
+export interface AggregateGame {
+  count: Int;
 }
 
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
+export interface AggregateGamePromise
+  extends Promise<AggregateGame>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+export interface AggregateGameSubscription
+  extends Promise<AsyncIterator<AggregateGame>>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface BookedPlayerConnection {
@@ -8564,23 +9111,25 @@ export interface BookedPlayerConnectionSubscription
   aggregate: <T = AggregateBookedPlayerSubscription>() => T;
 }
 
-export interface FriendRequestEdge {
-  node: FriendRequest;
-  cursor: String;
+export interface GameConnection {
+  pageInfo: PageInfo;
+  edges: GameEdge[];
 }
 
-export interface FriendRequestEdgePromise
-  extends Promise<FriendRequestEdge>,
+export interface GameConnectionPromise
+  extends Promise<GameConnection>,
     Fragmentable {
-  node: <T = FriendRequestPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GameEdge>>() => T;
+  aggregate: <T = AggregateGamePromise>() => T;
 }
 
-export interface FriendRequestEdgeSubscription
-  extends Promise<AsyncIterator<FriendRequestEdge>>,
+export interface GameConnectionSubscription
+  extends Promise<AsyncIterator<GameConnection>>,
     Fragmentable {
-  node: <T = FriendRequestSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GameEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGameSubscription>() => T;
 }
 
 export interface GamerTagSubscriptionPayload {
@@ -8608,23 +9157,20 @@ export interface GamerTagSubscriptionPayloadSubscription
   previousValues: <T = GamerTagPreviousValuesSubscription>() => T;
 }
 
-export interface UserIndexEdge {
-  node: UserIndex;
-  cursor: String;
+export interface AggregateFriendRequest {
+  count: Int;
 }
 
-export interface UserIndexEdgePromise
-  extends Promise<UserIndexEdge>,
+export interface AggregateFriendRequestPromise
+  extends Promise<AggregateFriendRequest>,
     Fragmentable {
-  node: <T = UserIndexPromise>() => T;
-  cursor: () => Promise<String>;
+  count: () => Promise<Int>;
 }
 
-export interface UserIndexEdgeSubscription
-  extends Promise<AsyncIterator<UserIndexEdge>>,
+export interface AggregateFriendRequestSubscription
+  extends Promise<AsyncIterator<AggregateFriendRequest>>,
     Fragmentable {
-  node: <T = UserIndexSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamerTagPreviousValues {
@@ -8658,21 +9204,25 @@ export interface GamerTagPreviousValuesSubscription
   nso: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface FriendRequestConnection {
+  pageInfo: PageInfo;
+  edges: FriendRequestEdge[];
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface FriendRequestConnectionPromise
+  extends Promise<FriendRequestConnection>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FriendRequestEdge>>() => T;
+  aggregate: <T = AggregateFriendRequestPromise>() => T;
+}
+
+export interface FriendRequestConnectionSubscription
+  extends Promise<AsyncIterator<FriendRequestConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FriendRequestEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFriendRequestSubscription>() => T;
 }
 
 export interface UserIndex {
@@ -8706,25 +9256,29 @@ export interface UserIndexSubscription
   user: <T = UserSubscription>() => T;
 }
 
-export interface SocialMediaConnection {
-  pageInfo: PageInfo;
-  edges: SocialMediaEdge[];
+export interface UserIndexSubscriptionPayload {
+  mutation: MutationType;
+  node: UserIndex;
+  updatedFields: String[];
+  previousValues: UserIndexPreviousValues;
 }
 
-export interface SocialMediaConnectionPromise
-  extends Promise<SocialMediaConnection>,
+export interface UserIndexSubscriptionPayloadPromise
+  extends Promise<UserIndexSubscriptionPayload>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SocialMediaEdge>>() => T;
-  aggregate: <T = AggregateSocialMediaPromise>() => T;
+  mutation: () => Promise<MutationType>;
+  node: <T = UserIndexPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserIndexPreviousValuesPromise>() => T;
 }
 
-export interface SocialMediaConnectionSubscription
-  extends Promise<AsyncIterator<SocialMediaConnection>>,
+export interface UserIndexSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserIndexSubscriptionPayload>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SocialMediaEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSocialMediaSubscription>() => T;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserIndexSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserIndexPreviousValuesSubscription>() => T;
 }
 
 export interface GamingSessionSubscriptionPayload {
@@ -8752,27 +9306,20 @@ export interface GamingSessionSubscriptionPayloadSubscription
   previousValues: <T = GamingSessionPreviousValuesSubscription>() => T;
 }
 
-export interface SessionReviewIndexConnection {
-  pageInfo: PageInfo;
-  edges: SessionReviewIndexEdge[];
+export interface AggregateSocialMedia {
+  count: Int;
 }
 
-export interface SessionReviewIndexConnectionPromise
-  extends Promise<SessionReviewIndexConnection>,
+export interface AggregateSocialMediaPromise
+  extends Promise<AggregateSocialMedia>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SessionReviewIndexEdge>>() => T;
-  aggregate: <T = AggregateSessionReviewIndexPromise>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface SessionReviewIndexConnectionSubscription
-  extends Promise<AsyncIterator<SessionReviewIndexConnection>>,
+export interface AggregateSocialMediaSubscription
+  extends Promise<AsyncIterator<AggregateSocialMedia>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<SessionReviewIndexEdgeSubscription>>
-  >() => T;
-  aggregate: <T = AggregateSessionReviewIndexSubscription>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamingSessionPreviousValues {
@@ -8818,23 +9365,20 @@ export interface GamingSessionPreviousValuesSubscription
   retired: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface SessionReviewEdge {
-  node: SessionReview;
-  cursor: String;
+export interface AggregateSessionReviewIndex {
+  count: Int;
 }
 
-export interface SessionReviewEdgePromise
-  extends Promise<SessionReviewEdge>,
+export interface AggregateSessionReviewIndexPromise
+  extends Promise<AggregateSessionReviewIndex>,
     Fragmentable {
-  node: <T = SessionReviewPromise>() => T;
-  cursor: () => Promise<String>;
+  count: () => Promise<Int>;
 }
 
-export interface SessionReviewEdgeSubscription
-  extends Promise<AsyncIterator<SessionReviewEdge>>,
+export interface AggregateSessionReviewIndexSubscription
+  extends Promise<AsyncIterator<AggregateSessionReviewIndex>>,
     Fragmentable {
-  node: <T = SessionReviewSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface PCLauncher {
@@ -8889,25 +9433,31 @@ export interface PCLauncherSubscription
   riot: () => Promise<AsyncIterator<String>>;
 }
 
-export interface RequirementConnection {
-  pageInfo: PageInfo;
-  edges: RequirementEdge[];
+export interface SessionReviewIndex {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  text: String;
 }
 
-export interface RequirementConnectionPromise
-  extends Promise<RequirementConnection>,
+export interface SessionReviewIndexPromise
+  extends Promise<SessionReviewIndex>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<RequirementEdge>>() => T;
-  aggregate: <T = AggregateRequirementPromise>() => T;
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  text: () => Promise<String>;
+  sessionReview: <T = SessionReviewPromise>() => T;
 }
 
-export interface RequirementConnectionSubscription
-  extends Promise<AsyncIterator<RequirementConnection>>,
+export interface SessionReviewIndexSubscription
+  extends Promise<AsyncIterator<SessionReviewIndex>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<RequirementEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateRequirementSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  text: () => Promise<AsyncIterator<String>>;
+  sessionReview: <T = SessionReviewSubscription>() => T;
 }
 
 export interface GamingSessionIndexSubscriptionPayload {
@@ -8935,62 +9485,20 @@ export interface GamingSessionIndexSubscriptionPayloadSubscription
   previousValues: <T = GamingSessionIndexPreviousValuesSubscription>() => T;
 }
 
-export interface UserPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  gender: Gender;
-  email: String;
-  username: String;
-  password: String;
-  profilePicture?: String;
-  banner?: String;
-  gamerIsSetup: Boolean;
-  occupations: Occupations[];
-  name: String;
-  aboutMe?: String;
-  setup?: Int;
-  role: Role;
+export interface AggregateSavedCard {
+  count: Int;
 }
 
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
+export interface AggregateSavedCardPromise
+  extends Promise<AggregateSavedCard>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  gender: () => Promise<Gender>;
-  email: () => Promise<String>;
-  username: () => Promise<String>;
-  password: () => Promise<String>;
-  profilePicture: () => Promise<String>;
-  banner: () => Promise<String>;
-  gamerIsSetup: () => Promise<Boolean>;
-  occupations: () => Promise<Occupations[]>;
-  name: () => Promise<String>;
-  aboutMe: () => Promise<String>;
-  setup: () => Promise<Int>;
-  role: () => Promise<Role>;
+  count: () => Promise<Int>;
 }
 
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
+export interface AggregateSavedCardSubscription
+  extends Promise<AsyncIterator<AggregateSavedCard>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  gender: () => Promise<AsyncIterator<Gender>>;
-  email: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  profilePicture: () => Promise<AsyncIterator<String>>;
-  banner: () => Promise<AsyncIterator<String>>;
-  gamerIsSetup: () => Promise<AsyncIterator<Boolean>>;
-  occupations: () => Promise<AsyncIterator<Occupations[]>>;
-  name: () => Promise<AsyncIterator<String>>;
-  aboutMe: () => Promise<AsyncIterator<String>>;
-  setup: () => Promise<AsyncIterator<Int>>;
-  role: () => Promise<AsyncIterator<Role>>;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamingSessionIndexPreviousValues {
@@ -9024,20 +9532,23 @@ export interface GamingSessionIndexPreviousValuesSubscription
   game: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGamingTimeSlot {
-  count: Int;
+export interface RequirementEdge {
+  node: Requirement;
+  cursor: String;
 }
 
-export interface AggregateGamingTimeSlotPromise
-  extends Promise<AggregateGamingTimeSlot>,
+export interface RequirementEdgePromise
+  extends Promise<RequirementEdge>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = RequirementPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateGamingTimeSlotSubscription
-  extends Promise<AsyncIterator<AggregateGamingTimeSlot>>,
+export interface RequirementEdgeSubscription
+  extends Promise<AsyncIterator<RequirementEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = RequirementSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GamerTag {
@@ -9073,23 +9584,25 @@ export interface GamerTagSubscription
   pc: <T = PCLauncherSubscription>() => T;
 }
 
-export interface GamingSessionIndexEdge {
-  node: GamingSessionIndex;
-  cursor: String;
+export interface PCLauncherConnection {
+  pageInfo: PageInfo;
+  edges: PCLauncherEdge[];
 }
 
-export interface GamingSessionIndexEdgePromise
-  extends Promise<GamingSessionIndexEdge>,
+export interface PCLauncherConnectionPromise
+  extends Promise<PCLauncherConnection>,
     Fragmentable {
-  node: <T = GamingSessionIndexPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PCLauncherEdge>>() => T;
+  aggregate: <T = AggregatePCLauncherPromise>() => T;
 }
 
-export interface GamingSessionIndexEdgeSubscription
-  extends Promise<AsyncIterator<GamingSessionIndexEdge>>,
+export interface PCLauncherConnectionSubscription
+  extends Promise<AsyncIterator<PCLauncherConnection>>,
     Fragmentable {
-  node: <T = GamingSessionIndexSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PCLauncherEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePCLauncherSubscription>() => T;
 }
 
 export interface GamingTimeSlotSubscriptionPayload {
@@ -9117,23 +9630,25 @@ export interface GamingTimeSlotSubscriptionPayloadSubscription
   previousValues: <T = GamingTimeSlotPreviousValuesSubscription>() => T;
 }
 
-export interface GamingSessionEdge {
-  node: GamingSession;
-  cursor: String;
+export interface NotificationConnection {
+  pageInfo: PageInfo;
+  edges: NotificationEdge[];
 }
 
-export interface GamingSessionEdgePromise
-  extends Promise<GamingSessionEdge>,
+export interface NotificationConnectionPromise
+  extends Promise<NotificationConnection>,
     Fragmentable {
-  node: <T = GamingSessionPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<NotificationEdge>>() => T;
+  aggregate: <T = AggregateNotificationPromise>() => T;
 }
 
-export interface GamingSessionEdgeSubscription
-  extends Promise<AsyncIterator<GamingSessionEdge>>,
+export interface NotificationConnectionSubscription
+  extends Promise<AsyncIterator<NotificationConnection>>,
     Fragmentable {
-  node: <T = GamingSessionSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<NotificationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateNotificationSubscription>() => T;
 }
 
 export interface GamingTimeSlotPreviousValues {
@@ -9170,92 +9685,64 @@ export interface GamingTimeSlotPreviousValuesSubscription
   slots: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface GamerTagConnection {
-  pageInfo: PageInfo;
-  edges: GamerTagEdge[];
+export interface AggregateGamingSessionIndex {
+  count: Int;
 }
 
-export interface GamerTagConnectionPromise
-  extends Promise<GamerTagConnection>,
+export interface AggregateGamingSessionIndexPromise
+  extends Promise<AggregateGamingSessionIndex>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamerTagEdge>>() => T;
-  aggregate: <T = AggregateGamerTagPromise>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface GamerTagConnectionSubscription
-  extends Promise<AsyncIterator<GamerTagConnection>>,
+export interface AggregateGamingSessionIndexSubscription
+  extends Promise<AsyncIterator<AggregateGamingSessionIndex>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GamerTagEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGamerTagSubscription>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface Discount {
+export interface SavedCard {
   id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  percentage: Int;
-  threshold: Int;
-  playerOrSession: PlayerOrSession;
+  cardId: String;
+  default: Boolean;
+  lastFour: String;
+  brand: String;
 }
 
-export interface DiscountPromise extends Promise<Discount>, Fragmentable {
+export interface SavedCardPromise extends Promise<SavedCard>, Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  percentage: () => Promise<Int>;
-  threshold: () => Promise<Int>;
-  playerOrSession: () => Promise<PlayerOrSession>;
+  user: <T = UserPromise>() => T;
+  cardId: () => Promise<String>;
+  default: () => Promise<Boolean>;
+  lastFour: () => Promise<String>;
+  brand: () => Promise<String>;
 }
 
-export interface DiscountSubscription
-  extends Promise<AsyncIterator<Discount>>,
+export interface SavedCardSubscription
+  extends Promise<AsyncIterator<SavedCard>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  percentage: () => Promise<AsyncIterator<Int>>;
-  threshold: () => Promise<AsyncIterator<Int>>;
-  playerOrSession: () => Promise<AsyncIterator<PlayerOrSession>>;
+  user: <T = UserSubscription>() => T;
+  cardId: () => Promise<AsyncIterator<String>>;
+  default: () => Promise<AsyncIterator<Boolean>>;
+  lastFour: () => Promise<AsyncIterator<String>>;
+  brand: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SocialMedia {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  twitter?: String;
-  facebook?: String;
-  youtube?: String;
-  instagram?: String;
-  twitch?: String;
-  snapchat?: String;
+export interface AggregateGamingSession {
+  count: Int;
 }
 
-export interface SocialMediaPromise extends Promise<SocialMedia>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  twitter: () => Promise<String>;
-  facebook: () => Promise<String>;
-  youtube: () => Promise<String>;
-  instagram: () => Promise<String>;
-  twitch: () => Promise<String>;
-  snapchat: () => Promise<String>;
-}
-
-export interface SocialMediaSubscription
-  extends Promise<AsyncIterator<SocialMedia>>,
+export interface AggregateGamingSessionPromise
+  extends Promise<AggregateGamingSession>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  twitter: () => Promise<AsyncIterator<String>>;
-  facebook: () => Promise<AsyncIterator<String>>;
-  youtube: () => Promise<AsyncIterator<String>>;
-  instagram: () => Promise<AsyncIterator<String>>;
-  twitch: () => Promise<AsyncIterator<String>>;
-  snapchat: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGamingSessionSubscription
+  extends Promise<AsyncIterator<AggregateGamingSession>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface NotificationSubscriptionPayload {
@@ -9283,25 +9770,23 @@ export interface NotificationSubscriptionPayloadSubscription
   previousValues: <T = NotificationPreviousValuesSubscription>() => T;
 }
 
-export interface GameIndexConnection {
-  pageInfo: PageInfo;
-  edges: GameIndexEdge[];
+export interface GamerTagEdge {
+  node: GamerTag;
+  cursor: String;
 }
 
-export interface GameIndexConnectionPromise
-  extends Promise<GameIndexConnection>,
+export interface GamerTagEdgePromise
+  extends Promise<GamerTagEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GameIndexEdge>>() => T;
-  aggregate: <T = AggregateGameIndexPromise>() => T;
+  node: <T = GamerTagPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface GameIndexConnectionSubscription
-  extends Promise<AsyncIterator<GameIndexConnection>>,
+export interface GamerTagEdgeSubscription
+  extends Promise<AsyncIterator<GamerTagEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GameIndexEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGameIndexSubscription>() => T;
+  node: <T = GamerTagSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface NotificationPreviousValues {
@@ -9335,74 +9820,73 @@ export interface NotificationPreviousValuesSubscription
   viewed: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface GameConnection {
+export interface GamerRequestConnection {
   pageInfo: PageInfo;
-  edges: GameEdge[];
+  edges: GamerRequestEdge[];
 }
 
-export interface GameConnectionPromise
-  extends Promise<GameConnection>,
+export interface GamerRequestConnectionPromise
+  extends Promise<GamerRequestConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GameEdge>>() => T;
-  aggregate: <T = AggregateGamePromise>() => T;
+  edges: <T = FragmentableArray<GamerRequestEdge>>() => T;
+  aggregate: <T = AggregateGamerRequestPromise>() => T;
 }
 
-export interface GameConnectionSubscription
-  extends Promise<AsyncIterator<GameConnection>>,
+export interface GamerRequestConnectionSubscription
+  extends Promise<AsyncIterator<GamerRequestConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GameEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGameSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamerRequestEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamerRequestSubscription>() => T;
 }
 
-export interface FriendRequest {
+export interface Discount {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  percentage: Int;
+  threshold: Int;
+  playerOrSession: PlayerOrSession;
 }
 
-export interface FriendRequestPromise
-  extends Promise<FriendRequest>,
-    Fragmentable {
+export interface DiscountPromise extends Promise<Discount>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-  to: <T = UserPromise>() => T;
-  from: <T = UserPromise>() => T;
-  notification: <T = NotificationPromise>() => T;
+  percentage: () => Promise<Int>;
+  threshold: () => Promise<Int>;
+  playerOrSession: () => Promise<PlayerOrSession>;
 }
 
-export interface FriendRequestSubscription
-  extends Promise<AsyncIterator<FriendRequest>>,
+export interface DiscountSubscription
+  extends Promise<AsyncIterator<Discount>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  to: <T = UserSubscription>() => T;
-  from: <T = UserSubscription>() => T;
-  notification: <T = NotificationSubscription>() => T;
+  percentage: () => Promise<AsyncIterator<Int>>;
+  threshold: () => Promise<AsyncIterator<Int>>;
+  playerOrSession: () => Promise<AsyncIterator<PlayerOrSession>>;
 }
 
-export interface FriendRequestConnection {
-  pageInfo: PageInfo;
-  edges: FriendRequestEdge[];
+export interface GameIndexEdge {
+  node: GameIndex;
+  cursor: String;
 }
 
-export interface FriendRequestConnectionPromise
-  extends Promise<FriendRequestConnection>,
+export interface GameIndexEdgePromise
+  extends Promise<GameIndexEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FriendRequestEdge>>() => T;
-  aggregate: <T = AggregateFriendRequestPromise>() => T;
+  node: <T = GameIndexPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface FriendRequestConnectionSubscription
-  extends Promise<AsyncIterator<FriendRequestConnection>>,
+export interface GameIndexEdgeSubscription
+  extends Promise<AsyncIterator<GameIndexEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FriendRequestEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFriendRequestSubscription>() => T;
+  node: <T = GameIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PCLauncherSubscriptionPayload {
@@ -9430,20 +9914,21 @@ export interface PCLauncherSubscriptionPayloadSubscription
   previousValues: <T = PCLauncherPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateSocialMedia {
-  count: Int;
+export interface GameEdge {
+  node: Game;
+  cursor: String;
 }
 
-export interface AggregateSocialMediaPromise
-  extends Promise<AggregateSocialMedia>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface GameEdgePromise extends Promise<GameEdge>, Fragmentable {
+  node: <T = GamePromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateSocialMediaSubscription
-  extends Promise<AsyncIterator<AggregateSocialMedia>>,
+export interface GameEdgeSubscription
+  extends Promise<AsyncIterator<GameEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = GameSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PCLauncherPreviousValues {
@@ -9498,31 +9983,162 @@ export interface PCLauncherPreviousValuesSubscription
   riot: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SessionReviewIndex {
+export interface FriendRequestEdge {
+  node: FriendRequest;
+  cursor: String;
+}
+
+export interface FriendRequestEdgePromise
+  extends Promise<FriendRequestEdge>,
+    Fragmentable {
+  node: <T = FriendRequestPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FriendRequestEdgeSubscription
+  extends Promise<AsyncIterator<FriendRequestEdge>>,
+    Fragmentable {
+  node: <T = FriendRequestSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FriendRequest {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
-  text: String;
 }
 
-export interface SessionReviewIndexPromise
-  extends Promise<SessionReviewIndex>,
+export interface FriendRequestPromise
+  extends Promise<FriendRequest>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-  text: () => Promise<String>;
-  sessionReview: <T = SessionReviewPromise>() => T;
+  to: <T = UserPromise>() => T;
+  from: <T = UserPromise>() => T;
+  notification: <T = NotificationPromise>() => T;
 }
 
-export interface SessionReviewIndexSubscription
-  extends Promise<AsyncIterator<SessionReviewIndex>>,
+export interface FriendRequestSubscription
+  extends Promise<AsyncIterator<FriendRequest>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  text: () => Promise<AsyncIterator<String>>;
-  sessionReview: <T = SessionReviewSubscription>() => T;
+  to: <T = UserSubscription>() => T;
+  from: <T = UserSubscription>() => T;
+  notification: <T = NotificationSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RequirementSubscriptionPayload {
+  mutation: MutationType;
+  node: Requirement;
+  updatedFields: String[];
+  previousValues: RequirementPreviousValues;
+}
+
+export interface RequirementSubscriptionPayloadPromise
+  extends Promise<RequirementSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = RequirementPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RequirementPreviousValuesPromise>() => T;
+}
+
+export interface RequirementSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RequirementSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RequirementSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RequirementPreviousValuesSubscription>() => T;
+}
+
+export interface SessionReviewIndexConnection {
+  pageInfo: PageInfo;
+  edges: SessionReviewIndexEdge[];
+}
+
+export interface SessionReviewIndexConnectionPromise
+  extends Promise<SessionReviewIndexConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SessionReviewIndexEdge>>() => T;
+  aggregate: <T = AggregateSessionReviewIndexPromise>() => T;
+}
+
+export interface SessionReviewIndexConnectionSubscription
+  extends Promise<AsyncIterator<SessionReviewIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<SessionReviewIndexEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateSessionReviewIndexSubscription>() => T;
+}
+
+export interface RequirementPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  msg: String;
+}
+
+export interface RequirementPreviousValuesPromise
+  extends Promise<RequirementPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  msg: () => Promise<String>;
+}
+
+export interface RequirementPreviousValuesSubscription
+  extends Promise<AsyncIterator<RequirementPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  msg: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SavedCardConnection {
+  pageInfo: PageInfo;
+  edges: SavedCardEdge[];
+}
+
+export interface SavedCardConnectionPromise
+  extends Promise<SavedCardConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SavedCardEdge>>() => T;
+  aggregate: <T = AggregateSavedCardPromise>() => T;
+}
+
+export interface SavedCardConnectionSubscription
+  extends Promise<AsyncIterator<SavedCardConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SavedCardEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSavedCardSubscription>() => T;
 }
 
 export interface Notification {
@@ -9566,108 +10182,110 @@ export interface NotificationSubscription
   viewed: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface PCLauncherEdge {
-  node: PCLauncher;
-  cursor: String;
-}
-
-export interface PCLauncherEdgePromise
-  extends Promise<PCLauncherEdge>,
-    Fragmentable {
-  node: <T = PCLauncherPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PCLauncherEdgeSubscription
-  extends Promise<AsyncIterator<PCLauncherEdge>>,
-    Fragmentable {
-  node: <T = PCLauncherSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface RequirementSubscriptionPayload {
-  mutation: MutationType;
-  node: Requirement;
-  updatedFields: String[];
-  previousValues: RequirementPreviousValues;
-}
-
-export interface RequirementSubscriptionPayloadPromise
-  extends Promise<RequirementSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = RequirementPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = RequirementPreviousValuesPromise>() => T;
-}
-
-export interface RequirementSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RequirementSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RequirementSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RequirementPreviousValuesSubscription>() => T;
-}
-
-export interface GamingTimeSlotConnection {
-  pageInfo: PageInfo;
-  edges: GamingTimeSlotEdge[];
-}
-
-export interface GamingTimeSlotConnectionPromise
-  extends Promise<GamingTimeSlotConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GamingTimeSlotEdge>>() => T;
-  aggregate: <T = AggregateGamingTimeSlotPromise>() => T;
-}
-
-export interface GamingTimeSlotConnectionSubscription
-  extends Promise<AsyncIterator<GamingTimeSlotConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GamingTimeSlotEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGamingTimeSlotSubscription>() => T;
-}
-
-export interface RequirementPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  msg: String;
-}
-
-export interface RequirementPreviousValuesPromise
-  extends Promise<RequirementPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  msg: () => Promise<String>;
-}
-
-export interface RequirementPreviousValuesSubscription
-  extends Promise<AsyncIterator<RequirementPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  msg: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateGamerTag {
+export interface AggregateNotification {
   count: Int;
 }
 
-export interface AggregateGamerTagPromise
-  extends Promise<AggregateGamerTag>,
+export interface AggregateNotificationPromise
+  extends Promise<AggregateNotification>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateGamerTagSubscription
-  extends Promise<AsyncIterator<AggregateGamerTag>>,
+export interface AggregateNotificationSubscription
+  extends Promise<AsyncIterator<AggregateNotification>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SavedCardSubscriptionPayload {
+  mutation: MutationType;
+  node: SavedCard;
+  updatedFields: String[];
+  previousValues: SavedCardPreviousValues;
+}
+
+export interface SavedCardSubscriptionPayloadPromise
+  extends Promise<SavedCardSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SavedCardPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SavedCardPreviousValuesPromise>() => T;
+}
+
+export interface SavedCardSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SavedCardSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SavedCardSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SavedCardPreviousValuesSubscription>() => T;
+}
+
+export interface GamingSessionIndexConnection {
+  pageInfo: PageInfo;
+  edges: GamingSessionIndexEdge[];
+}
+
+export interface GamingSessionIndexConnectionPromise
+  extends Promise<GamingSessionIndexConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamingSessionIndexEdge>>() => T;
+  aggregate: <T = AggregateGamingSessionIndexPromise>() => T;
+}
+
+export interface GamingSessionIndexConnectionSubscription
+  extends Promise<AsyncIterator<GamingSessionIndexConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<GamingSessionIndexEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateGamingSessionIndexSubscription>() => T;
+}
+
+export interface SavedCardPreviousValues {
+  id: ID_Output;
+  cardId: String;
+  default: Boolean;
+  lastFour: String;
+  brand: String;
+}
+
+export interface SavedCardPreviousValuesPromise
+  extends Promise<SavedCardPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  cardId: () => Promise<String>;
+  default: () => Promise<Boolean>;
+  lastFour: () => Promise<String>;
+  brand: () => Promise<String>;
+}
+
+export interface SavedCardPreviousValuesSubscription
+  extends Promise<AsyncIterator<SavedCardPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  cardId: () => Promise<AsyncIterator<String>>;
+  default: () => Promise<AsyncIterator<Boolean>>;
+  lastFour: () => Promise<AsyncIterator<String>>;
+  brand: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateGamerRequest {
+  count: Int;
+}
+
+export interface AggregateGamerRequestPromise
+  extends Promise<AggregateGamerRequest>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGamerRequestSubscription
+  extends Promise<AsyncIterator<AggregateGamerRequest>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -9711,20 +10329,35 @@ export interface BookingInviteSubscription
   notification: <T = NotificationSubscription>() => T;
 }
 
-export interface AggregateGameIndex {
-  count: Int;
+export interface GameIndex {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  launcher?: String;
+  tags: String[];
 }
 
-export interface AggregateGameIndexPromise
-  extends Promise<AggregateGameIndex>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface GameIndexPromise extends Promise<GameIndex>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  launcher: () => Promise<String>;
+  tags: () => Promise<String[]>;
+  game: <T = GamePromise>() => T;
 }
 
-export interface AggregateGameIndexSubscription
-  extends Promise<AsyncIterator<AggregateGameIndex>>,
+export interface GameIndexSubscription
+  extends Promise<AsyncIterator<GameIndex>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  launcher: () => Promise<AsyncIterator<String>>;
+  tags: () => Promise<AsyncIterator<String[]>>;
+  game: <T = GameSubscription>() => T;
 }
 
 export interface SessionReviewSubscriptionPayload {
@@ -9752,20 +10385,23 @@ export interface SessionReviewSubscriptionPayloadSubscription
   previousValues: <T = SessionReviewPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateFriendRequest {
-  count: Int;
+export interface UserIndexEdge {
+  node: UserIndex;
+  cursor: String;
 }
 
-export interface AggregateFriendRequestPromise
-  extends Promise<AggregateFriendRequest>,
+export interface UserIndexEdgePromise
+  extends Promise<UserIndexEdge>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = UserIndexPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateFriendRequestSubscription
-  extends Promise<AsyncIterator<AggregateFriendRequest>>,
+export interface UserIndexEdgeSubscription
+  extends Promise<AsyncIterator<UserIndexEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = UserIndexSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SessionReviewPreviousValues {
@@ -9796,20 +10432,23 @@ export interface SessionReviewPreviousValuesSubscription
   rating: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface AggregateSessionReviewIndex {
-  count: Int;
+export interface SessionReviewEdge {
+  node: SessionReview;
+  cursor: String;
 }
 
-export interface AggregateSessionReviewIndexPromise
-  extends Promise<AggregateSessionReviewIndex>,
+export interface SessionReviewEdgePromise
+  extends Promise<SessionReviewEdge>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = SessionReviewPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateSessionReviewIndexSubscription
-  extends Promise<AsyncIterator<AggregateSessionReviewIndex>>,
+export interface SessionReviewEdgeSubscription
+  extends Promise<AsyncIterator<SessionReviewEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = SessionReviewSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Booking {
@@ -9914,42 +10553,55 @@ export interface BookingSubscription
   ) => T;
 }
 
-export interface NotificationEdge {
-  node: Notification;
+export interface GamingTimeSlotEdge {
+  node: GamingTimeSlot;
   cursor: String;
 }
 
-export interface NotificationEdgePromise
-  extends Promise<NotificationEdge>,
+export interface GamingTimeSlotEdgePromise
+  extends Promise<GamingTimeSlotEdge>,
     Fragmentable {
-  node: <T = NotificationPromise>() => T;
+  node: <T = GamingTimeSlotPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface NotificationEdgeSubscription
-  extends Promise<AsyncIterator<NotificationEdge>>,
+export interface GamingTimeSlotEdgeSubscription
+  extends Promise<AsyncIterator<GamingTimeSlotEdge>>,
     Fragmentable {
-  node: <T = NotificationSubscription>() => T;
+  node: <T = GamingTimeSlotSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GamerRequestEdge {
-  node: GamerRequest;
-  cursor: String;
+export interface GamerRequest {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  occupations: Occupations[];
+  addToOccupations?: String;
 }
 
-export interface GamerRequestEdgePromise
-  extends Promise<GamerRequestEdge>,
+export interface GamerRequestPromise
+  extends Promise<GamerRequest>,
     Fragmentable {
-  node: <T = GamerRequestPromise>() => T;
-  cursor: () => Promise<String>;
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
+  occupations: () => Promise<Occupations[]>;
+  addToOccupations: () => Promise<String>;
+  socialMedia: <T = SocialMediaPromise>() => T;
 }
 
-export interface GamerRequestEdgeSubscription
-  extends Promise<AsyncIterator<GamerRequestEdge>>,
+export interface GamerRequestSubscription
+  extends Promise<AsyncIterator<GamerRequest>>,
     Fragmentable {
-  node: <T = GamerRequestSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  user: <T = UserSubscription>() => T;
+  occupations: () => Promise<AsyncIterator<Occupations[]>>;
+  addToOccupations: () => Promise<AsyncIterator<String>>;
+  socialMedia: <T = SocialMediaSubscription>() => T;
 }
 
 export interface SocialMediaSubscriptionPayload {
@@ -10129,94 +10781,87 @@ export interface SessionReviewIndexSubscriptionPayloadSubscription
   previousValues: <T = SessionReviewIndexPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateGame {
-  count: Int;
-}
-
-export interface AggregateGamePromise
-  extends Promise<AggregateGame>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGameSubscription
-  extends Promise<AsyncIterator<AggregateGame>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface GamingSessionIndex {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  title: String;
-  gamer: String;
-  game?: String;
-}
-
-export interface GamingSessionIndexPromise
-  extends Promise<GamingSessionIndex>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  title: () => Promise<String>;
-  gamer: () => Promise<String>;
-  game: () => Promise<String>;
-  gamingSession: <T = GamingSessionPromise>() => T;
-}
-
-export interface GamingSessionIndexSubscription
-  extends Promise<AsyncIterator<GamingSessionIndex>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  title: () => Promise<AsyncIterator<String>>;
-  gamer: () => Promise<AsyncIterator<String>>;
-  game: () => Promise<AsyncIterator<String>>;
-  gamingSession: <T = GamingSessionSubscription>() => T;
-}
-
-export interface AggregateRequirement {
-  count: Int;
-}
-
-export interface AggregateRequirementPromise
-  extends Promise<AggregateRequirement>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateRequirementSubscription
-  extends Promise<AsyncIterator<AggregateRequirement>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface UserIndexSubscriptionPayload {
+export interface UserSubscriptionPayload {
   mutation: MutationType;
-  node: UserIndex;
+  node: User;
   updatedFields: String[];
-  previousValues: UserIndexPreviousValues;
+  previousValues: UserPreviousValues;
 }
 
-export interface UserIndexSubscriptionPayloadPromise
-  extends Promise<UserIndexSubscriptionPayload>,
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = UserIndexPromise>() => T;
+  node: <T = UserPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserIndexPreviousValuesPromise>() => T;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
 }
 
-export interface UserIndexSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserIndexSubscriptionPayload>>,
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserIndexSubscription>() => T;
+  node: <T = UserSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserIndexPreviousValuesSubscription>() => T;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface GamingSessionConnection {
+  pageInfo: PageInfo;
+  edges: GamingSessionEdge[];
+}
+
+export interface GamingSessionConnectionPromise
+  extends Promise<GamingSessionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GamingSessionEdge>>() => T;
+  aggregate: <T = AggregateGamingSessionPromise>() => T;
+}
+
+export interface GamingSessionConnectionSubscription
+  extends Promise<AsyncIterator<GamingSessionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GamingSessionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGamingSessionSubscription>() => T;
+}
+
+export interface AggregatePCLauncher {
+  count: Int;
+}
+
+export interface AggregatePCLauncherPromise
+  extends Promise<AggregatePCLauncher>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePCLauncherSubscription
+  extends Promise<AsyncIterator<AggregatePCLauncher>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SocialMediaConnection {
+  pageInfo: PageInfo;
+  edges: SocialMediaEdge[];
+}
+
+export interface SocialMediaConnectionPromise
+  extends Promise<SocialMediaConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SocialMediaEdge>>() => T;
+  aggregate: <T = AggregateSocialMediaPromise>() => T;
+}
+
+export interface SocialMediaConnectionSubscription
+  extends Promise<AsyncIterator<SocialMediaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SocialMediaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSocialMediaSubscription>() => T;
 }
 
 export type Long = string;
@@ -10288,6 +10933,10 @@ export const models: Model[] = [
   },
   {
     name: "PCLauncher",
+    embedded: false
+  },
+  {
+    name: "SavedCard",
     embedded: false
   },
   {

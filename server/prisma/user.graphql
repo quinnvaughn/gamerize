@@ -8,6 +8,8 @@ type User {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean! @default(value: false)
   occupations: [Occupations!]!
   name: String!
@@ -18,6 +20,7 @@ type User {
   # timeSlotsPlayed: [Booking!]!
   #   @relation(name: "BookingPlayers", onDelete: SET_NULL)
   invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
+  savedCards: [SavedCard!]! @relation(name: "SavedCards")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   setup: Int
   reviews: [SessionReview!]!
@@ -92,4 +95,13 @@ type PCLauncher {
   itch: String
   windows: String
   riot: String
+}
+
+type SavedCard {
+  id: ID! @unique
+  user: User! @relation(name: "SavedCards")
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
 }

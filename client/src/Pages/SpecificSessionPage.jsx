@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -9,8 +9,6 @@ import { Subscribe } from 'unstated'
 
 //local
 import SessionsContainer from '../Containers/SessionsContainer'
-import DefaultBanner from '../default-banner.png'
-import DefaultAvatar from '../default-avatar.png'
 import SelectionOptions from '../Components/SelectionOptions'
 import Footer from '../Components/Footer'
 import Reviews from '../Components/Reviews'
@@ -268,6 +266,7 @@ const GET_SPECIFIC_SESSION = gql`
       numReviews
       system
       creator {
+        id
         setup
         banner
         username
@@ -315,6 +314,7 @@ const GET_ME = gql`
   {
     me {
       username
+      email
       id
       gamertags {
         psn
@@ -336,6 +336,15 @@ const GET_ME = gql`
   }
 `
 
+const GET_MY_CUSTOMER_ID = gql`
+  {
+    me {
+      id
+      customerStripeId
+    }
+  }
+`
+
 export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: { sessionId: props.match.params.id },
@@ -349,7 +358,12 @@ export default function SpecificSessionPage(props) {
     }
   )
   const { data: thirdData, loading: thirdLoading } = useQuery(GET_ME)
-  return loading || secondLoading || thirdLoading ? (
+  const {
+    data: fourthData,
+    loading: fourthLoading,
+    refetch: meRefetch,
+  } = useQuery(GET_MY_CUSTOMER_ID)
+  return loading || secondLoading || thirdLoading || fourthLoading ? (
     <Loading />
   ) : (
     <PageContainer>
@@ -458,6 +472,7 @@ export default function SpecificSessionPage(props) {
               <FixedSelectionOptions
                 me={thirdData.me}
                 refetch={refetch}
+                customerId={fourthData.me.customerId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
@@ -466,12 +481,16 @@ export default function SpecificSessionPage(props) {
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
                 system={data.getSpecificSession.system}
+                meRefetch={meRefetch}
+                creator={data.getSpecificSession.creator}
                 launcher={data.getSpecificSession.game.launcher}
               />
             ) : (
               <SelectionOptions
                 me={thirdData.me}
                 refetch={refetch}
+                meRefetch={meRefetch}
+                customerId={fourthData.me.customerStripeId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
@@ -480,6 +499,7 @@ export default function SpecificSessionPage(props) {
                 numReviews={data.getSpecificSession.numReviews}
                 reviewRating={data.getSpecificSession.reviewRating}
                 system={data.getSpecificSession.system}
+                creator={data.getSpecificSession.creator}
                 launcher={data.getSpecificSession.game.launcher}
               />
             )

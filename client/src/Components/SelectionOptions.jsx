@@ -73,7 +73,10 @@ export default function SelectionOptions({
   game,
   slotsLeftToday,
   launcher,
+  meRefetch,
   refetch,
+  customerId,
+  creator,
   me,
 }) {
   return (
@@ -105,6 +108,9 @@ export default function SelectionOptions({
             price={price}
             refetch={refetch}
             me={me}
+            creator={creator}
+            customerId={customerId}
+            meRefetch={meRefetch}
             system={system}
             launcher={launcher}
           />

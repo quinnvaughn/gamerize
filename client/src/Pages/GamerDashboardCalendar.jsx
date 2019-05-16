@@ -202,8 +202,9 @@ export default function GamerDashboardCalendar(props) {
     pollInterval: 1000,
     skip: dayOrMonth === 'MONTH',
   })
+  console.log(data)
   const [state] = useStore(gamerSessionSelection)
-  return loading || secondLoading || thirdLoading ? (
+  return secondLoading || thirdLoading ? (
     <Loading gamer />
   ) : (
     <PageContainer>
