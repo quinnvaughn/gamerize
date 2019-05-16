@@ -33,6 +33,10 @@ var models = [
     embedded: false
   },
   {
+    name: "SavedCard",
+    embedded: false
+  },
+  {
     name: "GamerRequest",
     embedded: false
   },
@@ -124,7 +128,7 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `http://206.189.239.225:4466`,
-  secret: `gamerize-is-cool`
+  endpoint: `${process.env["PRISMA_ENDPOINT"]}`,
+  secret: `${process.env["PRISMA_SECRET"]}`
 });
 exports.prisma = new exports.Prisma();

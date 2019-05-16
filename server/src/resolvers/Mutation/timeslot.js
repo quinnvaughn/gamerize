@@ -1,6 +1,7 @@
 const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
 const _ = require('lodash')
+const { stripe } = require('../../stripe')
 const timeslot = {
   async cancelExtraSlot(parent, { input }, ctx) {
     // Disconnect an invite. Delete an invite.
@@ -369,6 +370,7 @@ const timeslot = {
         }
       `
       const { gamingTimeSlot } = await ctx.prisma.$graphql(QUERY)
+
       const playerIds = []
       for (const player of gamingTimeSlot.players) {
         const timeFormat = 'h:mm aa'
@@ -386,7 +388,7 @@ const timeslot = {
             text: `${
               gamingTimeSlot.gamingSession.creator.username
             } cancelled the timeslot for ${
-              gamingTimeSlot.game.name
+              gamingTimeSlot.gamingSession.game.name
             } from ${dateFns.format(
               gamingTimeSlot.startTime,
               timeFormat
@@ -403,7 +405,20 @@ const timeslot = {
   async bookTimeSlots(parent, { input }, ctx) {
     const userId = getUserId(ctx)
     let timeslotsBought = []
+    const creator = await ctx.prisma.user({ id: input.creatorId })
     const user = await ctx.prisma.user({ id: userId })
+    const charge = await stripe.charges.create({
+      amount: input.totalWithFee * 100,
+      currency: 'usd',
+      customer: user.customerStripeId,
+      transfer_data: {
+        amount: input.totalWithoutFee * 100 * 0.8,
+        destination: creator.connectedStripeId,
+      },
+    })
+    if (!charge) {
+      return { booked: false }
+    }
     for (const timeslot of input.timeSlots) {
       const timeslotPlayers = []
       _.times(timeslot.slots, () =>

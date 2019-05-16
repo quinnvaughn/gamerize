@@ -2,7 +2,6 @@ import { ApolloClient } from 'apollo-client'
 import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 
 const uploadLink = createUploadLink({
   uri: process.env.REACT_APP_APOLLO_CLIENT_URL,
@@ -20,15 +19,13 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-const persistedLink = createPersistedQueryLink()
-
 // const errorLink = onError(({ networkError, graphQLErrors }) => {
 //   console.log('graphQLErrors: ', graphQLErrors)
 //   console.log('networkError: ', networkError)
 // })
 
 const client = new ApolloClient({
-  link: authLink.concat(persistedLink.concat(uploadLink)),
+  link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
 })
 

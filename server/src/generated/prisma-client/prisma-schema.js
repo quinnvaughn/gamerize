@@ -63,6 +63,10 @@ type AggregateRequirement {
   count: Int!
 }
 
+type AggregateSavedCard {
+  count: Int!
+}
+
 type AggregateSessionReview {
   count: Int!
 }
@@ -3584,6 +3588,12 @@ type Mutation {
   upsertRequirement(where: RequirementWhereUniqueInput!, create: RequirementCreateInput!, update: RequirementUpdateInput!): Requirement!
   deleteRequirement(where: RequirementWhereUniqueInput!): Requirement
   deleteManyRequirements(where: RequirementWhereInput): BatchPayload!
+  createSavedCard(data: SavedCardCreateInput!): SavedCard!
+  updateSavedCard(data: SavedCardUpdateInput!, where: SavedCardWhereUniqueInput!): SavedCard
+  updateManySavedCards(data: SavedCardUpdateManyMutationInput!, where: SavedCardWhereInput): BatchPayload!
+  upsertSavedCard(where: SavedCardWhereUniqueInput!, create: SavedCardCreateInput!, update: SavedCardUpdateInput!): SavedCard!
+  deleteSavedCard(where: SavedCardWhereUniqueInput!): SavedCard
+  deleteManySavedCards(where: SavedCardWhereInput): BatchPayload!
   createSessionReview(data: SessionReviewCreateInput!): SessionReview!
   updateSessionReview(data: SessionReviewUpdateInput!, where: SessionReviewWhereUniqueInput!): SessionReview
   updateManySessionReviews(data: SessionReviewUpdateManyMutationInput!, where: SessionReviewWhereInput): BatchPayload!
@@ -4437,6 +4447,9 @@ type Query {
   requirement(where: RequirementWhereUniqueInput!): Requirement
   requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement]!
   requirementsConnection(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RequirementConnection!
+  savedCard(where: SavedCardWhereUniqueInput!): SavedCard
+  savedCards(where: SavedCardWhereInput, orderBy: SavedCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedCard]!
+  savedCardsConnection(where: SavedCardWhereInput, orderBy: SavedCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SavedCardConnection!
   sessionReview(where: SessionReviewWhereUniqueInput!): SessionReview
   sessionReviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview]!
   sessionReviewsConnection(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionReviewConnection!
@@ -4670,6 +4683,279 @@ enum Role {
   USER
   GAMER
   ADMIN
+}
+
+type SavedCard {
+  id: ID!
+  user: User!
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
+}
+
+type SavedCardConnection {
+  pageInfo: PageInfo!
+  edges: [SavedCardEdge]!
+  aggregate: AggregateSavedCard!
+}
+
+input SavedCardCreateInput {
+  user: UserCreateOneWithoutSavedCardsInput!
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
+}
+
+input SavedCardCreateManyWithoutUserInput {
+  create: [SavedCardCreateWithoutUserInput!]
+  connect: [SavedCardWhereUniqueInput!]
+}
+
+input SavedCardCreateWithoutUserInput {
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
+}
+
+type SavedCardEdge {
+  node: SavedCard!
+  cursor: String!
+}
+
+enum SavedCardOrderByInput {
+  id_ASC
+  id_DESC
+  cardId_ASC
+  cardId_DESC
+  default_ASC
+  default_DESC
+  lastFour_ASC
+  lastFour_DESC
+  brand_ASC
+  brand_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SavedCardPreviousValues {
+  id: ID!
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
+}
+
+input SavedCardScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  cardId: String
+  cardId_not: String
+  cardId_in: [String!]
+  cardId_not_in: [String!]
+  cardId_lt: String
+  cardId_lte: String
+  cardId_gt: String
+  cardId_gte: String
+  cardId_contains: String
+  cardId_not_contains: String
+  cardId_starts_with: String
+  cardId_not_starts_with: String
+  cardId_ends_with: String
+  cardId_not_ends_with: String
+  default: Boolean
+  default_not: Boolean
+  lastFour: String
+  lastFour_not: String
+  lastFour_in: [String!]
+  lastFour_not_in: [String!]
+  lastFour_lt: String
+  lastFour_lte: String
+  lastFour_gt: String
+  lastFour_gte: String
+  lastFour_contains: String
+  lastFour_not_contains: String
+  lastFour_starts_with: String
+  lastFour_not_starts_with: String
+  lastFour_ends_with: String
+  lastFour_not_ends_with: String
+  brand: String
+  brand_not: String
+  brand_in: [String!]
+  brand_not_in: [String!]
+  brand_lt: String
+  brand_lte: String
+  brand_gt: String
+  brand_gte: String
+  brand_contains: String
+  brand_not_contains: String
+  brand_starts_with: String
+  brand_not_starts_with: String
+  brand_ends_with: String
+  brand_not_ends_with: String
+  AND: [SavedCardScalarWhereInput!]
+  OR: [SavedCardScalarWhereInput!]
+  NOT: [SavedCardScalarWhereInput!]
+}
+
+type SavedCardSubscriptionPayload {
+  mutation: MutationType!
+  node: SavedCard
+  updatedFields: [String!]
+  previousValues: SavedCardPreviousValues
+}
+
+input SavedCardSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SavedCardWhereInput
+  AND: [SavedCardSubscriptionWhereInput!]
+  OR: [SavedCardSubscriptionWhereInput!]
+  NOT: [SavedCardSubscriptionWhereInput!]
+}
+
+input SavedCardUpdateInput {
+  user: UserUpdateOneRequiredWithoutSavedCardsInput
+  cardId: String
+  default: Boolean
+  lastFour: String
+  brand: String
+}
+
+input SavedCardUpdateManyDataInput {
+  cardId: String
+  default: Boolean
+  lastFour: String
+  brand: String
+}
+
+input SavedCardUpdateManyMutationInput {
+  cardId: String
+  default: Boolean
+  lastFour: String
+  brand: String
+}
+
+input SavedCardUpdateManyWithoutUserInput {
+  create: [SavedCardCreateWithoutUserInput!]
+  delete: [SavedCardWhereUniqueInput!]
+  connect: [SavedCardWhereUniqueInput!]
+  set: [SavedCardWhereUniqueInput!]
+  disconnect: [SavedCardWhereUniqueInput!]
+  update: [SavedCardUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [SavedCardUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [SavedCardScalarWhereInput!]
+  updateMany: [SavedCardUpdateManyWithWhereNestedInput!]
+}
+
+input SavedCardUpdateManyWithWhereNestedInput {
+  where: SavedCardScalarWhereInput!
+  data: SavedCardUpdateManyDataInput!
+}
+
+input SavedCardUpdateWithoutUserDataInput {
+  cardId: String
+  default: Boolean
+  lastFour: String
+  brand: String
+}
+
+input SavedCardUpdateWithWhereUniqueWithoutUserInput {
+  where: SavedCardWhereUniqueInput!
+  data: SavedCardUpdateWithoutUserDataInput!
+}
+
+input SavedCardUpsertWithWhereUniqueWithoutUserInput {
+  where: SavedCardWhereUniqueInput!
+  update: SavedCardUpdateWithoutUserDataInput!
+  create: SavedCardCreateWithoutUserInput!
+}
+
+input SavedCardWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  cardId: String
+  cardId_not: String
+  cardId_in: [String!]
+  cardId_not_in: [String!]
+  cardId_lt: String
+  cardId_lte: String
+  cardId_gt: String
+  cardId_gte: String
+  cardId_contains: String
+  cardId_not_contains: String
+  cardId_starts_with: String
+  cardId_not_starts_with: String
+  cardId_ends_with: String
+  cardId_not_ends_with: String
+  default: Boolean
+  default_not: Boolean
+  lastFour: String
+  lastFour_not: String
+  lastFour_in: [String!]
+  lastFour_not_in: [String!]
+  lastFour_lt: String
+  lastFour_lte: String
+  lastFour_gt: String
+  lastFour_gte: String
+  lastFour_contains: String
+  lastFour_not_contains: String
+  lastFour_starts_with: String
+  lastFour_not_starts_with: String
+  lastFour_ends_with: String
+  lastFour_not_ends_with: String
+  brand: String
+  brand_not: String
+  brand_in: [String!]
+  brand_not_in: [String!]
+  brand_lt: String
+  brand_lte: String
+  brand_gt: String
+  brand_gte: String
+  brand_contains: String
+  brand_not_contains: String
+  brand_starts_with: String
+  brand_not_starts_with: String
+  brand_ends_with: String
+  brand_not_ends_with: String
+  AND: [SavedCardWhereInput!]
+  OR: [SavedCardWhereInput!]
+  NOT: [SavedCardWhereInput!]
+}
+
+input SavedCardWhereUniqueInput {
+  id: ID
 }
 
 type SessionReview {
@@ -5378,6 +5664,7 @@ type Subscription {
   notification(where: NotificationSubscriptionWhereInput): NotificationSubscriptionPayload
   pCLauncher(where: PCLauncherSubscriptionWhereInput): PCLauncherSubscriptionPayload
   requirement(where: RequirementSubscriptionWhereInput): RequirementSubscriptionPayload
+  savedCard(where: SavedCardSubscriptionWhereInput): SavedCardSubscriptionPayload
   sessionReview(where: SessionReviewSubscriptionWhereInput): SessionReviewSubscriptionPayload
   sessionReviewIndex(where: SessionReviewIndexSubscriptionWhereInput): SessionReviewIndexSubscriptionPayload
   socialMedia(where: SocialMediaSubscriptionWhereInput): SocialMediaSubscriptionPayload
@@ -5445,6 +5732,8 @@ type User {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean!
   occupations: [Occupations!]!
   name: String!
@@ -5452,6 +5741,7 @@ type User {
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
   timeSlots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
   invites(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
+  savedCards(where: SavedCardWhereInput, orderBy: SavedCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedCard!]
   invitesReceived(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   setup: Int
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
@@ -5474,6 +5764,8 @@ input UserCreateInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -5481,6 +5773,7 @@ input UserCreateInput {
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5539,6 +5832,11 @@ input UserCreateOneWithoutReviewsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSavedCardsInput {
+  create: UserCreateWithoutSavedCardsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutGamertagsInput {
   gender: Gender
   email: String!
@@ -5546,6 +5844,8 @@ input UserCreateWithoutGamertagsInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -5553,6 +5853,7 @@ input UserCreateWithoutGamertagsInput {
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5568,6 +5869,8 @@ input UserCreateWithoutIndexInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -5575,6 +5878,7 @@ input UserCreateWithoutIndexInput {
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5590,12 +5894,15 @@ input UserCreateWithoutInvitesInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5612,6 +5919,8 @@ input UserCreateWithoutInvitesReceivedInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -5619,6 +5928,7 @@ input UserCreateWithoutInvitesReceivedInput {
   sessions: GamingSessionCreateManyWithoutGamersInput
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -5634,6 +5944,33 @@ input UserCreateWithoutReviewsInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
+  gamerIsSetup: Boolean
+  occupations: UserCreateoccupationsInput
+  name: String!
+  aboutMe: String
+  sessions: GamingSessionCreateManyWithoutGamersInput
+  timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
+  invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
+  invitesReceived: BookingInviteCreateManyWithoutToInput
+  setup: Int
+  friends: UserCreateManyInput
+  gamertags: GamerTagCreateOneWithoutUserInput
+  role: Role
+  index: UserIndexCreateOneWithoutUserInput!
+}
+
+input UserCreateWithoutSavedCardsInput {
+  gender: Gender
+  email: String!
+  username: String!
+  password: String!
+  profilePicture: String
+  banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
@@ -5643,6 +5980,7 @@ input UserCreateWithoutReviewsInput {
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
   role: Role
@@ -5656,12 +5994,15 @@ input UserCreateWithoutSessionsInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
   timeSlots: GamingTimeSlotCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5678,12 +6019,15 @@ input UserCreateWithoutTimeSlotsInput {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserCreateoccupationsInput
   name: String!
   aboutMe: String
   sessions: GamingSessionCreateManyWithoutGamersInput
   invites: BookingInviteCreateManyWithoutFromInput
+  savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
   reviews: SessionReviewCreateManyWithoutUserInput
@@ -5914,6 +6258,10 @@ enum UserOrderByInput {
   profilePicture_DESC
   banner_ASC
   banner_DESC
+  connectedStripeId_ASC
+  connectedStripeId_DESC
+  customerStripeId_ASC
+  customerStripeId_DESC
   gamerIsSetup_ASC
   gamerIsSetup_DESC
   name_ASC
@@ -5936,6 +6284,8 @@ type UserPreviousValues {
   password: String!
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean!
   occupations: [Occupations!]!
   name: String!
@@ -6049,6 +6399,34 @@ input UserScalarWhereInput {
   banner_not_starts_with: String
   banner_ends_with: String
   banner_not_ends_with: String
+  connectedStripeId: String
+  connectedStripeId_not: String
+  connectedStripeId_in: [String!]
+  connectedStripeId_not_in: [String!]
+  connectedStripeId_lt: String
+  connectedStripeId_lte: String
+  connectedStripeId_gt: String
+  connectedStripeId_gte: String
+  connectedStripeId_contains: String
+  connectedStripeId_not_contains: String
+  connectedStripeId_starts_with: String
+  connectedStripeId_not_starts_with: String
+  connectedStripeId_ends_with: String
+  connectedStripeId_not_ends_with: String
+  customerStripeId: String
+  customerStripeId_not: String
+  customerStripeId_in: [String!]
+  customerStripeId_not_in: [String!]
+  customerStripeId_lt: String
+  customerStripeId_lte: String
+  customerStripeId_gt: String
+  customerStripeId_gte: String
+  customerStripeId_contains: String
+  customerStripeId_not_contains: String
+  customerStripeId_starts_with: String
+  customerStripeId_not_starts_with: String
+  customerStripeId_ends_with: String
+  customerStripeId_not_ends_with: String
   gamerIsSetup: Boolean
   gamerIsSetup_not: Boolean
   name: String
@@ -6121,6 +6499,8 @@ input UserUpdateDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6128,6 +6508,7 @@ input UserUpdateDataInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6144,6 +6525,8 @@ input UserUpdateInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6151,6 +6534,7 @@ input UserUpdateInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6167,6 +6551,8 @@ input UserUpdateManyDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6194,6 +6580,8 @@ input UserUpdateManyMutationInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6279,6 +6667,13 @@ input UserUpdateOneRequiredWithoutReviewsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutSavedCardsInput {
+  create: UserCreateWithoutSavedCardsInput
+  update: UserUpdateWithoutSavedCardsDataInput
+  upsert: UserUpsertWithoutSavedCardsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutInvitesReceivedInput {
   create: UserCreateWithoutInvitesReceivedInput
   update: UserUpdateWithoutInvitesReceivedDataInput
@@ -6295,6 +6690,8 @@ input UserUpdateWithoutGamertagsDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6302,6 +6699,7 @@ input UserUpdateWithoutGamertagsDataInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6317,6 +6715,8 @@ input UserUpdateWithoutIndexDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6324,6 +6724,7 @@ input UserUpdateWithoutIndexDataInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6339,12 +6740,15 @@ input UserUpdateWithoutInvitesDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6361,6 +6765,8 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6368,6 +6774,7 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   sessions: GamingSessionUpdateManyWithoutGamersInput
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -6383,6 +6790,33 @@ input UserUpdateWithoutReviewsDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
+  gamerIsSetup: Boolean
+  occupations: UserUpdateoccupationsInput
+  name: String
+  aboutMe: String
+  sessions: GamingSessionUpdateManyWithoutGamersInput
+  timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
+  invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
+  invitesReceived: BookingInviteUpdateManyWithoutToInput
+  setup: Int
+  friends: UserUpdateManyInput
+  gamertags: GamerTagUpdateOneWithoutUserInput
+  role: Role
+  index: UserIndexUpdateOneRequiredWithoutUserInput
+}
+
+input UserUpdateWithoutSavedCardsDataInput {
+  gender: Gender
+  email: String
+  username: String
+  password: String
+  profilePicture: String
+  banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
@@ -6392,6 +6826,7 @@ input UserUpdateWithoutReviewsDataInput {
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
   role: Role
@@ -6405,12 +6840,15 @@ input UserUpdateWithoutSessionsDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
   timeSlots: GamingTimeSlotUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6427,12 +6865,15 @@ input UserUpdateWithoutTimeSlotsDataInput {
   password: String
   profilePicture: String
   banner: String
+  connectedStripeId: String
+  customerStripeId: String
   gamerIsSetup: Boolean
   occupations: UserUpdateoccupationsInput
   name: String
   aboutMe: String
   sessions: GamingSessionUpdateManyWithoutGamersInput
   invites: BookingInviteUpdateManyWithoutFromInput
+  savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
@@ -6485,6 +6926,11 @@ input UserUpsertWithoutInvitesReceivedInput {
 input UserUpsertWithoutReviewsInput {
   update: UserUpdateWithoutReviewsDataInput!
   create: UserCreateWithoutReviewsInput!
+}
+
+input UserUpsertWithoutSavedCardsInput {
+  update: UserUpdateWithoutSavedCardsDataInput!
+  create: UserCreateWithoutSavedCardsInput!
 }
 
 input UserUpsertWithWhereUniqueNestedInput {
@@ -6610,6 +7056,34 @@ input UserWhereInput {
   banner_not_starts_with: String
   banner_ends_with: String
   banner_not_ends_with: String
+  connectedStripeId: String
+  connectedStripeId_not: String
+  connectedStripeId_in: [String!]
+  connectedStripeId_not_in: [String!]
+  connectedStripeId_lt: String
+  connectedStripeId_lte: String
+  connectedStripeId_gt: String
+  connectedStripeId_gte: String
+  connectedStripeId_contains: String
+  connectedStripeId_not_contains: String
+  connectedStripeId_starts_with: String
+  connectedStripeId_not_starts_with: String
+  connectedStripeId_ends_with: String
+  connectedStripeId_not_ends_with: String
+  customerStripeId: String
+  customerStripeId_not: String
+  customerStripeId_in: [String!]
+  customerStripeId_not_in: [String!]
+  customerStripeId_lt: String
+  customerStripeId_lte: String
+  customerStripeId_gt: String
+  customerStripeId_gte: String
+  customerStripeId_contains: String
+  customerStripeId_not_contains: String
+  customerStripeId_starts_with: String
+  customerStripeId_not_starts_with: String
+  customerStripeId_ends_with: String
+  customerStripeId_not_ends_with: String
   gamerIsSetup: Boolean
   gamerIsSetup_not: Boolean
   name: String
@@ -6649,6 +7123,9 @@ input UserWhereInput {
   invites_every: BookingInviteWhereInput
   invites_some: BookingInviteWhereInput
   invites_none: BookingInviteWhereInput
+  savedCards_every: SavedCardWhereInput
+  savedCards_some: SavedCardWhereInput
+  savedCards_none: SavedCardWhereInput
   invitesReceived_every: BookingInviteWhereInput
   invitesReceived_some: BookingInviteWhereInput
   invitesReceived_none: BookingInviteWhereInput

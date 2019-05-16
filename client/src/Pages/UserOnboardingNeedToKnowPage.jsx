@@ -88,9 +88,16 @@ export default function UserOnboardingNeedToKnowPage(props) {
       <Content>
         <NeedToKnow>
           <Info>Things you need to know</Info>
-          <Title>Free</Title>
+          <Title>Invites</Title>
           <Subtitle>
-            The alpha is totally free! Don't let the prices fool you.
+            If you add more than one player in a session, your invites will be
+            under the sessions link. You can only invite your added friends.
+          </Subtitle>
+          <Title>Paying</Title>
+          <Subtitle>
+            In the future, we want to be able to split up payments to you and
+            your invited friends, but our current system doesn't do that, so you
+            will have to settle that outside the website, unfortunately.
           </Subtitle>
           <Title>Gamertags</Title>
           <Subtitle>
@@ -107,13 +114,7 @@ export default function UserOnboardingNeedToKnowPage(props) {
           <Subtitle>
             Make sure your gamers are playing long enough games. If you die in a
             BR game in the first couple of minutes, for example, you should
-            expect another game to be played (this is more relevant once the
-            games aren't free).
-          </Subtitle>
-          <Title>Invites</Title>
-          <Subtitle>
-            If you add more than one player in a session, your invites will be
-            under the sessions link.
+            expect another game to be played.
           </Subtitle>
           <Title>Most important</Title>
           <Subtitle>

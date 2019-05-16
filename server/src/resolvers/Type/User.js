@@ -36,6 +36,9 @@ const User = {
   timeSlotsBooked: async (parent, _, { prisma }) => {
     return await prisma.user({ id: parent.id }).timeSlotsBooked()
   },
+  savedCards: async (parent, _, { prisma }) => {
+    return await prisma.user({ id: parent.id }).savedCards()
+  },
   sentMeAFriendRequest: async (parent, _, ctx) => {
     try {
       const userId = getUserId(ctx)

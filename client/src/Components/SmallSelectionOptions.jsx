@@ -83,9 +83,12 @@ export default function SmallSelectionOptions({
   gamer,
   game,
   refetch,
+  meRefetch,
+  creator,
   close,
   slotsLeftToday,
   me,
+  customerId,
   launcher,
 }) {
   return (
@@ -118,7 +121,10 @@ export default function SmallSelectionOptions({
             <Totals
               price={price}
               refetch={refetch}
+              meRefetch={meRefetch}
               me={me}
+              creator={creator}
+              customerId={customerId}
               launcher={launcher}
               system={system}
             />

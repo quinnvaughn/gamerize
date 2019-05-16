@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
-import { useMutation } from 'react-apollo-hooks'
+import { useMutation, useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 //local imports
 import NavBar from '../Components/NavBar'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -84,6 +85,22 @@ const LetsGo = styled.div`
   pointer-events: ${props => props.disabled && 'none'};
 `
 
+const Stripe = styled.a`
+  margin-bottom: 1rem;
+  margin-right: 3rem;
+  color: #fff;
+  text-decoration: none;
+  outline: 0;
+  border: 0;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 1rem 2.2rem;
+  cursor: pointer;
+  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
+  pointer-events: ${props => props.disabled && 'none'};
+`
+
 const UPDATE_USER_PROFILE = gql`
   mutation {
     allowGamerToPlay {
@@ -92,9 +109,64 @@ const UPDATE_USER_PROFILE = gql`
   }
 `
 
+const GET_MY_INFO = gql`
+  {
+    me {
+      id
+      email
+      name
+    }
+  }
+`
+
+function getSearchParameters() {
+  const prmstr = window.location.search.substr(1)
+  return prmstr != null && prmstr != '' ? transformToAssocArray(prmstr) : {}
+}
+
+function transformToAssocArray(prmstr) {
+  const params = {}
+  const prmarr = prmstr.split('&')
+  for (let i = 0; i < prmarr.length; i++) {
+    const tmparr = prmarr[i].split('=')
+    params[tmparr[0]] = tmparr[1]
+  }
+  return params
+}
+
+const ADD_STRIPE_CONNECT_ACCOUNT = gql`
+  mutation($input: AddStripeConnectAccountInput!) {
+    addStripeConnectAccount(input: $input) {
+      completed
+    }
+  }
+`
+
+async function addStripeAccount(addStripe, params, setDisabled) {
+  if (params.code) {
+    const input = { code: params.code }
+    const { data } = await addStripe({ variables: { input } })
+    if (data.addStripeConnectAccount.completed) {
+      setDisabled(false)
+    }
+  }
+}
+
 function GamerOnboardingInfoPage(props) {
+  const { data, loading } = useQuery(GET_MY_INFO)
+  const [disabled, setDisabled] = useState(true)
+  const addStripe = useMutation(ADD_STRIPE_CONNECT_ACCOUNT)
+  const params = getSearchParameters()
+  useEffect(() => {
+    addStripeAccount(addStripe, params, setDisabled)
+  }, [params])
   const allowGamerToPlay = useMutation(UPDATE_USER_PROFILE)
-  return (
+  const firstName = !loading && data && data.me && data.me.name.split(' ')[0]
+  const lastName = !loading && data && data.me && data.me.name.split(' ')[1]
+  const email = !loading && data && data.me && data.me.email
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>
@@ -102,8 +174,7 @@ function GamerOnboardingInfoPage(props) {
           <Info>Things you need to know</Info>
           <Title>Pricing</Title>
           <Subtitle>
-            We want you to put prices just so everyone is used to seeing the
-            price when this isn't free.
+            You can set whatever price you want! Even free if you so choose.
           </Subtitle>
           <Title>Setup</Title>
           <Subtitle>
@@ -141,9 +212,19 @@ function GamerOnboardingInfoPage(props) {
             Don't be an asshole to the gamers, or standoffish, or quiet. We want
             this to be a fun experience for everyone.
           </Subtitle>
+          <Stripe
+            disabled={!disabled}
+            href={`https://connect.stripe.com/express/oauth/authorize?redirect_uri=${
+              process.env.REACT_APP_STRIPE_REDIRECT_URI
+            }&client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&state=${
+              process.env.REACT_APP_STRIPE_STATE_VALUE
+            }&stripe_user[business_type]=individual&stripe_user[first_name]=${firstName}&stripe_user[last_name]=${lastName}&stripe_user[email]=${email}&suggested_capabilities[]=platform_payments`}
+          >
+            Add your Stripe Account
+          </Stripe>
           <LetsGo
+            disabled={disabled}
             onClick={async () => {
-              const input = { gamerIsSetup: true }
               const { data } = await allowGamerToPlay()
               if (data.allowGamerToPlay.allowed) {
                 await props.history.push('/gamer-dashboard/home')

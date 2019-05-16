@@ -107,6 +107,52 @@ type Mutation {
     input: CancelNotBookeeBookingInput!
   ): CancelNotBookeeBookingPayload!
   updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfilePayload!
+  addStripeConnectAccount(
+    input: AddStripeConnectAccountInput!
+  ): AddStripeConnectAccountPayload!
+  addCard(input: AddCardInput!): AddCardPayload!
+  deleteCard(input: DeleteCardInput!): DeleteCardPayload!
+  changeDefaultCard(input: ChangeDefaultCardInput!): ChangeDefaultCardPayload!
+  logIntoStripe: LogIntoStripePayload!
+}
+
+type LogIntoStripePayload {
+  url: String!
+}
+
+input ChangeDefaultCardInput {
+  cardId: String!
+  id: String!
+}
+
+type ChangeDefaultCardPayload {
+  updated: Boolean!
+}
+
+input DeleteCardInput {
+  cardId: String!
+}
+
+type DeleteCardPayload {
+  deleted: Boolean!
+}
+
+input AddCardInput {
+  id: String!
+  brand: String!
+  lastFour: String!
+}
+
+type AddCardPayload {
+  added: Boolean!
+}
+
+input AddStripeConnectAccountInput {
+  code: String!
+}
+
+type AddStripeConnectAccountPayload {
+  completed: Boolean
 }
 
 type AllowGamerToPlayPayload {
@@ -307,6 +353,9 @@ type SendInvitePayload {
 
 input BookTimeSlotsInput {
   timeSlots: [GamingTimeSlotInput!]!
+  totalWithFee: Float!
+  creatorId: String!
+  totalWithoutFee: Float!
 }
 
 input GamingTimeSlotInput {
@@ -468,6 +517,9 @@ type User {
   gamerIsSetup: Boolean!
   profilePicture: String
   banner: String
+  savedCards: [SavedCard!]!
+  connectedStripeId: String
+  customerStripeId: String
   currentGamerRequest: Boolean!
   sessions: [GamingSession!]!
   timeSlots: [GamingTimeSlot!]!

@@ -4,11 +4,14 @@ import { Subscribe } from 'unstated'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router-dom'
+import { Elements } from 'react-stripe-elements'
 import { useMutation } from 'react-apollo-hooks'
 
 import SessionsContainer from '../Containers/SessionsContainer'
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
+import { calcFee } from '../utils/Fee'
+import FirstTimeCheckout from './FirstTimeCheckout'
 
 const Container = styled.div`
   width: 100%;
@@ -140,6 +143,8 @@ const BOOK_TIME_SLOTS = gql`
 function Totals(props) {
   const [loading, setLoading] = useState(false)
   const [booked, setBooked] = useState(false)
+  const [bookError, setBookError] = useState(false)
+  const [needCard, setNeedCard] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
   const disabled = props.me.gamertags
     ? props.system === 'PC'
@@ -149,6 +154,7 @@ function Totals(props) {
       : !props.me.gamertags[mapSystem(props.system)]
     : true
   const isMe = props.match.params.user === props.me.username
+  const customerStripeId = props.customerId
   return (
     <Container>
       <Subscribe to={[SessionsContainer]}>
@@ -160,12 +166,11 @@ function Totals(props) {
             })
             .reduce(totalReducer, 0)
           const slots = sessions.reduce(numSessionsReducer, 0)
-          // const totals = sessions.state.sessions.map(session => (
-          //   <Total session={session} container={sessions} price={props.price} />
-          // ))
+          const fee = Number(calcFee(total, 'USD'))
           const discount = 0
 
-          const totalMinusDiscounts = total - discount
+          const totalMinusDiscounts = total + fee - discount
+          const totalNotIncludingFees = total - discount
           const showTotals = sessions.length >= 1
           const content = showTotals ? (
             <TotalsContainer>
@@ -178,6 +183,10 @@ function Totals(props) {
                 </Items>
                 <Cost>{`$${total}`}</Cost>
               </NumberSlots>
+              <Discounts>
+                <DiscountsTitle>Processing Fee</DiscountsTitle>
+                <DiscountPercentage>{`+ $${fee}`}</DiscountPercentage>
+              </Discounts>
               <Discounts>
                 <DiscountsTitle>Discounts</DiscountsTitle>
                 <DiscountPercentage>{`- $${discount}`}</DiscountPercentage>
@@ -204,46 +213,68 @@ function Totals(props) {
                 </AppropriateGT>
               )}
               <Book
+                id="bookButton"
                 disabled={sessions.length === 0 || disabled}
                 onClick={async () => {
-                  const timeSlots = sessions.map(timeSlot => {
-                    return {
-                      timeSlotId: timeSlot.id,
-                      slots: timeSlot.slots,
-                      players: timeSlot.players,
-                      total: totalMinusDiscounts,
-                      startTime: timeSlot.startTime,
+                  if (!customerStripeId) {
+                    setNeedCard(true)
+                  } else {
+                    const timeSlots = sessions.map(timeslot => {
+                      return {
+                        timeSlotId: timeslot.id,
+                        slots: timeslot.slots,
+                        players: timeslot.players,
+                        total: props.price * timeslot.slots,
+                        startTime: timeslot.startTime,
+                      }
+                    })
+                    const input = {
+                      timeSlots,
+                      creatorId: props.creator.id,
+                      totalWithFee: totalMinusDiscounts,
+                      totalWithoutFee: totalNotIncludingFees,
                     }
-                  })
-                  const input = { timeSlots }
-                  setLoading(true)
-                  await bookTimeSlots({
-                    variables: { input },
-                  })
-                  setLoading(false)
-                  setBooked(true)
-                  container.clearSessions()
-                  setTimeout(() => {
-                    setBooked(false)
-                    props.refetch()
-                  }, 1000)
+                    setLoading(true)
+                    const { data } = await bookTimeSlots({
+                      variables: { input },
+                    })
+                    if (data.bookTimeSlots.booked) {
+                      setLoading(false)
+                      setBooked(true)
+                      container.clearSessions()
+                      setTimeout(() => {
+                        setBooked(false)
+                        props.refetch()
+                      }, 1000)
+                    } else {
+                      setBookError(true)
+                    }
+                  }
                 }}
               >
                 {loading ? (
                   'Booking'
                 ) : !loading && booked ? (
                   <FaCheck />
+                ) : bookError ? (
+                  'Please Try Again'
                 ) : (
                   'Book'
                 )}
               </Book>
-              <NotCharged>
-                <NotChargedYet>
-                  {/* Eventually change to : You will not be charged yet */}The
-                  alpha is free!
-                </NotChargedYet>
-              </NotCharged>
-              {/* Don't need for alpha 
+              {needCard && (
+                <Elements>
+                  <FirstTimeCheckout
+                    setNeedCard={setNeedCard}
+                    email={props.me.email}
+                    refetch={props.meRefetch}
+                  />
+                </Elements>
+              )}
+              {/* <NotCharged>
+                <NotChargedYet>You will not be charged yet.</NotChargedYet>
+              </NotCharged> */}
+              {/* Don't need either until I have multi payment set up. 
               {showTotals && (
                 <HowMuchYouPay>
                   <YouPay>
