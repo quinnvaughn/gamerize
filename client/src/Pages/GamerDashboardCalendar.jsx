@@ -156,6 +156,7 @@ const ME = gql`
           slots
           startTime
           gamingSession {
+            id
             system
             game {
               name
@@ -204,9 +205,8 @@ export default function GamerDashboardCalendar(props) {
     pollInterval: 1000,
     skip: dayOrMonth === 'MONTH',
   })
-  console.log(data)
   const [state] = useStore(gamerSessionSelection)
-  return secondLoading || thirdLoading ? (
+  return loading || secondLoading || thirdLoading ? (
     <Loading gamer />
   ) : (
     <PageContainer>
