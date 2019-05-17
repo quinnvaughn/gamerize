@@ -514,7 +514,7 @@ type User {
   email: String!
   name: String!
   username: String!
-  displayName: String
+  displayName: String!
   gender: Gender!
   gamerIsSetup: Boolean!
   profilePicture: String

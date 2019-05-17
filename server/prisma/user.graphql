@@ -5,7 +5,7 @@ type User {
   gender: Gender! @default(value: "MALE")
   email: String! @unique
   username: String! @unique
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
