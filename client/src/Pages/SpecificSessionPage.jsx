@@ -479,7 +479,7 @@ export default function SpecificSessionPage(props) {
               <FixedSelectionOptions
                 me={thirdData.me}
                 refetch={refetch}
-                customerId={fourthData.me.customerId}
+                customerId={fourthData.me.customerStripeId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 hasDefaultCard={fourthData.me.hasDefaultCard}
