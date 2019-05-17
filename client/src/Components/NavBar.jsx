@@ -126,7 +126,7 @@ function NavBar(props) {
   const { data, loading, refetch } = useQuery(GET_ME)
   const { data: notifications, loading: secondLoading } = useQuery(
     GET_MY_NOTIFICATIONS,
-    { pollInterval: 1000 }
+    { pollInterval: 1000, skip: !token }
   )
   useEffect(() => {
     refetch()
