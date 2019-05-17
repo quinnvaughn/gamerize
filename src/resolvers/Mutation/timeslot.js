@@ -407,17 +407,20 @@ const timeslot = {
     let timeslotsBought = []
     const creator = await ctx.prisma.user({ id: input.creatorId })
     const user = await ctx.prisma.user({ id: userId })
-    const charge = await stripe.charges.create({
-      amount: input.totalWithFee * 100,
-      currency: 'usd',
-      customer: user.customerStripeId,
-      transfer_data: {
-        amount: input.totalWithoutFee * 100 * 0.8,
-        destination: creator.connectedStripeId,
-      },
-    })
-    if (!charge) {
-      return { booked: false }
+    const shouldCharge = input.totalWithFee > 0
+    if (shouldCharge) {
+      const charge = await stripe.charges.create({
+        amount: input.totalWithFee * 100,
+        currency: 'usd',
+        customer: user.customerStripeId,
+        transfer_data: {
+          amount: input.totalWithoutFee * 100 * 0.8,
+          destination: creator.connectedStripeId,
+        },
+      })
+      if (!charge) {
+        return { booked: false }
+      }
     }
     for (const timeslot of input.timeSlots) {
       const timeslotPlayers = []
