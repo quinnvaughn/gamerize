@@ -5,6 +5,10 @@ import * as serviceWorker from './serviceWorker'
 
 const rootElement = document.getElementById('root')
 
+if (process.env.NODE_ENV !== 'development') {
+  console.log = () => {}
+}
+
 if (rootElement.hasChildNodes()) {
   hydrate(<App />, rootElement)
 } else {
