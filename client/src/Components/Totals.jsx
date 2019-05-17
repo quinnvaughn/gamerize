@@ -216,7 +216,7 @@ function Totals(props) {
                 id="bookButton"
                 disabled={sessions.length === 0 || disabled}
                 onClick={async () => {
-                  if (!customerStripeId) {
+                  if (!customerStripeId || !props.hasDefaultCard) {
                     setNeedCard(true)
                   } else {
                     const timeSlots = sessions.map(timeslot => {

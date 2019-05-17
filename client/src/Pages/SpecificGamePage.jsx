@@ -120,7 +120,7 @@ const GET_GAME = gql`
         id
         creator {
           username
-          name
+          displayName
           profilePicture
         }
         title

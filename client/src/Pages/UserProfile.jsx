@@ -244,7 +244,7 @@ const Row = styled.div`
 const GET_USER = gql`
   query($username: String!) {
     getUser(username: $username) {
-      name
+      displayName
       aboutMe
       username
       numReviews
@@ -379,7 +379,7 @@ export default function UserProfile(props) {
               return matches ? (
                 <SmallContainer>
                   <SmallLeft>
-                    <Name>{data.getUser.name}</Name>
+                    <Name>{data.getUser.displayName}</Name>
                     <Username>@{data.getUser.username}</Username>
                     <Occupations>
                       {data.getUser.occupations.map(job => (
@@ -400,7 +400,7 @@ export default function UserProfile(props) {
                 <Fragment>
                   <Row>
                     <SmallLeft>
-                      <Name>{data.getUser.name}</Name>
+                      <Name>{data.getUser.displayName}</Name>
                       <Username>@{data.getUser.username}</Username>
                     </SmallLeft>
                     {secondData.me &&

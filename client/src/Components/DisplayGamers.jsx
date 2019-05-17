@@ -20,12 +20,13 @@ const AllTheGames = styled.div`
 `
 
 export default function DisplayGamers(props) {
+  console.log(props.data.getGamers)
   return (
     <Container>
       <AllTheGames>
         {props.data.getGamers.map(gamer => (
           <ExploreGamer
-            name={gamer.name}
+            name={gamer.displayName}
             profilePicture={gamer.profilePicture}
             occupations={gamer.occupations}
             mostPlayedGames={gamer.mostPlayedGames}

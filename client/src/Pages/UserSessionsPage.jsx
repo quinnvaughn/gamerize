@@ -151,6 +151,7 @@ const MY_SESSIONS = gql`
       id
       from {
         username
+        profilePicture
       }
       booking {
         timeslot {
@@ -176,6 +177,10 @@ const MY_SESSIONS = gql`
           gamingSession {
             game {
               name
+            }
+            creator {
+              displayName
+              profilePicture
             }
           }
           gamers {
@@ -204,6 +209,8 @@ const MY_SESSIONS = gql`
             name
           }
           creator {
+            profilePicture
+            displayName
             username
           }
         }
@@ -230,6 +237,8 @@ const MY_SESSIONS = gql`
             name
           }
           creator {
+            displayName
+            profilePicture
             username
           }
         }
@@ -285,6 +294,7 @@ export default function UserSessionsPage(props) {
                   {_.map(data.myInvitesReceived, invite => (
                     <MyInviteReceived
                       from={invite.from.username}
+                      profilePicture={invite.from.profilePicture}
                       refetch={refetch}
                       key={invite.id}
                       timeslot={invite.booking.timeslot}

@@ -61,7 +61,7 @@ const map = (sessions, first) => {
       index <= first - 1 && (
         <Session
           id={session.id}
-          name={session.creator.name}
+          name={session.creator.displayName}
           game={session.game.name}
           username={session.creator.username}
           system={session.system}

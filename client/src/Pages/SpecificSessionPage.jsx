@@ -272,7 +272,7 @@ const GET_SPECIFIC_SESSION = gql`
         username
         profilePicture
         occupations
-        name
+        displayName
       }
       game {
         name
@@ -342,6 +342,7 @@ const GET_MY_CUSTOMER_ID = gql`
     me {
       id
       customerStripeId
+      hasDefaultCard
     }
   }
 `
@@ -387,7 +388,9 @@ export default function SpecificSessionPage(props) {
                     src={data.getSpecificSession.creator.profilePicture}
                     alt="Avatar"
                   />
-                  <Gamer>{`${data.getSpecificSession.creator.name}`}</Gamer>
+                  <Gamer>{`${
+                    data.getSpecificSession.creator.displayName
+                  }`}</Gamer>
                 </GamerLink>
                 <Occupations>
                   {data.getSpecificSession.creator.occupations.map(
@@ -476,6 +479,7 @@ export default function SpecificSessionPage(props) {
                 customerId={fourthData.me.customerId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
+                hasDefaultCard={fourthData.me.hasDefaultCard}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
@@ -492,6 +496,7 @@ export default function SpecificSessionPage(props) {
                 refetch={refetch}
                 meRefetch={meRefetch}
                 customerId={fourthData.me.customerStripeId}
+                hasDefaultCard={fourthData.me.hasDefaultCard}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
@@ -521,7 +526,7 @@ export default function SpecificSessionPage(props) {
                 <TimeSlotSession
                   me={thirdData.me}
                   selectedSession={sessions.state.selectedSession}
-                  gamer={formatGamers(data.getSpecificSession.gamers)}
+                  gamer={data.getSpecificSession.creator.displayName}
                   system={data.getSpecificSession.system}
                   game={data.getSpecificSession.game.name}
                   goBack={() => sessions.goBack()}

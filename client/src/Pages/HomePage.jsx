@@ -52,7 +52,7 @@ const GET_SESSIONS = gql`
       title
       creator {
         profilePicture
-        name
+        displayName
         username
       }
       game {
@@ -66,7 +66,7 @@ const GET_SESSIONS = gql`
 const GET_GAMERS = gql`
   query($first: Int) {
     getGamers(first: $first) {
-      name
+      displayName
       username
       occupations
       profilePicture

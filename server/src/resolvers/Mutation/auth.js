@@ -8,6 +8,7 @@ const auth = {
     const email = input.email.toLowerCase()
     const password = await bcrypt.hash(input.password, 10)
     const name = input.name.toLowerCase()
+    const displayName = input.name.toLowerCase()
     const alreadyUsername = await prisma.userIndex({
       username,
     })
@@ -30,8 +31,10 @@ const auth = {
       banner:
         'https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_default_banner.jpg',
       password,
+      displayName: input.name,
       index: {
         create: {
+          displayName,
           email,
           username,
           name,

@@ -74,6 +74,7 @@ export default function SelectionOptions({
   slotsLeftToday,
   launcher,
   meRefetch,
+  hasDefaultCard,
   refetch,
   customerId,
   creator,
@@ -111,6 +112,7 @@ export default function SelectionOptions({
             creator={creator}
             customerId={customerId}
             meRefetch={meRefetch}
+            hasDefaultCard={hasDefaultCard}
             system={system}
             launcher={launcher}
           />

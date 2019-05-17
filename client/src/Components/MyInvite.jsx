@@ -233,10 +233,14 @@ export default function MyInvite({ inviteId, timeslot, me, refetch }) {
   return (
     <Container>
       <Margins>
-        <SessionPictureContainer src={DefaultSessionPicture}>
+        <SessionPictureContainer
+          src={timeslot.gamingSession.creator.profilePicture}
+        >
           <SessionPictureSecond>
             <SessionPictureThird>
-              <SessionPicture src={DefaultSessionPicture} />
+              <SessionPicture
+                src={timeslot.gamingSession.creator.profilePicture}
+              />
             </SessionPictureThird>
           </SessionPictureSecond>
         </SessionPictureContainer>
@@ -245,7 +249,9 @@ export default function MyInvite({ inviteId, timeslot, me, refetch }) {
             {dateFns.format(timeslot.startTime, dateFormat)}
           </SessionDate>
           {timeslot.gamers.map((gamer, index) => (
-            <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
+            <SessionGamer key={index + gamer.name}>
+              {timeslot.gamingSession.creator.displayName}
+            </SessionGamer>
           ))}
           <SessionGame>{timeslot.gamingSession.game.name}</SessionGame>
           <SearchPlayersContainer ref={node}>
