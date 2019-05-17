@@ -42,7 +42,7 @@ const GET_SESSIONS = gql`
       title
       creator {
         profilePicture
-        name
+        displayName
         username
       }
       game {

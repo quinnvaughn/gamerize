@@ -1,4 +1,5 @@
 const { getUserId } = require('../../utils')
+const { stripe } = require('../../stripe')
 
 const User = {
   currentGamerRequest: async (parent, _, ctx) => {
@@ -54,6 +55,15 @@ const User = {
     } catch (e) {
       if (e) return false
     }
+  },
+  hasDefaultCard: async (parent, _, ctx) => {
+    const userId = getUserId(ctx)
+    const user = await ctx.prisma.user({ id: userId })
+    if (!user.customerStripeId) {
+      return false
+    }
+    const customer = await stripe.customers.retrieve(user.customerStripeId)
+    return Boolean(customer.default_source)
   },
   sentFriendRequest: async (parent, _, ctx) => {
     try {

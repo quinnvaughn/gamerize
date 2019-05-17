@@ -199,10 +199,14 @@ export default function MyTimeSlot({
           timeslot.gamingSession.game.name
         )}/${timeslot.gamingSession.id}`}
       >
-        <SessionPictureContainer src={DefaultSessionPicture}>
+        <SessionPictureContainer
+          src={timeslot.gamingSession.creator.profilePicture}
+        >
           <SessionPictureSecond>
             <SessionPictureThird>
-              <SessionPicture src={DefaultSessionPicture} />
+              <SessionPicture
+                src={timeslot.gamingSession.creator.profilePicture}
+              />
             </SessionPictureThird>
           </SessionPictureSecond>
         </SessionPictureContainer>
@@ -212,7 +216,9 @@ export default function MyTimeSlot({
           {dateFns.format(timeslot.startTime, dateFormat)}
         </SessionDate>
         {timeslot.gamingSession.gamers.map((gamer, index) => (
-          <SessionGamer key={index + gamer.name}>{gamer.name}</SessionGamer>
+          <SessionGamer key={index + gamer.name}>
+            {timeslot.gamingSession.creator.displayName}
+          </SessionGamer>
         ))}
         {players.length > 0 ? (
           <PlayedWith>

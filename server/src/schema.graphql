@@ -182,6 +182,7 @@ type UploadProfilePicturePayload {
 
 input UpdateUserProfileInput {
   name: String
+  displayName: String
   aboutMe: String
   gender: Gender
   gamertags: GamertagsInput
@@ -513,10 +514,12 @@ type User {
   email: String!
   name: String!
   username: String!
+  displayName: String
   gender: Gender!
   gamerIsSetup: Boolean!
   profilePicture: String
   banner: String
+  hasDefaultCard: Boolean!
   savedCards: [SavedCard!]!
   connectedStripeId: String
   customerStripeId: String

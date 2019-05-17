@@ -159,6 +159,7 @@ const GAMER_SESSIONS_SPECIFIC_DAY = gql`
       full
       passed
       gamingSession {
+        id
         system
         game {
           launcher

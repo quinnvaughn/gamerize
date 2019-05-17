@@ -130,6 +130,7 @@ const GET_INFO = gql`
       id
       name
       aboutMe
+      displayName
       email
       gender
       savedCards {
@@ -174,6 +175,8 @@ function reducer(state, action) {
       return { ...state, firstName: action.payload }
     case 'setLastName':
       return { ...state, lastName: action.payload }
+    case 'setDisplayName':
+      return { ...state, displayName: action.payload }
     case 'setAboutMe':
       return { ...state, aboutMe: action.payload }
     case 'setSaving':
@@ -217,6 +220,7 @@ const initialState = {
   firstName: '',
   lastName: '',
   aboutMe: '',
+  displayName: '',
   psn: '',
   nso: '',
   xbl: '',
@@ -242,6 +246,7 @@ export default function GamerDashboardAccountEdit(props) {
     if (!_.isNil(data) && !_.isNil(data.me)) {
       dispatch({ type: 'setFirstName', payload: data.me.name.split(' ')[0] })
       dispatch({ type: 'setLastName', payload: data.me.name.split(' ')[1] })
+      dispatch({ type: 'setDisplayName', payload: data.me.displayName })
       dispatch({ type: 'setGender', payload: data.me.gender })
       if (!_.isNil(data.me.aboutMe)) {
         dispatch({
@@ -318,6 +323,24 @@ export default function GamerDashboardAccountEdit(props) {
                           })
                     }}
                     value={state.lastName ? state.lastName : ''}
+                  />
+                </RowRight>
+              </Row>
+              <Row>
+                <RowLeft>
+                  <Label>Display Name</Label>
+                </RowLeft>
+                <RowRight>
+                  <Name
+                    onChange={e => {
+                      e.target.value === ''
+                        ? dispatch({ type: 'setDisplayName', payload: '' })
+                        : dispatch({
+                            type: 'setDisplayName',
+                            payload: String(e.target.value),
+                          })
+                    }}
+                    value={state.displayName ? state.displayName : ''}
                   />
                 </RowRight>
               </Row>
@@ -634,6 +657,7 @@ export default function GamerDashboardAccountEdit(props) {
               }
               const input = {
                 name: `${state.firstName} ${state.lastName}`,
+                displayName: state.displayName,
                 aboutMe: state.aboutMe,
                 gender: state.gender,
                 gamertags,

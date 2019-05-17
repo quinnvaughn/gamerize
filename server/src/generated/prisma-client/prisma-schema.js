@@ -5729,6 +5729,7 @@ type User {
   gender: Gender!
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5761,6 +5762,7 @@ input UserCreateInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5841,6 +5843,7 @@ input UserCreateWithoutGamertagsInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5866,6 +5869,7 @@ input UserCreateWithoutIndexInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5891,6 +5895,7 @@ input UserCreateWithoutInvitesInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5916,6 +5921,7 @@ input UserCreateWithoutInvitesReceivedInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5941,6 +5947,7 @@ input UserCreateWithoutReviewsInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5966,6 +5973,7 @@ input UserCreateWithoutSavedCardsInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -5991,6 +5999,7 @@ input UserCreateWithoutSessionsInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -6016,6 +6025,7 @@ input UserCreateWithoutTimeSlotsInput {
   gender: Gender
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -6048,6 +6058,7 @@ type UserIndex {
   updatedAt: DateTime!
   email: String!
   username: String!
+  displayName: String
   name: String!
   user: User!
 }
@@ -6061,6 +6072,7 @@ type UserIndexConnection {
 input UserIndexCreateInput {
   email: String!
   username: String!
+  displayName: String
   name: String!
   user: UserCreateOneWithoutIndexInput!
 }
@@ -6073,6 +6085,7 @@ input UserIndexCreateOneWithoutUserInput {
 input UserIndexCreateWithoutUserInput {
   email: String!
   username: String!
+  displayName: String
   name: String!
 }
 
@@ -6092,6 +6105,8 @@ enum UserIndexOrderByInput {
   email_DESC
   username_ASC
   username_DESC
+  displayName_ASC
+  displayName_DESC
   name_ASC
   name_DESC
 }
@@ -6102,6 +6117,7 @@ type UserIndexPreviousValues {
   updatedAt: DateTime!
   email: String!
   username: String!
+  displayName: String
   name: String!
 }
 
@@ -6126,6 +6142,7 @@ input UserIndexSubscriptionWhereInput {
 input UserIndexUpdateInput {
   email: String
   username: String
+  displayName: String
   name: String
   user: UserUpdateOneRequiredWithoutIndexInput
 }
@@ -6133,6 +6150,7 @@ input UserIndexUpdateInput {
 input UserIndexUpdateManyMutationInput {
   email: String
   username: String
+  displayName: String
   name: String
 }
 
@@ -6146,6 +6164,7 @@ input UserIndexUpdateOneRequiredWithoutUserInput {
 input UserIndexUpdateWithoutUserDataInput {
   email: String
   username: String
+  displayName: String
   name: String
 }
 
@@ -6213,6 +6232,20 @@ input UserIndexWhereInput {
   username_not_starts_with: String
   username_ends_with: String
   username_not_ends_with: String
+  displayName: String
+  displayName_not: String
+  displayName_in: [String!]
+  displayName_not_in: [String!]
+  displayName_lt: String
+  displayName_lte: String
+  displayName_gt: String
+  displayName_gte: String
+  displayName_contains: String
+  displayName_not_contains: String
+  displayName_starts_with: String
+  displayName_not_starts_with: String
+  displayName_ends_with: String
+  displayName_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -6252,6 +6285,8 @@ enum UserOrderByInput {
   email_DESC
   username_ASC
   username_DESC
+  displayName_ASC
+  displayName_DESC
   password_ASC
   password_DESC
   profilePicture_ASC
@@ -6281,6 +6316,7 @@ type UserPreviousValues {
   gender: Gender!
   email: String!
   username: String!
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -6357,6 +6393,20 @@ input UserScalarWhereInput {
   username_not_starts_with: String
   username_ends_with: String
   username_not_ends_with: String
+  displayName: String
+  displayName_not: String
+  displayName_in: [String!]
+  displayName_not_in: [String!]
+  displayName_lt: String
+  displayName_lte: String
+  displayName_gt: String
+  displayName_gte: String
+  displayName_contains: String
+  displayName_not_contains: String
+  displayName_starts_with: String
+  displayName_not_starts_with: String
+  displayName_ends_with: String
+  displayName_not_ends_with: String
   password: String
   password_not: String
   password_in: [String!]
@@ -6496,6 +6546,7 @@ input UserUpdateDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6522,6 +6573,7 @@ input UserUpdateInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6548,6 +6600,7 @@ input UserUpdateManyDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6577,6 +6630,7 @@ input UserUpdateManyMutationInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6687,6 +6741,7 @@ input UserUpdateWithoutGamertagsDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6712,6 +6767,7 @@ input UserUpdateWithoutIndexDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6737,6 +6793,7 @@ input UserUpdateWithoutInvitesDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6762,6 +6819,7 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6787,6 +6845,7 @@ input UserUpdateWithoutReviewsDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6812,6 +6871,7 @@ input UserUpdateWithoutSavedCardsDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6837,6 +6897,7 @@ input UserUpdateWithoutSessionsDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -6862,6 +6923,7 @@ input UserUpdateWithoutTimeSlotsDataInput {
   gender: Gender
   email: String
   username: String
+  displayName: String
   password: String
   profilePicture: String
   banner: String
@@ -7014,6 +7076,20 @@ input UserWhereInput {
   username_not_starts_with: String
   username_ends_with: String
   username_not_ends_with: String
+  displayName: String
+  displayName_not: String
+  displayName_in: [String!]
+  displayName_not_in: [String!]
+  displayName_lt: String
+  displayName_lte: String
+  displayName_gt: String
+  displayName_gte: String
+  displayName_contains: String
+  displayName_not_contains: String
+  displayName_starts_with: String
+  displayName_not_starts_with: String
+  displayName_ends_with: String
+  displayName_not_ends_with: String
   password: String
   password_not: String
   password_in: [String!]

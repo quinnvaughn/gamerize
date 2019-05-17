@@ -18,7 +18,7 @@ export default function GamesRow(props) {
           game={props.name}
           id={session.id}
           title={session.title}
-          name={session.creator.name}
+          name={session.creator.displayName}
           system={session.system}
           price={session.price}
           reviews={session.reviewRating}

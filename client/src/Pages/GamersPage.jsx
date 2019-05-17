@@ -36,7 +36,7 @@ const Title = styled.h2`
 const GET_GAMERS = gql`
   {
     getGamers {
-      name
+      displayName
       username
       occupations
       profilePicture

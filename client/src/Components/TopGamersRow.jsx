@@ -63,7 +63,7 @@ const map = (gamers, first) => {
     return (
       index <= first - 1 && (
         <Gamer
-          name={gamer.name}
+          name={gamer.displayName}
           occupations={gamer.occupations}
           username={gamer.username}
           key={gamer.username}

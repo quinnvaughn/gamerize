@@ -175,6 +175,7 @@ export default function MyInviteReceived({
   timeslot,
   refetch,
   inviteId,
+  profilePicture,
   from,
   gamertags,
 }) {
@@ -195,10 +196,10 @@ export default function MyInviteReceived({
   return (
     <Container>
       <Margins>
-        <SessionPictureContainer src={DefaultSessionPicture}>
+        <SessionPictureContainer src={profilePicture}>
           <SessionPictureSecond>
             <SessionPictureThird>
-              <SessionPicture src={DefaultSessionPicture} />
+              <SessionPicture src={profilePicture} />
             </SessionPictureThird>
           </SessionPictureSecond>
         </SessionPictureContainer>
