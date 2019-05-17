@@ -24,9 +24,24 @@ const authLink = setContext((_, { headers }) => {
 //   console.log('networkError: ', networkError)
 // })
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'cache-and-network',
+    errorPolicy: 'ignore',
+  },
+  query: {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+  },
+  mutate: {
+    errorPolicy: 'all',
+  },
+}
+
 const client = new ApolloClient({
   link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
+  defaultOptions,
 })
 
 export default client
