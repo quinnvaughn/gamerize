@@ -20,6 +20,7 @@
     "prisma": "1.30",
     "prisma-client-lib": "1.28.0",
     "promise-all": "^1.0.0",
+    "qs": "^6.7.0",
     "stripe": "^6.34.0"
   },
   "devDependencies": {

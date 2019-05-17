@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
@@ -142,8 +142,9 @@ const ADD_STRIPE_CONNECT_ACCOUNT = gql`
   }
 `
 
-async function addStripeAccount(addStripe, params, setDisabled) {
+async function addStripeAccount(addStripe, params, setDisabled, setCallAgain) {
   if (params.code) {
+    setCallAgain(false)
     const input = { code: params.code }
     const { data } = await addStripe({ variables: { input } })
     if (data.addStripeConnectAccount.completed) {
@@ -155,10 +156,13 @@ async function addStripeAccount(addStripe, params, setDisabled) {
 function GamerOnboardingInfoPage(props) {
   const { data, loading } = useQuery(GET_MY_INFO)
   const [disabled, setDisabled] = useState(true)
+  const [callAgain, setCallAgain] = useState(true)
   const addStripe = useMutation(ADD_STRIPE_CONNECT_ACCOUNT)
   const params = getSearchParameters()
   useEffect(() => {
-    addStripeAccount(addStripe, params, setDisabled)
+    params.code &&
+      callAgain &&
+      addStripeAccount(addStripe, params, setDisabled, setCallAgain)
   }, [params])
   const allowGamerToPlay = useMutation(UPDATE_USER_PROFILE)
   const firstName = !loading && data && data.me && data.me.name.split(' ')[0]

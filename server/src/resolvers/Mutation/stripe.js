@@ -3,13 +3,19 @@ const { getUserId } = require('../../utils')
 const { stripe: stripeAPI } = require('../../stripe')
 
 const stripe = {
-  async addStripeConnectAccount(parent, { input }, ctx) {
+  async addStripeConnectAccount(
+    parent,
+    {
+      input: { code },
+    },
+    ctx
+  ) {
     const userId = getUserId(ctx)
     const response = await axios.post(
       'https://connect.stripe.com/oauth/token',
       {
-        client_secret: process.env.STRIPE_CLIENT_ID,
-        code: input.code,
+        client_secret: process.env.STRIPE_SECRET_KEY,
+        code,
         grant_type: 'authorization_code',
       }
     )
@@ -115,10 +121,10 @@ const stripe = {
   async logIntoStripe(parent, _, ctx) {
     const userId = getUserId(ctx)
     const user = await ctx.prisma.user({ id: userId })
-    const {url} = await stripeAPI.accounts.createLoginLink(
+    const { url } = await stripeAPI.accounts.createLoginLink(
       user.connectedStripeId
     )
-    return {url}
+    return { url }
   },
 }
 
