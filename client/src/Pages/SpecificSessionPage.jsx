@@ -258,6 +258,7 @@ const GET_SPECIFIC_SESSION = gql`
     getSpecificSession(sessionId: $sessionId) {
       title
       length
+      id
       type
       slots
       price
@@ -279,6 +280,7 @@ const GET_SPECIFIC_SESSION = gql`
         launcher
       }
       gamers {
+        id
         occupations
         username
         name
@@ -304,6 +306,7 @@ const GET_SLOTS_TODAY = gql`
       }
       players {
         player {
+          id
           username
         }
       }

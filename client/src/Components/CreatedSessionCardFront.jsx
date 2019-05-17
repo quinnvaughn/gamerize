@@ -101,7 +101,7 @@ export default function CreatedSessionCardFront({ session, setup, dispatch }) {
     >
       <SessionTitle>{session.title}</SessionTitle>
       <Game>{session.game.name}</Game>
-      <Price>{`$${session.price} a slot`}</Price>
+      <Price>{`$${parseFloat(session.price).toFixed(2)} a slot`}</Price>
       <Length>{`${session.length + setup} minutes a game`}</Length>
       <Systems>
         <SystemTitle>{`System: `}</SystemTitle>

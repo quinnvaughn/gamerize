@@ -112,6 +112,7 @@ const MY_GAMING_SESSIONS = gql`
         name
       }
       gamers {
+        id
         username
       }
       price
@@ -135,6 +136,7 @@ const SLOTS_TODAY = gql`
         }
       }
       gamingSession {
+        id
         length
         game {
           name
