@@ -320,6 +320,8 @@ const GET_ME = gql`
       username
       email
       id
+      customerStripeId
+      hasDefaultCard
       gamertags {
         psn
         xbl
@@ -340,16 +342,6 @@ const GET_ME = gql`
   }
 `
 
-const GET_MY_CUSTOMER_ID = gql`
-  {
-    me {
-      id
-      customerStripeId
-      hasDefaultCard
-    }
-  }
-`
-
 export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: { sessionId: props.match.params.id },
@@ -362,13 +354,12 @@ export default function SpecificSessionPage(props) {
       pollInterval: 500,
     }
   )
-  const { data: thirdData, loading: thirdLoading } = useQuery(GET_ME)
   const {
-    data: fourthData,
-    loading: fourthLoading,
+    data: thirdData,
+    loading: thirdLoading,
     refetch: meRefetch,
-  } = useQuery(GET_MY_CUSTOMER_ID)
-  return loading || secondLoading || thirdLoading || fourthLoading ? (
+  } = useQuery(GET_ME)
+  return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : (
     <PageContainer>
@@ -479,10 +470,10 @@ export default function SpecificSessionPage(props) {
               <FixedSelectionOptions
                 me={thirdData.me}
                 refetch={refetch}
-                customerId={fourthData.me.customerStripeId}
+                customerId={thirdData.me.customerStripeId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                hasDefaultCard={fourthData.me.hasDefaultCard}
+                hasDefaultCard={thirdData.me.hasDefaultCard}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
@@ -498,8 +489,8 @@ export default function SpecificSessionPage(props) {
                 me={thirdData.me}
                 refetch={refetch}
                 meRefetch={meRefetch}
-                customerId={fourthData.me.customerStripeId}
-                hasDefaultCard={fourthData.me.hasDefaultCard}
+                customerId={thirdData.me.customerStripeId}
+                hasDefaultCard={thirdData.me.hasDefaultCard}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
