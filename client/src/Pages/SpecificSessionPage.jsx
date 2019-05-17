@@ -359,7 +359,7 @@ export default function SpecificSessionPage(props) {
     loading: thirdLoading,
     refetch: meRefetch,
   } = useQuery(GET_ME)
-  return loading || secondLoading || thirdLoading ? (
+  return loading || secondLoading || thirdLoading || !thirdData.me ? (
     <Loading />
   ) : (
     <PageContainer>
