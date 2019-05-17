@@ -185,11 +185,15 @@ function Totals(props) {
               </NumberSlots>
               <Discounts>
                 <DiscountsTitle>Processing Fee</DiscountsTitle>
-                <DiscountPercentage>{`+ $${fee}`}</DiscountPercentage>
+                <DiscountPercentage>{`+ $${parseFloat(fee).toFixed(
+                  2
+                )}`}</DiscountPercentage>
               </Discounts>
               <Discounts>
                 <DiscountsTitle>Discounts</DiscountsTitle>
-                <DiscountPercentage>{`- $${discount}`}</DiscountPercentage>
+                <DiscountPercentage>{`- $${parseFloat(discount).toFixed(
+                  2
+                )}`}</DiscountPercentage>
               </Discounts>
               <Total>
                 <TotalTitle>Total</TotalTitle>{' '}
