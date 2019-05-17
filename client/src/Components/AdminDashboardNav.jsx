@@ -54,7 +54,7 @@ function AdminDashboardNav(props) {
   return (
     <Container>
       <Icon
-        publicId="gamerize_logo.png"
+        publicId="https://res.cloudinary.com/gamerize/image/upload/gamerize_logo.png"
         height="80"
         onClick={async () => {
           await props.history.push('/')
