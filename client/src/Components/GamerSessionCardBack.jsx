@@ -217,7 +217,6 @@ export default function GamerSessionCardBack({
   const [endTime, setEndTime] = useState(null)
   const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
   const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
-  console.log(startTime)
   return (
     <Card back last={last}>
       {side === null && (

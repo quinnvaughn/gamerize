@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
@@ -135,6 +135,13 @@ const CreateSessionButton = styled.button`
   margin-top: 1rem;
 `
 
+const ErrorMessage = styled.div`
+  font-size: 1.6rem;
+  color: #db1422;
+  font-weight: 700;
+  margin-top: 0.3rem;
+`
+
 const initialState = {
   flip: false,
   game: '',
@@ -184,6 +191,7 @@ const CREATE_SESSION = gql`
 
 export default function CreateSession(props) {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [priceError, setPriceError] = useState(false)
   const createSession = useMutation(CREATE_SESSION)
   return (
     <Container>
@@ -202,18 +210,26 @@ export default function CreateSession(props) {
         title={state.game}
       />
       <PriceContainer>
-        <Price>
-          Price<USD> (USD) </USD>:{' '}
-        </Price>
+        <Price>Price: </Price>
         <SessionPrice
           onChange={e => {
-            dispatch({
-              type: 'setPrice',
-              payload: e.target.value === '' ? '' : Number(e.target.value),
-            })
+            setPriceError(false)
+            if (Number(e.target.value) !== 0 && Number(e.target.value) < 1) {
+              setPriceError(true)
+            } else {
+              dispatch({
+                type: 'setPrice',
+                payload: e.target.value === '' ? '' : e.target.value,
+              })
+            }
           }}
           value={state.price}
         />
+        {priceError && (
+          <ErrorMessage>
+            Price must either be zero or at least a dollar
+          </ErrorMessage>
+        )}
       </PriceContainer>
       <LengthContainer>
         <Length>
@@ -257,7 +273,7 @@ export default function CreateSession(props) {
           const input = {
             title: state.title,
             game: state.game,
-            price: state.price,
+            price: parseFloat(state.price),
             length: state.length,
             system: state.system,
             slots: state.slots,
