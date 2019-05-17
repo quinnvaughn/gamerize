@@ -111,15 +111,17 @@ export default function GamerDashboardActiveSessions(props) {
         </Top>
         <GamerDashboardSessionsNav />
         <Sessions>
-          {sessions.myGamingSessions.map(session => (
-            <CreatedSessionCard
-              session={session}
-              refetch={refetch}
-              setup={data.me.setup}
-              setOpen={setEdit}
-              key={session.title + session.game}
-            />
-          ))}
+          {sessions &&
+            sessions.myGamingSessions &&
+            sessions.myGamingSessions.map(session => (
+              <CreatedSessionCard
+                session={session}
+                refetch={refetch}
+                setup={data.me.setup}
+                setOpen={setEdit}
+                key={session.title + session.game}
+              />
+            ))}
         </Sessions>
       </Content>
       {openNew && (

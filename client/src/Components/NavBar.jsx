@@ -126,7 +126,7 @@ function NavBar(props) {
   const { data, loading, refetch } = useQuery(GET_ME)
   const { data: notifications, loading: secondLoading } = useQuery(
     GET_MY_NOTIFICATIONS,
-    { pollInterval: 1000, skip: !token }
+    { pollInterval: 1000 }
   )
   useEffect(() => {
     refetch()
@@ -189,7 +189,11 @@ function NavBar(props) {
                             {`Admin Dashboard`}
                           </StyledLink>
                         )
-                      } else if (link.path === '/notifications') {
+                      } else if (
+                        link.path === '/notifications' &&
+                        notifications &&
+                        notifications.numUserNotifications
+                      ) {
                         return (
                           <StyledLink key={link.text} to={'/notifications'}>
                             <NotificationContainer>

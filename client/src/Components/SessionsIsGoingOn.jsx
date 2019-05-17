@@ -129,6 +129,15 @@ export default function SessionsIsGoingOn({ currentSession, refetch }) {
           </Time>
           <AddButton
             onClick={async () => {
+              const input = { minutes: 1, sessionId: currentSession.id }
+              await addMinutesToSession({ variables: { input } })
+              refetch()
+            }}
+          >
+            Add 1 minute
+          </AddButton>
+          <AddButton
+            onClick={async () => {
               const input = { minutes: 5, sessionId: currentSession.id }
               await addMinutesToSession({ variables: { input } })
               refetch()

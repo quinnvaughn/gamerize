@@ -109,6 +109,7 @@ const MY_GAMING_SESSIONS = gql`
       id
       title
       game {
+        id
         name
       }
       gamers {
@@ -139,6 +140,7 @@ const SLOTS_TODAY = gql`
         id
         length
         game {
+          id
           name
         }
       }
@@ -159,6 +161,7 @@ const ME = gql`
             id
             system
             game {
+              id
               name
               launcher
             }
@@ -166,6 +169,7 @@ const ME = gql`
           endTime
           players {
             player {
+              id
               gamertags {
                 psn
                 xbl
