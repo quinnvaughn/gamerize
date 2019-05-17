@@ -113,12 +113,14 @@ const GET_GAME = gql`
       banner
       picture
       numSessions
+      id
       sessions {
         system
         numReviews
         reviewRating
         id
         creator {
+          id
           username
           displayName
           profilePicture

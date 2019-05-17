@@ -51,6 +51,7 @@ const GET_SESSIONS = gql`
       price
       title
       creator {
+        id
         profilePicture
         displayName
         username
@@ -67,6 +68,7 @@ const GET_GAMERS = gql`
   query($first: Int) {
     getGamers(first: $first) {
       displayName
+      id
       username
       occupations
       profilePicture
@@ -82,6 +84,7 @@ const GET_GAMES = gql`
   query($first: Int, $orderBy: String) {
     allGames(first: $first, orderBy: $orderBy) {
       name
+      id
       tags
       numSessions
       picture

@@ -41,6 +41,7 @@ const GET_SESSIONS = gql`
       price
       title
       creator {
+        id
         profilePicture
         displayName
         username

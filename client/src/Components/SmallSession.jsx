@@ -119,7 +119,9 @@ export default function SmallSession(props) {
         <Systems>
           <System>{formatSystem(props.system)}</System>
         </Systems>
-        <Price>{`Starting at $${props.price} a game`}</Price>
+        <Price>{`Starting at $${parseFloat(props.price).toFixed(
+          2
+        )} a game`}</Price>
         {/* <Bottom>
           <StarRatings
             rating={props.reviewRating}

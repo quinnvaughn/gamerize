@@ -18,7 +18,7 @@ function calcFee(amount, currency) {
     (cost + parseFloat(_fee.Fixed)) / (1 - parseFloat(_fee.Percent) / 100)
   const fee = total - cost
 
-  return fee.toFixed(2)
+  return amount === 0 ? 0 : fee.toFixed(2)
 }
 
 export { calcFee }

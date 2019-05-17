@@ -133,7 +133,9 @@ export default function Session(props) {
           <Game>{`${props.game} - `}</Game>
           <System>{formatSystem(props.system)}</System>
         </Systems>
-        <Price>{`Starting at $${props.price} a game`}</Price>
+        <Price>{`Starting at $${parseFloat(props.price).toFixed(
+          2
+        )} a game`}</Price>
         {/* <Bottom>
           <Reviews>{props.reviews}</Reviews>
           <StarRatings

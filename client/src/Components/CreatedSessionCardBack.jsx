@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
@@ -157,6 +157,13 @@ const DeleteSession = styled.button`
   margin-top: 1rem;
 `
 
+const ErrorMessage = styled.div`
+  font-size: 1.6rem;
+  color: #db1422;
+  font-weight: 700;
+  margin-top: 0.3rem;
+`
+
 const UPDATE_SESSION = gql`
   mutation($input: UpdateSessionInput!) {
     updateSession(input: $input) {
@@ -181,6 +188,7 @@ export default function CreatedSessionCardBack({
   state,
   refetch,
 }) {
+  const [priceError, setPriceError] = useState(false)
   const updateSession = useMutation(UPDATE_SESSION)
   const retireSession = useMutation(RETIRE_SESSION)
   return (
@@ -203,13 +211,23 @@ export default function CreatedSessionCardBack({
         <Price>Price: </Price>
         <SessionPrice
           onChange={e => {
-            dispatch({
-              type: 'setPrice',
-              payload: e.target.value === '' ? '' : Number(e.target.value),
-            })
+            setPriceError(false)
+            if (Number(e.target.value) !== 0 && Number(e.target.value) < 1) {
+              setPriceError(true)
+            } else {
+              dispatch({
+                type: 'setPrice',
+                payload: e.target.value === '' ? '' : e.target.value,
+              })
+            }
           }}
           value={state.price}
         />
+        {priceError && (
+          <ErrorMessage>
+            Price must either be zero or at least a dollar
+          </ErrorMessage>
+        )}
       </PriceContainer>
       <LengthContainer>
         <Length>Length:</Length>
@@ -248,12 +266,13 @@ export default function CreatedSessionCardBack({
       />
       <ButtonContainer>
         <EditSession
+          disabled={priceError}
           onClick={async () => {
             const input = {
               sessionId: session.id,
               title: state.title,
               game: state.game,
-              price: state.price,
+              price: parseFloat(state.price),
               length: state.length,
               system: state.system,
               slots: state.slots,

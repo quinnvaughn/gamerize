@@ -179,6 +179,7 @@ const MY_SESSIONS = gql`
               name
             }
             creator {
+              id
               displayName
               profilePicture
             }
@@ -195,6 +196,7 @@ const MY_SESSIONS = gql`
       id
       timeslot {
         startTime
+        id
         players {
           player {
             username
@@ -209,6 +211,7 @@ const MY_SESSIONS = gql`
             name
           }
           creator {
+            id
             profilePicture
             displayName
             username
@@ -222,6 +225,7 @@ const MY_SESSIONS = gql`
         username
       }
       timeslot {
+        id
         startTime
         players {
           player {
@@ -237,6 +241,7 @@ const MY_SESSIONS = gql`
             name
           }
           creator {
+            id
             displayName
             profilePicture
             username
