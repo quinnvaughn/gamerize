@@ -110,9 +110,9 @@ export default function SelectionOptions({
             refetch={refetch}
             me={me}
             creator={creator}
-            customerId={customerId}
+            customerId={me.customerStripeId}
             meRefetch={meRefetch}
-            hasDefaultCard={hasDefaultCard}
+            hasDefaultCard={me.hasDefaultCard}
             system={system}
             launcher={launcher}
           />

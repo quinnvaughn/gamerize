@@ -88,8 +88,6 @@ export default function SmallSelectionOptions({
   close,
   slotsLeftToday,
   me,
-  hasDefaultCard,
-  customerId,
   launcher,
 }) {
   return (
@@ -125,8 +123,8 @@ export default function SmallSelectionOptions({
               meRefetch={meRefetch}
               me={me}
               creator={creator}
-              hasDefaultCard={hasDefaultCard}
-              customerId={customerId}
+              hasDefaultCard={me.hasDefaultCard}
+              customerId={me.customerStripeId}
               launcher={launcher}
               system={system}
             />

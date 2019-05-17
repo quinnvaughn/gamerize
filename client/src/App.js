@@ -6,7 +6,7 @@ import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { LastLocationProvider } from 'react-router-last-location'
 import { CloudinaryContext } from 'cloudinary-react'
-import {StripeProvider} from 'react-stripe-elements';
+import { StripeProvider } from 'react-stripe-elements'
 
 //local imports
 import ScrollToTop from './Components/ScrollToTop'
@@ -22,33 +22,35 @@ class App extends Component {
         <ApolloHooksProvider client={client}>
           <BrowserRouter>
             <LastLocationProvider>
-              <StripeProvider apiKey={`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`}>
-              <Provider>
-                <ScrollToTop>
-                  <GlobalStyle />
-                  <CloudinaryContext cloudName="gamerize">
-                    <Switch>
-                      {routes.map(route =>
-                        route.protected ? (
-                          <ProtectedRoute
-                            path={route.path}
-                            component={route.component}
-                            exact={route.exact}
-                            key={route.path}
-                          />
-                        ) : (
-                          <Route
-                            path={route.path}
-                            component={route.component}
-                            exact={route.exact}
-                            key={route.path}
-                          />
-                        )
-                      )}
-                    </Switch>
-                  </CloudinaryContext>
-                </ScrollToTop>
-              </Provider>
+              <StripeProvider
+                apiKey={`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`}
+              >
+                <Provider>
+                  <ScrollToTop>
+                    <GlobalStyle />
+                    <CloudinaryContext cloudName="gamerize">
+                      <Switch>
+                        {routes.map(route =>
+                          route.protected ? (
+                            <ProtectedRoute
+                              path={route.path}
+                              component={route.component}
+                              exact={route.exact}
+                              key={route.path}
+                            />
+                          ) : (
+                            <Route
+                              path={route.path}
+                              component={route.component}
+                              exact={route.exact}
+                              key={route.path}
+                            />
+                          )
+                        )}
+                      </Switch>
+                    </CloudinaryContext>
+                  </ScrollToTop>
+                </Provider>
               </StripeProvider>
             </LastLocationProvider>
           </BrowserRouter>

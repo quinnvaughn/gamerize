@@ -57,6 +57,7 @@ const GET_SESSIONS = gql`
         username
       }
       game {
+        id
         name
       }
     }
@@ -84,8 +85,8 @@ const GET_GAMES = gql`
   query($first: Int, $orderBy: String) {
     allGames(first: $first, orderBy: $orderBy) {
       name
-      id
       tags
+      id
       numSessions
       picture
     }

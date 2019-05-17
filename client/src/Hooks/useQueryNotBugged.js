@@ -1,17 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 
-export default function useQueryNotBugged(...args) {
-  const [notNullData, setNotNullData] = useState()
-  const { data, error, loading, fetchMore, refetch } = useQuery(...args)
+export default function useQueryNotBugged(query, options) {
+  const prevDataRef = useRef()
+  const { loading, error, data, refetch } = useQuery(query, options)
+  const hasData = data && Object.keys(data).length
+  const activeData = hasData ? data : prevDataRef.current
 
   useEffect(() => {
-    if (!data) {
-      setNotNullData()
+    if (hasData) {
+      prevDataRef.current = data
     }
-    if (data && !loading) {
-      setNotNullData(data)
-    }
-  }, [data])
-  return { data: notNullData, error, loading, fetchMore, refetch }
+  })
+
+  return {
+    data: activeData,
+    refetch,
+    loading,
+    error,
+  }
 }

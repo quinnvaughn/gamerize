@@ -322,6 +322,8 @@ const GET_ME = gql`
       username
       email
       id
+      role
+      profilePicture
       customerStripeId
       hasDefaultCard
       gamertags {
@@ -361,7 +363,7 @@ export default function SpecificSessionPage(props) {
     loading: thirdLoading,
     refetch: meRefetch,
   } = useQuery(GET_ME)
-  return loading || secondLoading || thirdLoading || !thirdData.me ? (
+  return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : (
     <PageContainer>
@@ -472,10 +474,8 @@ export default function SpecificSessionPage(props) {
               <FixedSelectionOptions
                 me={thirdData.me}
                 refetch={refetch}
-                customerId={thirdData.me.customerStripeId}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
-                hasDefaultCard={thirdData.me.hasDefaultCard}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
                 slots={data.getSpecificSession.slots}
                 price={data.getSpecificSession.price}
@@ -491,8 +491,6 @@ export default function SpecificSessionPage(props) {
                 me={thirdData.me}
                 refetch={refetch}
                 meRefetch={meRefetch}
-                customerId={thirdData.me.customerStripeId}
-                hasDefaultCard={thirdData.me.hasDefaultCard}
                 gamer={formatGamers(data.getSpecificSession.gamers)}
                 game={data.getSpecificSession.game.name}
                 slotsLeftToday={data.getSpecificSession.slotsLeftToday}
