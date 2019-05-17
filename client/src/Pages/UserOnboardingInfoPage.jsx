@@ -122,6 +122,7 @@ const Next = styled.button`
   color: #fff;
   text-decoration: none;
   outline: 0;
+  cursor: pointer;
   border: 0;
   border-radius: 4px;
   font-size: 1.6rem;
