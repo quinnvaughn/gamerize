@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import DefaultAvatar from '../default-avatar.png'
-
 const Container = styled(Link)`
   padding: 1.6rem 2.4rem;
   padding-left: 3.2rem;

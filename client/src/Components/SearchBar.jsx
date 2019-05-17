@@ -62,7 +62,7 @@ const SEARCH_GAMERIZE = gql`
         profilePicture
         numSessions
         username
-        name
+        displayName
       }
       session {
         id

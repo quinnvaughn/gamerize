@@ -6,6 +6,7 @@ const search = {
         where: {
           OR: [
             { name_contains: undercaseSearch },
+            { displayName_contains: undercaseSearch },
             { username_contains: undercaseSearch },
           ],
         },
