@@ -138,7 +138,7 @@ const mapUsers = (users, first) => {
       index <= first - 1 && (
         <SearchResultUser
           username={user.user.username}
-          name={user.user.name}
+          name={user.user.displayName}
           profilePicture={user.user.profilePicture}
           gamer={user.user.role === 'GAMER'}
           numSessions={user.user.numSessions}
