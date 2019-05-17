@@ -1123,6 +1123,8 @@ export type UserIndexOrderByInput =
   | "email_DESC"
   | "username_ASC"
   | "username_DESC"
+  | "displayName_ASC"
+  | "displayName_DESC"
   | "name_ASC"
   | "name_DESC";
 
@@ -1401,6 +1403,8 @@ export type UserOrderByInput =
   | "email_DESC"
   | "username_ASC"
   | "username_DESC"
+  | "displayName_ASC"
+  | "displayName_DESC"
   | "password_ASC"
   | "password_DESC"
   | "profilePicture_ASC"
@@ -1815,6 +1819,7 @@ export interface UserUpdateDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -2328,6 +2333,7 @@ export interface UserUpdateWithoutReviewsDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -2387,6 +2393,7 @@ export interface GamingTimeSlotUpdateManyWithoutGamersInput {
 export interface UserIndexUpdateManyMutationInput {
   email?: String;
   username?: String;
+  displayName?: String;
   name?: String;
 }
 
@@ -2483,6 +2490,7 @@ export interface UserCreateWithoutIndexInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -2536,6 +2544,7 @@ export interface UserUpdateManyMutationInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -2553,6 +2562,7 @@ export interface UserUpdateWithoutSessionsDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -2958,6 +2968,20 @@ export interface UserWhereInput {
   username_not_starts_with?: String;
   username_ends_with?: String;
   username_not_ends_with?: String;
+  displayName?: String;
+  displayName_not?: String;
+  displayName_in?: String[] | String;
+  displayName_not_in?: String[] | String;
+  displayName_lt?: String;
+  displayName_lte?: String;
+  displayName_gt?: String;
+  displayName_gte?: String;
+  displayName_contains?: String;
+  displayName_not_contains?: String;
+  displayName_starts_with?: String;
+  displayName_not_starts_with?: String;
+  displayName_ends_with?: String;
+  displayName_not_ends_with?: String;
   password?: String;
   password_not?: String;
   password_in?: String[] | String;
@@ -3146,6 +3170,7 @@ export interface UserUpdateWithoutSavedCardsDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -3171,6 +3196,7 @@ export interface UserUpdateWithoutTimeSlotsDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -3302,6 +3328,7 @@ export interface UserCreateWithoutSavedCardsInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -3526,6 +3553,7 @@ export interface UserUpdateWithoutInvitesDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -3887,6 +3915,7 @@ export interface UserCreateInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -3982,6 +4011,20 @@ export interface UserIndexWhereInput {
   username_not_starts_with?: String;
   username_ends_with?: String;
   username_not_ends_with?: String;
+  displayName?: String;
+  displayName_not?: String;
+  displayName_in?: String[] | String;
+  displayName_not_in?: String[] | String;
+  displayName_lt?: String;
+  displayName_lte?: String;
+  displayName_gt?: String;
+  displayName_gte?: String;
+  displayName_contains?: String;
+  displayName_not_contains?: String;
+  displayName_starts_with?: String;
+  displayName_not_starts_with?: String;
+  displayName_ends_with?: String;
+  displayName_not_ends_with?: String;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -4227,6 +4270,7 @@ export interface UserCreateWithoutReviewsInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4313,6 +4357,7 @@ export interface UserCreateWithoutSessionsInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4427,6 +4472,7 @@ export interface UserCreateWithoutTimeSlotsInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4452,6 +4498,7 @@ export interface UserUpdateWithoutInvitesReceivedDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -4516,6 +4563,7 @@ export interface UserCreateWithoutInvitesInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4612,6 +4660,20 @@ export interface UserScalarWhereInput {
   username_not_starts_with?: String;
   username_ends_with?: String;
   username_not_ends_with?: String;
+  displayName?: String;
+  displayName_not?: String;
+  displayName_in?: String[] | String;
+  displayName_not_in?: String[] | String;
+  displayName_lt?: String;
+  displayName_lte?: String;
+  displayName_gt?: String;
+  displayName_gte?: String;
+  displayName_contains?: String;
+  displayName_not_contains?: String;
+  displayName_starts_with?: String;
+  displayName_not_starts_with?: String;
+  displayName_ends_with?: String;
+  displayName_not_ends_with?: String;
   password?: String;
   password_not?: String;
   password_in?: String[] | String;
@@ -4758,6 +4820,7 @@ export interface UserUpdateManyDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -4849,6 +4912,7 @@ export interface UserCreateWithoutInvitesReceivedInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4905,6 +4969,7 @@ export interface UserIndexCreateOneWithoutUserInput {
 export interface UserIndexUpdateWithoutUserDataInput {
   email?: String;
   username?: String;
+  displayName?: String;
   name?: String;
 }
 
@@ -5277,6 +5342,7 @@ export interface UserUpdateWithoutIndexDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -5321,6 +5387,7 @@ export interface NotificationUpdateManyWithoutBookingInput {
 export interface UserIndexUpdateInput {
   email?: String;
   username?: String;
+  displayName?: String;
   name?: String;
   user?: UserUpdateOneRequiredWithoutIndexInput;
 }
@@ -5333,6 +5400,7 @@ export interface NotificationUpdateWithWhereUniqueWithoutBookingInput {
 export interface UserIndexCreateInput {
   email: String;
   username: String;
+  displayName?: String;
   name: String;
   user: UserCreateOneWithoutIndexInput;
 }
@@ -6241,6 +6309,7 @@ export interface BookingInviteUpsertWithWhereUniqueWithoutToInput {
 export interface UserIndexCreateWithoutUserInput {
   email: String;
   username: String;
+  displayName?: String;
   name: String;
 }
 
@@ -6707,6 +6776,7 @@ export interface UserCreateWithoutGamertagsInput {
   gender?: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -6988,6 +7058,7 @@ export interface UserUpdateWithoutGamertagsDataInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -7170,6 +7241,7 @@ export interface UserUpdateInput {
   gender?: Gender;
   email?: String;
   username?: String;
+  displayName?: String;
   password?: String;
   profilePicture?: String;
   banner?: String;
@@ -7264,6 +7336,7 @@ export interface UserIndexPreviousValues {
   updatedAt: DateTimeOutput;
   email: String;
   username: String;
+  displayName?: String;
   name: String;
 }
 
@@ -7275,6 +7348,7 @@ export interface UserIndexPreviousValuesPromise
   updatedAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   username: () => Promise<String>;
+  displayName: () => Promise<String>;
   name: () => Promise<String>;
 }
 
@@ -7286,6 +7360,7 @@ export interface UserIndexPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  displayName: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
 }
 
@@ -7838,6 +7913,7 @@ export interface User {
   gender: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -7858,6 +7934,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   gender: () => Promise<Gender>;
   email: () => Promise<String>;
   username: () => Promise<String>;
+  displayName: () => Promise<String>;
   password: () => Promise<String>;
   profilePicture: () => Promise<String>;
   banner: () => Promise<String>;
@@ -7959,6 +8036,7 @@ export interface UserSubscription
   gender: () => Promise<AsyncIterator<Gender>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  displayName: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   profilePicture: () => Promise<AsyncIterator<String>>;
   banner: () => Promise<AsyncIterator<String>>;
@@ -8428,6 +8506,7 @@ export interface UserPreviousValues {
   gender: Gender;
   email: String;
   username: String;
+  displayName?: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -8450,6 +8529,7 @@ export interface UserPreviousValuesPromise
   gender: () => Promise<Gender>;
   email: () => Promise<String>;
   username: () => Promise<String>;
+  displayName: () => Promise<String>;
   password: () => Promise<String>;
   profilePicture: () => Promise<String>;
   banner: () => Promise<String>;
@@ -8472,6 +8552,7 @@ export interface UserPreviousValuesSubscription
   gender: () => Promise<AsyncIterator<Gender>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  displayName: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   profilePicture: () => Promise<AsyncIterator<String>>;
   banner: () => Promise<AsyncIterator<String>>;
@@ -9231,6 +9312,7 @@ export interface UserIndex {
   updatedAt: DateTimeOutput;
   email: String;
   username: String;
+  displayName?: String;
   name: String;
 }
 
@@ -9240,6 +9322,7 @@ export interface UserIndexPromise extends Promise<UserIndex>, Fragmentable {
   updatedAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   username: () => Promise<String>;
+  displayName: () => Promise<String>;
   name: () => Promise<String>;
   user: <T = UserPromise>() => T;
 }
@@ -9252,6 +9335,7 @@ export interface UserIndexSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   email: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  displayName: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   user: <T = UserSubscription>() => T;
 }

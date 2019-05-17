@@ -5,6 +5,7 @@ type User {
   gender: Gender! @default(value: "MALE")
   email: String! @unique
   username: String! @unique
+  displayName: String
   password: String!
   profilePicture: String
   banner: String
@@ -49,6 +50,7 @@ type UserIndex {
   updatedAt: DateTime!
   email: String! @unique
   username: String! @unique
+  displayName: String
   name: String!
   user: User! @relation(name: "UserIndex", onDelete: SET_NULL)
 }
