@@ -12,6 +12,7 @@ const user = {
     ctx
   ) {
     const userId = getUserId(ctx)
+    const user = await ctx.prisma.user({ id: userId })
     const updated = await ctx.prisma.updateUser({
       where: { id: userId },
       data: {
@@ -38,7 +39,14 @@ const user = {
         ...rest,
       },
     })
-    return updated ? { updated: true } : { updated: false }
+    const updatedIndex = await ctx.prisma.updateUserIndex({
+      where: { username: user.username.toLowerCase() },
+      data: {
+        name: rest.name.toLowerCase(),
+        displayName: rest.displayName.toLowerCase(),
+      },
+    })
+    return updated && updatedIndex ? { updated: true } : { updated: false }
   },
 }
 
