@@ -99,7 +99,7 @@ export default function SmallSelectionOptions({
       </ExitContainer>
       <Top>
         <Price>
-          {`$${price}`} <Per>per slot</Per>
+          {`$${parseFloat(price).toFixed(2)}`} <Per>per slot</Per>
         </Price>
         {/* <RatingContainer>
           <StarRatings
