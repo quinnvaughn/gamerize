@@ -53,6 +53,7 @@ const GET_GAMER_REQUESTS = gql`
     getGamerRequests {
       id
       user {
+        id
         username
       }
       socialMedia {
