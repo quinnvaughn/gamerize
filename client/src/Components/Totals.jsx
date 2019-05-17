@@ -181,7 +181,7 @@ function Totals(props) {
                     slots === 1 ? 'slot' : 'slots'
                   }`}
                 </Items>
-                <Cost>{`$${total}`}</Cost>
+                <Cost>{`$${parseFloat(total).toFixed(2)}`}</Cost>
               </NumberSlots>
               <Discounts>
                 <DiscountsTitle>Processing Fee</DiscountsTitle>
@@ -193,7 +193,9 @@ function Totals(props) {
               </Discounts>
               <Total>
                 <TotalTitle>Total</TotalTitle>{' '}
-                <TotalCost>{`$${totalMinusDiscounts}`}</TotalCost>
+                <TotalCost>{`$${parseFloat(totalMinusDiscounts).toFixed(
+                  2
+                )}`}</TotalCost>
               </Total>
             </TotalsContainer>
           ) : isMe ? (

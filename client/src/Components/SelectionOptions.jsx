@@ -84,7 +84,7 @@ export default function SelectionOptions({
     <Container>
       <Top>
         <Price>
-          {`$${price}`} <Per>per slot</Per>
+          {`$${parseFloat(price).toFixed(2)}`} <Per>per slot</Per>
         </Price>
         {/* <RatingContainer>
           <StarRatings
