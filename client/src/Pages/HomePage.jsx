@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import { useQuery } from 'react-apollo-hooks'
 import Media from 'react-media'
 
 //local imports
@@ -13,7 +14,7 @@ import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
 import TopSessionsRow from '../Components/TopSessionsRow'
-import useQueryNotBugged from '../Hooks/useQueryNotBugged'
+import { Mixpanel } from '../Components/Mixpanel'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -97,29 +98,17 @@ const GET_GAMES = gql`
 export default function HomePage(props) {
   useTitle('Play games with your favorite people - Gamerize')
   const [first, setFirst] = useState(4)
-  const { data, loading } = useQueryNotBugged(GET_GAMES, {
+  const { data, loading } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
-  const { data: secondData, loading: secondLoading } = useQueryNotBugged(
-    GET_GAMERS,
-    { variables: { first } }
-  )
-  const { data: thirdData, loading: thirdLoading } = useQueryNotBugged(
-    GET_SESSIONS,
-    {
-      variables: { first },
-    }
-  )
-  const wait =
-    loading ||
-    secondLoading ||
-    thirdLoading ||
-    !data ||
-    !data.allGames ||
-    !secondData ||
-    !secondData.getGamers ||
-    !thirdData ||
-    !thirdData.allSessions
+  const { data: secondData, loading: secondLoading } = useQuery(GET_GAMERS, {
+    variables: { first },
+  })
+  const { data: thirdData, loading: thirdLoading } = useQuery(GET_SESSIONS, {
+    variables: { first },
+  })
+  Mixpanel.track('Consumer looked at website.')
+  const wait = loading || secondLoading || thirdLoading
   return wait ? (
     <Loading />
   ) : (
