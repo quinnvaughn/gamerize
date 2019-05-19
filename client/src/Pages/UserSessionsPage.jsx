@@ -266,7 +266,7 @@ const INVITES = 'INVITES'
 export default function UserSessionsPage(props) {
   const [tab, setTab] = useState(SESSIONS)
   const { data, loading, refetch } = useQuery(MY_SESSIONS, {
-    pollInterval: 5000,
+    pollInterval: 500,
   })
   const deleteOldInvites = useMutation(DELETE_OLD_INVITES)
   useEffect(() => {
