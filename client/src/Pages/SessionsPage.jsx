@@ -47,6 +47,7 @@ const GET_SESSIONS = gql`
         username
       }
       game {
+        id
         name
       }
     }
