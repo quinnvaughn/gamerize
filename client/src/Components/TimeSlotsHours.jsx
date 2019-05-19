@@ -162,11 +162,13 @@ const GAMER_SESSIONS_SPECIFIC_DAY = gql`
         id
         system
         game {
+          id
           launcher
         }
       }
       players {
         player {
+          id
           username
         }
       }
