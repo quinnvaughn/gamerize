@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
@@ -117,9 +117,9 @@ export default function LoginPage(props) {
             setError(error)
             setSubmitting(false)
           } else {
-          await localStorage.setItem('TOKEN', token)
-          setSubmitting(false)
-          props.history.push('/')
+            await localStorage.setItem('TOKEN', token)
+            setSubmitting(false)
+            props.history.push('/')
           }
         }}
       >
@@ -132,7 +132,7 @@ export default function LoginPage(props) {
           handleSubmit,
           isSubmitting,
         }) => (
-          <LoginForm onSubmit={handleSubmit}>
+          <LoginForm onSubmit={handleSubmit} method="post">
             <Title>Login to Gamerize</Title>
             <Item
               type="email"
@@ -143,7 +143,9 @@ export default function LoginPage(props) {
               value={values.email}
               required
             />
-            {touched.email && errors.email && <SmallErrorMessage>{errors.email}</SmallErrorMessage>}
+            {touched.email && errors.email && (
+              <SmallErrorMessage>{errors.email}</SmallErrorMessage>
+            )}
             <Item
               type="password"
               placeholder="Password"
@@ -153,7 +155,9 @@ export default function LoginPage(props) {
               value={values.password}
               required
             />
-            {touched.password && errors.password && <SmallErrorMessage>{errors.password}</SmallErrorMessage>}
+            {touched.password && errors.password && (
+              <SmallErrorMessage>{errors.password}</SmallErrorMessage>
+            )}
             {error && <ErrorMessage>{error}</ErrorMessage>}
             <LoginButton type="submit">Login</LoginButton>
             <StyledLink to="/sign-up">Sign up</StyledLink>
