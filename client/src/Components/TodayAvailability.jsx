@@ -86,7 +86,7 @@ const Session = styled.div`
   cursor: pointer;
   font-weight: 600;
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   display: flex;
   border-radius: 0.4rem;
   align-items: center;
