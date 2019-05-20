@@ -6,6 +6,7 @@ import dateFns from 'date-fns'
 // local imports
 import SessionsContainer from '../Containers/SessionsContainer'
 import { singleOrPlural } from '../utils/Strings'
+import { Mixpanel } from './Mixpanel'
 
 const Container = styled.div`
   width: 100%;
@@ -188,6 +189,9 @@ export default function TodayAvailability(props) {
                     full={session.players.length === session.slots}
                     startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
+                      Mixpanel.track(
+                        'Selected session straight from today availability.'
+                      )
                       container.setSelectedSession(session)
                       container.setShowModal(true)
                     }}

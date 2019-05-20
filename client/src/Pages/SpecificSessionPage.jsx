@@ -27,6 +27,7 @@ import {
 } from '../utils/Strings'
 import { formatGamers, formatSystem } from '../utils/Strings'
 import Loading from '../Components/Loading'
+import { Mixpanel } from '../Components/Mixpanel'
 
 //data
 
@@ -368,6 +369,7 @@ export default function SpecificSessionPage(props) {
     loading: thirdLoading,
     refetch: meRefetch,
   } = useQuery(GET_ME)
+  Mixpanel.track('Clicked on a session')
   return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : (

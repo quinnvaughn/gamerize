@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import dateFns from 'date-fns'
+import gql from 'graphql-tag'
 
-import DefaultSessionPicture from '../default-game.gif'
 import { noSpaces } from '../utils/Strings'
 import { useMutation } from 'react-apollo-hooks'
-import gql from 'graphql-tag'
+import { Mixpanel } from './Mixpanel'
 
 const Container = styled.div`
   display: flex;
@@ -236,6 +236,7 @@ export default function MyTimeSlot({
                   const input = { bookingId }
                   const { data } = await cancelBooking({ variables: { input } })
                   if (data.cancelBooking.cancelled) {
+                    Mixpanel.track('Cancelled booking')
                     refetch()
                   }
                 } else {

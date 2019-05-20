@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik } from 'formik'
+import { Mixpanel } from '../Components/Mixpanel'
 
 const Container = styled.div`
   display: flex;
@@ -81,6 +82,9 @@ const SIGNUP = gql`
   mutation($input: SignupInput!) {
     signup(input: $input) {
       token
+      user {
+        id
+      }
       error
     }
   }
@@ -121,13 +125,15 @@ export default function SignUpPage(props) {
           setSubmitting(true)
           const {
             data: {
-              signup: { error, token },
+              signup: { error, token, user },
             },
           } = await signup({ variables: { input: values } })
           if (error) {
             setError(error)
             setSubmitting(false)
           } else {
+            Mixpanel.alias(user.id)
+            Mixpanel.track('Successful signup')
             await localStorage.setItem('TOKEN', token)
             setSubmitting(false)
             await props.history.push('/user-onboarding/info')
