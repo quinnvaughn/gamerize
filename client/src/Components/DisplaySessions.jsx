@@ -29,6 +29,7 @@ export default function DisplaySessions(props) {
             game={session.game.name}
             id={session.id}
             title={session.title}
+            slotsAvailable={session.slotsAvailable}
             name={session.creator.displayName}
             system={session.system}
             price={session.price}

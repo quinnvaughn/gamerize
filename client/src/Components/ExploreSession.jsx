@@ -118,6 +118,12 @@ const Bottom = styled.div`
   cursor: pointer;
 `
 
+const SlotsAvailable = styled.div`
+  color: #db1422;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
 export default function ExploreSession(props) {
   return (
     <Container>
@@ -136,6 +142,11 @@ export default function ExploreSession(props) {
         <Price>{`Starting at $${parseFloat(props.price).toFixed(
           2
         )} a game`}</Price>
+        <Bottom>
+          {props.slotsAvailable && (
+            <SlotsAvailable>Slots Available</SlotsAvailable>
+          )}
+        </Bottom>
         {/* <Bottom>
           <Reviews>{props.reviews}</Reviews>
           <StarRatings
