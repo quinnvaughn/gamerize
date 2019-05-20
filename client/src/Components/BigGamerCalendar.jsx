@@ -136,8 +136,8 @@ const Row = styled.div`
 `
 
 const THAT_DAY_SESSIONS = gql`
-  query($day: DateTime, $today: Boolean) {
-    thatDaySessions(day: $day, today: $today) {
+  query($day: DateTime, $today: Boolean, $timeZone: String!) {
+    thatDaySessions(day: $day, today: $today, timeZone: $timeZone) {
       id
       startTime
       endTime
@@ -167,6 +167,7 @@ function BigGamerCalendar(props) {
     skip: !selectedDay,
     variables: {
       day: selectedDay,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     pollInterval: 1000,
   })
@@ -236,9 +237,7 @@ function BigGamerCalendar(props) {
   }
 
   const onDateClick = inputDay => {
-    const dateFormat = 'MM/DD/YYYY'
-
-    const day = dateFns.format(inputDay, dateFormat)
+    const day = inputDay
     setSelectedDay(day)
   }
 

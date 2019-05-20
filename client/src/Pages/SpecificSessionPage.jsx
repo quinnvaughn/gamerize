@@ -291,8 +291,8 @@ const GET_SPECIFIC_SESSION = gql`
 `
 
 const GET_SLOTS_TODAY = gql`
-  query($sessionId: String!) {
-    specificSessionSlotsToday(sessionId: $sessionId) {
+  query($sessionId: String!, $timeZone: String!) {
+    specificSessionSlotsToday(sessionId: $sessionId, timeZone: $timeZone) {
       startTime
       length
       slots
@@ -348,7 +348,10 @@ const GET_ME = gql`
 
 export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
-    variables: { sessionId: props.match.params.id },
+    variables: {
+      sessionId: props.match.params.id,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    },
     pollInterval: 500,
   })
   const { data: secondData, loading: secondLoading, refetch } = useQuery(

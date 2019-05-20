@@ -123,8 +123,8 @@ const MY_GAMING_SESSIONS = gql`
 `
 
 const SLOTS_TODAY = gql`
-  query($today: Boolean) {
-    thatDaySessions(today: $today) {
+  query($today: Boolean, $timeZone: String!) {
+    thatDaySessions(today: $today, timeZone: $timeZone) {
       id
       startTime
       endTime
@@ -205,7 +205,10 @@ export default function GamerDashboardCalendar(props) {
     loading: thirdLoading,
     refetch: thirdRefetch,
   } = useQuery(SLOTS_TODAY, {
-    variables: { today: true },
+    variables: {
+      today: true,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    },
     pollInterval: 1000,
     skip: dayOrMonth === 'MONTH',
   })

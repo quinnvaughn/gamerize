@@ -60,8 +60,8 @@ const NoUpcoming = styled.div`
 `
 
 const NEXT_SESSION = gql`
-  {
-    nextTimeSlot {
+  query($timeZone: String!) {
+    nextTimeSlot(timeZone: $timeZone) {
       slots
       startTime
       gamingSession {
@@ -93,7 +93,10 @@ const NEXT_SESSION = gql`
 `
 
 export default function NextSession(props) {
-  const { data, loading } = useQuery(NEXT_SESSION, { pollInterval: 5000 })
+  const { data, loading } = useQuery(NEXT_SESSION, {
+    variables: { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+    pollInterval: 5000,
+  })
   const renderUsernames = () => {
     let usernames = new Set()
     let counter = 0
