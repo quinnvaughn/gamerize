@@ -12,6 +12,7 @@ import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { calcFee } from '../utils/Fee'
 import FirstTimeCheckout from './FirstTimeCheckout'
+import { Mixpanel } from './Mixpanel'
 
 const Container = styled.div`
   width: 100%;
@@ -245,6 +246,7 @@ function Totals(props) {
                       variables: { input },
                     })
                     if (data.bookTimeSlots.booked) {
+                      Mixpanel.track('Booked a timeslot/s.')
                       setLoading(false)
                       setBooked(true)
                       container.clearSessions()

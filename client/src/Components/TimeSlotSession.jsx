@@ -14,6 +14,7 @@ import { noUnderscores } from '../utils/Strings'
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { formatSystem } from '../utils/Strings'
+import { Mixpanel } from './Mixpanel'
 
 const Container = styled.div`
   display: block;
@@ -249,6 +250,7 @@ function TimeSlotSession(props) {
       ? !props.me.gamertags[mapSystem(system)][mapLauncher(game.launcher)]
       : !props.me.gamertags[mapSystem(system)]
     : true
+  Mixpanel.track('Selected a specific timeslot')
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
     const endTime = 'h:mm a'
@@ -303,7 +305,10 @@ function TimeSlotSession(props) {
         <AddSessionsContainer>
           <AddSessions
             disabled={disabled}
-            onClick={() => session.addSessions()}
+            onClick={() => {
+              Mixpanel.track('Added session/s')
+              session.addSessions()
+            }}
           >
             Add Session
           </AddSessions>
