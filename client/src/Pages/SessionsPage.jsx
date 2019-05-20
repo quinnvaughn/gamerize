@@ -38,6 +38,7 @@ const GET_SESSIONS = gql`
     allSessions {
       id
       system
+      slotsAvailable
       price
       title
       creator {
