@@ -313,6 +313,7 @@ type Booking {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players(where: BookedPlayerWhereInput, orderBy: BookedPlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookedPlayer!]
@@ -331,6 +332,7 @@ type BookingConnection {
 }
 
 input BookingCreateInput {
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players: BookedPlayerCreateManyWithoutBookingInput
@@ -363,6 +365,7 @@ input BookingCreateOneWithoutPlayersInput {
 }
 
 input BookingCreateWithoutInvitesInput {
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players: BookedPlayerCreateManyWithoutBookingInput
@@ -374,6 +377,7 @@ input BookingCreateWithoutInvitesInput {
 }
 
 input BookingCreateWithoutNotificationsInput {
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players: BookedPlayerCreateManyWithoutBookingInput
@@ -385,6 +389,7 @@ input BookingCreateWithoutNotificationsInput {
 }
 
 input BookingCreateWithoutPlayersInput {
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   total: Float!
@@ -396,6 +401,7 @@ input BookingCreateWithoutPlayersInput {
 }
 
 input BookingCreateWithoutTimeslotInput {
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players: BookedPlayerCreateManyWithoutBookingInput
@@ -800,6 +806,8 @@ enum BookingOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  charge_ASC
+  charge_DESC
   numSlots_ASC
   numSlots_DESC
   numPlayers_ASC
@@ -814,6 +822,7 @@ type BookingPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   total: Float!
@@ -851,6 +860,20 @@ input BookingScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  charge: String
+  charge_not: String
+  charge_in: [String!]
+  charge_not_in: [String!]
+  charge_lt: String
+  charge_lte: String
+  charge_gt: String
+  charge_gte: String
+  charge_contains: String
+  charge_not_contains: String
+  charge_starts_with: String
+  charge_not_starts_with: String
+  charge_ends_with: String
+  charge_not_ends_with: String
   numSlots: Int
   numSlots_not: Int
   numSlots_in: [Int!]
@@ -901,6 +924,7 @@ input BookingSubscriptionWhereInput {
 }
 
 input BookingUpdateInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   players: BookedPlayerUpdateManyWithoutBookingInput
@@ -913,6 +937,7 @@ input BookingUpdateInput {
 }
 
 input BookingUpdateManyDataInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   total: Float
@@ -920,6 +945,7 @@ input BookingUpdateManyDataInput {
 }
 
 input BookingUpdateManyMutationInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   total: Float
@@ -967,6 +993,7 @@ input BookingUpdateOneWithoutNotificationsInput {
 }
 
 input BookingUpdateWithoutInvitesDataInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   players: BookedPlayerUpdateManyWithoutBookingInput
@@ -978,6 +1005,7 @@ input BookingUpdateWithoutInvitesDataInput {
 }
 
 input BookingUpdateWithoutNotificationsDataInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   players: BookedPlayerUpdateManyWithoutBookingInput
@@ -989,6 +1017,7 @@ input BookingUpdateWithoutNotificationsDataInput {
 }
 
 input BookingUpdateWithoutPlayersDataInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   total: Float
@@ -1000,6 +1029,7 @@ input BookingUpdateWithoutPlayersDataInput {
 }
 
 input BookingUpdateWithoutTimeslotDataInput {
+  charge: String
   numSlots: Int
   numPlayers: Int
   players: BookedPlayerUpdateManyWithoutBookingInput
@@ -1067,6 +1097,20 @@ input BookingWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  charge: String
+  charge_not: String
+  charge_in: [String!]
+  charge_not_in: [String!]
+  charge_lt: String
+  charge_lte: String
+  charge_gt: String
+  charge_gte: String
+  charge_contains: String
+  charge_not_contains: String
+  charge_starts_with: String
+  charge_not_starts_with: String
+  charge_ends_with: String
+  charge_not_ends_with: String
   numSlots: Int
   numSlots_not: Int
   numSlots_in: [Int!]
@@ -5729,7 +5773,7 @@ type User {
   gender: Gender!
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5762,7 +5806,7 @@ input UserCreateInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5843,7 +5887,7 @@ input UserCreateWithoutGamertagsInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5869,7 +5913,7 @@ input UserCreateWithoutIndexInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5895,7 +5939,7 @@ input UserCreateWithoutInvitesInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5921,7 +5965,7 @@ input UserCreateWithoutInvitesReceivedInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5947,7 +5991,7 @@ input UserCreateWithoutReviewsInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5973,7 +6017,7 @@ input UserCreateWithoutSavedCardsInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -5999,7 +6043,7 @@ input UserCreateWithoutSessionsInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -6025,7 +6069,7 @@ input UserCreateWithoutTimeSlotsInput {
   gender: Gender
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String
@@ -6316,7 +6360,7 @@ type UserPreviousValues {
   gender: Gender!
   email: String!
   username: String!
-  displayName: String
+  displayName: String!
   password: String!
   profilePicture: String
   banner: String

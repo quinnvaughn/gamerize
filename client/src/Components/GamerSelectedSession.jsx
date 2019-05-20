@@ -167,7 +167,10 @@ export default function GamerSelectedSession(props) {
                 ) === -1
               }
               onClick={async () => {
-                const input = { sessionId: state.selectedSession.id }
+                const input = {
+                  sessionId: state.selectedSession.id,
+                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                }
                 await cancelTimeSlot({ variables: { input } })
                 dispatch({ type: 'setSelectedSession', payload: null })
                 props.refetch()
