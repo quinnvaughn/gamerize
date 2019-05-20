@@ -14,13 +14,20 @@ type Query {
   totalSessions: Int!
   getSpecificSession(sessionId: String!): GamingSession!
   mySlotsToday: [GamingTimeSlot!]!
-  specificSessionSlotsToday(sessionId: String!): [GamingTimeSlot!]!
-  thatDaySessions(day: DateTime, today: Boolean): [GamingTimeSlot!]!
+  specificSessionSlotsToday(
+    sessionId: String!
+    timeZone: String!
+  ): [GamingTimeSlot!]!
+  thatDaySessions(
+    day: DateTime
+    today: Boolean
+    timeZone: String!
+  ): [GamingTimeSlot!]!
   myUpcomingBookings: [Booking!]!
   myPastBookings: [Booking!]!
   myGamingSessions: [GamingSession!]!
   myRetiredGamingSessions: [GamingSession!]!
-  nextTimeSlot: GamingTimeSlot
+  nextTimeSlot(timeZone: String!): GamingTimeSlot
   myInvites: [BookingInvite!]!
   myInvitesReceived: [BookingInvite!]!
   myFriendRequests: [FriendRequest!]!
@@ -38,7 +45,11 @@ type Query {
   numGamerNotifications: Int!
   getGamerRequests: [GamerRequest!]!
   getGamers(first: Int): [User!]!
-  gamerSessionsSpecificDay(day: DateTime!, gamer: String!): [GamingTimeSlot!]!
+  gamerSessionsSpecificDay(
+    day: DateTime!
+    gamer: String!
+    timeZone: String!
+  ): [GamingTimeSlot!]!
   searchGamerize(search: String!): [SearchResult!]!
   moreSessions(search: String!, skip: Int): [GamingSession!]!
   moreGames(search: String!, skip: Int): [Game!]!
@@ -421,6 +432,7 @@ input SocialMediaInput {
 input CreateBulkGamingTimeSlotsInput {
   startTime: DateTime!
   endTime: DateTime!
+  timeZone: String!
   gamingSessionId: String!
 }
 
@@ -440,6 +452,7 @@ input CreateGamerRequestInput {
 
 input CreateGamingTimeSlotInput {
   startTime: DateTime!
+  timeZone: String!
   gamingSessionId: String!
 }
 

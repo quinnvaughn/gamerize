@@ -275,7 +275,11 @@ export default function GamerSessionCardBack({
             <Add
               // disabled={state.loading}
               onClick={async () => {
-                const input = { startTime, gamingSessionId: session.id }
+                const input = {
+                  startTime,
+                  gamingSessionId: session.id,
+                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                }
                 const { data } = await createGamingSlot({
                   variables: { input },
                 })
@@ -333,6 +337,7 @@ export default function GamerSessionCardBack({
                   startTime,
                   endTime,
                   gamingSessionId: session.id,
+                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 }
                 const { data } = await createBulkGamingSlots({
                   variables: { input },

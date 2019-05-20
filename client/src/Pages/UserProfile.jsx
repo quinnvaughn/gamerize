@@ -290,8 +290,8 @@ const GET_ME = gql`
 `
 
 const GET_GAMER_AVAILABILITY = gql`
-  query($day: DateTime!, $gamer: String!) {
-    gamerSessionsSpecificDay(day: $day, gamer: $gamer) {
+  query($day: DateTime!, $gamer: String!, $timeZone: String!) {
+    gamerSessionsSpecificDay(day: $day, gamer: $gamer, timeZone: $timeZone) {
       id
       startTime
       endTime
@@ -325,7 +325,11 @@ export default function UserProfile(props) {
   const { data: thirdData, loading: thirdLoading } = useQuery(
     GET_GAMER_AVAILABILITY,
     {
-      variables: { gamer: props.match.params.user, day },
+      variables: {
+        gamer: props.match.params.user,
+        day,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
     }
   )
   useTitle(`User Profile - Gamerize`)

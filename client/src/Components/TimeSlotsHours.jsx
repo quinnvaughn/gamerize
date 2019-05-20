@@ -149,8 +149,8 @@ const ExitContainer = styled.div`
 `
 
 const GAMER_SESSIONS_SPECIFIC_DAY = gql`
-  query($day: DateTime!, $gamer: String!) {
-    gamerSessionsSpecificDay(day: $day, gamer: $gamer) {
+  query($day: DateTime!, $gamer: String!, $timeZone: String!) {
+    gamerSessionsSpecificDay(day: $day, gamer: $gamer, timeZone: $timeZone) {
       startTime
       endTime
       length
@@ -181,6 +181,7 @@ function TimeSlotHours(props) {
     variables: {
       day: props.day,
       gamer: props.match.params.user,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
   useEffect(() => {
