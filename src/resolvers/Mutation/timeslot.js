@@ -2,6 +2,8 @@ const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
 const _ = require('lodash')
 const { stripe } = require('../../stripe')
+const { DateTime } = require('luxon')
+
 const timeslot = {
   async cancelExtraSlot(parent, { input }, ctx) {
     // Disconnect an invite. Delete an invite.
@@ -133,7 +135,9 @@ const timeslot = {
         created: true,
         individualGamingSession,
         successMsg: `Successfully added session from ${dateFns.format(
-          individualGamingSession.startTime,
+          DateTime.fromISO(individualGamingSession.startTime)
+            .setZone(input.timeZone)
+            .toISO(),
           dateFormat
         )}-${dateFns.format(endTime, dateFormat)}`,
       }
@@ -229,9 +233,16 @@ const timeslot = {
         successMsg = [
           ...successMsg,
           `Session added from ${dateFns.format(
-            sessions[session].startTime,
+            DateTime.fromISO(sessions[session].startTime)
+              .setZone(input.timeZone)
+              .toISO(),
             dateFormat
-          )}-${dateFns.format(sessions[session].endTime, dateFormat)}`,
+          )}-${dateFns.format(
+            DateTime.fromISO(sessions[session].endTime)
+              .setZone(input.timeZone)
+              .toISO(),
+            dateFormat
+          )}`,
         ]
       }
       return { created: true, overlaps, sessions, successMsg }
