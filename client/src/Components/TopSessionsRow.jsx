@@ -68,6 +68,7 @@ const map = (sessions, first) => {
           price={session.price}
           key={session.id}
           title={session.title}
+          slotsAvailable={session.slotsAvailable}
           profilePicture={session.creator.profilePicture}
         />
       )

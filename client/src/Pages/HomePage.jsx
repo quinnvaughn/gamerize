@@ -51,6 +51,7 @@ const GET_SESSIONS = gql`
       system
       price
       title
+      slotsAvailable
       creator {
         id
         profilePicture
