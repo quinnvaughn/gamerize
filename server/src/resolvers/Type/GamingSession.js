@@ -12,6 +12,17 @@ const GamingSession = {
     const reviews = await prisma.gamingSession({ id: parent.id }).reviews()
     return reviews.length
   },
+  slotsAvailable: async (parent, _, { prisma }) => {
+    const currentTime = moment()
+      .utc()
+      .format('YYYY-MM-DDTHH:mm:ss')
+    const sessions = await prisma.gamingSession({ id: parent.id }).timeslots({
+      where: {
+        startTime_gte: currentTime,
+      },
+    })
+    return sessions.length > 0 ? true : false
+  },
   slotsLeftToday: async (parent, _, { prisma }) => {
     const currentTime = moment()
       .utc()

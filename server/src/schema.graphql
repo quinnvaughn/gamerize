@@ -589,6 +589,7 @@ type GamingSession {
   numReviews: Int!
   reviewRating: Float!
   slotsLeftToday: Int!
+  slotsAvailable: Boolean!
 }
 
 type GamingTimeSlot {
