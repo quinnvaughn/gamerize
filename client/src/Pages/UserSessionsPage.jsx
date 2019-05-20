@@ -129,7 +129,7 @@ const SetButton = styled.button`
     props.active ? '2px solid #db1422' : '2px solid transparent'};
 `
 
-const MY_SESSIONS = gql`
+const ME = gql`
   {
     me {
       id
@@ -147,22 +147,33 @@ const MY_SESSIONS = gql`
         }
       }
     }
+  }
+`
+
+const MY_INVITES_RECEIVED = gql`
+  {
     myInvitesReceived {
       id
       from {
+        id
         username
         profilePicture
       }
       booking {
+        id
         timeslot {
+          id
           gamingSession {
+            id
             system
             game {
+              id
               name
               launcher
             }
           }
           gamers {
+            id
             username
             name
           }
@@ -170,12 +181,20 @@ const MY_SESSIONS = gql`
         }
       }
     }
+  }
+`
+const MY_INVITES = gql`
+  {
     myInvites {
       id
       booking {
+        id
         timeslot {
+          id
           gamingSession {
+            id
             game {
+              id
               name
             }
             creator {
@@ -185,6 +204,7 @@ const MY_SESSIONS = gql`
             }
           }
           gamers {
+            id
             username
             name
           }
@@ -192,6 +212,11 @@ const MY_SESSIONS = gql`
         }
       }
     }
+  }
+`
+
+const MY_PAST_BOOKINGS = gql`
+  {
     myPastBookings {
       id
       timeslot {
@@ -199,15 +224,18 @@ const MY_SESSIONS = gql`
         id
         players {
           player {
+            id
             username
           }
         }
         gamingSession {
           id
           gamers {
+            id
             name
           }
           game {
+            id
             name
           }
           creator {
@@ -219,9 +247,15 @@ const MY_SESSIONS = gql`
         }
       }
     }
+  }
+`
+
+const MY_UPCOMING_BOOKINGS = gql`
+  {
     myUpcomingBookings {
       id
       bookee {
+        id
         username
       }
       timeslot {
@@ -229,15 +263,18 @@ const MY_SESSIONS = gql`
         startTime
         players {
           player {
+            id
             username
           }
         }
         gamingSession {
           id
           gamers {
+            id
             name
           }
           game {
+            id
             name
           }
           creator {
@@ -265,7 +302,34 @@ const INVITES = 'INVITES'
 
 export default function UserSessionsPage(props) {
   const [tab, setTab] = useState(SESSIONS)
-  const { data, loading, refetch } = useQuery(MY_SESSIONS, {
+  const { data, loading, refetch } = useQuery(ME, {
+    pollInterval: 500,
+  })
+  const {
+    data: secondData,
+    loading: secondLoading,
+    refetch: secondRefetch,
+  } = useQuery(MY_INVITES_RECEIVED, {
+    pollInterval: 500,
+  })
+  const {
+    data: thirdData,
+    loading: thirdLoading,
+    refetch: thirdRefetch,
+  } = useQuery(MY_INVITES, {
+    pollInterval: 500,
+  })
+  const { data: fourthData, loading: fourthLoading } = useQuery(
+    MY_PAST_BOOKINGS,
+    {
+      pollInterval: 500,
+    }
+  )
+  const {
+    data: fifthData,
+    loading: fifthLoading,
+    refetch: fifthRefetch,
+  } = useQuery(MY_UPCOMING_BOOKINGS, {
     pollInterval: 500,
   })
   const deleteOldInvites = useMutation(DELETE_OLD_INVITES)
@@ -276,9 +340,11 @@ export default function UserSessionsPage(props) {
     oldInvites()
     refetch()
   }, {})
-  let upcoming = !loading && data.myUpcomingBookings
-  let previous = !loading && data.myPastBookings
-  return loading ? (
+  let upcoming = !loading && fifthData.myUpcomingBookings
+  let previous = !loading && fourthData.myPastBookings
+  const wait =
+    loading || secondLoading || thirdLoading || fourthLoading || fifthLoading
+  return wait ? (
     <Loading />
   ) : (
     <PageContainer>
@@ -296,11 +362,11 @@ export default function UserSessionsPage(props) {
               <InvitesTitle>Invites received</InvitesTitle>
               <NegativeMargin>
                 <InvitesContent>
-                  {_.map(data.myInvitesReceived, invite => (
+                  {_.map(secondData.myInvitesReceived, invite => (
                     <MyInviteReceived
                       from={invite.from.username}
                       profilePicture={invite.from.profilePicture}
-                      refetch={refetch}
+                      refetch={secondRefetch}
                       key={invite.id}
                       timeslot={invite.booking.timeslot}
                       inviteId={invite.id}
@@ -314,9 +380,9 @@ export default function UserSessionsPage(props) {
               <InvitesTitle>My invites</InvitesTitle>
               <NegativeMargin>
                 <InvitesContent>
-                  {_.map(data.myInvites, invite => (
+                  {_.map(thirdData.myInvites, invite => (
                     <MyInvite
-                      refetch={refetch}
+                      refetch={thirdRefetch}
                       key={invite.id}
                       timeslot={invite.booking.timeslot}
                       me={data.me.username}
@@ -340,7 +406,7 @@ export default function UserSessionsPage(props) {
                       bookingId={id}
                       timeslot={timeslot}
                       me={data.me}
-                      refetch={refetch}
+                      refetch={fifthRefetch}
                       bookee={bookee}
                     />
                   ))}

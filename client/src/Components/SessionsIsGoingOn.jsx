@@ -129,7 +129,7 @@ export default function SessionsIsGoingOn({ currentSession, refetch }) {
           </Time>
           <AddButton
             onClick={async () => {
-              const input = { minutes: 1, sessionId: currentSession.id }
+              const input = { minutes: 1, sessionId: currentSession.id, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}
               await addMinutesToSession({ variables: { input } })
               refetch()
             }}
@@ -138,7 +138,7 @@ export default function SessionsIsGoingOn({ currentSession, refetch }) {
           </AddButton>
           <AddButton
             onClick={async () => {
-              const input = { minutes: 5, sessionId: currentSession.id }
+              const input = { minutes: 5, sessionId: currentSession.id, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }
               await addMinutesToSession({ variables: { input } })
               refetch()
             }}
@@ -147,7 +147,7 @@ export default function SessionsIsGoingOn({ currentSession, refetch }) {
           </AddButton>
           <AddButton
             onClick={async () => {
-              const input = { minutes: 10, sessionId: currentSession.id }
+              const input = { minutes: 10, sessionId: currentSession.id, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }
               await addMinutesToSession({ variables: { input } })
               refetch()
             }}

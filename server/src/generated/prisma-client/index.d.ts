@@ -1145,6 +1145,8 @@ export type BookingOrderByInput =
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
+  | "charge_ASC"
+  | "charge_DESC"
   | "numSlots_ASC"
   | "numSlots_DESC"
   | "numPlayers_ASC"
@@ -2490,7 +2492,7 @@ export interface UserCreateWithoutIndexInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -2658,6 +2660,20 @@ export interface BookingWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  charge?: String;
+  charge_not?: String;
+  charge_in?: String[] | String;
+  charge_not_in?: String[] | String;
+  charge_lt?: String;
+  charge_lte?: String;
+  charge_gt?: String;
+  charge_gte?: String;
+  charge_contains?: String;
+  charge_not_contains?: String;
+  charge_starts_with?: String;
+  charge_not_starts_with?: String;
+  charge_ends_with?: String;
+  charge_not_ends_with?: String;
   numSlots?: Int;
   numSlots_not?: Int;
   numSlots_in?: Int[] | Int;
@@ -2726,6 +2742,7 @@ export type GamerRequestWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface BookingUpdateWithoutInvitesDataInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   players?: BookedPlayerUpdateManyWithoutBookingInput;
@@ -3328,7 +3345,7 @@ export interface UserCreateWithoutSavedCardsInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -3915,7 +3932,7 @@ export interface UserCreateInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4270,7 +4287,7 @@ export interface UserCreateWithoutReviewsInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4357,7 +4374,7 @@ export interface UserCreateWithoutSessionsInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4380,6 +4397,7 @@ export interface UserCreateWithoutSessionsInput {
 }
 
 export interface BookingUpdateWithoutTimeslotDataInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   players?: BookedPlayerUpdateManyWithoutBookingInput;
@@ -4420,6 +4438,7 @@ export interface BookingInviteUpdateManyWithoutBookingInput {
 }
 
 export interface BookingCreateWithoutInvitesInput {
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   players?: BookedPlayerCreateManyWithoutBookingInput;
@@ -4472,7 +4491,7 @@ export interface UserCreateWithoutTimeSlotsInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4563,7 +4582,7 @@ export interface UserCreateWithoutInvitesInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -4867,6 +4886,7 @@ export interface GamerTagUpdateWithoutUserDataInput {
 }
 
 export interface BookingCreateWithoutTimeslotInput {
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   players?: BookedPlayerCreateManyWithoutBookingInput;
@@ -4912,7 +4932,7 @@ export interface UserCreateWithoutInvitesReceivedInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -5086,6 +5106,7 @@ export interface UserIndexSubscriptionWhereInput {
 }
 
 export interface BookingUpdateWithoutNotificationsDataInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   players?: BookedPlayerUpdateManyWithoutBookingInput;
@@ -5328,6 +5349,7 @@ export interface BookedPlayerSubscriptionWhereInput {
 }
 
 export interface BookingUpdateWithoutPlayersDataInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   total?: Float;
@@ -6003,6 +6025,20 @@ export interface BookingScalarWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  charge?: String;
+  charge_not?: String;
+  charge_in?: String[] | String;
+  charge_not_in?: String[] | String;
+  charge_lt?: String;
+  charge_lte?: String;
+  charge_gt?: String;
+  charge_gte?: String;
+  charge_contains?: String;
+  charge_not_contains?: String;
+  charge_starts_with?: String;
+  charge_not_starts_with?: String;
+  charge_ends_with?: String;
+  charge_not_ends_with?: String;
   numSlots?: Int;
   numSlots_not?: Int;
   numSlots_in?: Int[] | Int;
@@ -6063,6 +6099,7 @@ export interface SessionReviewCreateManyWithoutSessionInput {
 }
 
 export interface BookingUpdateManyDataInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   total?: Float;
@@ -6346,6 +6383,7 @@ export interface BookedPlayerUpsertWithWhereUniqueWithoutBookingInput {
 }
 
 export interface BookingCreateWithoutPlayersInput {
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   total: Float;
@@ -6718,6 +6756,7 @@ export interface GamingTimeSlotUpdateManyMutationInput {
 }
 
 export interface BookingCreateInput {
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   players?: BookedPlayerCreateManyWithoutBookingInput;
@@ -6737,6 +6776,7 @@ export interface GamingSessionUpdateOneRequiredInput {
 }
 
 export interface BookingUpdateInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   players?: BookedPlayerUpdateManyWithoutBookingInput;
@@ -6766,6 +6806,7 @@ export interface GamingSessionCreateInput {
 }
 
 export interface BookingUpdateManyMutationInput {
+  charge?: String;
   numSlots?: Int;
   numPlayers?: Int;
   total?: Float;
@@ -6776,7 +6817,7 @@ export interface UserCreateWithoutGamertagsInput {
   gender?: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -7217,6 +7258,7 @@ export interface GameUpdateOneRequiredInput {
 }
 
 export interface BookingCreateWithoutNotificationsInput {
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   players?: BookedPlayerCreateManyWithoutBookingInput;
@@ -7913,7 +7955,7 @@ export interface User {
   gender: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -8259,6 +8301,7 @@ export interface BookingPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   total: Float;
@@ -8271,6 +8314,7 @@ export interface BookingPreviousValuesPromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  charge: () => Promise<String>;
   numSlots: () => Promise<Int>;
   numPlayers: () => Promise<Int>;
   total: () => Promise<Float>;
@@ -8283,6 +8327,7 @@ export interface BookingPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  charge: () => Promise<AsyncIterator<String>>;
   numSlots: () => Promise<AsyncIterator<Int>>;
   numPlayers: () => Promise<AsyncIterator<Int>>;
   total: () => Promise<AsyncIterator<Float>>;
@@ -8506,7 +8551,7 @@ export interface UserPreviousValues {
   gender: Gender;
   email: String;
   username: String;
-  displayName?: String;
+  displayName: String;
   password: String;
   profilePicture?: String;
   banner?: String;
@@ -10539,6 +10584,7 @@ export interface Booking {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  charge?: String;
   numSlots: Int;
   numPlayers: Int;
   total: Float;
@@ -10549,6 +10595,7 @@ export interface BookingPromise extends Promise<Booking>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  charge: () => Promise<String>;
   numSlots: () => Promise<Int>;
   numPlayers: () => Promise<Int>;
   players: <T = FragmentableArray<BookedPlayer>>(
@@ -10596,6 +10643,7 @@ export interface BookingSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  charge: () => Promise<AsyncIterator<String>>;
   numSlots: () => Promise<AsyncIterator<Int>>;
   numPlayers: () => Promise<AsyncIterator<Int>>;
   players: <T = Promise<AsyncIterator<BookedPlayerSubscription>>>(
