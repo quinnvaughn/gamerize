@@ -6,6 +6,7 @@ import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik } from 'formik'
 import { spawn } from 'child_process'
+import { Mixpanel } from '../Components/Mixpanel'
 
 const Container = styled.div`
   display: flex;
@@ -83,6 +84,11 @@ const LOGIN = gql`
     login(input: $input) {
       token
       error
+      user {
+        id
+        email
+        name
+      }
     }
   }
 `
@@ -110,13 +116,22 @@ export default function LoginPage(props) {
           setSubmitting(true)
           const {
             data: {
-              login: { error, token },
+              login: { error, token, user },
             },
           } = await login({ variables: { input: values } })
           if (error) {
             setError(error)
             setSubmitting(false)
+            Mixpanel.track('Unsuccessful login')
           } else {
+            Mixpanel.identify(user.id)
+            Mixpanel.people.set({
+              $email: user.email,
+              $first_name: user.name.split(' ')[0],
+              $last_name: user.name.split(' ')[1],
+              $last_login: new Date(),
+            })
+            Mixpanel.track('Successful login')
             await localStorage.setItem('TOKEN', token)
             setSubmitting(false)
             props.history.push('/')
