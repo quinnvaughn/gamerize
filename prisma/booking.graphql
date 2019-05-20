@@ -2,6 +2,7 @@ type Booking {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
+  charge: String
   numSlots: Int!
   numPlayers: Int!
   players: [BookedPlayer!]! @relation(name: "BookingPlayers", onDelete: CASCADE)

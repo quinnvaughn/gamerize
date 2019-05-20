@@ -399,6 +399,7 @@ type UpdateSessionPayload {
 
 input CancelTimeSlotInput {
   sessionId: String!
+  timeZone: String!
 }
 
 type CancelTimeSlotPayload {
@@ -408,6 +409,7 @@ type CancelTimeSlotPayload {
 input AddMinutesToTimeSlotInput {
   sessionId: String!
   minutes: Int!
+  timeZone: String!
 }
 
 type AddMinutesToGamingTimeSlotPayload {

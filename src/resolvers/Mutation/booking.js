@@ -1,5 +1,6 @@
 const { getUserId, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
+const { stripe } = require('../../stripe')
 const booking = {
   async cancelBooking(parent, { input }, ctx) {
     const userId = getUserId(ctx)
@@ -7,9 +8,17 @@ const booking = {
     if (bookee.id !== userId) {
       throw new AuthError()
     }
-    const cancelledBooking = await ctx.prisma.deleteBooking({
-      id: input.bookingId,
-    })
+    const { charge } = await ctx.prisma.booking({ id: input.bookingId })
+    const refund = charge
+      ? await stripe.refunds.create({
+          charge,
+        })
+      : true
+    const cancelledBooking = refund
+      ? await ctx.prisma.deleteBooking({
+          id: input.bookingId,
+        })
+      : false
     return cancelledBooking ? { cancelled: true } : { cancelled: false }
   },
   async cancelNotBookeeBooking(parent, { input }, ctx) {
