@@ -84,6 +84,8 @@ const SIGNUP = gql`
       token
       user {
         id
+        email
+        name
       }
       error
     }
@@ -134,6 +136,12 @@ export default function SignUpPage(props) {
           } else {
             Mixpanel.alias(user.id)
             Mixpanel.track('Successful signup')
+            Mixpanel.people.set({
+              $email: user.email,
+              $first_name: user.name.split(' ')[0],
+              $last_name: user.name.split(' ')[1],
+              $created: new Date(),
+            })
             await localStorage.setItem('TOKEN', token)
             setSubmitting(false)
             await props.history.push('/user-onboarding/info')
