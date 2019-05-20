@@ -350,14 +350,16 @@ export default function SpecificSessionPage(props) {
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: {
       sessionId: props.match.params.id,
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     pollInterval: 500,
   })
   const { data: secondData, loading: secondLoading, refetch } = useQuery(
     GET_SLOTS_TODAY,
     {
-      variables: { sessionId: props.match.params.id },
+      variables: {
+        sessionId: props.match.params.id,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
       pollInterval: 500,
     }
   )
