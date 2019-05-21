@@ -36,6 +36,7 @@ const Title = styled.h2`
 const GET_GAMES = gql`
   query($orderBy: String) {
     allGames(orderBy: $orderBy) {
+      id
       name
       tags
       numSessions
