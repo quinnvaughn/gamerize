@@ -76,9 +76,11 @@ const GET_SESSIONS = gql`
       id
       title
       game {
+        id
         name
       }
       gamers {
+        id
         username
       }
       price
