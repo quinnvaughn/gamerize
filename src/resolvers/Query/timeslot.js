@@ -1,6 +1,7 @@
 const { getUserId } = require('../../utils')
 const dateFns = require('date-fns')
 const { DateTime } = require('luxon')
+const moment = require('moment-timezone')
 
 const timeslot = {
   async thatDaySessions(parent, { day, today, timeZone }, ctx) {
@@ -11,18 +12,18 @@ const timeslot = {
           AND: [
             { gamers_some: { id: userId } },
             {
-              startTime_gte: dateFns.startOfDay(
-                DateTime.local()
-                  .setZone(timeZone)
-                  .toISO()
-              ),
+              startTime_gte: moment
+                .tz(timeZone)
+                .startOf('day')
+                .utc()
+                .toDate(),
             },
             {
-              startTime_lte: dateFns.endOfDay(
-                DateTime.local()
-                  .setZone(timeZone)
-                  .toISO()
-              ),
+              startTime_lte: moment
+                .tz(timeZone)
+                .endOf('day')
+                .utc()
+                .toDate(),
             },
           ],
         },
@@ -33,18 +34,18 @@ const timeslot = {
           AND: [
             { gamers_some: { id: userId } },
             {
-              startTime_gte: dateFns.startOfDay(
-                DateTime.fromISO(day)
-                  .setZone(timeZone)
-                  .toISO()
-              ),
+              startTime_gte: moment
+                .tz(day, timeZone)
+                .startOf('day')
+                .utc()
+                .toDate(),
             },
             {
-              startTime_lte: dateFns.endOfDay(
-                DateTime.fromISO(day)
-                  .setZone(timeZone)
-                  .toISO()
-              ),
+              startTime_lte: moment
+                .tz(day, timeZone)
+                .endOf('day')
+                .utc()
+                .toDate(),
             },
           ],
         },
@@ -55,16 +56,16 @@ const timeslot = {
     return await ctx.prisma.gamingTimeSlots({
       where: {
         gamers_some: { username: gamer },
-        startTime_gte: dateFns.startOfDay(
-          DateTime.fromISO(day)
-            .setZone(timeZone)
-            .toISO()
-        ),
-        startTime_lte: dateFns.endOfDay(
-          DateTime.fromISO(day)
-            .setZone(timeZone)
-            .toISO()
-        ),
+        startTime_gte: moment
+          .tz(day, timeZone)
+          .startOf('day')
+          .utc()
+          .toDate(),
+        startTime_lte: moment
+          .tz(day, timeZone)
+          .endOf('day')
+          .utc()
+          .toDate(),
       },
     })
   },
@@ -75,9 +76,10 @@ const timeslot = {
         AND: [
           { gamers_some: { id: userId } },
           {
-            startTime_gte: DateTime.local()
-              .setZone(timeZone)
-              .toISO(),
+            startTime_gte: moment
+              .tz(timeZone)
+              .utc()
+              .toDate(),
           },
         ],
       },
@@ -91,18 +93,18 @@ const timeslot = {
         AND: [
           { gamingSession: { id: sessionId } },
           {
-            startTime_gte: dateFns.startOfDay(
-              DateTime.local()
-                .setZone(timeZone)
-                .toISO()
-            ),
+            startTime_gte: moment
+              .tz(timeZone)
+              .startOf('day')
+              .utc()
+              .toDate(),
           },
           {
-            startTime_lte: dateFns.endOfDay(
-              DateTime.local()
-                .setZone(timeZone)
-                .toISO()
-            ),
+            startTime_lte: moment
+              .tz(timeZone)
+              .endOf('day')
+              .utc()
+              .toDate(),
           },
         ],
       },
