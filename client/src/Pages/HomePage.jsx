@@ -97,7 +97,7 @@ const GET_GAMES = gql`
 `
 
 export default function HomePage(props) {
-  useTitle('Play games with your favorite people - Gamerize')
+  useTitle('Gamerize - Play games with your favorite people')
   const [first, setFirst] = useState(4)
   const { data, loading } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
