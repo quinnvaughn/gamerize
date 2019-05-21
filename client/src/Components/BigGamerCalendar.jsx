@@ -150,8 +150,10 @@ const THAT_DAY_SESSIONS = gql`
         }
       }
       gamingSession {
+        id
         length
         game {
+          id
           name
         }
       }
@@ -169,9 +171,9 @@ function BigGamerCalendar(props) {
       day: selectedDay,
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
-    pollInterval: 1000,
+    // pollInterval: 1000,
   })
-
+  console.log(selectedDay)
   const renderHeader = () => {
     const dateFormat = 'MMMM YYYY'
 
