@@ -438,35 +438,37 @@ export default function UserProfile(props) {
             </FavoriteGameContainer>
           </FavoriteGames>
           {data.getUser.role === 'GAMER' && (
-            <Sessions>
-              <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
-              <NegativeMargins>
-                <SessionsMapped>
-                  {_.map(data.getUser.sessions, (session, index) => (
-                    <SmallSession
-                      id={session.id}
-                      title={session.title}
-                      key={session.game.name + index}
-                      username={data.getUser.username}
-                      game={noSpaces(session.game.name)}
-                      name={session.game.name}
-                      system={session.system}
-                      price={session.price}
-                      profilePicture={data.getUser.profilePicture}
-                      reviewRating={session.reviewRating}
-                      numReviews={session.numReviews}
-                    />
-                  ))}
-                </SessionsMapped>
-              </NegativeMargins>
-            </Sessions>
+            <Fragment>
+              <Sessions>
+                <SessionsTitle>{`Gaming sessions`}</SessionsTitle>
+                <NegativeMargins>
+                  <SessionsMapped>
+                    {_.map(data.getUser.sessions, (session, index) => (
+                      <SmallSession
+                        id={session.id}
+                        title={session.title}
+                        key={session.game.name + index}
+                        username={data.getUser.username}
+                        game={noSpaces(session.game.name)}
+                        name={session.game.name}
+                        system={session.system}
+                        price={session.price}
+                        profilePicture={data.getUser.profilePicture}
+                        reviewRating={session.reviewRating}
+                        numReviews={session.numReviews}
+                      />
+                    ))}
+                  </SessionsMapped>
+                </NegativeMargins>
+              </Sessions>
+              <GamerAvailability
+                day={new Date()}
+                name={data.getUser.name}
+                username={data.getUser.username}
+                sessions={thirdData.gamerSessionsSpecificDay}
+              />
+            </Fragment>
           )}
-          <GamerAvailability
-            day={new Date()}
-            name={data.getUser.name}
-            username={data.getUser.username}
-            sessions={thirdData.gamerSessionsSpecificDay}
-          />
         </RightSide>
       </Content>
     </PageContainer>
