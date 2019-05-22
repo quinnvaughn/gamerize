@@ -247,19 +247,15 @@ const GET_USER = gql`
       displayName
       aboutMe
       username
-      numReviews
       areWeFriends
       profilePicture
       banner
       role
       sentFriendRequest
       sentMeAFriendRequest
-      reviewRating
       occupations
-      reviews {
-        text
-      }
       mostPlayedGames {
+        id
         name
         picture
       }
@@ -267,15 +263,11 @@ const GET_USER = gql`
         id
         title
         game {
+          id
           name
         }
         system
         price
-        reviews {
-          text
-        }
-        reviewRating
-        numReviews
       }
     }
   }
@@ -284,6 +276,7 @@ const GET_USER = gql`
 const GET_ME = gql`
   {
     me {
+      id
       username
     }
   }
@@ -308,6 +301,7 @@ const GET_GAMER_AVAILABILITY = gql`
         id
         length
         game {
+          id
           name
         }
       }
