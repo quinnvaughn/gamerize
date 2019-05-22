@@ -283,8 +283,8 @@ const GET_ME = gql`
 `
 
 const GET_GAMER_AVAILABILITY = gql`
-  query($day: DateTime!, $gamer: String!, $timeZone: String!) {
-    gamerSessionsSpecificDay(day: $day, gamer: $gamer, timeZone: $timeZone) {
+  query($gamer: String!, $timeZone: String!) {
+    gamerSessionsSpecificDay(gamer: $gamer, timeZone: $timeZone) {
       id
       startTime
       endTime
@@ -310,8 +310,6 @@ const GET_GAMER_AVAILABILITY = gql`
 `
 
 export default function UserProfile(props) {
-  const dayFormat = 'M/D/YY'
-  const day = dateFns.format(new Date(), dayFormat)
   const { data, loading, refetch } = useQuery(GET_USER, {
     variables: { username: props.match.params.user },
   })
@@ -321,7 +319,6 @@ export default function UserProfile(props) {
     {
       variables: {
         gamer: props.match.params.user,
-        day,
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
     }
