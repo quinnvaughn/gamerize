@@ -244,6 +244,7 @@ const Row = styled.div`
 const GET_USER = gql`
   query($username: String!) {
     getUser(username: $username) {
+      id
       displayName
       aboutMe
       username
