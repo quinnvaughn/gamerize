@@ -52,21 +52,21 @@ const timeslot = {
       })
     }
   },
-  async gamerSessionsSpecificDay(parent, { day, gamer, timeZone }, ctx) {
+  async gamerSessionsSpecificDay(parent, { gamer, timeZone }, ctx) {
     return await ctx.prisma.gamingTimeSlots({
       where: {
         AND: [
           { gamers_some: { username: gamer } },
           {
             startTime_gte: moment
-              .tz(day, timeZone)
+              .tz(timeZone)
               .startOf('day')
               .utc()
               .toDate(),
           },
           {
             startTime_lte: moment
-              .tz(day, timeZone)
+              .tz(timeZone)
               .endOf('day')
               .utc()
               .toDate(),
