@@ -256,7 +256,6 @@ const GET_USER = gql`
       sentMeAFriendRequest
       occupations
       mostPlayedGames {
-        id
         name
         picture
       }
