@@ -148,9 +148,13 @@ const ExitContainer = styled.div`
   background: #fff;
 `
 
-const GAMER_SESSIONS_SPECIFIC_DAY = gql`
-  query($day: DateTime, $gamer: String!, $timeZone: String!) {
-    gamerSessionsSpecificDay(day: $day, gamer: $gamer, timeZone: $timeZone) {
+const SPECIFIC_SESSION_FOR_GAMER_DAY = gql`
+  query($day: DateTime!, $sessionId: String!, $timeZone: String!) {
+    specificSessionForGamerDay(
+      day: $day
+      sessionId: $sessionId
+      timeZone: $timeZone
+    ) {
       startTime
       endTime
       length
@@ -177,13 +181,14 @@ const GAMER_SESSIONS_SPECIFIC_DAY = gql`
 `
 
 function TimeSlotHours(props) {
-  const { data, loading } = useQuery(GAMER_SESSIONS_SPECIFIC_DAY, {
+  const { data, loading } = useQuery(SPECIFIC_SESSION_FOR_GAMER_DAY, {
     variables: {
       day: props.day,
-      gamer: props.match.params.user,
+      sessionId: props.match.params.id,
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
+  console.log(data)
   useEffect(() => {
     const element = document.getElementById('currentCalendar')
     element && element.scrollIntoView()
@@ -210,7 +215,7 @@ function TimeSlotHours(props) {
     let selectedDate = dateFns.startOfDay(props.day)
 
     for (let i = 0; i < 24; i++) {
-      const sessions = data.gamerSessionsSpecificDay.filter(
+      const sessions = data.specificSessionForGamerDay.filter(
         session => dateFns.getHours(session.startTime) === i
       )
 
