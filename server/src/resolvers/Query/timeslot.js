@@ -52,28 +52,50 @@ const timeslot = {
       })
     }
   },
-  async gamerSessionsSpecificDay(parent, { gamer, timeZone }, ctx) {
-    return await ctx.prisma.gamingTimeSlots({
-      where: {
-        AND: [
-          { gamers_some: { username: gamer } },
-          {
-            startTime_gte: moment
-              .tz(timeZone)
-              .startOf('day')
-              .utc()
-              .toDate(),
+  async gamerSessionsSpecificDay(parent, { day, gamer, timeZone }, ctx) {
+    return day
+      ? await ctx.prisma.gamingTimeSlots({
+          where: {
+            AND: [
+              { gamers_some: { username: gamer } },
+              {
+                startTime_gte: moment
+                  .tz(day, timeZone)
+                  .startOf('day')
+                  .utc()
+                  .toDate(),
+              },
+              {
+                startTime_lte: moment
+                  .tz(day, timeZone)
+                  .endOf('day')
+                  .utc()
+                  .toDate(),
+              },
+            ],
           },
-          {
-            startTime_lte: moment
-              .tz(timeZone)
-              .endOf('day')
-              .utc()
-              .toDate(),
+        })
+      : await ctx.prisma.gamingTimeSlots({
+          where: {
+            AND: [
+              { gamers_some: { username: gamer } },
+              {
+                startTime_gte: moment
+                  .tz(timeZone)
+                  .startOf('day')
+                  .utc()
+                  .toDate(),
+              },
+              {
+                startTime_lte: moment
+                  .tz(timeZone)
+                  .endOf('day')
+                  .utc()
+                  .toDate(),
+              },
+            ],
           },
-        ],
-      },
-    })
+        })
   },
   async nextTimeSlot(parent, { timeZone }, ctx) {
     const userId = getUserId(ctx)

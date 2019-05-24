@@ -149,7 +149,7 @@ const ExitContainer = styled.div`
 `
 
 const GAMER_SESSIONS_SPECIFIC_DAY = gql`
-  query($day: DateTime!, $gamer: String!, $timeZone: String!) {
+  query($day: DateTime, $gamer: String!, $timeZone: String!) {
     gamerSessionsSpecificDay(day: $day, gamer: $gamer, timeZone: $timeZone) {
       startTime
       endTime
