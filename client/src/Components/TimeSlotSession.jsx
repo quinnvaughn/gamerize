@@ -240,6 +240,7 @@ function TimeSlotSession(props) {
   useEffect(() => {
     const element = document.getElementById('modal')
     element.scrollTop = 0
+    Mixpanel.track('Selected a specific timeslot')
   }, {})
   const { system, game } = props.selectedSession.gamingSession
   const isMe = props.match.params.user === props.me.username
@@ -250,7 +251,6 @@ function TimeSlotSession(props) {
       ? !props.me.gamertags[mapSystem(system)][mapLauncher(game.launcher)]
       : !props.me.gamertags[mapSystem(system)]
     : true
-  Mixpanel.track('Selected a specific timeslot')
   const renderHeader = () => {
     const dateFormat = 'MMM Do, YYYY'
     const endTime = 'h:mm a'

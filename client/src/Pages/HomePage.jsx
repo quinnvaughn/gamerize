@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
@@ -98,6 +98,9 @@ const GET_GAMES = gql`
 
 export default function HomePage(props) {
   useTitle('Gamerize - Play games with your favorite people')
+  useEffect(() => {
+    Mixpanel.track('Consumer looked at website.')
+  }, {})
   const [first, setFirst] = useState(4)
   const { data, loading } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
@@ -108,7 +111,6 @@ export default function HomePage(props) {
   const { data: thirdData, loading: thirdLoading } = useQuery(GET_SESSIONS, {
     variables: { first },
   })
-  Mixpanel.track('Consumer looked at website.')
   const wait = loading || secondLoading || thirdLoading
   return wait ? (
     <Loading />
