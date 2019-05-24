@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -348,6 +348,9 @@ const GET_ME = gql`
 `
 
 export default function SpecificSessionPage(props) {
+  useEffect(() => {
+    Mixpanel.track('Clicked on a session')
+  }, {})
   const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
     variables: {
       sessionId: props.match.params.id,
@@ -369,7 +372,6 @@ export default function SpecificSessionPage(props) {
     loading: thirdLoading,
     refetch: meRefetch,
   } = useQuery(GET_ME)
-  Mixpanel.track('Clicked on a session')
   return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : (
