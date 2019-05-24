@@ -12,6 +12,7 @@ const booking = {
     const refund = charge
       ? await stripe.refunds.create({
           charge,
+          reverse_transfer: true,
         })
       : true
     const cancelledBooking = refund
