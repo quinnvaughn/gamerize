@@ -388,13 +388,17 @@ const timeslot = {
       const QUERY = `
         {
           gamingTimeSlot(where: {id: "${input.sessionId}"}) {
+            id
             startTime
             endTime
             gamingSession {
+              id
               game {
+                id
                 name
               }
               creator {
+                id
                 username
               }
             }

@@ -46,6 +46,7 @@ type Query {
   getGamerRequests: [GamerRequest!]!
   getGamers(first: Int): [User!]!
   gamerSessionsSpecificDay(
+    day: DateTime
     gamer: String!
     timeZone: String!
   ): [GamingTimeSlot!]!
