@@ -1,4 +1,4 @@
-import React, { Suspense, Component } from 'react'
+import React, { Component } from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import { Provider } from 'unstated'
 import UNSTATED from 'unstated-debug'
