@@ -5,7 +5,6 @@ import { Subscribe } from 'unstated'
 import dateFns from 'date-fns'
 import { MdClose } from 'react-icons/md'
 
-import SystemPicker from './SystemPicker'
 import TimeSlots from './TimeSlots'
 import SessionsContainer from '../Containers/SessionsContainer'
 import Totals from './Totals'
@@ -115,7 +114,6 @@ export default function SmallSelectionOptions({
         {session => (
           <Fragment>
             <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-            <SystemPicker system={system} setSystem={session.setSystem} />
             <TimeSlots gamer={gamer} game={game} />
             <Totals
               price={price}

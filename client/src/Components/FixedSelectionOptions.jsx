@@ -76,7 +76,7 @@ export default function FixedSelectionOptions(props) {
       <Content>
         <LeftSide>
           <Price>
-            {`$${props.price}`} <Per>per slot</Per>
+            {`$${parseFloat(props.price).toFixed(2)}`} <Per>per slot</Per>
           </Price>
           {/* <RatingContainer>
             <StarRatings

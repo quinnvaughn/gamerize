@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useState, useEffect } from 'react'
 import styled, { keyframes, createGlobalStyle } from 'styled-components'
 
 //local imports
@@ -56,7 +56,6 @@ const Modal = styled.div`
   box-shadow: 0, 0, 1rem, rgba(0, 0, 0, 0.2);
   max-width: ${props => (props.width ? `${props.width}px` : '108rem')};
   max-height: 100%;
-  overflow-y: initial !important;
 `
 
 const ModalContent = styled.div`
@@ -72,11 +71,16 @@ const GlobalStyle = createGlobalStyle`
 
 export default function SimpleModal(props) {
   const node = useRef()
+  const [lock, setLock] = useState(true)
+  useEffect(() => {
+    document.body.style.overflow = lock ? 'hidden' : 'inherit'
+  }, [lock])
 
   const handleClickOutside = () => {
+    setLock(false)
     props.onRequestClose()
   }
-  useLockBodyScroll()
+
   useOnOutsideClick(
     node,
     useCallback(() => {

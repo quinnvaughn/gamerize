@@ -175,7 +175,7 @@ const Systems = styled.span`
 `
 
 const BannerContainer = styled.div`
-  height: 40rem;
+  height: auto;
 `
 
 const Banner = styled.img`
