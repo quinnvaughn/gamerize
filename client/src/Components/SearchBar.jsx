@@ -39,6 +39,9 @@ const Container = styled.div`
   :hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
   }
+  @media (max-width: 743px) {
+    width: 100%;
+  }
 `
 
 const StyledSearch = styled(FaSearch)`
