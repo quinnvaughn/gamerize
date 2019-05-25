@@ -20,6 +20,7 @@ import UserOnboardingNeedToKnowPage from './Pages/UserOnboardingNeedToKnowPage'
 import AdminDashboard from './Pages/AdminDashboard'
 import GamerOnboarding from './Pages/GamerOnboarding'
 import SessionsPage from './Pages/SessionsPage'
+import NotThere from './Pages/404Page'
 
 const routes = [
   {
@@ -123,6 +124,9 @@ const routes = [
     path: '/profile/photos',
     protected: true,
     component: EditProfilePhotosPage,
+  },
+  {
+    component: NotThere,
   },
 ]
 
