@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Image } from 'cloudinary-react'
+import { withRouter } from 'react-router-dom'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
@@ -34,12 +35,49 @@ const Dropdown = styled.div`
   position: absolute;
   background: #fff;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
 `
 
-export default function IconWithDropdown(props) {
+const DropdownOption = styled.div`
+  background: #fff;
+  cursor: pointer;
+  :hover {
+    background: #d3d3d3;
+  }
+  padding: 1rem;
+  font-size: 1.6rem;
+  width: 100%;
+`
+
+const notSignedInLinks = [
+  {
+    text: 'Sign Up',
+    path: '/sign-up',
+  },
+  {
+    text: 'Login',
+    path: '/login',
+  },
+]
+
+const signedInLinks = [
+  {
+    text: 'Become a Gamer',
+    path: '/become-a-gamer',
+  },
+  {
+    text: 'Sessions',
+    path: '/my-sessions',
+  },
+  {
+    text: 'Notifications',
+    path: '/notifications',
+  },
+]
+
+function IconWithDropdown(props) {
   const node = useRef()
   const [open, setOpen] = useState(false)
   useOnOutsideClick(
@@ -64,9 +102,63 @@ export default function IconWithDropdown(props) {
       {open && <ChevronUp />}
       {open && (
         <Dropdown>
-          <div>Hello</div>
+          <DropdownOption
+            onClick={async () => {
+              await props.history.push('/')
+            }}
+          >
+            Home
+          </DropdownOption>
+          {!props.loggedIn
+            ? notSignedInLinks.map(link => (
+                <DropdownOption
+                  onClick={async () => {
+                    await props.history.push(link.path)
+                  }}
+                >
+                  {link.text}
+                </DropdownOption>
+              ))
+            : signedInLinks.map(link => {
+                if (link.path === '/become-a-gamer' && props.gamer) {
+                  return (
+                    <DropdownOption
+                      key={link.text}
+                      onClick={async () => {
+                        await props.history.push('/gamer-dashboard/home')
+                      }}
+                    >
+                      {`Gamer Dashboard`}
+                    </DropdownOption>
+                  )
+                } else if (link.path === '/become-a-gamer' && props.admin) {
+                  return (
+                    <DropdownOption
+                      key={link.text}
+                      onClick={async () => {
+                        await props.history.push('/admin-dashboard/home')
+                      }}
+                    >
+                      {`Admin Dashboard`}
+                    </DropdownOption>
+                  )
+                } else {
+                  return (
+                    <DropdownOption
+                      key={link.text}
+                      onClick={async () => {
+                        await props.history.push(link.path)
+                      }}
+                    >
+                      {link.text}
+                    </DropdownOption>
+                  )
+                }
+              })}
         </Dropdown>
       )}
     </IconContainer>
   )
 }
+
+export default withRouter(IconWithDropdown)
