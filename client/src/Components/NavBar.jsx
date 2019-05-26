@@ -138,13 +138,18 @@ function NavBar(props) {
   }, [token])
   const gamer = !loading && data && data.me && data.me.role === 'GAMER'
   const admin = !loading && data && data.me && data.me.role === 'ADMIN'
+  const loggedIn = !loading && data && !_.isEmpty(data.me)
   return (
     <Container className="navbar">
       <Left>
         <Media query={{ maxWidth: 1127 }}>
           {matches =>
             matches ? (
-              <IconWithDropdown />
+              <IconWithDropdown
+                loggedIn={loggedIn}
+                gamer={gamer}
+                admin={admin}
+              />
             ) : (
               <Icon
                 publicId="https://res.cloudinary.com/gamerize/image/upload/gamerize_logo.png"
@@ -159,9 +164,9 @@ function NavBar(props) {
         <SearchBar />
       </Left>
       {loading || secondLoading ? null : (
-        <Media query={{ maxWidth: 1127 }}>
+        <Media query={{ minWidth: 1128 }}>
           {matches =>
-            matches && !_.isEmpty(data) && data.me ? null : (
+            matches && !_.isEmpty(data) && data.me ? (
               <Links>
                 {data === null || !_.get(data, ['me'])
                   ? notSignedInLinks.map(link => (
@@ -225,7 +230,7 @@ function NavBar(props) {
                   />
                 )}
               </Links>
-            )
+            ) : null
           }
         </Media>
       )}
