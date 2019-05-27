@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 //local imports
 import NavBar from '../Components/NavBar'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -179,7 +180,7 @@ const GET_ME = gql`
 `
 
 export default function BecomeAGamerIntroPage(props) {
-  const { data, loading, refetch } = useQuery(GET_ME)
+  const { data, loading, refetch, error } = useQuery(GET_ME)
   useEffect(() => {
     refetch()
   }, {})
@@ -199,6 +200,8 @@ export default function BecomeAGamerIntroPage(props) {
             </GoBackContainer>
           </StopContainer>
         </Content>
+      ) : error ? (
+        <ErrorPage errors={error} />
       ) : (
         <Content>
           <Setup>

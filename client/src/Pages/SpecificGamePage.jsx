@@ -9,6 +9,7 @@ import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
 import { noUnderscores, mapTags } from '../utils/Strings'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -174,12 +175,14 @@ const GET_GAME = gql`
 `
 
 export default function SpecificGamePage(props) {
-  const { data, loading } = useQuery(GET_GAME, {
+  const { data, loading, error } = useQuery(GET_GAME, {
     variables: { name: noUnderscores(props.match.params.game) },
   })
   const { specificGame: game } = data
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />

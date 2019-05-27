@@ -7,6 +7,7 @@ import { Image } from 'cloudinary-react'
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -127,11 +128,13 @@ const UPLOAD_BANNER = gql`
 `
 
 export default function GamerDashboardAccountPhotos(props) {
-  const { data, loading, refetch } = useQuery(GET_INFO)
+  const { data, loading, refetch, error } = useQuery(GET_INFO)
   const uploadProfilePicture = useMutation(UPLOAD_PROFILE_PICTURE)
   const uploadBanner = useMutation(UPLOAD_BANNER)
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <GamerDashboardNav />

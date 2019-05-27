@@ -10,6 +10,7 @@ import Modal from '../Components/Modal'
 import CreateGame from '../Components/CreateGame'
 import Loading from '../Components/Loading'
 import AdminGame from '../Components/AdminGame'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -74,9 +75,11 @@ const GET_GAMES = gql`
 
 export default function AdminDashboardGamesPage(props) {
   const [openNew, setOpenNew] = useState(false)
-  const { data, loading, refetch } = useQuery(GET_GAMES)
+  const { data, loading, refetch, error } = useQuery(GET_GAMES)
   return loading ? (
     <Loading admin />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <AdminDashboardNav />

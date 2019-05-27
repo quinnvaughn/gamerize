@@ -14,6 +14,7 @@ import GamerSelectedSession from '../Components/GamerSelectedSession'
 import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
 import NextSession from '../Components/NextSession'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -192,18 +193,20 @@ const ME = gql`
 `
 export default function GamerDashboardCalendar(props) {
   const [dayOrMonth, setDayOrMonth] = useState(TODAY)
-  const { data, loading, refetch } = useQuery(ME, {
+  const { data, loading, refetch, error } = useQuery(ME, {
     pollInterval: 1000,
   })
   const {
     data: secondData,
     loading: secondLoading,
     refetch: secondRefetch,
+    error: secondError,
   } = useQuery(MY_GAMING_SESSIONS, { pollInterval: 1000 })
   const {
     data: thirdData,
     loading: thirdLoading,
     refetch: thirdRefetch,
+    error: thirdError,
   } = useQuery(SLOTS_TODAY, {
     variables: {
       today: true,
@@ -213,8 +216,11 @@ export default function GamerDashboardCalendar(props) {
     skip: dayOrMonth === 'MONTH',
   })
   const [state] = useStore(gamerSessionSelection)
+  const errors = error || secondError || thirdError
   return loading || secondLoading || thirdLoading ? (
     <Loading gamer />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <GamerDashboardNav />

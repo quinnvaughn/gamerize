@@ -5,6 +5,7 @@ import AdminDashboardNav from '../Components/AdminDashboardNav'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 import { currencyFormat } from '../utils/Strings'
 
@@ -58,9 +59,11 @@ const STATISTICS = gql`
 `
 
 export default function AdminDashboardStatsPage(props) {
-  const { data, loading } = useQuery(STATISTICS)
+  const { data, loading, error } = useQuery(STATISTICS)
   return loading ? (
     <Loading admin />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <AdminDashboardNav />

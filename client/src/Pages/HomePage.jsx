@@ -15,6 +15,7 @@ import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
 import TopSessionsRow from '../Components/TopSessionsRow'
 import { Mixpanel } from '../Components/Mixpanel'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -102,18 +103,29 @@ export default function HomePage(props) {
     Mixpanel.track('Consumer looked at website.')
   }, {})
   const [first, setFirst] = useState(4)
-  const { data, loading } = useQuery(GET_GAMES, {
+  const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
-  const { data: secondData, loading: secondLoading } = useQuery(GET_GAMERS, {
+  const {
+    data: secondData,
+    loading: secondLoading,
+    error: secondError,
+  } = useQuery(GET_GAMERS, {
     variables: { first },
   })
-  const { data: thirdData, loading: thirdLoading } = useQuery(GET_SESSIONS, {
+  const {
+    data: thirdData,
+    loading: thirdLoading,
+    error: thirdError,
+  } = useQuery(GET_SESSIONS, {
     variables: { first },
   })
   const wait = loading || secondLoading || thirdLoading
+  const errors = error || secondError || thirdError
   return wait ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

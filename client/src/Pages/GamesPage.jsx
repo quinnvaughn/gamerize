@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import NavBar from '../Components/NavBar'
 import DisplayGames from '../Components/DisplayGames'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -46,11 +47,13 @@ const GET_GAMES = gql`
 `
 
 export default function GamesPage(props) {
-  const { data, loading } = useQuery(GET_GAMES, {
+  const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { orderBy: 'numSessions_DESC' },
   })
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />
