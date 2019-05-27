@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
+import { MdClose } from 'react-icons/md'
 import gql from 'graphql-tag'
 
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
@@ -31,7 +32,7 @@ const Container = styled.div`
   box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid black;
-  width: ${props => `${props.width}rem`};
+  width: 100%;
   border: 1px solid #ebebeb;
   transition: box-shadow 200ms ease-in;
   transition: width 200ms ease-in;
@@ -49,6 +50,12 @@ const StyledSearch = styled(FaSearch)`
   height: 1.8rem;
   width: 1.8rem;
   margin-right: 2rem;
+`
+
+const StyledClose = styled(MdClose)`
+  height: 2.4rem;
+  width: 2.4rem;
+  margin-right: 1rem;
 `
 
 const SEARCH_GAMERIZE = gql`
@@ -86,10 +93,9 @@ const SEARCH_GAMERIZE = gql`
   }
 `
 
-export default function SearchBar(props) {
+export default function SmallSearchBar(props) {
   const node = useRef()
   const [search, setSearch] = useState('')
-  const [width, setWidth] = useState(46)
   const [open, setOpen] = useState(false)
   const { data } = useQueryNotBugged(SEARCH_GAMERIZE, {
     skip: !search || search.length === 0,
@@ -98,17 +104,16 @@ export default function SearchBar(props) {
   useOnOutsideClick(
     node,
     useCallback(() => {
-      setWidth(46)
       setOpen(false)
+      props.setClicked(false)
     }, [])
   )
   return (
     <Container
       onClick={() => {
-        setWidth(60)
         setOpen(true)
+        props.setClicked(true)
       }}
-      width={width}
       ref={node}
     >
       <StyledSearch />
@@ -120,6 +125,15 @@ export default function SearchBar(props) {
           setSearch(event.target.value)
         }}
       />
+      {props.clicked && (
+        <StyledClose
+          onClick={async () => {
+            await setSearch('')
+            await setOpen(false)
+            await props.setClicked(false)
+          }}
+        />
+      )}
       {open && <SearchBarDropdown data={data} search={search} />}
     </Container>
   )

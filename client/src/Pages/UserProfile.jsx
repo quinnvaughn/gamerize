@@ -37,8 +37,10 @@ const Content = styled.div`
   font-size: 1.6rem;
   margin: 0 auto;
   margin-top: 2rem !important;
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  max-width: none;
   display: flex;
-  width: 100%;
   @media (max-width: 1127px) {
     flex-direction: column;
   }
@@ -77,6 +79,10 @@ const ProfilePicture = styled.img`
   width: 12rem;
   height: 12rem;
   border-radius: 50%;
+  @media (max-width: 479px) {
+    width: 8rem;
+    height: 8rem;
+  }
 `
 
 const ProfilePictureContainer = styled.div`
@@ -98,6 +104,9 @@ const Name = styled.h1`
   font-weight: 600;
   margin-bottom: 0.3rem;
   line-height: 4rem;
+  @media (max-width: 479px) {
+    font-size: 3rem;
+  }
 `
 
 const Occupations = styled.div`
@@ -225,10 +234,16 @@ const SmallContainer = styled.div`
 
 const SmallLeft = styled.div`
   flex: 80%;
+  @media (max-width: 479px) {
+    flex: 70%;
+  }
 `
 
 const SmallRight = styled.div`
   flex: 20%;
+  @media (max-width: 479px) {
+    flex: 30%;
+  }
 `
 
 const Flex20 = styled.div`

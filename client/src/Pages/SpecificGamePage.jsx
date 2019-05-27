@@ -78,31 +78,72 @@ const Tag = styled.div`
 
 const Sessions = styled.div`
   font-size: 1.2rem;
-  font-weight: 400;
+  font-weight: 600;
   color: black;
   margin-bottom: 1.2rem;
 `
 
 const Header = styled.div`
-  height: 223px;
+  content: '';
   position: relative;
-`
-
-const Container = styled.div`
-  display: flex;
-  height: 223px;
+  overflow: hidden;
 `
 
 const InfoContainer = styled.div`
-  margin-left: 1rem;
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
 `
 
-const Background = styled(Image)`
+const Background = styled.div`
   height: 100%;
-  position: absolute;
   width: 100%;
-  opacity: 0.6;
   z-index: -1;
+  position: absolute;
+  background-image: url(${props => props.publicId});
+  background-position: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #392e5c;
+`
+
+const Placeholder = styled.div`
+  margin-left: 3rem;
+  margin-bottom: 3rem;
+  margin-right: 2rem;
+  margin-top: 3rem;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  @media (min-width: 1128px) {
+    margin-left: 8rem;
+  }
+`
+
+const Flex = styled.div`
+  display: flex;
+`
+
+const FlexShrink = styled.div`
+  margin-right: 2rem;
+  flex-shrink: 1;
+`
+
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  background: linear-gradient(
+    0deg,
+    #faf9fa 0,
+    rgba(250, 249, 250, 0.9) 25%,
+    rgba(250, 249, 250, 0.3)
+  );
+`
+
+const GameImage = styled(Image)`
+  max-width: 100%;
+  vertical-align: top;
+  width: 13rem;
 `
 
 const GET_GAME = gql`
@@ -142,31 +183,35 @@ export default function SpecificGamePage(props) {
   ) : (
     <PageContainer>
       <NavBar />
-      <Header>
-        <Background publicId={game.banner} />
-        <HeaderContent>
-          <Container>
-            <Image publicId={game.picture} width="200" />
-            <InfoContainer>
-              <TitleOfGame>{`${game.name}`}</TitleOfGame>
-              <Sessions>{`${game.numSessions} ${
-                game.numSessions === 1 ? 'session' : 'sessions'
-              }
+      <Container>
+        <Header>
+          <Background publicId={game.banner} />
+          <Placeholder>
+            <Flex>
+              <FlexShrink>
+                <GameImage publicId={game.picture} />
+              </FlexShrink>
+              <InfoContainer>
+                <TitleOfGame>{`${game.name}`}</TitleOfGame>
+                <Sessions>{`${game.numSessions} ${
+                  game.numSessions === 1 ? 'session' : 'sessions'
+                }
         `}</Sessions>
-              <Tags>
-                {game.tags.map(tag => (
-                  <Tag>{mapTags(tag)}</Tag>
-                ))}
-              </Tags>
-            </InfoContainer>
-          </Container>
-        </HeaderContent>
-      </Header>
-      <Content>
-        <InnerContent>
-          <GamesRow name={game.name} sessions={game.sessions} />
-        </InnerContent>
-      </Content>
+                <Tags>
+                  {game.tags.map(tag => (
+                    <Tag>{mapTags(tag)}</Tag>
+                  ))}
+                </Tags>
+              </InfoContainer>
+            </Flex>
+          </Placeholder>
+        </Header>
+        <Content>
+          <InnerContent>
+            <GamesRow name={game.name} sessions={game.sessions} />
+          </InnerContent>
+        </Content>
+      </Container>
     </PageContainer>
   )
 }

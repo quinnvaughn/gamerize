@@ -4,13 +4,12 @@ import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import Media from 'react-media'
 import gql from 'graphql-tag'
-import { Image } from 'cloudinary-react'
 import { useQuery } from 'react-apollo-hooks'
 
 //local imports
 import NotificationBadge from './NotificationBadge'
-import SearchBar from './SearchBar'
 import NavBarAvatar from './NavBarAvatar'
+import DynamicIconAndSearch from './DynamicIconAndSearch'
 
 const Container = styled.nav`
   height: 8rem;
@@ -24,21 +23,18 @@ const Container = styled.nav`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding-left: 8rem;
-
-  @media (max-width: 1127px) {
-    padding-left: 2.4rem;
-  }
+  padding-left: 2rem;
 `
 
 const Links = styled.div`
   font-size: 1.4rem;
   display: flex;
   height: 100%;
-  padding-right: 8rem;
 
-  @media (max-width: 1127px) {
-    padding-right: 2.4rem;
+  margin-right: 2rem;
+
+  @media (min-width: 1720px) {
+    margin-right: 4rem;
   }
 `
 
@@ -71,11 +67,10 @@ const Left = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-`
-
-const Icon = styled(Image)`
-  margin-right: 2.4rem;
-  cursor: pointer;
+  @media (max-width: 743px) {
+    margin-right: 2rem;
+    width: 100%;
+  }
 `
 
 const notSignedInLinks = [
@@ -133,30 +128,16 @@ function NavBar(props) {
   }, [token])
   const gamer = !loading && data && data.me && data.me.role === 'GAMER'
   const admin = !loading && data && data.me && data.me.role === 'ADMIN'
+  const loggedIn = !loading && data && !_.isEmpty(data.me)
   return (
     <Container className="navbar">
       <Left>
-        <Icon
-          publicId="https://res.cloudinary.com/gamerize/image/upload/gamerize_logo.png"
-          height="80"
-          onClick={async () => {
-            await props.history.push('/')
-          }}
-        />
-        <SearchBar />
+        <DynamicIconAndSearch loggedIn={loggedIn} gamer={gamer} admin={admin} />
       </Left>
       {loading || secondLoading ? null : (
-        <Media query={{ maxWidth: 1127 }}>
-          {matches =>
-            matches && !_.isEmpty(data) && data.me ? (
-              <Links>
-                <NavBarAvatar
-                  admin={admin}
-                  gamer={gamer}
-                  profilePicture={data.me.profilePicture}
-                />
-              </Links>
-            ) : (
+        <Media query={{ minWidth: 1128 }}>
+          {matches => {
+            return matches && !_.isEmpty(data) ? (
               <Links>
                 {data === null || !_.get(data, ['me'])
                   ? notSignedInLinks.map(link => (
@@ -165,10 +146,7 @@ function NavBar(props) {
                       </StyledLink>
                     ))
                   : signedInLinks.map(link => {
-                      if (
-                        link.path === '/become-a-gamer' &&
-                        data.me.role === 'GAMER'
-                      ) {
+                      if (link.path === '/become-a-gamer' && gamer) {
                         return (
                           <StyledLink
                             key={link.text}
@@ -177,10 +155,7 @@ function NavBar(props) {
                             {`Gamer Dashboard`}
                           </StyledLink>
                         )
-                      } else if (
-                        link.path === '/become-a-gamer' &&
-                        data.me.role === 'ADMIN'
-                      ) {
+                      } else if (link.path === '/become-a-gamer' && admin) {
                         return (
                           <StyledLink
                             key={link.text}
@@ -226,8 +201,8 @@ function NavBar(props) {
                   />
                 )}
               </Links>
-            )
-          }
+            ) : null
+          }}
         </Media>
       )}
     </Container>
