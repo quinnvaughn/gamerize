@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 
 //local imports
 import NavBar from '../Components/NavBar'
+import ErrorPage from './ErrorPage'
 import GenderDropdown from '../Components/GenderDropdown'
 
 const PageContainer = styled.div`
@@ -214,7 +215,7 @@ const GET_ME = gql`
 `
 
 function UserOnboardingInfoPage(props) {
-  const { data, loading } = useQuery(GET_ME)
+  const { data, loading, error } = useQuery(GET_ME)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
@@ -223,7 +224,9 @@ function UserOnboardingInfoPage(props) {
       dispatch({ type: 'setName', payload: data.me.name })
     }
   }, [data.me])
-  return loading ? null : (
+  return loading ? null : error ? (
+    <ErrorPage errors={error} />
+  ) : (
     <PageContainer>
       <NavBar />
       <Content>

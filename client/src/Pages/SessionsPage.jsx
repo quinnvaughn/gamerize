@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import NavBar from '../Components/NavBar'
 import DisplaySessions from '../Components/DisplaySessions'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -57,9 +58,12 @@ const GET_SESSIONS = gql`
 `
 
 export default function SessionsPage(props) {
-  const { data, loading } = useQuery(GET_SESSIONS)
+  const { data, loading, error } = useQuery(GET_SESSIONS)
+  const errors = error
   return loading ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

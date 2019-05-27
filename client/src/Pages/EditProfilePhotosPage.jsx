@@ -9,6 +9,7 @@ import { Image } from 'cloudinary-react'
 import EditProfileNav from '../Components/EditProfileNav'
 import NavBar from '../Components/NavBar'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -110,10 +111,12 @@ const UPLOAD_PROFILE_PICTURE = gql`
 `
 
 export default function GamerDashboardAccountEdit(props) {
-  const { data, loading, refetch } = useQuery(GET_INFO)
+  const { data, loading, refetch, error } = useQuery(GET_INFO)
   const uploadProfilePicture = useMutation(UPLOAD_PROFILE_PICTURE)
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />

@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 //local imports
 import NavBar from '../Components/NavBar'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -154,7 +155,7 @@ async function addStripeAccount(addStripe, params, setDisabled, setCallAgain) {
 }
 
 function GamerOnboardingInfoPage(props) {
-  const { data, loading } = useQuery(GET_MY_INFO)
+  const { data, loading, error } = useQuery(GET_MY_INFO)
   const [disabled, setDisabled] = useState(true)
   const [callAgain, setCallAgain] = useState(true)
   const addStripe = useMutation(ADD_STRIPE_CONNECT_ACCOUNT)
@@ -170,6 +171,8 @@ function GamerOnboardingInfoPage(props) {
   const email = !loading && data && data.me && data.me.email
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />
@@ -213,8 +216,9 @@ function GamerOnboardingInfoPage(props) {
           </Subtitle>
           <Title>Most important</Title>
           <Subtitle>
-            Don't be an asshole to the gamers, or standoffish, or quiet. We want
-            this to be a fun experience for everyone.
+            import ErrorPage from './ErrorPage'; Don't be an asshole to the
+            gamers, or standoffish, or quiet. We want this to be a fun
+            experience for everyone.
           </Subtitle>
           <Stripe
             disabled={!disabled}

@@ -10,6 +10,7 @@ import NavBar from '../Components/NavBar'
 import MyInvite from '../Components/MyInvite'
 import MyInviteReceived from '../Components/MyInviteReceived'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -302,13 +303,14 @@ const INVITES = 'INVITES'
 
 export default function UserSessionsPage(props) {
   const [tab, setTab] = useState(SESSIONS)
-  const { data, loading, refetch } = useQuery(ME, {
+  const { data, loading, refetch, error } = useQuery(ME, {
     pollInterval: 500,
   })
   const {
     data: secondData,
     loading: secondLoading,
     refetch: secondRefetch,
+    error: secondError,
   } = useQuery(MY_INVITES_RECEIVED, {
     pollInterval: 500,
   })
@@ -316,19 +318,22 @@ export default function UserSessionsPage(props) {
     data: thirdData,
     loading: thirdLoading,
     refetch: thirdRefetch,
+    error: thirdError,
   } = useQuery(MY_INVITES, {
     pollInterval: 500,
   })
-  const { data: fourthData, loading: fourthLoading } = useQuery(
-    MY_PAST_BOOKINGS,
-    {
-      pollInterval: 500,
-    }
-  )
+  const {
+    data: fourthData,
+    loading: fourthLoading,
+    error: fourthError,
+  } = useQuery(MY_PAST_BOOKINGS, {
+    pollInterval: 500,
+  })
   const {
     data: fifthData,
     loading: fifthLoading,
     refetch: fifthRefetch,
+    error: fifthError,
   } = useQuery(MY_UPCOMING_BOOKINGS, {
     pollInterval: 500,
   })
@@ -344,8 +349,11 @@ export default function UserSessionsPage(props) {
   let previous = !loading && fourthData.myPastBookings
   const wait =
     loading || secondLoading || thirdLoading || fourthLoading || fifthLoading
+  const errors = error || secondError || thirdError || fourthError || fifthError
   return wait ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

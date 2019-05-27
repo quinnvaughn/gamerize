@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 
 //local imports
 import NavBar from '../Components/NavBar'
+import ErrorPage from './ErrorPage'
 import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
@@ -160,11 +161,13 @@ const UPLOAD_BANNER = gql`
 `
 function GamerOnboardingPhotosPage(props) {
   const [disabled, setDisabled] = useState(true)
-  const { data, loading, refetch } = useQuery(GET_INFO)
+  const { data, loading, refetch, error } = useQuery(GET_INFO)
   const uploadProfilePicture = useMutation(UPLOAD_PROFILE_PICTURE)
   const uploadBanner = useMutation(UPLOAD_BANNER)
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />

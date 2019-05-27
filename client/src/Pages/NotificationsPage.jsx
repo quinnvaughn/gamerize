@@ -10,6 +10,7 @@ import Loading from '../Components/Loading'
 import NotificationFriendRequest from '../Components/NotificationFriendRequest'
 import NotificationMiscellaneous from '../Components/NotificationMiscellaneous'
 import NotificationBookingInvite from '../Components/NotificationBookingInvite'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -110,10 +111,14 @@ const VIEW_NOTIFICATIONS = gql`
 `
 
 export default function NotificationsPage(props) {
-  const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
+  const { data, loading, refetch, error } = useQuery(MY_NOTIFICATIONS, {
     pollInterval: 5000,
   })
-  const { data: secondData, loading: secondLoading } = useQuery(MYSELF)
+  const {
+    data: secondData,
+    loading: secondLoading,
+    error: secondError,
+  } = useQuery(MYSELF)
   const viewUserNotifications = useMutation(VIEW_NOTIFICATIONS)
   useEffect(() => {
     async function notifications() {
@@ -138,8 +143,11 @@ export default function NotificationsPage(props) {
   groups.DENIED_GAMER_REQUEST && misc.push(...groups.DENIED_GAMER_REQUEST)
   const friendRequests = groups.FRIEND_REQUEST
   const bookingInvites = groups.TIMESLOT_INVITE
+  const errors = error || secondError
   return loading || secondLoading ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

@@ -12,6 +12,7 @@ import { capitalize, formatGender } from '../utils/Strings'
 import GenderDropdown from '../Components/GenderDropdown'
 import Loading from '../Components/Loading'
 import PaymentMethods from '../Components/PaymentMethods'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -239,7 +240,7 @@ const initialState = {
 }
 
 export default function GamerDashboardAccountEdit(props) {
-  const { data, loading, refetch } = useQuery(GET_INFO)
+  const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
@@ -279,6 +280,8 @@ export default function GamerDashboardAccountEdit(props) {
   }, [data.me])
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <NavBar />
