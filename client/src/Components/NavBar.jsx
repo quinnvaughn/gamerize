@@ -4,14 +4,12 @@ import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import Media from 'react-media'
 import gql from 'graphql-tag'
-import { Image } from 'cloudinary-react'
 import { useQuery } from 'react-apollo-hooks'
 
 //local imports
 import NotificationBadge from './NotificationBadge'
-import SearchBar from './SearchBar'
 import NavBarAvatar from './NavBarAvatar'
-import IconWithDropdown from './IconWithDropdown'
+import DynamicIconAndSearch from './DynamicIconAndSearch'
 
 const Container = styled.nav`
   height: 8rem;
@@ -75,14 +73,6 @@ const Left = styled.div`
   }
 `
 
-const Icon = styled(Image)`
-  margin-right: 2.4rem;
-  cursor: pointer;
-  @media (max-width: 1127px) {
-    margin-right: 0;
-  }
-`
-
 const notSignedInLinks = [
   {
     text: 'Sign Up',
@@ -142,31 +132,12 @@ function NavBar(props) {
   return (
     <Container className="navbar">
       <Left>
-        <Media query={{ maxWidth: 1127 }}>
-          {matches =>
-            matches ? (
-              <IconWithDropdown
-                loggedIn={loggedIn}
-                gamer={gamer}
-                admin={admin}
-              />
-            ) : (
-              <Icon
-                publicId="https://res.cloudinary.com/gamerize/image/upload/gamerize_logo.png"
-                height="80"
-                onClick={async () => {
-                  await props.history.push('/')
-                }}
-              />
-            )
-          }
-        </Media>
-        <SearchBar />
+        <DynamicIconAndSearch loggedIn={loggedIn} gamer={gamer} admin={admin} />
       </Left>
       {loading || secondLoading ? null : (
         <Media query={{ minWidth: 1128 }}>
-          {matches =>
-            matches && !_.isEmpty(data) && data.me ? (
+          {matches => {
+            return matches && !_.isEmpty(data) ? (
               <Links>
                 {data === null || !_.get(data, ['me'])
                   ? notSignedInLinks.map(link => (
@@ -231,7 +202,7 @@ function NavBar(props) {
                 )}
               </Links>
             ) : null
-          }
+          }}
         </Media>
       )}
     </Container>

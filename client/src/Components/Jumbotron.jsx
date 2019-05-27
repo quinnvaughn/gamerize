@@ -4,7 +4,7 @@ import { Image } from 'cloudinary-react'
 
 const TitleContainer = styled.div`
   width: 100%;
-  height: 900px;
+  height: auto;
   position: relative;
 `
 
@@ -14,7 +14,6 @@ export default function Jumbotron(props) {
   return (
     <TitleContainer>
       <Img
-        height="900"
         crop="scale"
         width="100%"
         publicId="https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_jumbotron.jpg"
