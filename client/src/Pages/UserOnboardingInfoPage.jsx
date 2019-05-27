@@ -1,7 +1,7 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
-import { useMutation } from 'react-apollo-hooks'
+import { useMutation, useQuery } from 'react-apollo-hooks'
 import { withRouter } from 'react-router-dom'
 
 //local imports
@@ -148,6 +148,7 @@ const UPDATE_USER_PROFILE = gql`
 
 const initialState = {
   aboutMe: '',
+  displayName: '',
   psn: '',
   nso: '',
   xbl: '',
@@ -168,6 +169,10 @@ function reducer(state, action) {
       return { ...state, aboutMe: action.payload }
     case 'setGender':
       return { ...state, gender: action.payload }
+    case 'setDisplayName':
+      return { ...state, displayName: action.payload }
+    case 'setName':
+      return { ...state, name: action.payload }
     case 'setPSN':
       return { ...state, psn: action.payload }
     case 'setXBL':
@@ -199,10 +204,26 @@ function reducer(state, action) {
   }
 }
 
+const GET_ME = gql`
+  {
+    me {
+      id
+      name
+    }
+  }
+`
+
 function UserOnboardingInfoPage(props) {
+  const { data, loading } = useQuery(GET_ME)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
   const [state, dispatch] = useReducer(reducer, initialState)
-  return (
+  useEffect(() => {
+    if (data && data.me && data.me.name) {
+      dispatch({ type: 'setDisplayName', payload: data.me.name })
+      dispatch({ type: 'setName', payload: data.me.name })
+    }
+  }, [data.me])
+  return loading ? null : (
     <PageContainer>
       <NavBar />
       <Content>
@@ -219,6 +240,24 @@ function UserOnboardingInfoPage(props) {
                 </RowLeft>
                 <RowRight relative>
                   <GenderDropdown title={state.gender} dispatch={dispatch} />
+                </RowRight>
+              </Row>
+              <Row>
+                <RowLeft>
+                  <Label>Display Name</Label>
+                </RowLeft>
+                <RowRight>
+                  <Name
+                    onChange={e => {
+                      e.target.value === ''
+                        ? dispatch({ type: 'setDisplayName', payload: '' })
+                        : dispatch({
+                            type: 'setDisplayName',
+                            payload: String(e.target.value),
+                          })
+                    }}
+                    value={state.displayName ? state.displayName : ''}
+                  />
                 </RowRight>
               </Row>
               <Row>
@@ -508,6 +547,8 @@ function UserOnboardingInfoPage(props) {
                 const input = {
                   aboutMe: state.aboutMe,
                   gender: state.gender,
+                  displayName: state.displayName,
+                  name: state.name,
                   gamertags,
                 }
                 const { data } = await updateUserProfile({
