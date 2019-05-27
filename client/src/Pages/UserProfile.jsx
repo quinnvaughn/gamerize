@@ -18,6 +18,7 @@ import FavoriteGame from '../Components/FavoriteGame'
 import useTitle from '../Hooks/useTitle'
 import AddFriendButton from '../Components/AddFriendButton'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -325,22 +326,30 @@ const GET_GAMER_AVAILABILITY = gql`
 `
 
 export default function UserProfile(props) {
-  const { data, loading, refetch } = useQuery(GET_USER, {
+  const { data, loading, refetch, error } = useQuery(GET_USER, {
     variables: { username: props.match.params.user },
   })
-  const { data: secondData, loading: secondLoading } = useQuery(GET_ME)
-  const { data: thirdData, loading: thirdLoading } = useQuery(
-    GET_GAMER_AVAILABILITY,
-    {
-      variables: {
-        gamer: props.match.params.user,
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      },
-    }
-  )
+  const {
+    data: secondData,
+    loading: secondLoading,
+    error: secondError,
+  } = useQuery(GET_ME)
+  const {
+    data: thirdData,
+    loading: thirdLoading,
+    error: thirdError,
+  } = useQuery(GET_GAMER_AVAILABILITY, {
+    variables: {
+      gamer: props.match.params.user,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    },
+  })
   useTitle(`User Profile - Gamerize`)
+  const errors = error || secondError || thirdError
   return loading || secondLoading || thirdLoading ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

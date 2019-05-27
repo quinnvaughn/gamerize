@@ -2,6 +2,11 @@ import React from 'react'
 import { render, hydrate } from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import * as Sentry from '@sentry/browser'
+
+Sentry.init({
+  dsn: 'https://1ca3e49dfb97459e94af1a69dc03686f@sentry.io/1469078',
+})
 
 const rootElement = document.getElementById('root')
 

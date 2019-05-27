@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -118,7 +119,7 @@ const UPDATE_GAMER_PROFILE = gql`
 `
 
 export default function GamerDashboardAccountEdit(props) {
-  const { data, loading, refetch } = useQuery(GET_INFO)
+  const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateGamerProfile = useMutation(UPDATE_GAMER_PROFILE)
   const [setup, setSetup] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -128,6 +129,8 @@ export default function GamerDashboardAccountEdit(props) {
   }, [data.me])
   return loading ? (
     <Loading gamer />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <GamerDashboardNav />

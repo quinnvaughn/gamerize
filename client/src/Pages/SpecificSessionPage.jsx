@@ -28,6 +28,7 @@ import {
 import { formatGamers, formatSystem } from '../utils/Strings'
 import Loading from '../Components/Loading'
 import { Mixpanel } from '../Components/Mixpanel'
+import ErrorPage from './ErrorPage'
 
 //data
 
@@ -351,29 +352,35 @@ export default function SpecificSessionPage(props) {
   useEffect(() => {
     Mixpanel.track('Clicked on a session')
   }, {})
-  const { data, loading } = useQuery(GET_SPECIFIC_SESSION, {
+  const { data, loading, error } = useQuery(GET_SPECIFIC_SESSION, {
     variables: {
       sessionId: props.match.params.id,
     },
     pollInterval: 500,
   })
-  const { data: secondData, loading: secondLoading, refetch } = useQuery(
-    GET_SLOTS_TODAY,
-    {
-      variables: {
-        sessionId: props.match.params.id,
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      },
-      pollInterval: 500,
-    }
-  )
+  const {
+    data: secondData,
+    loading: secondLoading,
+    refetch,
+    error: secondError,
+  } = useQuery(GET_SLOTS_TODAY, {
+    variables: {
+      sessionId: props.match.params.id,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    },
+    pollInterval: 500,
+  })
   const {
     data: thirdData,
     loading: thirdLoading,
     refetch: meRefetch,
+    error: thirdError,
   } = useQuery(GET_ME)
+  const errors = error || secondError || thirdError
   return loading || secondLoading || thirdLoading ? (
     <Loading />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <NavBar />

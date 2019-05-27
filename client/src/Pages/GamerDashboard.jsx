@@ -11,6 +11,7 @@ import GamerDashboardAccountPhotos from './GamerDashboardAccountPhotos'
 import GamerDashboardHome from './GamerDashboardHome'
 import GamerRoute from '../Components/GamerRoute'
 import useTitle from '../Hooks/useTitle'
+import ErrorPage from './ErrorPage'
 
 const routes = [
   {
@@ -50,9 +51,11 @@ const GET_IS_SETUP = gql`
 
 export default function GamerDashboard(props) {
   useTitle('Your Gamer Dashboard')
-  const { data, loading } = useQuery(GET_IS_SETUP)
+  const { data, loading, error } = useQuery(GET_IS_SETUP)
   return loading ? null : data && data.me && data.me.gamerIsSetup === false ? (
     <Redirect to="/gamer-onboarding/photos" />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <Fragment>
       {routes.map(route => (

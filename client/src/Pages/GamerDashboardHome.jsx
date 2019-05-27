@@ -8,6 +8,7 @@ import { useQuery, useMutation } from 'react-apollo-hooks'
 import GamerBookings from '../Components/GamerBookings'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import Loading from '../Components/Loading'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -52,7 +53,7 @@ const SectionTitle = styled.div`
 `
 
 const Stripe = styled.button`
-margin-top: 4rem;
+  margin-top: 4rem;
   background: #db1422;
   padding: 1rem 1.4rem;
   color: #fff;
@@ -100,7 +101,7 @@ const LOG_INTO_STRIPE = gql`
 `
 
 export default function GamerDashboardHome(props) {
-  const { data, loading, refetch } = useQuery(MY_NOTIFICATIONS, {
+  const { data, loading, refetch, error } = useQuery(MY_NOTIFICATIONS, {
     pollInterval: 500,
   })
   const viewGamerNotifications = useMutation(VIEW_NOTIFICATIONS)
@@ -121,6 +122,8 @@ export default function GamerDashboardHome(props) {
   const bookings = groups.BOOKED_TIMESLOT
   return loading ? (
     <Loading gamer />
+  ) : error ? (
+    <ErrorPage errors={error} />
   ) : (
     <PageContainer>
       <GamerDashboardNav />
@@ -140,10 +143,14 @@ export default function GamerDashboardHome(props) {
               />
             ))}
         </Section>
-        <Stripe onClick={async () => {
-          const {data} = await logIntoStripe()
-          window.location = data.logIntoStripe.url
-        }}>Log into Stripe</Stripe>
+        <Stripe
+          onClick={async () => {
+            const { data } = await logIntoStripe()
+            window.location = data.logIntoStripe.url
+          }}
+        >
+          Log into Stripe
+        </Stripe>
       </Content>
     </PageContainer>
   )

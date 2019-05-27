@@ -10,6 +10,7 @@ import CreateSession from '../Components/CreateSession'
 import Modal from '../Components/Modal'
 import Loading from '../Components/Loading'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -95,12 +96,18 @@ const GET_SESSIONS = gql`
 export default function GamerDashboardActiveSessions(props) {
   const [openNew, setOpenNew] = useState(false)
   const [edit, setEdit] = useState(false)
-  const { data, loading } = useQuery(GET_ME)
-  const { data: sessions, loading: secondLoading, refetch } = useQuery(
-    GET_SESSIONS
-  )
+  const { data, loading, error } = useQuery(GET_ME)
+  const {
+    data: sessions,
+    loading: secondLoading,
+    refetch,
+    error: secondError,
+  } = useQuery(GET_SESSIONS)
+  const errors = error || secondError
   return loading || secondLoading ? (
     <Loading gamer />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <GamerDashboardNav />

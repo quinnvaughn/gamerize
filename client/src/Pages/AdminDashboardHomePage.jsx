@@ -8,6 +8,7 @@ import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import Loading from '../Components/Loading'
 import GamerRequestTableColumns from '../Components/GamerRequestTableColumns'
+import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -70,17 +71,21 @@ const GET_NUM_REQUESTS = gql`
 `
 
 export default function AdminDashboardGamerHomePage(props) {
-  const { data, loading, refetch } = useQuery(GET_GAMER_REQUESTS, {
+  const { data, loading, refetch, error } = useQuery(GET_GAMER_REQUESTS, {
     pollInterval: 1000,
   })
-  const { data: secondData, loading: secondLoading } = useQuery(
-    GET_NUM_REQUESTS,
-    {
-      pollInterval: 1000,
-    }
-  )
+  const {
+    data: secondData,
+    loading: secondLoading,
+    error: secondError,
+  } = useQuery(GET_NUM_REQUESTS, {
+    pollInterval: 1000,
+  })
+  const errors = error || secondError
   return loading || secondLoading ? (
     <Loading admin />
+  ) : errors ? (
+    <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
       <AdminDashboardNav />
