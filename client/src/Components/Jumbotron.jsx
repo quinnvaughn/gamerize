@@ -16,7 +16,7 @@ export default function Jumbotron(props) {
       <Img
         crop="scale"
         width="100%"
-        publicId="https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_jumbotron.jpg"
+        publicId="https://res.cloudinary.com/gamerize/image/upload/v1559006952/jumbotron_2.jpg"
         alt="Gaming Jumbotron"
       />
     </TitleContainer>
