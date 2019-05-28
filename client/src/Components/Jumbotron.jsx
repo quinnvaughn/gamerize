@@ -14,6 +14,8 @@ export default function Jumbotron(props) {
   return (
     <TitleContainer>
       <Img
+        dpr="auto"
+        responsive
         crop="scale"
         width="100%"
         publicId="https://res.cloudinary.com/gamerize/image/upload/v1559006952/jumbotron_2.jpg"
