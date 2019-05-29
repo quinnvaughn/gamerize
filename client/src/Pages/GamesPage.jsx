@@ -41,7 +41,7 @@ const GET_GAMES = gql`
       name
       tags
       numSessions
-      picture
+      banner
     }
   }
 `

@@ -64,7 +64,7 @@ const map = (games, first) => {
           key={game.name}
           tags={game.tags}
           full
-          picture={game.picture}
+          picture={game.banner}
           numSessions={game.numSessions}
         />
       )

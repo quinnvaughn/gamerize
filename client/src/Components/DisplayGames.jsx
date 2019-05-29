@@ -27,7 +27,7 @@ export default function DisplayGames(props) {
           <ExploreGame
             name={game.name}
             key={game.name}
-            picture={game.picture}
+            picture={game.banner}
             tags={game.tags}
             full
             numSessions={game.numSessions}
