@@ -91,7 +91,7 @@ const GET_GAMES = gql`
       tags
       id
       numSessions
-      picture
+      banner
     }
     totalGames
   }
