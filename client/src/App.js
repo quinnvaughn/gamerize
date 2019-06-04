@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, HashRouter } from 'react-router-dom'
 import { Provider } from 'unstated'
 import UNSTATED from 'unstated-debug'
 import { ApolloProvider } from 'react-apollo'
@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
-          <BrowserRouter>
+          <HashRouter>
             <LastLocationProvider>
               <StripeProvider
                 apiKey={`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`}
@@ -53,7 +53,7 @@ class App extends Component {
                 </Provider>
               </StripeProvider>
             </LastLocationProvider>
-          </BrowserRouter>
+          </HashRouter>
         </ApolloHooksProvider>
       </ApolloProvider>
     )
