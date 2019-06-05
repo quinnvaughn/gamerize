@@ -21,6 +21,7 @@ import AdminDashboard from './Pages/AdminDashboard'
 import GamerOnboarding from './Pages/GamerOnboarding'
 import SessionsPage from './Pages/SessionsPage'
 import NotThere from './Pages/404Page'
+import FAQPage from './Pages/FAQPage'
 
 const routes = [
   {
@@ -89,6 +90,10 @@ const routes = [
   {
     path: '/sign-up',
     component: SignUpPage,
+  },
+  {
+    path: '/faq',
+    component: FAQPage,
   },
   {
     path: '/user-onboarding/info',
