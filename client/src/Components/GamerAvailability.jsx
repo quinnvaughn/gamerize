@@ -119,7 +119,6 @@ const Availability = styled.div`
 `
 
 export default function GamerAvailability(props) {
-  console.log(props)
   useEffect(() => {
     const element = document.getElementById('current')
     // scroll to your element
