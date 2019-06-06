@@ -59,6 +59,27 @@ const Gamers = styled.div`
   font-weight: 600;
 `
 
+const Text = styled.div`
+  font-size: 1.8rem;
+`
+
+const TextContainer = styled.div`
+  display: flex;
+  margin-top: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  line-height: 1.5;
+`
+
+const Link = styled.div`
+  font-size: 1.8rem;
+  cursor: pointer;
+  :hover {
+    color: #db1422;
+  }
+`
+
 export default function FAQPage(props) {
   useTitle('Gamerize - Frequently Asked Questions')
   return (
@@ -268,6 +289,12 @@ export default function FAQPage(props) {
             minutes after you click on the "Add" button, although this is
             changeable.
           </Collapsible>
+          <Collapsible title="The game I want to play isn't available. How do I add it?">
+            Currently, that process involves us doing things on our side, so the
+            easiest way is to go to our Discord server under the
+            "#game_requests" channel and request the game you'd like to be able
+            to play.
+          </Collapsible>
           <Collapsible title="How do I know who I'm supposed to be playing with?">
             Once you fill out your time slots, your "Next Sessions" card will
             appear and display the gamertags of who you are supposed to be
@@ -306,9 +333,17 @@ export default function FAQPage(props) {
             available in your account, which is paid out on a daily basis.
           </Collapsible>
           <Collapsible title="What is Gamerize's fee?">
-            We take 20% of the revenue you get to provide you with our services,
-            leaving the 80% to you.
+            We take a 20% commission for our services provided, leaving the 80%
+            to you.
           </Collapsible>
+          <TextContainer>
+            <Text>Have any other questions?</Text>
+            <Link
+              onClick={() => (window.location = 'https://discord.gg/RVB43KF')}
+            >
+              Join our Discord to get them answered
+            </Link>
+          </TextContainer>
         </Bottom>
       </Content>
     </PageContainer>
