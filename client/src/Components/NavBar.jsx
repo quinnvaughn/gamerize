@@ -82,6 +82,10 @@ const notSignedInLinks = [
     text: 'Login',
     path: '/login',
   },
+  {
+    text: 'Help',
+    path: '/faq',
+  },
 ]
 
 const signedInLinks = [
@@ -96,6 +100,10 @@ const signedInLinks = [
   {
     text: 'Notifications',
     path: '/notifications',
+  },
+  {
+    text: 'Help',
+    path: '/faq',
   },
 ]
 
@@ -177,6 +185,12 @@ function NavBar(props) {
                               />
                               {link.text}
                             </NotificationContainer>
+                          </StyledLink>
+                        )
+                      } else if (link.path === '/faq') {
+                        return (
+                          <StyledLink key={link.text} to={link.path}>
+                            {link.text}
                           </StyledLink>
                         )
                       } else {
