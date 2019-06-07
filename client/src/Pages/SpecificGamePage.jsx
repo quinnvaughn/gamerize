@@ -209,12 +209,12 @@ export default function SpecificGamePage(props) {
             </Flex>
           </Placeholder>
         </Header>
-        <Content>
-          <InnerContent>
-            <GamesRow name={game.name} sessions={game.sessions} />
-          </InnerContent>
-        </Content>
       </Container>
+      <Content>
+        <InnerContent>
+          <GamesRow name={game.name} sessions={game.sessions} />
+        </InnerContent>
+      </Content>
     </PageContainer>
   )
 }
