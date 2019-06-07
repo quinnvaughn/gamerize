@@ -68,7 +68,8 @@ const REPORT_ERROR = gql`
 
 export default function ErrorPage(props) {
   useEffect(() => {
-    Sentry.captureException(new Error(props.errors))
+    process.env.NODE_ENV === 'production' &&
+      Sentry.captureException(new Error(props.errors))
   }, {})
   return (
     <PageContainer>
