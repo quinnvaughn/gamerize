@@ -60,6 +60,7 @@ const GET_GAMER_REQUESTS = gql`
       socialMedia {
         twitter
       }
+      occupations
     }
   }
 `
@@ -104,6 +105,7 @@ export default function AdminDashboardGamerHomePage(props) {
                 id={gamerRequest.id}
                 user={gamerRequest.user}
                 socialMedia={gamerRequest.socialMedia}
+                occupations={gamerRequest.occupations}
               />
             ))}
           </Table>
