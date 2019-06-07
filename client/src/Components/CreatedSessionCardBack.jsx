@@ -7,9 +7,7 @@ import gql from 'graphql-tag'
 import GameSessionDropdown from './GameSessionDropdown'
 import TypeSessionDropdown from './TypeSessionDropdown'
 import SystemsSessionDropdown from './SystemsSessionDropdown'
-import LauncherDropdown from './LauncherDropdown'
 import { formatSystem } from '../utils/Strings'
-import { formatLauncher } from '../utils/System'
 
 const Card = styled.div`
   background: #fff;
@@ -249,13 +247,6 @@ export default function CreatedSessionCardBack({
         dispatch={dispatch}
         title={formatSystem(state.system)}
       />
-      {state.system === 'PC' && (
-        <LauncherDropdown
-          label={'Launcher: '}
-          dispatch={dispatch}
-          title={formatLauncher(state.launcher)}
-        />
-      )}
       <SlotsContainer>
         <Slots>Slots:</Slots>
         <SessionSlots

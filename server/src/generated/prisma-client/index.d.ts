@@ -1212,9 +1212,7 @@ export type GamingSessionIndexOrderByInput =
   | "gamer_ASC"
   | "gamer_DESC"
   | "game_ASC"
-  | "game_DESC"
-  | "launcher_ASC"
-  | "launcher_DESC";
+  | "game_DESC";
 
 export type DiscountOrderByInput =
   | "id_ASC"
@@ -1385,8 +1383,6 @@ export type GamingSessionOrderByInput =
   | "length_DESC"
   | "price_ASC"
   | "price_DESC"
-  | "launcher_ASC"
-  | "launcher_DESC"
   | "system_ASC"
   | "system_DESC"
   | "type_ASC"
@@ -2127,7 +2123,6 @@ export interface GamingSessionUpdateWithoutGamersDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewUpdateManyWithoutSessionInput;
   system?: System;
   type?: TypeOfGame;
@@ -2484,7 +2479,6 @@ export interface GamingSessionUpdateWithoutTimeslotsDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewUpdateManyWithoutSessionInput;
   system?: System;
   type?: TypeOfGame;
@@ -3336,10 +3330,6 @@ export interface GamingSessionIndexWhereInput {
   game_not_starts_with?: String;
   game_ends_with?: String;
   game_not_ends_with?: String;
-  launcher?: Launcher;
-  launcher_not?: Launcher;
-  launcher_in?: Launcher[] | Launcher;
-  launcher_not_in?: Launcher[] | Launcher;
   gamingSession?: GamingSessionWhereInput;
   AND?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
   OR?: GamingSessionIndexWhereInput[] | GamingSessionIndexWhereInput;
@@ -3675,7 +3665,6 @@ export interface GamingSessionUpdateWithoutReviewsDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   system?: System;
   type?: TypeOfGame;
   slots?: Int;
@@ -3768,7 +3757,6 @@ export interface GamingSessionUpdateManyMutationInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   system?: System;
   type?: TypeOfGame;
   slots?: Int;
@@ -3786,7 +3774,6 @@ export interface GamingSessionUpdateInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewUpdateManyWithoutSessionInput;
   system?: System;
   type?: TypeOfGame;
@@ -4369,7 +4356,6 @@ export interface GamingSessionCreateWithoutTimeslotsInput {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewCreateManyWithoutSessionInput;
   system: System;
   type: TypeOfGame;
@@ -4831,7 +4817,6 @@ export interface GamingSessionCreateWithoutReviewsInput {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   system: System;
   type: TypeOfGame;
   slots: Int;
@@ -5728,10 +5713,6 @@ export interface GamingSessionWhereInput {
   price_lte?: Float;
   price_gt?: Float;
   price_gte?: Float;
-  launcher?: Launcher;
-  launcher_not?: Launcher;
-  launcher_in?: Launcher[] | Launcher;
-  launcher_not_in?: Launcher[] | Launcher;
   reviews_every?: SessionReviewWhereInput;
   reviews_some?: SessionReviewWhereInput;
   reviews_none?: SessionReviewWhereInput;
@@ -5890,7 +5871,6 @@ export interface GamingSessionUpdateDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewUpdateManyWithoutSessionInput;
   system?: System;
   type?: TypeOfGame;
@@ -5910,7 +5890,6 @@ export interface GamingSessionIndexUpdateInput {
   title?: String;
   gamer?: String;
   game?: String;
-  launcher?: Launcher;
   gamingSession?: GamingSessionUpdateOneRequiredInput;
 }
 
@@ -6097,7 +6076,6 @@ export interface GamingSessionCreateWithoutGamersInput {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewCreateManyWithoutSessionInput;
   system: System;
   type: TypeOfGame;
@@ -6695,10 +6673,6 @@ export interface GamingSessionScalarWhereInput {
   price_lte?: Float;
   price_gt?: Float;
   price_gte?: Float;
-  launcher?: Launcher;
-  launcher_not?: Launcher;
-  launcher_in?: Launcher[] | Launcher;
-  launcher_not_in?: Launcher[] | Launcher;
   system?: System;
   system_not?: System;
   system_in?: System[] | System;
@@ -6746,7 +6720,6 @@ export interface GamingSessionUpdateManyDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   system?: System;
   type?: TypeOfGame;
   slots?: Int;
@@ -6822,7 +6795,6 @@ export interface GamingSessionCreateInput {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewCreateManyWithoutSessionInput;
   system: System;
   type: TypeOfGame;
@@ -7039,7 +7011,7 @@ export interface GameCreateInput {
   name: String;
   tags?: GameCreatetagsInput;
   sessions?: GamingSessionCreateManyWithoutGameInput;
-  launcher?: Launcher;
+  launcher: Launcher;
   numSessions?: Int;
   picture: String;
   banner: String;
@@ -7070,7 +7042,6 @@ export interface GamingSessionCreateWithoutGameInput {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewCreateManyWithoutSessionInput;
   system: System;
   type: TypeOfGame;
@@ -7102,7 +7073,6 @@ export interface GamingSessionIndexUpdateManyMutationInput {
   title?: String;
   gamer?: String;
   game?: String;
-  launcher?: Launcher;
 }
 
 export interface GamingSessionUpdateManyWithoutGameInput {
@@ -7159,7 +7129,7 @@ export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
 export interface GameCreateWithoutSessionsInput {
   name: String;
   tags?: GameCreatetagsInput;
-  launcher?: Launcher;
+  launcher: Launcher;
   numSessions?: Int;
   picture: String;
   banner: String;
@@ -7171,7 +7141,6 @@ export interface GamingSessionUpdateWithoutGameDataInput {
   title?: String;
   length?: Int;
   price?: Float;
-  launcher?: Launcher;
   reviews?: SessionReviewUpdateManyWithoutSessionInput;
   system?: System;
   type?: TypeOfGame;
@@ -7346,7 +7315,6 @@ export interface GamingSessionIndexCreateInput {
   title: String;
   gamer: String;
   game?: String;
-  launcher?: Launcher;
   gamingSession: GamingSessionCreateOneInput;
 }
 
@@ -7516,7 +7484,7 @@ export interface Game {
   updatedAt: DateTimeOutput;
   name: String;
   tags: Tags[];
-  launcher?: Launcher;
+  launcher: Launcher;
   numSessions: Int;
   picture: String;
   banner: String;
@@ -7665,7 +7633,6 @@ export interface GamingSession {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   system: System;
   type: TypeOfGame;
   slots: Int;
@@ -7694,7 +7661,6 @@ export interface GamingSessionPromise
   title: () => Promise<String>;
   length: () => Promise<Int>;
   price: () => Promise<Float>;
-  launcher: () => Promise<Launcher>;
   reviews: <T = FragmentableArray<SessionReview>>(
     args?: {
       where?: SessionReviewWhereInput;
@@ -7767,7 +7733,6 @@ export interface GamingSessionSubscription
   title: () => Promise<AsyncIterator<String>>;
   length: () => Promise<AsyncIterator<Int>>;
   price: () => Promise<AsyncIterator<Float>>;
-  launcher: () => Promise<AsyncIterator<Launcher>>;
   reviews: <T = Promise<AsyncIterator<SessionReviewSubscription>>>(
     args?: {
       where?: SessionReviewWhereInput;
@@ -8843,7 +8808,6 @@ export interface GamingSessionIndex {
   title: String;
   gamer: String;
   game?: String;
-  launcher?: Launcher;
 }
 
 export interface GamingSessionIndexPromise
@@ -8855,7 +8819,6 @@ export interface GamingSessionIndexPromise
   title: () => Promise<String>;
   gamer: () => Promise<String>;
   game: () => Promise<String>;
-  launcher: () => Promise<Launcher>;
   gamingSession: <T = GamingSessionPromise>() => T;
 }
 
@@ -8868,7 +8831,6 @@ export interface GamingSessionIndexSubscription
   title: () => Promise<AsyncIterator<String>>;
   gamer: () => Promise<AsyncIterator<String>>;
   game: () => Promise<AsyncIterator<String>>;
-  launcher: () => Promise<AsyncIterator<Launcher>>;
   gamingSession: <T = GamingSessionSubscription>() => T;
 }
 
@@ -8922,7 +8884,7 @@ export interface GamePreviousValues {
   updatedAt: DateTimeOutput;
   name: String;
   tags: Tags[];
-  launcher?: Launcher;
+  launcher: Launcher;
   numSessions: Int;
   picture: String;
   banner: String;
@@ -9496,7 +9458,6 @@ export interface GamingSessionPreviousValues {
   title: String;
   length: Int;
   price: Float;
-  launcher?: Launcher;
   system: System;
   type: TypeOfGame;
   slots: Int;
@@ -9512,7 +9473,6 @@ export interface GamingSessionPreviousValuesPromise
   title: () => Promise<String>;
   length: () => Promise<Int>;
   price: () => Promise<Float>;
-  launcher: () => Promise<Launcher>;
   system: () => Promise<System>;
   type: () => Promise<TypeOfGame>;
   slots: () => Promise<Int>;
@@ -9528,7 +9488,6 @@ export interface GamingSessionPreviousValuesSubscription
   title: () => Promise<AsyncIterator<String>>;
   length: () => Promise<AsyncIterator<Int>>;
   price: () => Promise<AsyncIterator<Float>>;
-  launcher: () => Promise<AsyncIterator<Launcher>>;
   system: () => Promise<AsyncIterator<System>>;
   type: () => Promise<AsyncIterator<TypeOfGame>>;
   slots: () => Promise<AsyncIterator<Int>>;
@@ -9678,7 +9637,6 @@ export interface GamingSessionIndexPreviousValues {
   title: String;
   gamer: String;
   game?: String;
-  launcher?: Launcher;
 }
 
 export interface GamingSessionIndexPreviousValuesPromise
@@ -9690,7 +9648,6 @@ export interface GamingSessionIndexPreviousValuesPromise
   title: () => Promise<String>;
   gamer: () => Promise<String>;
   game: () => Promise<String>;
-  launcher: () => Promise<Launcher>;
 }
 
 export interface GamingSessionIndexPreviousValuesSubscription
@@ -9702,7 +9659,6 @@ export interface GamingSessionIndexPreviousValuesSubscription
   title: () => Promise<AsyncIterator<String>>;
   gamer: () => Promise<AsyncIterator<String>>;
   game: () => Promise<AsyncIterator<String>>;
-  launcher: () => Promise<AsyncIterator<Launcher>>;
 }
 
 export interface RequirementEdge {

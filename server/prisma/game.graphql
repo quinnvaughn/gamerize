@@ -8,7 +8,7 @@ type Game {
   name: String! @unique
   tags: [Tags!]!
   sessions: [GamingSession!]!
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int! @default(value: 0)
   picture: String!
   banner: String!

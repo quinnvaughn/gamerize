@@ -78,20 +78,6 @@ const TypeTitle = styled.span`
   font-weight: 600;
 `
 
-const LauncherTitle = styled.span`
-  font-size: 1.7rem;
-  font-weight: 600;
-`
-
-const Launchers = styled.div`
-  margin-bottom: 0.5rem;
-`
-
-const Launcher = styled.span`
-  font-size: 1.7rem;
-  font-weight: 400;
-`
-
 const TypeGame = styled.span`
   font-size: 1.7rem;
   font-weight: 400;
@@ -106,7 +92,6 @@ export default function CreatedSessionCardFront({ session, setup, dispatch }) {
     dispatch({ type: 'setSlots', payload: session.slots })
     dispatch({ type: 'setType', payload: session.type })
     dispatch({ type: 'setSystem', payload: session.system })
-    dispatch({ type: 'setLauncher', payload: session.launcher })
   }, [])
   return (
     <Card
@@ -126,12 +111,6 @@ export default function CreatedSessionCardFront({ session, setup, dispatch }) {
             : capitalize(noUnderscores(session.system))
         }`}</System>
       </Systems>
-      {session.system === 'PC' && (
-        <Launchers>
-          <LauncherTitle>{'Launcher: '}</LauncherTitle>
-          <Launcher>{`${capitalize(session.launcher)}`}</Launcher>
-        </Launchers>
-      )}
       <Slots>{`${session.slots} slots per game`}</Slots>
       <Type>
         <TypeTitle>{`Type of game: `}</TypeTitle>

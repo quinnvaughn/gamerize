@@ -8,7 +8,6 @@ type GamingSession {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews: [SessionReview!]!
   system: System!
   type: TypeOfGame!
@@ -28,7 +27,6 @@ type GamingSessionIndex {
   title: String!
   gamer: String!
   game: String
-  launcher: Launcher
   gamingSession: GamingSession!
 }
 

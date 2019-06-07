@@ -18,7 +18,6 @@ const initialState = {
   flip: false,
   game: '',
   title: '',
-  launcher: '',
   length: '',
   price: '',
   type: '',
@@ -42,8 +41,6 @@ function reducer(state, action) {
       return { ...state, type: action.payload }
     case 'setSystem':
       return { ...state, system: action.payload }
-    case 'setLauncher':
-      return { ...state, launcher: action.payload }
     case 'setSlots':
       return { ...state, slots: action.payload }
     case 'clearState':

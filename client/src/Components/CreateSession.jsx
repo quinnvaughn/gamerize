@@ -7,9 +7,7 @@ import gql from 'graphql-tag'
 import GameSessionDropdown from './GameSessionDropdown'
 import SystemsSessionDropdown from './SystemsSessionDropdown'
 import TypeSessionDropdown from './TypeSessionDropdown'
-import LauncherDropdown from './LauncherDropdown'
 import { formatSystem } from '../utils/Strings'
-import { formatLauncher } from '../utils/System'
 
 const Container = styled.div`
   width: 100%;
@@ -148,7 +146,6 @@ const initialState = {
   flip: false,
   game: '',
   title: '',
-  launcher: '',
   length: '',
   price: '',
   type: '',
@@ -168,8 +165,6 @@ function reducer(state, action) {
       return { ...state, price: action.payload }
     case 'setLength':
       return { ...state, length: action.payload }
-    case 'setLauncher':
-      return { ...state, launcher: action.payload }
     case 'setType':
       return { ...state, type: action.payload }
     case 'setSystem':
@@ -256,13 +251,6 @@ export default function CreateSession(props) {
         dispatch={dispatch}
         title={formatSystem(state.system)}
       />
-      {state.system === 'PC' && (
-        <LauncherDropdown
-          label={'Launcher: '}
-          dispatch={dispatch}
-          title={formatLauncher(state.launcher)}
-        />
-      )}
       <SlotsContainer>
         <Slots>Slots: </Slots>
         <SessionSlots
@@ -286,7 +274,6 @@ export default function CreateSession(props) {
             title: state.title,
             game: state.game,
             price: parseFloat(state.price),
-            launcher: state.launcher,
             length: state.length,
             system: state.system,
             slots: state.slots,

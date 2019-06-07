@@ -4,11 +4,9 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import * as Sentry from '@sentry/browser'
 
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: 'https://1ca3e49dfb97459e94af1a69dc03686f@sentry.io/1469078',
-  })
-}
+Sentry.init({
+  dsn: 'https://1ca3e49dfb97459e94af1a69dc03686f@sentry.io/1469078',
+})
 
 const rootElement = document.getElementById('root')
 

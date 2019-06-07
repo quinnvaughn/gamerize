@@ -39,7 +39,7 @@ type Query {
   numGamers: Int!
   numUsers: Int!
   numTimeslotsBooked: Int!
-  ourTakeHome: Float!
+  ourTakeHome: Int!
   numSessionsPlayed: Int!
   numSessionsPlayedToday: Int!
   numGamerNotifications: Int!
@@ -475,7 +475,6 @@ input CreateGamingSessionInput {
   title: String!
   length: Int!
   price: Int!
-  launcher: Launcher
   type: TypeOfGame!
   slots: Int!
   system: System!
@@ -506,6 +505,7 @@ type CreateGamerRequestPayload {
 input CreateGameInput {
   tags: [Tags!]!
   name: String!
+  launcher: String!
   picture: String!
   banner: String!
 }
@@ -582,7 +582,6 @@ type GamingSession {
   creator: User!
   title: String!
   length: Int!
-  launcher: Launcher
   price: Float!
   reviews: [SessionReview!]!
   system: System!
@@ -618,6 +617,7 @@ type Game {
   name: String!
   tags: [Tags!]!
   sessions: [GamingSession!]!
+  launcher: Launcher!
   numSessions: Int!
   picture: String!
   banner: String!

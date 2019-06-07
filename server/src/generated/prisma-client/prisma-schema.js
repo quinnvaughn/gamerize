@@ -1544,7 +1544,7 @@ type Game {
   name: String!
   tags: [Tags!]!
   sessions(where: GamingSessionWhereInput, orderBy: GamingSessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingSession!]
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int!
   picture: String!
   banner: String!
@@ -1560,7 +1560,7 @@ input GameCreateInput {
   name: String!
   tags: GameCreatetagsInput
   sessions: GamingSessionCreateManyWithoutGameInput
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int
   picture: String!
   banner: String!
@@ -1583,7 +1583,7 @@ input GameCreatetagsInput {
 input GameCreateWithoutSessionsInput {
   name: String!
   tags: GameCreatetagsInput
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int
   picture: String!
   banner: String!
@@ -1777,7 +1777,7 @@ type GamePreviousValues {
   updatedAt: DateTime!
   name: String!
   tags: [Tags!]!
-  launcher: Launcher
+  launcher: Launcher!
   numSessions: Int!
   picture: String!
   banner: String!
@@ -2350,7 +2350,6 @@ type GamingSession {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   system: System!
   type: TypeOfGame!
@@ -2374,7 +2373,6 @@ input GamingSessionCreateInput {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews: SessionReviewCreateManyWithoutSessionInput
   system: System!
   type: TypeOfGame!
@@ -2416,7 +2414,6 @@ input GamingSessionCreateWithoutGameInput {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews: SessionReviewCreateManyWithoutSessionInput
   system: System!
   type: TypeOfGame!
@@ -2433,7 +2430,6 @@ input GamingSessionCreateWithoutGamersInput {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews: SessionReviewCreateManyWithoutSessionInput
   system: System!
   type: TypeOfGame!
@@ -2451,7 +2447,6 @@ input GamingSessionCreateWithoutReviewsInput {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   system: System!
   type: TypeOfGame!
   slots: Int!
@@ -2468,7 +2463,6 @@ input GamingSessionCreateWithoutTimeslotsInput {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   reviews: SessionReviewCreateManyWithoutSessionInput
   system: System!
   type: TypeOfGame!
@@ -2490,7 +2484,6 @@ type GamingSessionIndex {
   title: String!
   gamer: String!
   game: String
-  launcher: Launcher
   gamingSession: GamingSession!
 }
 
@@ -2504,7 +2497,6 @@ input GamingSessionIndexCreateInput {
   title: String!
   gamer: String!
   game: String
-  launcher: Launcher
   gamingSession: GamingSessionCreateOneInput!
 }
 
@@ -2526,8 +2518,6 @@ enum GamingSessionIndexOrderByInput {
   gamer_DESC
   game_ASC
   game_DESC
-  launcher_ASC
-  launcher_DESC
 }
 
 type GamingSessionIndexPreviousValues {
@@ -2537,7 +2527,6 @@ type GamingSessionIndexPreviousValues {
   title: String!
   gamer: String!
   game: String
-  launcher: Launcher
 }
 
 type GamingSessionIndexSubscriptionPayload {
@@ -2562,7 +2551,6 @@ input GamingSessionIndexUpdateInput {
   title: String
   gamer: String
   game: String
-  launcher: Launcher
   gamingSession: GamingSessionUpdateOneRequiredInput
 }
 
@@ -2570,7 +2558,6 @@ input GamingSessionIndexUpdateManyMutationInput {
   title: String
   gamer: String
   game: String
-  launcher: Launcher
 }
 
 input GamingSessionIndexWhereInput {
@@ -2646,10 +2633,6 @@ input GamingSessionIndexWhereInput {
   game_not_starts_with: String
   game_ends_with: String
   game_not_ends_with: String
-  launcher: Launcher
-  launcher_not: Launcher
-  launcher_in: [Launcher!]
-  launcher_not_in: [Launcher!]
   gamingSession: GamingSessionWhereInput
   AND: [GamingSessionIndexWhereInput!]
   OR: [GamingSessionIndexWhereInput!]
@@ -2673,8 +2656,6 @@ enum GamingSessionOrderByInput {
   length_DESC
   price_ASC
   price_DESC
-  launcher_ASC
-  launcher_DESC
   system_ASC
   system_DESC
   type_ASC
@@ -2692,7 +2673,6 @@ type GamingSessionPreviousValues {
   title: String!
   length: Int!
   price: Float!
-  launcher: Launcher
   system: System!
   type: TypeOfGame!
   slots: Int!
@@ -2760,10 +2740,6 @@ input GamingSessionScalarWhereInput {
   price_lte: Float
   price_gt: Float
   price_gte: Float
-  launcher: Launcher
-  launcher_not: Launcher
-  launcher_in: [Launcher!]
-  launcher_not_in: [Launcher!]
   system: System
   system_not: System
   system_in: [System!]
@@ -2812,7 +2788,6 @@ input GamingSessionUpdateDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   reviews: SessionReviewUpdateManyWithoutSessionInput
   system: System
   type: TypeOfGame
@@ -2830,7 +2805,6 @@ input GamingSessionUpdateInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   reviews: SessionReviewUpdateManyWithoutSessionInput
   system: System
   type: TypeOfGame
@@ -2845,7 +2819,6 @@ input GamingSessionUpdateManyDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   system: System
   type: TypeOfGame
   slots: Int
@@ -2856,7 +2829,6 @@ input GamingSessionUpdateManyMutationInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   system: System
   type: TypeOfGame
   slots: Int
@@ -2919,7 +2891,6 @@ input GamingSessionUpdateWithoutGameDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   reviews: SessionReviewUpdateManyWithoutSessionInput
   system: System
   type: TypeOfGame
@@ -2936,7 +2907,6 @@ input GamingSessionUpdateWithoutGamersDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   reviews: SessionReviewUpdateManyWithoutSessionInput
   system: System
   type: TypeOfGame
@@ -2954,7 +2924,6 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   system: System
   type: TypeOfGame
   slots: Int
@@ -2971,7 +2940,6 @@ input GamingSessionUpdateWithoutTimeslotsDataInput {
   title: String
   length: Int
   price: Float
-  launcher: Launcher
   reviews: SessionReviewUpdateManyWithoutSessionInput
   system: System
   type: TypeOfGame
@@ -3084,10 +3052,6 @@ input GamingSessionWhereInput {
   price_lte: Float
   price_gt: Float
   price_gte: Float
-  launcher: Launcher
-  launcher_not: Launcher
-  launcher_in: [Launcher!]
-  launcher_not_in: [Launcher!]
   reviews_every: SessionReviewWhereInput
   reviews_some: SessionReviewWhereInput
   reviews_none: SessionReviewWhereInput
