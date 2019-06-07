@@ -13,6 +13,7 @@ type GamingSession {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  item: Int
   requirements: [Requirement!]!
   discounts: [Discount!]!
   timeslots: [GamingTimeSlot!]!
