@@ -81,6 +81,12 @@ const Link = styled.div`
   }
 `
 
+const Attention = styled.div`
+  margin-top: 2rem;
+  font-size: 3rem;
+  font-weight: 700;
+`
+
 export default function FAQPage(props) {
   useTitle('Gamerize - Frequently Asked Questions')
   useEmailClick()
@@ -90,6 +96,7 @@ export default function FAQPage(props) {
       <Content>
         <Top>
           <FAQ>Frequently Asked Questions</FAQ>
+          <Attention>We are currently experiencing technical issues. The site is currently down except for a few pages. Please check back in a couple of days.</Attention>
           <Users>Users</Users>
           <Collapsible title="What is Gamerize?">
             Gamerize is a marketplace where you can pay to play video games with
