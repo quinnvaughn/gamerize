@@ -159,8 +159,8 @@ function BecomeAGamerDetails(props) {
               <Subtitle>
                 We require at least one of these to know you have a sizable
                 enough presence on the internet to reach out to fans. Also, you
-                must currently be American to be accepted as a gamer, so do not
-                apply if you are not. We hope to address this in the future.
+                must currently be living in America to be approved as a gamer.
+                We hope to address this in the future.
               </Subtitle>
               <InputContainer>
                 <InputLabel color="#38A1F3">Twitter</InputLabel>
