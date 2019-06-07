@@ -76,6 +76,7 @@ const GET_SESSIONS = gql`
     myGamingSessions {
       id
       title
+      launcher
       game {
         id
         name

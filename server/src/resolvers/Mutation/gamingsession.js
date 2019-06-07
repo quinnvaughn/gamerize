@@ -19,6 +19,7 @@ const gamingsession = {
       type: input.type,
       slots: input.slots,
       system: input.system,
+      launcher: input.launcher,
       requirements: { create: [] },
       discounts: { create: [] },
     })

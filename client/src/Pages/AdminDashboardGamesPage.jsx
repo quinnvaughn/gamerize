@@ -68,7 +68,6 @@ const GET_GAMES = gql`
       banner
       tags
       numSessions
-      launcher
     }
   }
 `
@@ -95,7 +94,6 @@ export default function AdminDashboardGamesPage(props) {
             <AdminGame
               picture={game.picture}
               name={game.name}
-              launcher={game.launcher}
               tags={game.tags}
               numSessions={game.numSessions}
             />
