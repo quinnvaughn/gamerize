@@ -59,6 +59,14 @@ const StyledLink = styled(Link)`
   }
 `
 
+const Occupation = styled.div`
+  padding: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #db1422;
+  margin-right: 0.5rem;
+  font-size: 1.6rem;
+`
+
 const ACCEPT_REQUEST = gql`
   mutation($input: AcceptGamerRequestInput!) {
     acceptGamerRequest(input: $input) {
@@ -91,7 +99,11 @@ export default function GamerRequestRow(props) {
       <Cell>{props.socialMedia.youtube}</Cell>
       <Cell>{props.socialMedia.instagram}</Cell>
       <Cell>{props.socialMedia.snapchat}</Cell>
-      <Cell>{props.occupations}</Cell>
+      <Cell>
+        {props.occupations.map(occupation => (
+          <Occupation>{occupation}</Occupation>
+        ))}
+      </Cell>
       <Cell>
         <Approve
           onClick={async () => {
