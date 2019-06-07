@@ -95,6 +95,11 @@ export default function FAQPage(props) {
             Gamerize is a marketplace where you can pay to play video games with
             your favorite celebrities/streamers/youtubers/etc.
           </Collapsible>
+          <Collapsible title="Is this a finished product?">
+            Definitely not! This is merely an open alpha/beta. Gamerize will
+            constantly be adding features and improving the experience for
+            everyone.
+          </Collapsible>
           <Collapsible title="How do I sign up?">
             Click on the Sign Up link in the navigation bar and fill out your
             information.
