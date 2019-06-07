@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import NavBar from '../Components/NavBar'
 import Collapsible from '../Components/Collapsible'
 import useTitle from '../Hooks/useTitle'
+import useEmailClick from '../Hooks/useEmailClick'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -82,6 +83,7 @@ const Link = styled.div`
 
 export default function FAQPage(props) {
   useTitle('Gamerize - Frequently Asked Questions')
+  useEmailClick()
   return (
     <PageContainer>
       <NavBar />
