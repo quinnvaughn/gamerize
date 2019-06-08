@@ -71,6 +71,7 @@ const TextContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   line-height: 1.5;
+  margin-bottom: 2rem;
 `
 
 const Link = styled.div`
@@ -85,6 +86,7 @@ const Attention = styled.div`
   margin-top: 2rem;
   font-size: 3rem;
   font-weight: 700;
+  margin-bottom: 2rem;
 `
 
 export default function FAQPage(props) {
@@ -96,7 +98,18 @@ export default function FAQPage(props) {
       <Content>
         <Top>
           <FAQ>Frequently Asked Questions</FAQ>
-          <Attention>We are currently experiencing technical issues. The site is currently down except for a few pages. Please check back in a couple of days.</Attention>
+          <Attention>
+            We are currently experiencing technical issues. The site is
+            currently down except for a few pages.
+          </Attention>
+          <TextContainer>
+            <Text>In the meantime...</Text>
+            <Link
+              onClick={() => (window.location = 'https://discord.gg/RVB43KF')}
+            >
+              Join our Discord to know when it's back up.
+            </Link>
+          </TextContainer>
           <Users>Users</Users>
           <Collapsible title="What is Gamerize?">
             Gamerize is a marketplace where you can pay to play video games with
