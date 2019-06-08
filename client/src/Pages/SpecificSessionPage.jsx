@@ -263,6 +263,7 @@ const GET_SPECIFIC_SESSION = gql`
       id
       type
       slots
+      launcher
       price
       slotsLeftToday
       reviewRating
@@ -280,7 +281,6 @@ const GET_SPECIFIC_SESSION = gql`
       game {
         id
         name
-        launcher
       }
       gamers {
         id
@@ -305,7 +305,6 @@ const GET_SLOTS_TODAY = gql`
         system
         game {
           id
-          launcher
         }
       }
       players {
@@ -439,7 +438,7 @@ export default function SpecificSessionPage(props) {
                   <Flex>
                     <TypeOfContent>Launcher</TypeOfContent>
                     <Launcher>
-                      {capitalize(data.getSpecificSession.game.launcher)}
+                      {capitalize(data.getSpecificSession.launcher)}
                     </Launcher>
                   </Flex>
                 )}
@@ -500,7 +499,7 @@ export default function SpecificSessionPage(props) {
                 system={data.getSpecificSession.system}
                 meRefetch={meRefetch}
                 creator={data.getSpecificSession.creator}
-                launcher={data.getSpecificSession.game.launcher}
+                launcher={data.getSpecificSession.launcher}
               />
             ) : (
               <SelectionOptions
@@ -516,7 +515,7 @@ export default function SpecificSessionPage(props) {
                 reviewRating={data.getSpecificSession.reviewRating}
                 system={data.getSpecificSession.system}
                 creator={data.getSpecificSession.creator}
-                launcher={data.getSpecificSession.game.launcher}
+                launcher={data.getSpecificSession.launcher}
               />
             )
           }

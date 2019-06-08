@@ -60,6 +60,7 @@ const STATISTICS = gql`
 
 export default function AdminDashboardStatsPage(props) {
   const { data, loading, error } = useQuery(STATISTICS)
+  console.log(error)
   return loading ? (
     <Loading admin />
   ) : error ? (

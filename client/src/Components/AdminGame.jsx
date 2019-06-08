@@ -50,7 +50,6 @@ export default function AdminGame(props) {
     <Container>
       <Image publicId={props.picture} width="100%" height="300" />
       <Title>{props.name}</Title>
-      <Launcher>{`${formatLauncher(props.launcher)} launcher`}</Launcher>
       <TagsContainer>
         {props.tags.map(tag => (
           <Tag>{mapTags(tag)}</Tag>

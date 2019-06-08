@@ -1,3 +1,4 @@
+
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
@@ -51,7 +52,6 @@ const CreateGameButton = styled.button`
 `
 
 const initialState = {
-  launcher: '',
   name: '',
   tags: [],
   picture: '',
@@ -64,8 +64,6 @@ function reducer(state, action) {
       return { ...state, flip: action.payload }
     case 'setName':
       return { ...state, name: action.payload }
-    case 'setLauncher':
-      return { ...state, launcher: action.payload }
     case 'setTags':
       if (state.tags.includes(action.payload)) {
         return {
@@ -112,18 +110,6 @@ export default function CreateGame(props) {
         />
       </TitleContainer>
       <TitleContainer>
-        <Title>Launcher:</Title>
-        <SessionTitle
-          onChange={e => {
-            dispatch({
-              type: 'setLauncher',
-              payload: e.target.value,
-            })
-          }}
-          value={state.launcher}
-        />
-      </TitleContainer>
-      <TitleContainer>
         <Title>Tags:</Title>
         <TagDropdown dispatch={dispatch} tags={state.tags} />
       </TitleContainer>
@@ -146,7 +132,7 @@ export default function CreateGame(props) {
         />
       </TitleContainer>
       {/* Add a tags dropdown.*/}
-      
+
       <CreateGameButton
         onClick={async () => {
           const input = {
