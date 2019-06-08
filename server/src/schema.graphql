@@ -582,6 +582,7 @@ type GamingSession {
   creator: User!
   title: String!
   length: Int!
+  launcher: Launcher
   price: Float!
   reviews: [SessionReview!]!
   system: System!
@@ -617,7 +618,7 @@ type Game {
   name: String!
   tags: [Tags!]!
   sessions: [GamingSession!]!
-  launcher: Launcher!
+  launcher: Launcher
   numSessions: Int!
   picture: String!
   banner: String!
