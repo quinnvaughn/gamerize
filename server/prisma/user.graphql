@@ -1,0 +1,109 @@
+type User {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  gender: Gender! @default(value: "MALE")
+  email: String! @unique
+  username: String! @unique
+  displayName: String!
+  password: String!
+  profilePicture: String
+  banner: String
+  connectedStripeId: String
+  customerStripeId: String
+  gamerIsSetup: Boolean! @default(value: false)
+  occupations: [Occupations!]!
+  name: String!
+  aboutMe: String
+  sessions: [GamingSession!]! @relation(name: "MySessions")
+  timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
+  #timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
+  # timeSlotsPlayed: [Booking!]!
+  #   @relation(name: "BookingPlayers", onDelete: SET_NULL)
+  invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
+  savedCards: [SavedCard!]! @relation(name: "SavedCards")
+  invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
+  setup: Int
+  reviews: [SessionReview!]!
+  friends: [User!]!
+  gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)
+  role: Role! @default(value: "USER")
+  index: UserIndex! @relation(name: "UserIndex", onDelete: CASCADE)
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Role {
+  USER
+  GAMER
+  ADMIN
+}
+
+## Workaround for no case insensitive search in prisma yet.
+type UserIndex {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String! @unique
+  username: String! @unique
+  displayName: String
+  name: String!
+  user: User! @relation(name: "UserIndex", onDelete: SET_NULL)
+}
+
+type BookedPlayer {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  #
+  #
+  player: User!
+  booking: Booking! @relation(name: "BookingPlayers", onDelete: SET_NULL)
+  timeslot: GamingTimeSlot!
+    @relation(name: "TimeSlotBookedPlayers", onDelete: SET_NULL)
+}
+
+type GamerTag {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User! @relation(name: "UserGamerTags", onDelete: SET_NULL)
+  ## Playstation Network
+  psn: String
+  ## Xbox Live
+  xbl: String
+  ## Nintendo Switch Online
+  nso: String
+  ## Too many fucking launchers
+  pc: PCLauncher @relation(name: "PCLauncher", onDelete: CASCADE)
+}
+
+type PCLauncher {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  gamerTag: GamerTag! @relation(name: "PCLauncher", onDelete: SET_NULL)
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  windows: String
+  riot: String
+}
+
+type SavedCard {
+  id: ID! @unique
+  user: User! @relation(name: "SavedCards")
+  cardId: String!
+  default: Boolean!
+  lastFour: String!
+  brand: String!
+}

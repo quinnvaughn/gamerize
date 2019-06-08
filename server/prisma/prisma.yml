@@ -1,0 +1,20 @@
+endpoint: ${env:PRISMA_ENDPOINT} # change it later
+secret: ${env:PRISMA_SECRET}
+datamodel:
+  - user.graphql
+  - gamerrequest.graphql
+  - game.graphql
+  - gamingsession.graphql
+  - sessionreview.graphql
+  - gamingtimeslot.graphql
+  - enums.graphql
+  - booking.graphql
+  - bookinginvite.graphql
+  - friendrequest.graphql
+  - notification.graphql
+
+generate:
+  - generator: javascript-client
+    output: ../src/generated/prisma-client/
+  - generator: graphql-schema
+    output: ../src/generated/prisma.graphql

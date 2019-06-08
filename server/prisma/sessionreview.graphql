@@ -1,0 +1,21 @@
+#import GamingSession from './gamingsession.graphql'
+#import User from './user.graphql'
+
+type SessionReview {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  session: GamingSession!
+  text: String!
+  rating: Int!
+}
+
+## until Prisma gets case insensitive search
+type SessionReviewIndex {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+  sessionReview: SessionReview!
+}

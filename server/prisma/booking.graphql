@@ -1,0 +1,18 @@
+type Booking {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  charge: String
+  numSlots: Int!
+  numPlayers: Int!
+  players: [BookedPlayer!]! @relation(name: "BookingPlayers", onDelete: CASCADE)
+  total: Float!
+  bookee: User! @relation(name: "Bookee", onDelete: SET_NULL)
+  timeslot: GamingTimeSlot!
+    @relation(name: "TimeSlotBookings", onDelete: SET_NULL)
+  invites: [BookingInvite!]!
+    @relation(name: "BookingInvites", onDelete: CASCADE)
+  cancelled: Boolean
+  notifications: [Notification!]!
+    @relation(name: "BookingNotifications", onDelete: CASCADE)
+}

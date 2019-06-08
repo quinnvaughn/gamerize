@@ -1,0 +1,25 @@
+#import User from './user.graphql'
+#import Occupations from './enums.graphql'
+
+type GamerRequest {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  occupations: [Occupations!]!
+  addToOccupations: String
+  socialMedia: SocialMedia!
+    @relation(name: "GamerRequestSocialMedia", onDelete: CASCADE)
+}
+
+type SocialMedia {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}

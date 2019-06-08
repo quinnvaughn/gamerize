@@ -1,0 +1,63 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@sentry/browser": "^5.3.0",
+    "apollo-boost": "^0.3.1",
+    "apollo-link-context": "^1.0.17",
+    "apollo-link-persisted-queries": "^0.2.2",
+    "apollo-upload-client": "^10.0.0",
+    "cloudinary-react": "^1.1.0",
+    "date-fns": "^1.30.1",
+    "formik": "^1.5.1",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "history": "^4.7.2",
+    "lodash": "^4.17.11",
+    "mixpanel-browser": "^2.28.0",
+    "moment": "^2.24.0",
+    "normalize.css": "^8.0.1",
+    "rc-time-picker": "^3.6.4",
+    "react": "^16.8.4",
+    "react-apollo": "^2.5.2",
+    "react-apollo-hooks": "^0.4.3",
+    "react-card-flip": "^0.5.0",
+    "react-date-picker": "^7.3.0",
+    "react-dom": "^16.8.4",
+    "react-hookstore": "^1.2.0",
+    "react-icons": "^3.4.0",
+    "react-loading": "^2.0.3",
+    "react-media": "^1.9.2",
+    "react-responsive": "^6.1.1",
+    "react-router-dom": "4.3.1",
+    "react-router-last-location": "^2.0.0-beta.1",
+    "react-scripts": "2.1.5",
+    "react-scroll-into-view": "^1.5.0",
+    "react-snap": "^1.23.0",
+    "react-star-ratings": "^2.3.0",
+    "react-stripe-elements": "^3.0.0",
+    "slack": "^11.0.2",
+    "styled-components": "^4.1.3",
+    "styled-tools": "^1.7.1",
+    "unstated": "^2.1.1",
+    "unstated-debug": "^0.3.2",
+    "yup": "^0.26.10"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "proxy": "http://localhost:4000",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

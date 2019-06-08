@@ -1,0 +1,39 @@
+type Notification {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  type: NotificationType!
+  text: String!
+  for: User! @relation(name: "NotificationFor")
+  friendRequest: FriendRequest
+    @relation(name: "FriendRequestNotification", onDelete: SET_NULL)
+  bookingInvite: BookingInvite
+  booking: Booking @relation(name: "BookingNotifications", onDelete: SET_NULL)
+  friend: User @relation(name: "NewFriendNotification", onDelete: SET_NULL)
+  viewed: Boolean! @default(value: false)
+}
+
+enum NotificationType {
+  ## User cancelled booking. Notify gamer with this.
+  CANCELLED_BOOKING
+  ## Gamer cancelled timeslot. Notify users with this.
+  CANCELLED_TIMESLOT
+  ## Gamer added minutes to current slot and pushed back slots.
+  GAMER_PUSHED_BACK_SLOT
+  ACCEPTED_GAMER_REQUEST
+  DENIED_GAMER_REQUEST
+  FRIEND_REQUEST
+  ## For user when timeslot is accepted
+  ACCEPTED_TIMESLOT_REQUEST
+  ## For Gamer
+  TIMESLOT_REQUEST
+  ## For Gamer
+  BOOKED_TIMESLOT
+  TIMESLOT_INVITE
+  ## Your friend cancelled whole booking
+  FRIEND_CANCELLED_BOOKING
+  ## Your friend you invited cancelled their spot
+  FRIEND_CANCELLED_THEIR_SLOT
+  ACCEPTED_TIMESLOT_INVITE
+  ACCEPTED_FRIEND_REQUEST
+}

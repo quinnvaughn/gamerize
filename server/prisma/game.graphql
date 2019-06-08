@@ -1,0 +1,39 @@
+#import Tags from './enums.graphql'
+#import GamingSession from './gamingsession.graphql'
+
+type Game {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String! @unique
+  tags: [Tags!]!
+  sessions: [GamingSession!]!
+  launcher: Launcher
+  numSessions: Int! @default(value: 0)
+  picture: String!
+  banner: String!
+}
+
+## until Prisma gets case insensitive search
+type GameIndex {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  launcher: String
+  tags: [String!]!
+  game: Game!
+}
+
+enum Launcher {
+  EPIC
+  STEAM
+  ORIGIN
+  BATTLENET
+  GOG
+  UPLAY
+  BETHESDA
+  ITCH
+  WINDOWS
+  RIOT
+}

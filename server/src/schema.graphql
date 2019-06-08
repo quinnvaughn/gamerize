@@ -1,0 +1,625 @@
+# import * from './generated/prisma.graphql'
+type Query {
+  me: User
+  allGames(first: Int, orderBy: String): [Game!]!
+  allSessions(first: Int, orderBy: String): [GamingSession!]!
+  getUser(username: String!): User!
+  searchUsersForInvite(
+    search: String!
+    gamers: [String!]!
+    inviteId: String!
+  ): [User!]!
+  totalGames: Int!
+  totalGamers: Int!
+  totalSessions: Int!
+  getSpecificSession(sessionId: String!): GamingSession!
+  mySlotsToday: [GamingTimeSlot!]!
+  specificSessionSlotsToday(
+    sessionId: String!
+    timeZone: String!
+  ): [GamingTimeSlot!]!
+  thatDaySessions(
+    day: DateTime
+    today: Boolean
+    timeZone: String!
+  ): [GamingTimeSlot!]!
+  myUpcomingBookings: [Booking!]!
+  myPastBookings: [Booking!]!
+  myGamingSessions: [GamingSession!]!
+  myRetiredGamingSessions: [GamingSession!]!
+  nextTimeSlot(timeZone: String!): GamingTimeSlot
+  myInvites: [BookingInvite!]!
+  myInvitesReceived: [BookingInvite!]!
+  myFriendRequests: [FriendRequest!]!
+  myUserNotifications: [Notification!]!
+  myGamerNotifications: [Notification!]!
+  specificGame(name: String!): Game!
+  numUserNotifications: Int!
+  numGamerRequests: Int!
+  numGamers: Int!
+  numUsers: Int!
+  numTimeslotsBooked: Int!
+  ourTakeHome: Int!
+  numSessionsPlayed: Int!
+  numSessionsPlayedToday: Int!
+  numGamerNotifications: Int!
+  getGamerRequests: [GamerRequest!]!
+  getGamers(first: Int): [User!]!
+  gamerSessionsSpecificDay(
+    gamer: String!
+    timeZone: String!
+  ): [GamingTimeSlot!]!
+  specificSessionForGamerDay(
+    day: DateTime!
+    sessionId: String!
+    timeZone: String!
+  ): [GamingTimeSlot!]!
+  searchGamerize(search: String!): [SearchResult!]!
+  moreSessions(search: String!, skip: Int): [GamingSession!]!
+  moreGames(search: String!, skip: Int): [Game!]!
+  moreUsers(search: String!, skip: Int): [User!]!
+}
+
+type Mutation {
+  signup(input: SignupInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  createGamerRequest(
+    input: CreateGamerRequestInput!
+  ): CreateGamerRequestPayload!
+  createGame(input: CreateGameInput!): CreateGamePayload!
+  createGamingSession(
+    input: CreateGamingSessionInput!
+  ): CreateGamingSessionPayload!
+  createGamingTimeSlot(
+    input: CreateGamingTimeSlotInput!
+  ): CreateGamingTimeSlotPayload!
+  createBulkGamingTimeSlots(
+    input: CreateBulkGamingTimeSlotsInput!
+  ): CreateBulkGamingTimeSlotsPayload!
+  addMinutesToTimeSlot(
+    input: AddMinutesToTimeSlotInput!
+  ): AddMinutesToGamingTimeSlotPayload!
+  cancelTimeSlot(input: CancelTimeSlotInput!): CancelTimeSlotPayload!
+  allowGamerToPlay: AllowGamerToPlayPayload!
+  updateSession(input: UpdateSessionInput!): UpdateSessionPayload!
+  bookTimeSlots(input: BookTimeSlotsInput!): BookTimeSlotsPayload!
+  sendInvite(input: SendInviteInput!): SendInvitePayload!
+  acceptInvite(input: AcceptInviteInput!): AcceptInvitePayload!
+  ## This cancels the extra slots in case your friend declines an invite or can't play, etc.
+  ## This does not cancel the entire session, however. Which means it needs a different resolver.
+  ## Could do it in same resolver but that's too messy.
+  cancelExtraSlot(input: CancelExtraSlotInput!): CancelExtraSlotPayload!
+  cancelBooking(input: CancelBookingInput!): CancelBookingPayload!
+  declineInvite(input: DeclineInviteInput!): DeclineInvitePayload!
+  sendFriendRequest(input: SendFriendRequestInput!): SendFriendRequestPayload!
+  cancelFriendRequest(
+    input: CancelFriendRequestInput!
+  ): CancelFriendRequestPayload!
+  acceptFriendRequest(
+    input: AcceptFriendRequestInput!
+  ): AcceptFriendRequestPayload!
+  declineFriendRequest(
+    input: DeclineFriendRequestInput!
+  ): DeclineFriendRequestPayload!
+  deleteNotification(
+    input: DeleteNotificationInput!
+  ): DeleteNotificationPayload!
+  acceptGamerRequest(
+    input: AcceptGamerRequestInput!
+  ): AcceptGamerRequestPayload!
+  declineGamerRequest(
+    input: DeclineGamerRequestInput!
+  ): DeclineGamerRequestPayload!
+  updateGamerProfile(
+    input: UpdateGamerProfileInput!
+  ): UpdateGamerProfilePayload!
+  viewUserNotifications: ViewNotificationsPayload!
+  viewGamerNotifications: ViewNotificationsPayload!
+  retireSession(input: RetireSessionInput!): RetireSessionPayload!
+  unretireSession(input: UnretireSessionInput!): UnretireSessionPayload!
+  deleteOldInvites: DeleteOldInvitesPayload!
+  cancelNotBookeeBooking(
+    input: CancelNotBookeeBookingInput!
+  ): CancelNotBookeeBookingPayload!
+  updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfilePayload!
+  addStripeConnectAccount(
+    input: AddStripeConnectAccountInput!
+  ): AddStripeConnectAccountPayload!
+  addCard(input: AddCardInput!): AddCardPayload!
+  deleteCard(input: DeleteCardInput!): DeleteCardPayload!
+  changeDefaultCard(input: ChangeDefaultCardInput!): ChangeDefaultCardPayload!
+  logIntoStripe: LogIntoStripePayload!
+}
+
+type LogIntoStripePayload {
+  url: String!
+}
+
+input ChangeDefaultCardInput {
+  cardId: String!
+  id: String!
+}
+
+type ChangeDefaultCardPayload {
+  updated: Boolean!
+}
+
+input DeleteCardInput {
+  cardId: String!
+}
+
+type DeleteCardPayload {
+  deleted: Boolean!
+}
+
+input AddCardInput {
+  id: String!
+  brand: String!
+  lastFour: String!
+}
+
+type AddCardPayload {
+  added: Boolean!
+}
+
+input AddStripeConnectAccountInput {
+  code: String!
+}
+
+type AddStripeConnectAccountPayload {
+  completed: Boolean
+}
+
+type AllowGamerToPlayPayload {
+  allowed: Boolean!
+}
+
+type SearchResult {
+  type: SearchResultType!
+  game: Game
+  user: User
+  session: GamingSession
+}
+
+enum SearchResultType {
+  GAME
+  USER
+  SESSION
+}
+
+type UploadBannerPayload {
+  updated: Boolean!
+}
+
+type UploadProfilePicturePayload {
+  updated: Boolean!
+}
+
+input UpdateUserProfileInput {
+  name: String
+  displayName: String
+  aboutMe: String
+  gender: Gender
+  gamertags: GamertagsInput
+  gamerIsSetup: Boolean
+}
+
+input GamertagsInput {
+  psn: String
+  xbl: String
+  nso: String
+  pc: PCInput
+}
+
+input PCInput {
+  epic: String
+  steam: String
+  origin: String
+  gog: String
+  battlenet: String
+  uplay: String
+  bethesda: String
+  itch: String
+  riot: String
+  windows: String
+}
+
+type UpdateUserProfilePayload {
+  updated: Boolean!
+}
+
+input CancelNotBookeeBookingInput {
+  bookingId: String
+}
+
+type CancelNotBookeeBookingPayload {
+  cancelled: Boolean
+}
+
+input CancelFriendRequestInput {
+  username: String!
+}
+
+type CancelFriendRequestPayload {
+  cancelled: Boolean!
+}
+
+type DeleteOldInvitesPayload {
+  deleted: Boolean!
+}
+
+input UnretireSessionInput {
+  sessionId: String!
+}
+
+type UnretireSessionPayload {
+  unretired: Boolean!
+}
+
+input RetireSessionInput {
+  sessionId: String!
+}
+
+type RetireSessionPayload {
+  retired: Boolean!
+}
+
+type ViewNotificationsPayload {
+  viewed: Boolean!
+}
+
+input UpdateGamerProfileInput {
+  setup: Int
+}
+
+type UpdateGamerProfilePayload {
+  updated: Boolean!
+}
+
+input DeclineGamerRequestInput {
+  gamerRequestId: String!
+}
+
+type DeclineGamerRequestPayload {
+  declined: Boolean!
+}
+
+input AcceptGamerRequestInput {
+  gamerRequestId: String!
+}
+
+type AcceptGamerRequestPayload {
+  accepted: Boolean!
+}
+
+input DeleteNotificationInput {
+  notificationId: String!
+}
+
+type DeleteNotificationPayload {
+  deleted: Boolean!
+}
+
+input DeclineFriendRequestInput {
+  username: String
+  friendRequestId: String
+}
+
+type DeclineFriendRequestPayload {
+  declined: Boolean!
+}
+
+input AcceptFriendRequestInput {
+  friendRequestId: String
+  username: String
+}
+
+type AcceptFriendRequestPayload {
+  accepted: Boolean
+}
+
+input SendFriendRequestInput {
+  username: String!
+}
+
+type SendFriendRequestPayload {
+  sent: Boolean!
+}
+
+input CancelBookingInput {
+  bookingId: String!
+}
+
+type CancelBookingPayload {
+  cancelled: Boolean!
+}
+
+input CancelExtraSlotInput {
+  inviteId: String!
+}
+
+type CancelExtraSlotPayload {
+  cancelled: Boolean!
+}
+
+input DeclineInviteInput {
+  inviteId: String!
+}
+
+type DeclineInvitePayload {
+  declined: Boolean!
+}
+
+input AcceptInviteInput {
+  inviteId: String!
+}
+
+type AcceptInvitePayload {
+  accepted: Boolean!
+}
+
+input SendInviteInput {
+  username: String!
+  inviteId: String!
+}
+
+type SendInvitePayload {
+  sent: Boolean!
+}
+
+input BookTimeSlotsInput {
+  timeSlots: [GamingTimeSlotInput!]!
+  totalWithFee: Float!
+  creatorId: String!
+  totalWithoutFee: Float!
+}
+
+input GamingTimeSlotInput {
+  slots: Int!
+  players: Int!
+  timeSlotId: String!
+  total: Float!
+  startTime: DateTime!
+}
+
+type BookTimeSlotsPayload {
+  booked: Boolean!
+}
+
+input UpdateSessionInput {
+  sessionId: String!
+  title: String
+  game: String
+  price: Float
+  length: Int
+  system: System!
+  slots: Int
+  type: TypeOfGame
+}
+
+type UpdateSessionPayload {
+  updatedSession: GamingSession!
+}
+
+input CancelTimeSlotInput {
+  sessionId: String!
+  timeZone: String!
+}
+
+type CancelTimeSlotPayload {
+  cancelled: Boolean!
+}
+
+input AddMinutesToTimeSlotInput {
+  sessionId: String!
+  minutes: Int!
+  timeZone: String!
+}
+
+type AddMinutesToGamingTimeSlotPayload {
+  updatedSession: GamingTimeSlot!
+}
+
+type AuthPayload {
+  error: String
+  token: String
+  user: User
+}
+
+input SocialMediaInput {
+  twitter: String
+  facebook: String
+  youtube: String
+  instagram: String
+  twitch: String
+  snapchat: String
+}
+
+input CreateBulkGamingTimeSlotsInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  gamingSessionId: String!
+}
+
+type CreateBulkGamingTimeSlotsPayload {
+  created: Boolean!
+  overlaps: [GamingTimeSlot!]!
+  sessions: [GamingTimeSlot!]!
+  successMsg: [String!]!
+  errorMsg: String
+}
+
+input CreateGamerRequestInput {
+  occupations: [Occupations!]!
+  addToOccupations: String
+  socialMedia: SocialMediaInput!
+}
+
+input CreateGamingTimeSlotInput {
+  startTime: DateTime!
+  timeZone: String!
+  gamingSessionId: String!
+}
+
+type CreateGamingTimeSlotPayload {
+  created: Boolean!
+  overlap: Boolean
+  GamingTimeSlot: GamingTimeSlot
+  successMsg: String
+  errorMsg: String
+}
+
+input CreateGamingSessionInput {
+  game: String!
+  title: String!
+  length: Int!
+  price: Int!
+  type: TypeOfGame!
+  slots: Int!
+  system: System!
+}
+
+input RequirementInput {
+  msg: String!
+}
+
+input DiscountInput {
+  percentage: Int!
+  threshold: Int!
+  playerOrSession: PlayerOrSession!
+}
+
+type CreateGamingSessionPayload {
+  gamingSession: GamingSession
+  msg: String
+  created: Boolean!
+}
+
+type CreateGamerRequestPayload {
+  created: Boolean!
+  request: GamerRequest
+  msg: String
+}
+
+input CreateGameInput {
+  tags: [Tags!]!
+  name: String!
+  launcher: String!
+  picture: String!
+  banner: String!
+}
+
+type CreateGamePayload {
+  created: Boolean!
+  game: Game
+  msg: String
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  name: String!
+  username: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  username: String!
+  displayName: String!
+  gender: Gender!
+  gamerIsSetup: Boolean!
+  profilePicture: String
+  banner: String
+  hasDefaultCard: Boolean!
+  savedCards: [SavedCard!]!
+  connectedStripeId: String
+  customerStripeId: String
+  currentGamerRequest: Boolean!
+  sessions: [GamingSession!]!
+  timeSlots: [GamingTimeSlot!]!
+  timeSlotsBooked: [Booking!]!
+  numSessions: Int!
+  sessionIsGoingOn: SessionIsGoingOn
+  setup: Int
+  role: Role!
+  mostPlayedGames: [MostPlayedGames!]!
+  occupations: [Occupations!]!
+  aboutMe: String
+  areWeFriends: Boolean!
+  gamertags: GamerTag
+  numReviews: Int!
+  sentMeAFriendRequest: Boolean!
+  sentFriendRequest: Boolean!
+  reviews: [SessionReview!]!
+  reviewRating: Float!
+  invites: [BookingInvite!]!
+  invitesReceived: [BookingInvite!]!
+}
+
+type MostPlayedGames {
+  name: String!
+  picture: String
+  count: Int!
+}
+
+type SessionIsGoingOn {
+  goingOn: Boolean!
+  session: GamingTimeSlot
+}
+
+type GamingSession {
+  id: ID!
+  gamers: [User!]!
+  game: Game!
+  creator: User!
+  title: String!
+  length: Int!
+  launcher: Launcher
+  price: Float!
+  reviews: [SessionReview!]!
+  system: System!
+  type: TypeOfGame!
+  slots: Int!
+  requirements: [Requirement!]!
+  discounts: [Discount!]!
+  timeSlots: [GamingTimeSlot!]!
+  numReviews: Int!
+  reviewRating: Float!
+  slotsLeftToday: Int!
+  slotsAvailable: Boolean!
+}
+
+type GamingTimeSlot {
+  id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+  gamingSession: GamingSession!
+  gamers: [User!]!
+  players: [BookedPlayer!]!
+  slots: Int!
+  setup: Int!
+  passed: Boolean!
+  bookings: [Booking!]!
+  finished: Boolean!
+  full: Boolean!
+  length: Int!
+}
+
+type Game {
+  id: ID!
+  name: String!
+  tags: [Tags!]!
+  sessions: [GamingSession!]!
+  launcher: Launcher!
+  numSessions: Int!
+  picture: String!
+  banner: String!
+}
