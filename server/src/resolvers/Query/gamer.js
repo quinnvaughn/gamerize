@@ -1,7 +1,7 @@
 const gamer = {
   async getGamers(parent, { first }, { prisma }) {
     return await prisma.users({
-      where: { role: 'GAMER' },
+      where: { role: 'GAMER', gamerIsSetup: true },
       first,
     })
   },
