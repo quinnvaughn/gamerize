@@ -7,7 +7,7 @@ const gamer = {
   },
   async totalGamers(parent, _, { prisma }) {
     return await prisma
-      .usersConnection({ where: { role: 'GAMER' } })
+      .usersConnection({ where: { role: 'GAMER', gamerIsSetup: true } })
       .aggregate()
       .count()
   },
