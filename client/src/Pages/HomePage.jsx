@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import Media from 'react-media'
+import { Helmet } from 'react-helmet'
 
 //local imports
 import Loading from '../Components/Loading'
@@ -128,6 +129,9 @@ export default function HomePage(props) {
     <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
+      <Helmet>
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
       <NavBar />
       <Jumbotron />
       <Content>

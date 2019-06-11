@@ -6,6 +6,7 @@ import _ from 'lodash'
 import gql from 'graphql-tag'
 import Media from 'react-media'
 import { Subscribe } from 'unstated'
+import { Helmet } from 'react-helmet'
 
 //local
 import SessionsContainer from '../Containers/SessionsContainer'
@@ -382,6 +383,9 @@ export default function SpecificSessionPage(props) {
     <ErrorPage errors={errors} />
   ) : (
     <PageContainer>
+      <Helmet>
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
       <NavBar />
       <BannerContainer>
         <Banner src={data.getSpecificSession.creator.banner} alt="Banner" />
