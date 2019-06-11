@@ -385,6 +385,20 @@ export default function SpecificSessionPage(props) {
     <PageContainer>
       <Helmet>
         <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content={`${data.getSpecificSession.title}`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Play ${data.getSpecificSession.game.name} with ${
+            data.getSpecificSession.creator.displayName
+          }`}
+        />
+        <meta
+          name="twitter:image"
+          content={`${data.getSpecificSession.creator.profilePicture}`}
+        />
       </Helmet>
       <NavBar />
       <BannerContainer>
