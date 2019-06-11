@@ -28,6 +28,16 @@ const Discord = styled.div`
   }
 `
 
+const Blog = styled.div`
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-right: 2rem;
+  :hover {
+    cursor: pointer;
+    color: #db1422;
+  }
+`
+
 const Copyright = styled.div`
   font-size: 1.6rem;
 `
@@ -53,6 +63,9 @@ export default function Footer(props) {
       <Discord onClick={() => (window.location = 'https://discord.gg/RVB43KF')}>
         Discord
       </Discord>
+      <Blog onClick={() => (window.location = 'https://medium.com/gamerize')}>
+        Blog
+      </Blog>
       <FAQ to="/faq">FAQ</FAQ>
       <Copyright>&copy;{` ${dateFns.getYear(new Date())} Gamerize`}</Copyright>
     </Container>
