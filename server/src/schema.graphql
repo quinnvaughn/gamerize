@@ -58,6 +58,7 @@ type Query {
   moreSessions(search: String!, skip: Int): [GamingSession!]!
   moreGames(search: String!, skip: Int): [Game!]!
   moreUsers(search: String!, skip: Int): [User!]!
+  averagePricePerBooking: Float!
 }
 
 type Mutation {

@@ -38,6 +38,28 @@ const booking = {
         : []
     return bookings
   },
+  async averagePricePerBooking(parent, _, { prisma }) {
+    const query = `
+        {
+          bookings {
+            numSlots
+            timeslot {
+              gamingSession {
+                price
+              }
+            }
+          }
+        }
+    `
+
+    const { bookings } = await prisma.$graphql(query)
+    const totalreducer = (acc, cur) =>
+      acc + cur.numSlots * cur.timeslot.gamingSession.price
+    const slotsreducer = (acc, cur) => acc + cur.numSlots
+    const total = bookings.reduce(totalreducer, 0)
+    const totalSlots = bookings.reduce(slotsreducer, 0)
+    return (total / totalSlots).toFixed(2)
+  },
 }
 
 module.exports = { booking }

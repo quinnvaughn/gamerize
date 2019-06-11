@@ -55,6 +55,7 @@ const STATISTICS = gql`
     ourTakeHome
     numSessionsPlayed
     numSessionsPlayedToday
+    averagePricePerBooking
   }
 `
 
@@ -82,6 +83,8 @@ export default function AdminDashboardStatsPage(props) {
           <Data>{data.numSessionsPlayed}</Data>
           <Title>Number of Sessions Played Today</Title>
           <Data>{data.numSessionsPlayedToday}</Data>
+          <Title>Average Price Per Booking</Title>
+          <Data>{data.averagePricePerBooking}</Data>
         </Top>
       </Content>
     </PageContainer>
