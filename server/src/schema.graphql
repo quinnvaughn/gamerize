@@ -505,7 +505,6 @@ type CreateGamerRequestPayload {
 input CreateGameInput {
   tags: [Tags!]!
   name: String!
-  launcher: String!
   picture: String!
   banner: String!
 }
