@@ -104,7 +104,7 @@ const signedInLinks = [
   {
     text: 'Help',
     path: '/faq',
-  },
+  }
 ]
 
 const GET_ME = gql`

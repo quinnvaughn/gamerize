@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Image } from 'cloudinary-react'
 import { withRouter } from 'react-router-dom'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
@@ -80,6 +81,7 @@ const signedInLinks = [
 function IconWithDropdown(props) {
   const node = useRef()
   const [open, setOpen] = useState(false)
+  const client = useApolloClient()
   useOnOutsideClick(
     node,
     useCallback(() => {
@@ -155,6 +157,18 @@ function IconWithDropdown(props) {
                   )
                 }
               })}
+          {props.loggedIn && (
+            <DropdownOption
+              key="Logout"
+              onClick={async () => {
+                await client.resetStore()
+                await props.history.push('/')
+                await localStorage.removeItem('TOKEN')
+              }}
+            >
+              Log out
+            </DropdownOption>
+          )}
         </Dropdown>
       )}
     </IconContainer>
