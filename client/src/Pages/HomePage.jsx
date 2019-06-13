@@ -17,6 +17,7 @@ import useTitle from '../Hooks/useTitle'
 import TopSessionsRow from '../Components/TopSessionsRow'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
+import useNotifications from '../Hooks/useNotifications'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -100,6 +101,7 @@ const GET_GAMES = gql`
 
 export default function HomePage(props) {
   useTitle('Gamerize - Play games with your favorite people')
+  useNotifications()
   useEffect(() => {
     Mixpanel.track('Consumer looked at website.')
   }, {})

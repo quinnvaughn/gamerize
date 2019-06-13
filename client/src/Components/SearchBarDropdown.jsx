@@ -294,7 +294,7 @@ function GameMore(props) {
     <Results>
       <BigContainer>
         <ChevronLeft onClick={() => props.setMore(null)} />
-        <BigType>Users</BigType>
+        <BigType>Games</BigType>
       </BigContainer>
       {!loading &&
         data &&
@@ -370,6 +370,7 @@ function UserMore(props) {
           <SearchResultUser
             username={user.username}
             name={user.name}
+            profilePicture={user.profilePicture}
             gamer={user.role === 'GAMER'}
             numSessions={user.numSessions}
           />
