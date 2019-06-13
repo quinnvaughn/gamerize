@@ -75,7 +75,7 @@ export default function SimpleModal(props) {
   useEffect(() => {
     document.body.style.overflow = lock ? 'hidden' : 'inherit'
     return () => {
-      setLock(false)
+      document.body.style.overflow = 'inherit'
     }
   }, [lock])
 
