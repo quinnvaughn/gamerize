@@ -74,6 +74,11 @@ const ExitContainer = styled.div`
   height: 3rem;
 `
 
+const SignInToBook = styled.div`
+  font-size: 1.8rem;
+  font-weight: 800;
+`
+
 export default function SmallSelectionOptions({
   price,
   reviews,
@@ -110,25 +115,29 @@ export default function SmallSelectionOptions({
           <NumReviews>{`${numReviews}`}</NumReviews>
         </RatingContainer> */}
       </Top>
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <Fragment>
-            <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-            <TimeSlots gamer={gamer} game={game} />
-            <Totals
-              price={price}
-              refetch={refetch}
-              meRefetch={meRefetch}
-              me={me}
-              creator={creator}
-              hasDefaultCard={me.hasDefaultCard}
-              customerId={me.customerStripeId}
-              launcher={launcher}
-              system={system}
-            />
-          </Fragment>
-        )}
-      </Subscribe>
+      {me === null ? (
+        <SignInToBook>Please sign in to book</SignInToBook>
+      ) : (
+        <Subscribe to={[SessionsContainer]}>
+          {session => (
+            <Fragment>
+              <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
+              <TimeSlots gamer={gamer} game={game} />
+              <Totals
+                price={price}
+                refetch={refetch}
+                meRefetch={meRefetch}
+                me={me}
+                creator={creator}
+                hasDefaultCard={me && me.hasDefaultCard}
+                customerId={me.customerStripeId}
+                launcher={launcher}
+                system={system}
+              />
+            </Fragment>
+          )}
+        </Subscribe>
+      )}
     </Container>
   )
 }
