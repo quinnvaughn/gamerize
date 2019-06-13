@@ -3,7 +3,6 @@ const { importSchema } = require('graphql-import')
 const { Prisma } = require('./generated/prisma-client')
 const cron = require('node-cron')
 
-//local data
 const resolvers = require('./resolvers')
 
 const basicDefs = gql(importSchema('./src/schema.graphql'))
