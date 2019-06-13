@@ -7,6 +7,7 @@ const gamingsession = {
       game: { connect: { name: input.game } },
       title: input.title,
       length: input.length,
+      launcher: input.launcher,
       price: input.price,
       gamers: {
         connect: [{ id: userId }],

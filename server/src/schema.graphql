@@ -475,6 +475,7 @@ input CreateGamingSessionInput {
   title: String!
   length: Int!
   price: Int!
+  launcher: Launcher
   type: TypeOfGame!
   slots: Int!
   system: System!
