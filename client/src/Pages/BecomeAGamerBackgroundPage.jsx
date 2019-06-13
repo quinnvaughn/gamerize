@@ -31,6 +31,9 @@ const Container = styled.div`
   padding: 3rem 3rem 1.6rem;
   height: 100%;
   position: relative;
+  @media (max-width: 1127px) {
+    width: 100%;
+  }
 `
 
 const Title = styled.div`
@@ -124,6 +127,9 @@ const Buttons = styled.div`
   justify-content: space-between;
   padding: 3rem 3rem 1.6rem;
   width: 60%;
+  @media (max-width: 1127px) {
+    width: 100%;
+  }
 `
 
 const DontSeeYours = styled.div`
