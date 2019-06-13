@@ -74,6 +74,9 @@ export default function SimpleModal(props) {
   const [lock, setLock] = useState(true)
   useEffect(() => {
     document.body.style.overflow = lock ? 'hidden' : 'inherit'
+    return () => {
+      setLock(false)
+    }
   }, [lock])
 
   const handleClickOutside = () => {
