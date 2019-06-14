@@ -10,6 +10,7 @@ import TypeSessionDropdown from './TypeSessionDropdown'
 import LauncherDropdown from './LauncherDropdown'
 import { formatSystem } from '../utils/Strings'
 import { formatLauncher } from '../utils/System'
+import { Mixpanel } from './Mixpanel'
 
 const Container = styled.div`
   width: 100%;
@@ -293,6 +294,7 @@ export default function CreateSession(props) {
             type: state.type,
           }
           const data = await createSession({ variables: { input } })
+          Mixpanel.track('Session created')
           await props.refetch()
           props.setOpen(false)
         }}

@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import TimePicker from './TimePicker'
 import SelectDayForSession from './SelectDayForSession'
 import { convertTo24Hours, convertToDay } from '../utils/Dates'
+import { Mixpanel } from './Mixpanel';
 
 const Card = styled.div`
   background: #fff;
@@ -283,6 +284,7 @@ export default function GamerSessionCardBack({
                 const { data } = await createGamingSlot({
                   variables: { input },
                 })
+                Mixpanel.track('Added one time slot')
                 data.createGamingTimeSlot.successMsg &&
                   setSuccess(data.createGamingTimeSlot.successMsg)
                 data.createGamingTimeSlot.errorMsg &&
@@ -342,6 +344,7 @@ export default function GamerSessionCardBack({
                 const { data } = await createBulkGamingSlots({
                   variables: { input },
                 })
+                Mixpanel.track('Added several time slots')
                 data.createBulkGamingTimeSlots.successMsg &&
                   setSuccess(data.createBulkGamingTimeSlots.successMsg)
                 data.createBulkGamingTimeSlots.errorMsg &&
