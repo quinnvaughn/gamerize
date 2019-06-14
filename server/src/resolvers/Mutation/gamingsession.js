@@ -54,6 +54,7 @@ const gamingsession = {
           price: input.price,
           game: { connect: { name: input.game } },
           length: input.length,
+          launcher: input.launcher,
           system: input.system,
           slots: input.slots,
           type: input.type,
