@@ -277,13 +277,17 @@ export default function CreatedSessionCardBack({
         <EditSession
           disabled={priceError}
           onClick={async () => {
-            if (state.system === 'PC')
             const input = {
               sessionId: session.id,
               title: state.title,
               game: state.game,
               price: parseFloat(state.price),
-              launcher: state.launcher === null && state.system === 'PC' ? 'STEAM' : state.launcher.length === 0 ? null : state.launcher,
+              launcher:
+                state.launcher === null && state.system === 'PC'
+                  ? 'STEAM'
+                  : state.launcher.length === 0
+                  ? null
+                  : state.launcher,
               length: state.length,
               system: state.system,
               slots: state.slots,
