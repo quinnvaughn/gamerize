@@ -190,6 +190,7 @@ export default function CreatedSessionCardBack({
   state,
   refetch,
 }) {
+  console.log(state.launcher)
   const [priceError, setPriceError] = useState(false)
   const updateSession = useMutation(UPDATE_SESSION)
   const retireSession = useMutation(RETIRE_SESSION)
@@ -253,7 +254,7 @@ export default function CreatedSessionCardBack({
         <LauncherDropdown
           label={'Launcher: '}
           dispatch={dispatch}
-          title={formatLauncher(state.launcher)}
+          title={state.launcher === null ? '' : formatLauncher(state.launcher)}
         />
       )}
       <SlotsContainer>
