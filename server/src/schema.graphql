@@ -474,7 +474,7 @@ input CreateGamingSessionInput {
   game: String!
   title: String!
   length: Int!
-  price: Int!
+  price: Float!
   launcher: Launcher
   type: TypeOfGame!
   slots: Int!

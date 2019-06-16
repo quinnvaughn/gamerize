@@ -204,11 +204,11 @@ export default function CreatedSessionCardBack({
           value={state.title}
         />
       </TitleContainer>
-      <GameSessionDropdown
+      {/* <GameSessionDropdown
         label={'Game: '}
         dispatch={dispatch}
         title={state.game}
-      />
+      /> */}
       <PriceContainer>
         <Price>Price: </Price>
         <SessionPrice
@@ -244,18 +244,8 @@ export default function CreatedSessionCardBack({
         />
         <Setup>*not counting setup</Setup>
       </LengthContainer>
-      <SystemsSessionDropdown
-        label={'System: '}
-        dispatch={dispatch}
-        title={formatSystem(state.system)}
-      />
-      {state.system === 'PC' && (
-        <LauncherDropdown
-          label={'Launcher: '}
-          dispatch={dispatch}
-          title={formatLauncher(state.launcher)}
-        />
-      )}
+      {/* <SystemsSessionDropdown value="System" /> */}
+      {/* {state.system === 'PC' && <LauncherDropdown value="Launcher" />} */}
       <SlotsContainer>
         <Slots>Slots:</Slots>
         <SessionSlots
@@ -268,11 +258,9 @@ export default function CreatedSessionCardBack({
           value={state.slots}
         />
       </SlotsContainer>
-      <TypeSessionDropdown
-        label={'Type: '}
-        dispatch={dispatch}
-        title={state.type}
-      />
+      {/* <TypeSessionDropdown
+        value="Type"
+      /> */}
       <ButtonContainer>
         <EditSession
           disabled={priceError}
