@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
@@ -164,6 +164,13 @@ function GamerOnboardingPhotosPage(props) {
   const { data, loading, refetch, error } = useQuery(GET_INFO)
   const uploadProfilePicture = useMutation(UPLOAD_PROFILE_PICTURE)
   const uploadBanner = useMutation(UPLOAD_BANNER)
+  useEffect(() => {
+    if (data.me && data.me.profilePicture) {
+      data.me.profilePicture !==
+        'https://res.cloudinary.com/gamerize/image/upload/v1555813486/gamerize_default_avatar.jpg' &&
+        setDisabled(false)
+    }
+  }, [data])
   return loading ? (
     <Loading />
   ) : error ? (

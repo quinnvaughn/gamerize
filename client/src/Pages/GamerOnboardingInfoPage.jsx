@@ -216,7 +216,7 @@ function GamerOnboardingInfoPage(props) {
           </Subtitle>
           <Title>Most important</Title>
           <Subtitle>
-            Don't be an asshole to the gamers, or standoffish, or quiet. We want
+            Don't be an asshole to the gamers, standoffish, or quiet. We want
             this to be a fun experience for everyone.
           </Subtitle>
           <Stripe

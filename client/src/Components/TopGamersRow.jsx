@@ -82,7 +82,7 @@ export default function GamerRow(props) {
       <AllTheGamers>{map(props.data.getGamers, props.first)}</AllTheGamers>
       <ShowAllContainer>
         <ShowAll to={`/gamers`}>
-          {`Show All Gamers (${props.data.getGamers.length})`}
+          {`Show All Gamers (${props.data.totalGamers})`}
           <ShowAllRight />
         </ShowAll>
       </ShowAllContainer>

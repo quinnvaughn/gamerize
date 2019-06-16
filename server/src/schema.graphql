@@ -391,6 +391,7 @@ input UpdateSessionInput {
   title: String
   game: String
   price: Float
+  launcher: Launcher
   length: Int
   system: System!
   slots: Int

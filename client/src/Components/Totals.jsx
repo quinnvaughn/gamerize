@@ -206,7 +206,7 @@ function Totals(props) {
           ) : isMe ? (
             <Me>You can't add timeslots on your own session</Me>
           ) : (
-            <AddSession>Please add a session</AddSession>
+            <AddSession>Please add a timeslot</AddSession>
           )
           return (
             <Fragment>
