@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import { MdClose } from 'react-icons/md'
+import { Formik, Field } from 'formik'
+import * as yup from 'yup'
 
 //local imports
-import GameSessionDropdown from './GameSessionDropdown'
-import TypeSessionDropdown from './TypeSessionDropdown'
-import SystemsSessionDropdown from './SystemsSessionDropdown'
-import LauncherDropdown from './LauncherDropdown'
-import { formatSystem } from '../utils/Strings'
+import { formatSystem, capitalize } from '../utils/Strings'
 import { formatLauncher } from '../utils/System'
+import CustomInput from './CustomInput'
+import CustomSelect from './CustomSelect'
 
 const Card = styled.div`
   background: #fff;
@@ -28,143 +29,61 @@ const Card = styled.div`
   }
 `
 
-const TitleContainer = styled.div`
-  margin-bottom: 0.5rem;
-`
-const Title = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-`
-
-const SessionTitle = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  font-weight: 600;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const PriceContainer = styled.div`
-  margin-bottom: 0.5rem;
-`
-
-const Price = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-`
-
-const SessionPrice = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  font-weight: 600;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const LengthContainer = styled.div`
-  margin-bottom: 0.5rem;
-`
-
-const Length = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-`
-
-const SessionLength = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  font-weight: 600;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const Setup = styled.span`
-  font-size: 1.2rem;
-  margin-left: 0.5rem;
-`
-
-const SlotsContainer = styled.div`
-  margin-bottom: 0.5rem;
-`
-
-const Slots = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-`
-
-const SessionSlots = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  font-weight: 600;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `
 
 const EditSession = styled.button`
-  background: #db1422;
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   padding: 1rem 1.4rem;
   color: #fff;
   cursor: pointer;
   outline: 0;
-  border: 1px solid #db1422;
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
   margin-top: 1rem;
+  pointer-events: ${props => props.disabled && 'none'};
 `
 
 const DeleteSession = styled.button`
-  background: #fff;
+  background: ${props => (props.disabled ? '#ebebeb' : '#fff')};
   padding: 1rem 1.4rem;
-  color: #db1422;
+  color: ${props => (props.disabled ? '#fff' : '#db1422')};
   cursor: pointer;
   outline: 0;
-  border: 1px solid #db1422;
+  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   font-size: 1.6rem;
   font-weight: 600;
   margin-top: 1rem;
+  pointer-events: ${props => props.disabled && 'none'};
 `
 
-const ErrorMessage = styled.div`
-  font-size: 1.6rem;
-  color: #db1422;
+const Title = styled.div`
+  font-size: 2.4rem;
   font-weight: 700;
-  margin-top: 0.3rem;
 `
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`
+
+const Close = styled(MdClose)`
+  font-size: 3rem;
+  color: black;
+  :hover {
+    color: #db1422;
+    cursor: pointer;
+  }
+`
+
+const UpdateSessionForm = styled.form``
 
 const UPDATE_SESSION = gql`
   mutation($input: UpdateSessionInput!) {
@@ -184,137 +103,410 @@ const RETIRE_SESSION = gql`
   }
 `
 
+const systems = ['PC', 'XBOX_ONE', 'PS4', 'NINTENDO_SWITCH']
+
+const launchers = [
+  'EPIC',
+  'STEAM',
+  'ORIGIN',
+  'BATTLENET',
+  'GOG',
+  'UPLAY',
+  'BETHESDA',
+  'ITCH',
+  'WINDOWS',
+  'RIOT',
+]
+
+const types = ['CUSTOM', 'CASUAL', 'COMPETITIVE']
+
+const createdSessionSchema = yup.object().shape({
+  title: yup
+    .string()
+    .trim()
+    .required('A title is required'),
+  price: yup.lazy(value => {
+    if (parseFloat(value) === 0) {
+      return yup
+        .number()
+        .max(0, 'Price must be either 0 or at least 1 dollar')
+        .required('Price is required')
+    }
+    return yup
+      .number()
+      .min(1, 'Price must be either 0 or at least 1 dollar')
+      .required('Price is required')
+  }),
+  game: yup
+    .string()
+    .nullable()
+    .required('You must choose a game'),
+  launcher: yup.mixed().when('system', {
+    is: val => val === 'PC',
+    then: yup
+      .string()
+      .nullable()
+      .required('You must have a launcher for PC games'),
+  }),
+  length: yup
+    .number()
+    .min(1, 'Length must be at least a minute')
+    .required('Length of game is required'),
+  type: yup
+    .string()
+    .nullable()
+    .required('Type of game is required'),
+  system: yup
+    .string()
+    .nullable()
+    .required('System is required'),
+  slots: yup
+    .number()
+    .min('1', 'You must have at least one slot in your session')
+    .required('Slots are required'),
+})
+
 export default function CreatedSessionCardBack({
   session,
-  dispatch,
   state,
+  dispatch,
   refetch,
+  games,
 }) {
-  const [priceError, setPriceError] = useState(false)
+  const [submitAction, setSubmitAction] = useState()
   const updateSession = useMutation(UPDATE_SESSION)
   const retireSession = useMutation(RETIRE_SESSION)
   return (
     <Card back>
-      <TitleContainer>
-        <Title>Title: </Title>
-        <SessionTitle
-          onChange={e => {
-            dispatch({ type: 'setTitle', payload: e.target.value })
-          }}
-          value={state.title}
-        />
-      </TitleContainer>
-      <GameSessionDropdown
-        label={'Game: '}
-        dispatch={dispatch}
-        title={state.game}
-      />
-      <PriceContainer>
-        <Price>Price: </Price>
-        <SessionPrice
-          onChange={e => {
-            setPriceError(false)
-            if (Number(e.target.value) !== 0 && Number(e.target.value) < 1) {
-              setPriceError(true)
-            } else {
-              dispatch({
-                type: 'setPrice',
-                payload: e.target.value === '' ? '' : e.target.value,
-              })
-            }
-          }}
-          value={state.price}
-        />
-        {priceError && (
-          <ErrorMessage>
-            Price must either be zero or at least a dollar
-          </ErrorMessage>
-        )}
-      </PriceContainer>
-      <LengthContainer>
-        <Length>Length:</Length>
-        <SessionLength
-          onChange={e => {
-            dispatch({
-              type: 'setLength',
-              payload: e.target.value === '' ? '' : Number(e.target.value),
-            })
-          }}
-          value={state.length}
-        />
-        <Setup>*not counting setup</Setup>
-      </LengthContainer>
-      <SystemsSessionDropdown
-        label={'System: '}
-        dispatch={dispatch}
-        title={formatSystem(state.system)}
-      />
-      {state.system === 'PC' && (
-        <LauncherDropdown
-          label={'Launcher: '}
-          dispatch={dispatch}
-          title={state.launcher === null ? '' : formatLauncher(state.launcher)}
-        />
-      )}
-      <SlotsContainer>
-        <Slots>Slots:</Slots>
-        <SessionSlots
-          onChange={e => {
-            dispatch({
-              type: 'setSlots',
-              payload: e.target.value === '' ? '' : Number(e.target.value),
-            })
-          }}
-          value={state.slots}
-        />
-      </SlotsContainer>
-      <TypeSessionDropdown
-        label={'Type: '}
-        dispatch={dispatch}
-        title={state.type}
-      />
-      <ButtonContainer>
-        <EditSession
-          disabled={priceError}
-          onClick={async () => {
+      <Formik
+        enableReinitialize={true}
+        validationSchema={createdSessionSchema}
+        initialValues={{
+          title: session.title,
+          price: parseFloat(session.price).toFixed(2),
+          length: session.length,
+          game: session.game.name,
+          system: session.system,
+          launcher: session.launcher,
+          slots: session.slots,
+          type: session.type,
+        }}
+        isInitialValid={true}
+        onSubmit={async (values, actions) => {
+          if (submitAction === 'update') {
             const input = {
               sessionId: session.id,
-              title: state.title,
-              game: state.game,
-              price: parseFloat(state.price),
-              launcher:
-                state.launcher === null && state.system === 'PC'
-                  ? 'STEAM'
-                  : state.launcher.length === 0
-                  ? null
-                  : state.launcher,
-              length: state.length,
-              system: state.system,
-              slots: state.slots,
-              type: state.type,
+              title: values.title,
+              game: values.game,
+              price: parseFloat(values.price),
+              length: values.length,
+              system: values.system,
+              slots: values.slots,
+              type: values.type,
             }
-            await updateSession({ variables: { input } })
+            const {data} = await updateSession({ variables: { input } })
+            if (data.updateSession.updated) {
             await refetch()
+            actions.setSubmitting(false)
+            }
             dispatch({ type: 'flip', payload: false })
-          }}
-        >
-          Update Session
-        </EditSession>
-        <DeleteSession
-          onClick={async () => {
+          }
+          else if (submitAction === 'retire') {
             const input = {
               sessionId: session.id,
             }
             const { data } = await retireSession({ variables: { input } })
             if (data.retireSession.retired) {
               await refetch()
+              actions.setSubmitting(false)
             }
             dispatch({ type: 'flip', payload: false })
-          }}
+          }
+        }}
+      >
+        {({
+          values,
+          errors,
+          handleSubmit,
+          resetForm,
+          submitForm,
+          isSubmitting,
+          isValid,
+        }) => (
+          <UpdateSessionForm method="post" onSubmit={handleSubmit}>
+            <TopContainer>
+              <Title>Update Session</Title>
+              <Close
+                onClick={() => {
+                  dispatch({ type: 'flip', payload: false })
+                  resetForm()
+                }}
+              />
+            </TopContainer>
+            <Field
+              name="title"
+              placeholder="Edit your title"
+              type="text"
+              required
+              component={CustomInput}
+            />
+            <Field
+              name="price"
+              min="0.01"
+              step="0.01"
+              type="number"
+              placeholder="Set the price"
+              required
+              component={CustomInput}
+            />
+            <Field
+              name="game"
+              menuPortalTarget
+              isClearable={false}
+              options={games.allGames.map(game => ({
+                value: game.name,
+                label: game.name,
+              }))}
+              placeholder="Select your game"
+              component={CustomSelect}
+            />
+            <Field
+              name="length"
+              type="number"
+              min="1"
+              placeholder="Pick the length of the game in whole minutes"
+              required
+              component={CustomInput}
+            />
+            <Field
+              name="system"
+              isClearable={false}
+              menuPortalTarget
+              options={systems.map(system => ({
+                value: system,
+                label: formatSystem(system),
+              }))}
+              placeholder="Choose your system"
+              component={CustomSelect}
+            />
+            {(values.system === 'PC' || values.system.value === 'PC') && (
+              <Field
+                name="launcher"
+                isClearable={false}
+                menuPortalTarget
+                placeholder="Please select your launcher"
+                options={launchers.map(launcher => ({
+                  value: launcher,
+                  label: formatLauncher(launcher),
+                }))}
+                component={CustomSelect}
+              />
+            )}
+            <Field
+              name="slots"
+              min="1"
+              type="number"
+              placeholder="Specify how you people you can play with"
+              required
+              component={CustomInput}
+            />
+            <Field
+              name="type"
+              isClearable={false}
+              menuPortalTarget
+              options={types.map(type => ({
+                value: type,
+                label: capitalize(type),
+              }))}
+              placeholder="Choose the type of game"
+              component={CustomSelect}
+            />
+            <ButtonContainer>
+            <EditSession
+              onClick={async () => {
+                await setSubmitAction('update')
+                await submitForm()
+              }}
+              disabled={isSubmitting || !isValid}
+            >
+              Update Session
+            </EditSession>
+            <DeleteSession
+            disabled={isSubmitting || !isValid}
+             onClick={async () => {
+              await setSubmitAction('retire')
+              await submitForm()
+            }}
         >
           Retire Session
         </DeleteSession>
-      </ButtonContainer>
+            </ButtonContainer>
+          </UpdateSessionForm>
+        )}
+      </Formik>
     </Card>
   )
 }
+
+// export default function CreatedSessionCardBack({
+//   session,
+//   state,
+//   dispatch,
+//   refetch,
+//   games
+// }) {
+// const updateSession = useMutation(UPDATE_SESSION)
+  // const retireSession = useMutation(RETIRE_SESSION)
+//   return (
+//     <Card back>
+//       {console.log(session)}
+//       <Formik
+//       enableReinitialize={true}
+//         validationSchema={createSessionSchema}
+//         initialValues={{
+//           title: session.title,
+//           game: session.game.name,
+//           price: session.price,
+//           launcher: session.launcher ? formatLauncher(session.launcher) : '',
+//           length: session.length,
+//           system: formatSystem(session.system),
+//           slots: session.slots,
+//           type: capitalize(session.type)
+//         }}
+//         onSubmit={async (values, actions) => {
+//                     const input = {
+//             title: values.title,
+//             game: values.game.value,
+//             price: parseFloat(values.price),
+//             launcher: values.launcher.value.length === 0 ? null : values.launcher.value,
+//             length: values.length,
+//             system: values.system.value,
+//             slots: values.slots,
+//             type: values.type.value,
+//           }
+//           // const data = await createSession({ variables: { input } })
+//           actions.setSubmitting(false)
+//           await refetch()
+//           // props.setOpen(false)
+//         }}
+//       >
+//         {({
+//           values,
+//           handleSubmit,
+//           isValid,
+//           isSubmitting,
+//         }) => (
+//           <UpdateSessionForm onSubmit={handleSubmit} method="post">
+//             <Field
+//               name="title"
+//               placeholder="Add a title"
+//               type="text"
+//               required
+//               component={CustomInput}
+//             />
+//             <Field
+//               name="price"
+//               min="0.01"
+//               step="0.01"
+//               type="number"
+//               placeholder="Set the price"
+//               required
+//               component={CustomInput}
+//             />
+//             <Field
+//               name="game"
+//               options={games.allGames.map(game => ({
+//                 value: game.name,
+//                 label: game.name,
+//               }))}
+//               placeholder="Select your game"
+//               component={CustomSelect}
+//             />
+
+//             <Field
+//               name="length"
+//               type="number"
+//               min="1"
+//               placeholder="Pick the length of the game in whole minutes"
+//               required
+//               component={CustomInput}
+//             />
+// <Field
+//   name="system"
+//   options={systems.map(system => ({
+//     value: system,
+//     label: formatSystem(system),
+//   }))}
+//   placeholder="Choose your system"
+//   component={CustomSelect}
+// />
+// {values.system && values.system.value === 'PC' && (
+//   <Field
+//     name="launcher"
+//     placeholder="Please select your launcher"
+//     options={launchers.map(launcher => ({
+//       value: launcher,
+//       label: formatLauncher(launcher),
+//     }))}
+//     component={CustomSelect}
+//   />
+// )}
+//             <Field
+//               name="slots"
+//               min="1"
+//               type="number"
+//               placeholder="Specify how you people you can play with"
+//               required
+//               component={CustomInput}
+//             />
+//             <Field
+//               name="type"
+//               options={types.map(type => ({
+//                 value: type,
+//                 label: capitalize(type),
+//               }))}
+//               placeholder="Choose the type of game"
+//               component={CustomSelect}
+//             />
+//             <ButtonContainer>
+// <EditSession
+//   onClick={async () => {
+// const input = {
+//   sessionId: session.id,
+//   title: state.title,
+//   game: state.game,
+//   price: parseFloat(state.price),
+//   length: state.length,
+//   system: state.system,
+//   slots: state.slots,
+//   type: state.type,
+// }
+// await updateSession({ variables: { input } })
+// await refetch()
+// dispatch({ type: 'flip', payload: false })
+//   }}
+// >
+//   Update Session
+// </EditSession>
+        // <DeleteSession
+        //   onClick={async () => {
+        //     const input = {
+        //       sessionId: session.id,
+        //     }
+        //     const { data } = await retireSession({ variables: { input } })
+        //     if (data.retireSession.retired) {
+        //       await refetch()
+        //     }
+        //     dispatch({ type: 'flip', payload: false })
+        //   }}
+        // >
+        //   Retire Session
+        // </DeleteSession>
+//       </ButtonContainer>
+//           </UpdateSessionForm>
+//         )}
+//       </Formik>
+
+//     </Card>
+//   )
+// }
