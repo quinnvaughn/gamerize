@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
-import { useQuery, useMutation} from 'react-apollo-hooks'
+import { useQuery, useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik, Field } from 'formik'
 
@@ -16,7 +16,6 @@ const Container = styled.div`
   width: 100%;
   padding: 2rem;
 `
-
 
 const CreateSessionButton = styled.button`
   background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
@@ -52,24 +51,37 @@ const createSessionSchema = yup.object().shape({
     .required('A title is required'),
   price: yup.lazy(value => {
     if (parseFloat(value) === 0) {
-      return yup.number().max(0, 'Price must be either 0 or at least 1 dollar').required('Price is required')
+      return yup
+        .number()
+        .max(0, 'Price must be either 0 or at least 1 dollar')
+        .required('Price is required')
     }
-    return yup.number().min(1, 'Price must be either 0 or at least 1 dollar').required('Price is required')
+    return yup
+      .number()
+      .min(1, 'Price must be either 0 or at least 1 dollar')
+      .required('Price is required')
   }),
-  game: yup.object().nullable().required('You must choose a game'),
+  game: yup
+    .string()
+    .nullable()
+    .required('You must choose a game'),
   launcher: yup.mixed().when('system', {
-    is: val => val.value === 'PC',
-    then: yup.object().nullable().required('You must have a launcher for PC games')
+    is: val => val === 'PC',
+    then: yup
+      .string()
+      .nullable()
+      .required('You must have a launcher for PC games'),
   }),
   length: yup
     .number()
     .min(1, 'Length must be at least a minute')
     .required('Length of game is required'),
   type: yup
-    .object().nullable()
+    .string()
+    .nullable()
     .required('Type of game is required'),
   system: yup
-    .object()
+    .string()
     .nullable()
     .required('System is required'),
   slots: yup
@@ -107,40 +119,31 @@ const types = ['CUSTOM', 'CASUAL', 'COMPETITIVE']
 
 export default function CreateSession(props) {
   const { data, loading } = useQuery(SEARCH_GAMES)
-    const createSession = useMutation(CREATE_SESSION)
+  const createSession = useMutation(CREATE_SESSION)
   return loading ? null : (
     <Container>
       <Formik
         validationSchema={createSessionSchema}
         initialValues={{
           title: '',
-          game: {
-            label: '',
-            value: '',
-          },
+          game: '',
           price: '',
-          launcher: {
-            label: '',
-            value: '',
-          },
+          launcher: '',
           length: '',
-          system: {
-            label: '',
-            value: '',
-          },
+          system: '',
           slots: '',
-          type: ''
+          type: '',
         }}
         onSubmit={async (values, actions) => {
-                    const input = {
+          const input = {
             title: values.title,
-            game: values.game.value,
+            game: values.game,
             price: parseFloat(values.price),
-            launcher: values.launcher.value.length === 0 ? null : values.launcher.value,
+            launcher: values.launcher.length === 0 ? null : values.launcher,
             length: values.length,
-            system: values.system.value,
+            system: values.system,
             slots: values.slots,
-            type: values.type.value,
+            type: values.type,
           }
           const data = await createSession({ variables: { input } })
           actions.setSubmitting(false)
@@ -149,13 +152,9 @@ export default function CreateSession(props) {
           props.setOpen(false)
         }}
       >
-        {({
-          values,
-          handleSubmit,
-          isValid,
-          isSubmitting,
-        }) => (
+        {({ values, handleSubmit, isValid, isSubmitting }) => (
           <CreateSessionForm onSubmit={handleSubmit} method="post">
+            {console.log(values)}
             <Field
               name="title"
               placeholder="Add a title"
@@ -199,7 +198,7 @@ export default function CreateSession(props) {
               placeholder="Choose your system"
               component={CustomSelect}
             />
-            {values.system && values.system.value === 'PC' && (
+            {values.system === 'PC' && (
               <Field
                 name="launcher"
                 placeholder="Please select your launcher"
@@ -227,7 +226,12 @@ export default function CreateSession(props) {
               placeholder="Choose the type of game"
               component={CustomSelect}
             />
-            <CreateSessionButton type="submit" disabled={isSubmitting || !isValid}>Create Session</CreateSessionButton>
+            <CreateSessionButton
+              type="submit"
+              disabled={isSubmitting || !isValid}
+            >
+              Create Session
+            </CreateSessionButton>
           </CreateSessionForm>
         )}
       </Formik>

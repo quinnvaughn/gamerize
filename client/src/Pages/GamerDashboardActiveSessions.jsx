@@ -94,6 +94,14 @@ const GET_SESSIONS = gql`
   }
 `
 
+const SEARCH_GAMES = gql`
+  {
+    allGames {
+      name
+    }
+  }
+`
+
 export default function GamerDashboardActiveSessions(props) {
   const [openNew, setOpenNew] = useState(false)
   const [edit, setEdit] = useState(false)
@@ -104,8 +112,9 @@ export default function GamerDashboardActiveSessions(props) {
     refetch,
     error: secondError,
   } = useQuery(GET_SESSIONS)
-  const errors = error || secondError
-  return loading || secondLoading ? (
+  const {data: games, loading: thirdLoading, error: thirdError} = useQuery(SEARCH_GAMES)
+  const errors = error || secondError || thirdError
+  return loading || secondLoading || thirdLoading ? (
     <Loading gamer />
   ) : errors ? (
     <ErrorPage errors={errors} />
@@ -125,6 +134,7 @@ export default function GamerDashboardActiveSessions(props) {
             sessions.myGamingSessions &&
             sessions.myGamingSessions.map(session => (
               <CreatedSessionCard
+                games={games}
                 session={session}
                 refetch={refetch}
                 setup={data.me.setup}

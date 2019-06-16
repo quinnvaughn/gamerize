@@ -17,9 +17,11 @@ export default function CustomSelect({
   field,
   form: { touched, errors, setFieldValue, setFieldTouched },
   options,
+  isClearable,
+  menuPortalTarget,
 }) {
   const onChange = option => {
-    setFieldValue(field.name, option)
+    setFieldValue(field.name, option.value)
   }
   const getValue = () => {
     if (options) {
@@ -37,8 +39,9 @@ export default function CustomSelect({
         onBlur={() => setFieldTouched(field.name)}
         placeholder={placeholder}
         isSearchable
-        isClearable
+        isClearable={isClearable === null ? true : isClearable}
         options={options}
+        menuPortalTarget={menuPortalTarget ? document.body : null}
         styles={{
           container: base => ({
             ...base,
@@ -60,6 +63,16 @@ export default function CustomSelect({
             ...base,
             position: 'relative',
             zIndex: 9000,
+          }),
+          singleValue: base => ({
+            ...base,
+            color: 'black',
+          }),
+          menuPortal: base => ({
+            ...base,
+            fontSize: '1.6rem',
+            fontWeight: 600,
+            zIndex: 999,
           }),
         }}
       />

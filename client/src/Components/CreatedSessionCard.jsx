@@ -1,15 +1,13 @@
-import React, { useReducer, useRef, useCallback } from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
 import ReactCardFlip from 'react-card-flip'
 
 //local imports
-import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import CreatedSessionCardFront from './CreatedSessionCardFront'
 import CreatedSessionCardBack from './CreatedSessionCardBack'
 
 const Container = styled.div`
   position: relative;
-  z-index: ${props => props.over && 3};
   width: calc(50% - 1rem);
   margin-right: 1rem;
 `
@@ -53,20 +51,10 @@ function reducer(state, action) {
   }
 }
 
-export default function CreatedSessionCard({ session, setup, refetch }) {
-  const node = useRef()
+export default function CreatedSessionCard({ session, setup, refetch, games }) {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const clearAndFlip = () => {
-    dispatch({ type: 'flip', payload: false })
-  }
-  useOnOutsideClick(
-    node,
-    useCallback(() => {
-      clearAndFlip()
-    }, [])
-  )
   return (
-    <Container ref={node} over={state.dropdown}>
+    <Container>
       <ReactCardFlip isFlipped={state.flip} flipDirection="horizontal">
         <CreatedSessionCardFront
           session={session}
@@ -75,6 +63,7 @@ export default function CreatedSessionCard({ session, setup, refetch }) {
           key="front"
         />
         <CreatedSessionCardBack
+          games={games}
           session={session}
           dispatch={dispatch}
           state={state}
