@@ -123,7 +123,7 @@ export default function GamerAvailability(props) {
     const element = document.getElementById('current')
     // scroll to your element
     element && element.scrollIntoView(true)
-    window.parent.scrollTo(0, 0)
+    props.setScrolledTo(true)
   }, {})
   const renderHours = () => {
     const dateFormat = 'ha'
