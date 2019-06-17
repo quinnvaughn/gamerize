@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useQuery } from 'react-apollo-hooks'
 import _ from 'lodash'
@@ -326,6 +326,7 @@ const GET_GAMER_AVAILABILITY = gql`
 `
 
 export default function UserProfile(props) {
+  const [scrolledTo, setScrolledTo] = useState(false)
   const { data, loading, refetch, error } = useQuery(GET_USER, {
     variables: { username: props.match.params.user },
   })
@@ -346,6 +347,9 @@ export default function UserProfile(props) {
   })
   useTitle(`User Profile - Gamerize`)
   const errors = error || secondError || thirdError
+  useEffect(() => {
+    scrolledTo && window.parent.scrollTo(0, 0)
+  }, [scrolledTo])
   return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : errors ? (
@@ -483,6 +487,7 @@ export default function UserProfile(props) {
                 </NegativeMargins>
               </Sessions>
               <GamerAvailability
+                setScrolledTo={setScrolledTo}
                 day={new Date()}
                 name={data.getUser.name}
                 username={data.getUser.username}
