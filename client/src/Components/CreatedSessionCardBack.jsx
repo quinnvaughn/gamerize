@@ -204,14 +204,13 @@ export default function CreatedSessionCardBack({
               slots: values.slots,
               type: values.type,
             }
-            const {data} = await updateSession({ variables: { input } })
+            const { data } = await updateSession({ variables: { input } })
             if (data.updateSession.updated) {
-            await refetch()
-            actions.setSubmitting(false)
+              await refetch()
+              actions.setSubmitting(false)
             }
             dispatch({ type: 'flip', payload: false })
-          }
-          else if (submitAction === 'retire') {
+          } else if (submitAction === 'retire') {
             const input = {
               sessionId: session.id,
             }
@@ -244,7 +243,7 @@ export default function CreatedSessionCardBack({
               />
             </TopContainer>
             <Field
-            label="Title"
+              label="Title"
               name="title"
               placeholder="Edit your title"
               type="text"
@@ -252,7 +251,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
-            label="Price"
+              label="Price"
               name="price"
               min="0.01"
               step="0.01"
@@ -262,7 +261,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
-            label="Game"
+              label="Game"
               name="game"
               menuPortalTarget
               isClearable={false}
@@ -274,7 +273,7 @@ export default function CreatedSessionCardBack({
               component={CustomSelect}
             />
             <Field
-            label="Length"
+              label="Length"
               name="length"
               type="number"
               min="1"
@@ -283,7 +282,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
-            label="System"
+              label="System"
               name="system"
               isClearable={false}
               menuPortalTarget
@@ -296,7 +295,7 @@ export default function CreatedSessionCardBack({
             />
             {(values.system === 'PC' || values.system.value === 'PC') && (
               <Field
-              label="Launcher"
+                label="Launcher"
                 name="launcher"
                 isClearable={false}
                 menuPortalTarget
@@ -309,7 +308,7 @@ export default function CreatedSessionCardBack({
               />
             )}
             <Field
-            label="Slots"
+              label="Slots"
               name="slots"
               min="1"
               type="number"
@@ -318,7 +317,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
-            label="Type"
+              label="Type"
               name="type"
               isClearable={false}
               menuPortalTarget
@@ -330,24 +329,24 @@ export default function CreatedSessionCardBack({
               component={CustomSelect}
             />
             <ButtonContainer>
-            <EditSession
-              onClick={async () => {
-                await setSubmitAction('update')
-                await submitForm()
-              }}
-              disabled={isSubmitting || !isValid}
-            >
-              Update Session
-            </EditSession>
-            <DeleteSession
-            disabled={isSubmitting || !isValid}
-             onClick={async () => {
-              await setSubmitAction('retire')
-              await submitForm()
-            }}
-        >
-          Retire Session
-        </DeleteSession>
+              <EditSession
+                onClick={async () => {
+                  await setSubmitAction('update')
+                  await submitForm()
+                }}
+                disabled={isSubmitting || !isValid}
+              >
+                Update Session
+              </EditSession>
+              <DeleteSession
+                disabled={isSubmitting}
+                onClick={async () => {
+                  await setSubmitAction('retire')
+                  await submitForm()
+                }}
+              >
+                Retire Session
+              </DeleteSession>
             </ButtonContainer>
           </UpdateSessionForm>
         )}
@@ -355,166 +354,3 @@ export default function CreatedSessionCardBack({
     </Card>
   )
 }
-
-// export default function CreatedSessionCardBack({
-//   session,
-//   state,
-//   dispatch,
-//   refetch,
-//   games
-// }) {
-// const updateSession = useMutation(UPDATE_SESSION)
-  // const retireSession = useMutation(RETIRE_SESSION)
-//   return (
-//     <Card back>
-//       {console.log(session)}
-//       <Formik
-//       enableReinitialize={true}
-//         validationSchema={createSessionSchema}
-//         initialValues={{
-//           title: session.title,
-//           game: session.game.name,
-//           price: session.price,
-//           launcher: session.launcher ? formatLauncher(session.launcher) : '',
-//           length: session.length,
-//           system: formatSystem(session.system),
-//           slots: session.slots,
-//           type: capitalize(session.type)
-//         }}
-//         onSubmit={async (values, actions) => {
-//                     const input = {
-//             title: values.title,
-//             game: values.game.value,
-//             price: parseFloat(values.price),
-//             launcher: values.launcher.value.length === 0 ? null : values.launcher.value,
-//             length: values.length,
-//             system: values.system.value,
-//             slots: values.slots,
-//             type: values.type.value,
-//           }
-//           // const data = await createSession({ variables: { input } })
-//           actions.setSubmitting(false)
-//           await refetch()
-//           // props.setOpen(false)
-//         }}
-//       >
-//         {({
-//           values,
-//           handleSubmit,
-//           isValid,
-//           isSubmitting,
-//         }) => (
-//           <UpdateSessionForm onSubmit={handleSubmit} method="post">
-//             <Field
-//               name="title"
-//               placeholder="Add a title"
-//               type="text"
-//               required
-//               component={CustomInput}
-//             />
-//             <Field
-//               name="price"
-//               min="0.01"
-//               step="0.01"
-//               type="number"
-//               placeholder="Set the price"
-//               required
-//               component={CustomInput}
-//             />
-//             <Field
-//               name="game"
-//               options={games.allGames.map(game => ({
-//                 value: game.name,
-//                 label: game.name,
-//               }))}
-//               placeholder="Select your game"
-//               component={CustomSelect}
-//             />
-
-//             <Field
-//               name="length"
-//               type="number"
-//               min="1"
-//               placeholder="Pick the length of the game in whole minutes"
-//               required
-//               component={CustomInput}
-//             />
-// <Field
-//   name="system"
-//   options={systems.map(system => ({
-//     value: system,
-//     label: formatSystem(system),
-//   }))}
-//   placeholder="Choose your system"
-//   component={CustomSelect}
-// />
-// {values.system && values.system.value === 'PC' && (
-//   <Field
-//     name="launcher"
-//     placeholder="Please select your launcher"
-//     options={launchers.map(launcher => ({
-//       value: launcher,
-//       label: formatLauncher(launcher),
-//     }))}
-//     component={CustomSelect}
-//   />
-// )}
-//             <Field
-//               name="slots"
-//               min="1"
-//               type="number"
-//               placeholder="Specify how you people you can play with"
-//               required
-//               component={CustomInput}
-//             />
-//             <Field
-//               name="type"
-//               options={types.map(type => ({
-//                 value: type,
-//                 label: capitalize(type),
-//               }))}
-//               placeholder="Choose the type of game"
-//               component={CustomSelect}
-//             />
-//             <ButtonContainer>
-// <EditSession
-//   onClick={async () => {
-// const input = {
-//   sessionId: session.id,
-//   title: state.title,
-//   game: state.game,
-//   price: parseFloat(state.price),
-//   length: state.length,
-//   system: state.system,
-//   slots: state.slots,
-//   type: state.type,
-// }
-// await updateSession({ variables: { input } })
-// await refetch()
-// dispatch({ type: 'flip', payload: false })
-//   }}
-// >
-//   Update Session
-// </EditSession>
-        // <DeleteSession
-        //   onClick={async () => {
-        //     const input = {
-        //       sessionId: session.id,
-        //     }
-        //     const { data } = await retireSession({ variables: { input } })
-        //     if (data.retireSession.retired) {
-        //       await refetch()
-        //     }
-        //     dispatch({ type: 'flip', payload: false })
-        //   }}
-        // >
-        //   Retire Session
-        // </DeleteSession>
-//       </ButtonContainer>
-//           </UpdateSessionForm>
-//         )}
-//       </Formik>
-
-//     </Card>
-//   )
-// }

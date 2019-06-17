@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Container = styled.div`
   margin-bottom: 0.5rem;
   display: ${props => props.label && 'flex'};
-  align-items: ${props => props.label && 'center'};
+  flex-direction: ${props => props.label && 'column'};
 `
 
 const Input = styled.input`
@@ -30,6 +30,10 @@ const Label = styled.span`
   margin-right: 0.8rem;
 `
 
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 const SmallErrorMessage = styled.div`
   margin-bottom: 0.2rem;
@@ -45,8 +49,13 @@ export default function CustomInput({
 }) {
   return (
     <Container label={label}>
-      {label && <Label>{label}</Label>}
-      <Input {...field} {...props} label={label}/>
+      {label && (
+        <Top>
+          <Label>{label}</Label>
+          <Input {...field} {...props} label={label} />
+        </Top>
+      )}
+      {!label && <Input {...field} {...props} />}
       {touched[field.name] && errors[field.name] && (
         <SmallErrorMessage>{errors[field.name]}</SmallErrorMessage>
       )}
