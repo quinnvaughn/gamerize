@@ -83,7 +83,7 @@ const notSignedInLinks = [
     path: '/login',
   },
   {
-    text: 'Help',
+    text: 'FAQ',
     path: '/faq',
   },
 ]
@@ -102,9 +102,9 @@ const signedInLinks = [
     path: '/notifications',
   },
   {
-    text: 'Help',
+    text: 'FAQ',
     path: '/faq',
-  }
+  },
 ]
 
 const GET_ME = gql`
