@@ -244,6 +244,7 @@ export default function CreatedSessionCardBack({
               />
             </TopContainer>
             <Field
+            label="Title"
               name="title"
               placeholder="Edit your title"
               type="text"
@@ -251,6 +252,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
+            label="Price"
               name="price"
               min="0.01"
               step="0.01"
@@ -260,6 +262,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
+            label="Game"
               name="game"
               menuPortalTarget
               isClearable={false}
@@ -271,6 +274,7 @@ export default function CreatedSessionCardBack({
               component={CustomSelect}
             />
             <Field
+            label="Length"
               name="length"
               type="number"
               min="1"
@@ -279,6 +283,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
+            label="System"
               name="system"
               isClearable={false}
               menuPortalTarget
@@ -291,6 +296,7 @@ export default function CreatedSessionCardBack({
             />
             {(values.system === 'PC' || values.system.value === 'PC') && (
               <Field
+              label="Launcher"
                 name="launcher"
                 isClearable={false}
                 menuPortalTarget
@@ -303,6 +309,7 @@ export default function CreatedSessionCardBack({
               />
             )}
             <Field
+            label="Slots"
               name="slots"
               min="1"
               type="number"
@@ -311,6 +318,7 @@ export default function CreatedSessionCardBack({
               component={CustomInput}
             />
             <Field
+            label="Type"
               name="type"
               isClearable={false}
               menuPortalTarget

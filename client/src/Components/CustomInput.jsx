@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   margin-bottom: 0.5rem;
+  display: ${props => props.label && 'flex'};
+  align-items: ${props => props.label && 'center'};
 `
 
 const Input = styled.input`
@@ -16,10 +18,18 @@ const Input = styled.input`
   font-size: 1.6rem;
   font-weight: 600;
   width: 100%;
+  flex: ${props => props.label && '1'};
   :hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
   }
 `
+
+const Label = styled.span`
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-right: 0.8rem;
+`
+
 
 const SmallErrorMessage = styled.div`
   margin-bottom: 0.2rem;
@@ -29,12 +39,14 @@ const SmallErrorMessage = styled.div`
 
 export default function CustomInput({
   field,
+  label,
   form: { touched, errors },
   ...props
 }) {
   return (
-    <Container>
-      <Input {...field} {...props} />
+    <Container label={label}>
+      {label && <Label>{label}</Label>}
+      <Input {...field} {...props} label={label}/>
       {touched[field.name] && errors[field.name] && (
         <SmallErrorMessage>{errors[field.name]}</SmallErrorMessage>
       )}

@@ -31,6 +31,12 @@ const CreateSessionButton = styled.button`
   pointer-events: ${props => props.disabled && 'none'};
 `
 
+const Title = styled.div`
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+`
+
 const CreateSessionForm = styled.form``
 
 const CREATE_SESSION = gql`
@@ -154,7 +160,7 @@ export default function CreateSession(props) {
       >
         {({ values, handleSubmit, isValid, isSubmitting }) => (
           <CreateSessionForm onSubmit={handleSubmit} method="post">
-            {console.log(values)}
+            <Title>Create Session</Title>
             <Field
               name="title"
               placeholder="Add a title"

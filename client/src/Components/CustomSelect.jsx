@@ -4,19 +4,30 @@ import Select from 'react-select'
 
 const Container = styled.div`
   margin-bottom: 0.5rem;
+  display: ${props => props.label && 'flex'};
+  align-items: ${props => props.label && 'center'};
 `
+
+const Label = styled.span`
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-right: 0.8rem;
+`
+
 
 const SmallErrorMessage = styled.div`
   margin-bottom: 0.2rem;
   color: #db1422;
   font-size: 1.2rem;
 `
+const StyledSelect = styled(Select)`flex: ${props => props.label && '1'};`
 
 export default function CustomSelect({
   placeholder,
   field,
   form: { touched, errors, setFieldValue, setFieldTouched },
   options,
+  label,
   isClearable,
   menuPortalTarget,
 }) {
@@ -31,14 +42,16 @@ export default function CustomSelect({
     }
   }
   return (
-    <Container>
-      <Select
+    <Container label={label}>
+      {label && <Label>{label}</Label>}
+      <StyledSelect
         name={field.name}
         value={getValue()}
         onChange={onChange}
         onBlur={() => setFieldTouched(field.name)}
         placeholder={placeholder}
         isSearchable
+        label={label}
         isClearable={isClearable === null ? true : isClearable}
         options={options}
         menuPortalTarget={menuPortalTarget ? document.body : null}
