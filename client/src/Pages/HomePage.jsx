@@ -18,6 +18,7 @@ import TopSessionsRow from '../Components/TopSessionsRow'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
 import useNotifications from '../Hooks/useNotifications'
+import useEmailClick from '../Hooks/useEmailClick';
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -103,6 +104,7 @@ export default function HomePage(props) {
   useTitle('Gamerize - Play games with your favorite people')
   useNotifications()
   useEffect(() => {
+    useEmailClick()
     Mixpanel.track('Consumer looked at website.')
   }, {})
   const [first, setFirst] = useState(4)
