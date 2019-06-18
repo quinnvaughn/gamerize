@@ -18,7 +18,8 @@ import TopSessionsRow from '../Components/TopSessionsRow'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
 import useNotifications from '../Hooks/useNotifications'
-import useEmailClick from '../Hooks/useEmailClick';
+import useEmailClick from '../Hooks/useEmailClick'
+import useTwitterClick from '../Hooks/useTwitterClick'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -107,6 +108,7 @@ export default function HomePage(props) {
     Mixpanel.track('Consumer looked at website.')
   }, {})
   useEmailClick()
+  useTwitterClick()
   const [first, setFirst] = useState(4)
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
