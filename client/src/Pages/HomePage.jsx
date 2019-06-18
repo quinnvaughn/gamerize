@@ -104,9 +104,9 @@ export default function HomePage(props) {
   useTitle('Gamerize - Play games with your favorite people')
   useNotifications()
   useEffect(() => {
-    useEmailClick()
     Mixpanel.track('Consumer looked at website.')
   }, {})
+  useEmailClick()
   const [first, setFirst] = useState(4)
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
