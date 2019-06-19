@@ -5,6 +5,7 @@ import SessionsContainer from '../Containers/SessionsContainer'
 import { Subscribe } from 'unstated'
 import _ from 'lodash'
 
+import { useSessions } from '../State/SessionsSelectedContext'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const Container = styled.div`
@@ -65,6 +66,7 @@ const ChevronUp = styled(FaChevronUp)`
 `
 
 export default function SlotOptionsDropdown(props) {
+  const [sessions, dispatch] = useSessions()
   const [open, setOpen] = useState(false)
   const node = useRef()
   useOnOutsideClick(node, () => {
@@ -77,38 +79,32 @@ export default function SlotOptionsDropdown(props) {
           setOpen(!open)
         }}
       >
-        <Subscribe to={[SessionsContainer]}>
-          {session => (
-            <Fragment>
-              <Number>
-                {props.slots
-                  ? session.state.addedSession.slots
-                  : session.state.addedSession.players}
-              </Number>
-              {open ? <ChevronUp /> : <ChevronDown />}
-              {open && (
-                <Dropdown>
-                  {_.times(
-                    session.state.addedSession.availableSlots + 1,
-                    index => {
-                      return (
-                        <DropdownItem
-                          onClick={() => {
-                            return props.slots
-                              ? session.setNumberOfSlots(index)
-                              : session.setNumberOfPlayers(index)
-                          }}
-                        >
-                          {index}
-                        </DropdownItem>
-                      )
-                    }
-                  )}
-                </Dropdown>
-              )}
-            </Fragment>
-          )}
-        </Subscribe>
+        <Number>
+          {props.slots
+            ? sessions.sessionToBeAdded.slots
+            : sessions.sessionToBeAdded.players}
+        </Number>
+        {open ? <ChevronUp /> : <ChevronDown />}
+        {open && (
+          <Dropdown>
+            {_.times(sessions.sessionToBeAdded.availableSlots + 1, index => {
+              return (
+                <DropdownItem
+                  onClick={() => {
+                    props.slots
+                      ? dispatch({ type: 'ADD_SLOTS', payload: index })
+                      : dispatch({
+                          type: 'ADD_PLAYERS',
+                          payload: index,
+                        })
+                  }}
+                >
+                  {index}
+                </DropdownItem>
+              )
+            })}
+          </Dropdown>
+        )}
       </SelectionButton>
     </Container>
   )

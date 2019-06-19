@@ -15,6 +15,7 @@ import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { formatSystem } from '../utils/Strings'
 import { Mixpanel } from './Mixpanel'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   display: block;
@@ -237,12 +238,14 @@ const Me = styled.div`
 `
 
 function TimeSlotSession(props) {
+  const { id } = props.selectedSession
+  const { system, game, launcher } = props.selectedSession.gamingSession
+  const [allSessions, dispatch] = useSessions()
   useEffect(() => {
     const element = document.getElementById('modal')
     element.scrollTop = 0
     Mixpanel.track('Selected a specific timeslot')
   }, {})
-  const { system, game, launcher } = props.selectedSession.gamingSession
   const isMe = props.match.params.user === props.me.username
   const disabled = isMe
     ? true
@@ -283,16 +286,18 @@ function TimeSlotSession(props) {
     )
   }
 
-  const renderSlots = session => {
+  const renderSlots = () => {
+    // Need to fill if already selected session
     let slots = []
     let counter = 0
-    let end = session.state.selectedSession.slots
+    let end = allSessions.selectedSession.slots
     while (counter < end) {
-      let username = session.state.selectedSession.players[counter]
-        ? session.state.selectedSession.players[counter].player.username
+      let username = allSessions.selectedSession.players[counter]
+        ? allSessions.selectedSession.players[counter].player.username
         : 'Available'
       slots.push(
         <Slot
+          index={counter}
           taken={username !== 'Available'}
           value={username ? counter : null}
         >
@@ -308,8 +313,8 @@ function TimeSlotSession(props) {
           <AddSessions
             disabled={disabled}
             onClick={() => {
+              dispatch({ type: 'ADD_SESSION' })
               Mixpanel.track('Added session/s')
-              session.addSessions()
             }}
           >
             Add Session
@@ -335,47 +340,45 @@ function TimeSlotSession(props) {
 
   const renderSlotOptions = () => {
     return (
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <SlotOptionsContainer>
-            <OptionsContainer>
-              <NumberOfSlotsContainer>
-                Slots: <SlotOptionsDropdown slots />
-              </NumberOfSlotsContainer>
-            </OptionsContainer>
-            <OptionsContainer>
-              <NumberOfPlayersContainer>
-                Players: <SlotOptionsDropdown />
-              </NumberOfPlayersContainer>
-            </OptionsContainer>
-            <OptionsContainer>
-              <PickAllSlotsForTeam
-                onClick={() => session.fillAllSlotsWithMyFriends()}
-              >
-                Fill all the slots with my friends
-              </PickAllSlotsForTeam>
-            </OptionsContainer>
-            <OptionsContainer>
-              <PickAllSlotsForMe onClick={() => session.fillAllSlotsForMe()}>
-                Fill all the slots for me
-              </PickAllSlotsForMe>
-            </OptionsContainer>
-          </SlotOptionsContainer>
-        )}
-      </Subscribe>
+      <SlotOptionsContainer>
+        <OptionsContainer>
+          <NumberOfSlotsContainer>
+            Slots: <SlotOptionsDropdown slots />
+          </NumberOfSlotsContainer>
+        </OptionsContainer>
+        <OptionsContainer>
+          <NumberOfPlayersContainer>
+            Players: <SlotOptionsDropdown />
+          </NumberOfPlayersContainer>
+        </OptionsContainer>
+        <OptionsContainer>
+          <PickAllSlotsForTeam
+            onClick={() => {
+              dispatch({ type: 'FILL_ALL_SLOTS_WITH_FRIENDS' })
+            }}
+          >
+            Fill all the slots with my friends
+          </PickAllSlotsForTeam>
+        </OptionsContainer>
+        <OptionsContainer>
+          <PickAllSlotsForMe
+            onClick={() => {
+              dispatch({ type: 'FILL_ALL_SLOTS_FOR_ME' })
+            }}
+          >
+            Fill all the slots for me
+          </PickAllSlotsForMe>
+        </OptionsContainer>
+      </SlotOptionsContainer>
     )
   }
 
   const renderPrimary = () => {
     return (
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <SlotsContainer>
-            {renderSlotOptions()}
-            {renderSlots(session)}
-          </SlotsContainer>
-        )}
-      </Subscribe>
+      <SlotsContainer>
+        {renderSlotOptions()}
+        {renderSlots(allSessions.selectedSession)}
+      </SlotsContainer>
     )
   }
 
