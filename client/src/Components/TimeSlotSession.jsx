@@ -242,13 +242,15 @@ function TimeSlotSession(props) {
     element.scrollTop = 0
     Mixpanel.track('Selected a specific timeslot')
   }, {})
-  const { system, game } = props.selectedSession.gamingSession
+  const { system, game, launcher } = props.selectedSession.gamingSession
   const isMe = props.match.params.user === props.me.username
   const disabled = isMe
     ? true
     : props.me.gamertags
     ? system === 'PC'
-      ? !props.me.gamertags[mapSystem(system)][mapLauncher(game.launcher)]
+      ? !props.me.gamertags[mapSystem(system)][
+          mapLauncher(launcher ? launcher : '')
+        ]
       : !props.me.gamertags[mapSystem(system)]
     : true
   const renderHeader = () => {
@@ -321,7 +323,7 @@ function TimeSlotSession(props) {
             <CorrectGamerTag>
               You must add a gamertag for{' '}
               {system === 'PC'
-                ? `the ${capitalize(game.launcher)} Launcher`
+                ? `the ${capitalize(launcher)} Launcher`
                 : displaySystem(system)}
             </CorrectGamerTag>
           )}

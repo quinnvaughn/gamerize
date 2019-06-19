@@ -165,9 +165,9 @@ const SPECIFIC_SESSION_FOR_GAMER_DAY = gql`
       gamingSession {
         id
         system
+        launcher
         game {
           id
-          launcher
         }
       }
       players {
@@ -188,7 +188,6 @@ function TimeSlotHours(props) {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
-  console.log(data)
   useEffect(() => {
     const element = document.getElementById('currentCalendar')
     element && element.scrollIntoView()
