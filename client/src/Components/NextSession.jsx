@@ -102,7 +102,7 @@ export default function NextSession(props) {
     let counter = 0
     let end = data.nextTimeSlot.slots
     const system = mapSystem(data.nextTimeSlot.gamingSession.system)
-    const launcher = mapLauncher(data.nextTimeSlot.gamingSession.game.launcher)
+    const launcher = mapLauncher(data.nextTimeSlot.gamingSession.game.launcher ? data.nextTimeSlot.gamingSession.game.launcher : '')
     while (counter < end) {
       if (system === 'pc') {
         let username =
