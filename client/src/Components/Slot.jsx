@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FaCheck } from 'react-icons/fa'
-import { Subscribe } from 'unstated'
 
-import SessionsContainer from '../Containers/SessionsContainer'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   border: 1px solid #dddfe2;
@@ -26,19 +25,12 @@ const Check = styled(FaCheck)`
 `
 
 export default function Slot(props) {
+  const [sessions] = useSessions()
+  const selected =
+    sessions.sessionToBeAdded.slots >= props.index || props.selected
   return (
-    <Subscribe to={[SessionsContainer]}>
-      {sessions => {
-        const selected =
-          sessions.state.addedSession.selected.filter(
-            selection => selection === props.value
-          ).length > 0
-        return (
-          <Container selected={selected} taken={props.taken}>
-            {selected ? <Check /> : props.children}
-          </Container>
-        )
-      }}
-    </Subscribe>
+    <Container selected={selected} taken={props.taken}>
+      {selected ? <Check /> : props.children}
+    </Container>
   )
 }

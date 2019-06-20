@@ -7,6 +7,7 @@ import dateFns from 'date-fns'
 import SessionsContainer from '../Containers/SessionsContainer'
 import { singleOrPlural } from '../utils/Strings'
 import { Mixpanel } from './Mixpanel'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   width: 100%;
@@ -118,6 +119,8 @@ const Availability = styled.div`
 `
 
 export default function TodayAvailability(props) {
+  const [allSessions, dispatch] = useSessions()
+  console.log(allSessions)
   useEffect(() => {
     const element = document.getElementById('current')
     element.scrollIntoView()
@@ -192,8 +195,13 @@ export default function TodayAvailability(props) {
                       Mixpanel.track(
                         'Selected session straight from today availability.'
                       )
-                      container.setSelectedSession(session)
-                      container.setShowModal(true)
+                      dispatch({
+                        type: 'SET_SELECTED_SESSION',
+                        payload: session,
+                      })
+                      dispatch({
+                        type: 'SHOW_MODAL',
+                      })
                     }}
                     disabled={session.passed}
                   >

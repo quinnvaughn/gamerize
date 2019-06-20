@@ -14,6 +14,9 @@ import client from './ApolloClient'
 import routes from './routes'
 import GlobalStyle from './globalstyles'
 import ProtectedRoute from './Components/ProtectedRoute'
+import { SessionsProvider } from './State/SessionsSelectedContext'
+
+UNSTATED.isEnabled = false
 
 class App extends Component {
   render() {
@@ -29,25 +32,27 @@ class App extends Component {
                   <ScrollToTop>
                     <GlobalStyle />
                     <CloudinaryContext cloudName="gamerize">
-                      <Switch>
-                        {routes.map(route =>
-                          route.protected ? (
-                            <ProtectedRoute
-                              path={route.path}
-                              component={route.component}
-                              exact={route.exact}
-                              key={route.path}
-                            />
-                          ) : (
-                            <Route
-                              path={route.path}
-                              component={route.component}
-                              exact={route.exact}
-                              key={route.path}
-                            />
-                          )
-                        )}
-                      </Switch>
+                      <SessionsProvider>
+                        <Switch>
+                          {routes.map(route =>
+                            route.protected ? (
+                              <ProtectedRoute
+                                path={route.path}
+                                component={route.component}
+                                exact={route.exact}
+                                key={route.path}
+                              />
+                            ) : (
+                              <Route
+                                path={route.path}
+                                component={route.component}
+                                exact={route.exact}
+                                key={route.path}
+                              />
+                            )
+                          )}
+                        </Switch>
+                      </SessionsProvider>
                     </CloudinaryContext>
                   </ScrollToTop>
                 </Provider>

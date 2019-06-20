@@ -9,6 +9,7 @@ import { MdClose } from 'react-icons/md'
 import { withRouter } from 'react-router-dom'
 
 import SessionsContainer from '../Containers/SessionsContainer'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   display: block;
@@ -188,6 +189,7 @@ function TimeSlotHours(props) {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
+  const [session, dispatch] = useSessions()
   useEffect(() => {
     const element = document.getElementById('currentCalendar')
     element && element.scrollIntoView()
@@ -279,6 +281,10 @@ function TimeSlotHours(props) {
                     full={session.players.length === session.slots}
                     startTime={dateFns.getMinutes(session.startTime)}
                     onClick={() => {
+                      dispatch({
+                        type: 'SET_SELECTED_SESSION',
+                        payload: session,
+                      })
                       container.setSelectedSession(session)
                     }}
                     disabled={session.passed || session.full}

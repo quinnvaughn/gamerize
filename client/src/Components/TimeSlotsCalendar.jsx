@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
 import dateFns from 'date-fns'
 import { withRouter } from 'react-router-dom'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   display: block;
@@ -147,33 +148,32 @@ const ExitContainer = styled.div`
   padding-right: 1rem;
 `
 
-class Calendar extends Component {
-  state = {
-    currentMonth: new Date(),
-    currentDay: new Date(),
-  }
+function TimeSlotsCalendar(props) {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [currentDay, setCurrentDay] = useState(new Date())
+  const [sessions, dispatch] = useSessions()
 
-  componentDidMount() {
+  useEffect(() => {
     window.scrollTo(0, 0)
-  }
+  })
 
-  renderHeader() {
+  function renderHeader() {
     const dateFormat = 'MMMM YYYY'
 
     return (
       <Header>
-        <ChevronLeft onClick={this.prevMonth} />
-        <Month>{dateFns.format(this.state.currentMonth, dateFormat)}</Month>
-        <ChevronRight onClick={this.nextMonth} />
+        <ChevronLeft onClick={prevMonth} />
+        <Month>{dateFns.format(currentMonth, dateFormat)}</Month>
+        <ChevronRight onClick={nextMonth} />
       </Header>
     )
   }
 
-  renderDays() {
+  function renderDays() {
     const dateFormat = 'dddd'
     const days = []
 
-    let startDate = dateFns.startOfWeek(this.state.currentMonth)
+    let startDate = dateFns.startOfWeek(currentMonth)
 
     for (let i = 0; i < 7; i++) {
       days.push(
@@ -186,8 +186,7 @@ class Calendar extends Component {
     return <Days>{days}</Days>
   }
 
-  renderCells() {
-    const { currentMonth, currentDay } = this.state
+  function renderCells() {
     const monthStart = dateFns.startOfMonth(currentMonth)
     const monthEnd = dateFns.endOfMonth(monthStart)
     const startDate = dateFns.startOfWeek(monthStart)
@@ -208,7 +207,7 @@ class Calendar extends Component {
           <Cell
             disabled={!dateFns.isSameMonth(day, monthStart)}
             key={cloneDay}
-            onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+            onClick={() => onDateClick(dateFns.parse(cloneDay))}
             current={dateFns.isSameDay(day, currentDay)}
           >
             <Number>{formattedDate}</Number>
@@ -222,34 +221,27 @@ class Calendar extends Component {
     return <div className="body">{rows}</div>
   }
 
-  onDateClick = day => {
-    this.props.setSelectedDay(day)
+  function onDateClick(day) {
+    dispatch({ type: 'SET_SELECTED_DAY', payload: day })
   }
 
-  nextMonth = () => {
-    this.setState(prevState => ({
-      currentMonth: dateFns.addMonths(prevState.currentMonth, 1),
-    }))
+  function nextMonth() {
+    setCurrentMonth(prev => dateFns.addMonths(prev, 1))
   }
 
-  prevMonth = () => {
-    this.setState(prevState => ({
-      currentMonth: dateFns.subMonths(prevState.currentMonth, 1),
-    }))
+  function prevMonth() {
+    setCurrentMonth(prev => dateFns.subMonths(prev, 1))
   }
-
-  render() {
-    return (
-      <Container>
-        <ExitContainer>
-          <Exit onClick={this.props.close} />
-        </ExitContainer>
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      <ExitContainer>
+        <Exit onClick={props.close} />
+      </ExitContainer>
+      {renderHeader()}
+      {renderDays()}
+      {renderCells()}
+    </Container>
+  )
 }
 
-export default withRouter(Calendar)
+export default withRouter(TimeSlotsCalendar)

@@ -30,6 +30,8 @@ import { formatGamers, formatSystem } from '../utils/Strings'
 import Loading from '../Components/Loading'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
+import { SessionsProvider, useSessions } from '../State/SessionsSelectedContext'
+import SelectedSlotsModal from '../Components/SelectedSlotsModal'
 
 //data
 
@@ -350,6 +352,7 @@ const GET_ME = gql`
 `
 
 export default function SpecificSessionPage(props) {
+  const [allSessions, dispatch] = useSessions()
   useEffect(() => {
     Mixpanel.track('Clicked on a session')
   }, {})
@@ -540,55 +543,40 @@ export default function SpecificSessionPage(props) {
           }
         </Media>
       </Content>
-      <Subscribe to={[SessionsContainer]}>
-        {sessions =>
-          sessions.state.showModal && (
-            <Modal
-              onRequestClose={() => {
-                sessions.setShowModal(!sessions.state.showModal)
-                sessions.setSelectedDay(null)
-                sessions.setSelectedSession(null)
+      {allSessions.showSelectedSlotsModal && <SelectedSlotsModal />}
+      {allSessions.showModal && (
+        <Modal
+          onRequestClose={() => {
+            dispatch({ type: 'CLOSE_MODAL' })
+          }}
+        >
+          {allSessions.selectedSession ? (
+            <TimeSlotSession
+              me={thirdData.me}
+              selectedSession={allSessions.selectedSession}
+              gamer={data.getSpecificSession.creator.displayName}
+              system={data.getSpecificSession.system}
+              game={data.getSpecificSession.game.name}
+              close={() => {
+                dispatch({ type: 'CLOSE_MODAL' })
               }}
-            >
-              {sessions.state.selectedSession ? (
-                <TimeSlotSession
-                  me={thirdData.me}
-                  selectedSession={sessions.state.selectedSession}
-                  gamer={data.getSpecificSession.creator.displayName}
-                  system={data.getSpecificSession.system}
-                  game={data.getSpecificSession.game.name}
-                  goBack={() => sessions.goBack()}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              ) : sessions.state.selectedDay ? (
-                <TimeSlotsHours
-                  setSelectedSession={sessions.setSelectedSession}
-                  day={sessions.state.selectedDay}
-                  goBack={() => sessions.setSelectedDay(null)}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              ) : (
-                <Calendar
-                  setSelectedDay={sessions.setSelectedDay}
-                  close={() => {
-                    sessions.setShowModal(!sessions.state.showModal)
-                    sessions.setSelectedDay(null)
-                    sessions.setSelectedSession(null)
-                  }}
-                />
-              )}
-            </Modal>
-          )
-        }
-      </Subscribe>
+            />
+          ) : allSessions.selectedDay ? (
+            <TimeSlotsHours
+              day={allSessions.selectedDay}
+              close={() => {
+                dispatch({ type: 'CLOSE_MODAL' })
+              }}
+            />
+          ) : (
+            <Calendar
+              close={() => {
+                dispatch({ type: 'CLOSE_MODAL' })
+              }}
+            />
+          )}
+        </Modal>
+      )}
       <Footer />
     </PageContainer>
   )

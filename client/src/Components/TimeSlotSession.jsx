@@ -15,6 +15,7 @@ import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { formatSystem } from '../utils/Strings'
 import { Mixpanel } from './Mixpanel'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   display: block;
@@ -185,6 +186,20 @@ const AddSessions = styled.button`
   border-radius: 4px;
 `
 
+const RemoveSessions = styled.button`
+  background: #fff;
+  pointer-events: ${props => props.disabled && 'none'};
+  padding: 1rem 1.4rem;
+  color: #db1422;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border: 1px solid #db1422;
+  border-radius: 4px;
+  margin-left: 1rem;
+`
+
 const AddSessionsContainer = styled.div`
   width: 100%;
   display: flex;
@@ -237,13 +252,16 @@ const Me = styled.div`
 `
 
 function TimeSlotSession(props) {
+  const { id } = props.selectedSession
+  const { system, game, launcher } = props.selectedSession.gamingSession
+  const [allSessions, dispatch] = useSessions()
   useEffect(() => {
     const element = document.getElementById('modal')
     element.scrollTop = 0
     Mixpanel.track('Selected a specific timeslot')
   }, {})
-  const { system, game, launcher } = props.selectedSession.gamingSession
   const isMe = props.match.params.user === props.me.username
+  const noSlots = allSessions.sessionToBeAdded.slots === 0
   const disabled = isMe
     ? true
     : props.me.gamertags
@@ -283,37 +301,90 @@ function TimeSlotSession(props) {
     )
   }
 
-  const renderSlots = session => {
+  const renderSlots = () => {
+    // Need to fill if already selected session
     let slots = []
     let counter = 0
-    let end = session.state.selectedSession.slots
-    while (counter < end) {
-      let username = session.state.selectedSession.players[counter]
-        ? session.state.selectedSession.players[counter].player.username
-        : 'Available'
-      slots.push(
-        <Slot
-          taken={username !== 'Available'}
-          value={username ? counter : null}
-        >
-          {username}
-        </Slot>
-      )
-      counter++
+    let end = allSessions.selectedSession.slots
+    const sameSessionSelection = allSessions.sessions.filter(
+      addedSession => addedSession.id === allSessions.selectedSession.id
+    )
+    const alreadySelected = sameSessionSelection.length > 0
+    if (alreadySelected) {
+      while (allSessions.selectedSession.players.length > counter) {
+        slots.push(
+          <Slot index={counter + 1} taken={true}>
+            {allSessions.selectedSession.players[counter].player.username}
+          </Slot>
+        )
+        counter++
+      }
+      while (
+        allSessions.selectedSession.players.length +
+          sameSessionSelection[0].slots >
+        counter
+      ) {
+        slots.push(<Slot index={counter + 1} taken={true} selected={true} />)
+        counter++
+      }
+      while (counter < end) {
+        let username = allSessions.selectedSession.players[counter]
+          ? allSessions.selectedSession.players[counter].player.username
+          : 'Available'
+        slots.push(
+          <Slot
+            index={counter + 1}
+            taken={username !== 'Available'}
+            value={username ? counter : null}
+          >
+            {username}
+          </Slot>
+        )
+        counter++
+      }
+    } else {
+      while (counter < end) {
+        let username = allSessions.selectedSession.players[counter]
+          ? allSessions.selectedSession.players[counter].player.username
+          : 'Available'
+        slots.push(
+          <Slot
+            index={counter + 1}
+            taken={username !== 'Available'}
+            value={username ? counter : null}
+          >
+            {username}
+          </Slot>
+        )
+        counter++
+      }
     }
     return (
       <Slots>
         {slots}
         <AddSessionsContainer>
           <AddSessions
-            disabled={disabled}
+            disabled={disabled || noSlots || alreadySelected}
             onClick={() => {
+              dispatch({ type: 'ADD_SESSION' })
               Mixpanel.track('Added session/s')
-              session.addSessions()
             }}
           >
             Add Session
           </AddSessions>
+          {alreadySelected && (
+            <RemoveSessions
+              onClick={() => {
+                dispatch({
+                  type: 'REMOVE_SESSION',
+                  payload: allSessions.selectedSession.id,
+                })
+                Mixpanel.track('Removed session/s')
+              }}
+            >
+              Remove Session
+            </RemoveSessions>
+          )}
         </AddSessionsContainer>
         <ExtraContainer>
           {props.me === null && (
@@ -335,47 +406,45 @@ function TimeSlotSession(props) {
 
   const renderSlotOptions = () => {
     return (
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <SlotOptionsContainer>
-            <OptionsContainer>
-              <NumberOfSlotsContainer>
-                Slots: <SlotOptionsDropdown slots />
-              </NumberOfSlotsContainer>
-            </OptionsContainer>
-            <OptionsContainer>
-              <NumberOfPlayersContainer>
-                Players: <SlotOptionsDropdown />
-              </NumberOfPlayersContainer>
-            </OptionsContainer>
-            <OptionsContainer>
-              <PickAllSlotsForTeam
-                onClick={() => session.fillAllSlotsWithMyFriends()}
-              >
-                Fill all the slots with my friends
-              </PickAllSlotsForTeam>
-            </OptionsContainer>
-            <OptionsContainer>
-              <PickAllSlotsForMe onClick={() => session.fillAllSlotsForMe()}>
-                Fill all the slots for me
-              </PickAllSlotsForMe>
-            </OptionsContainer>
-          </SlotOptionsContainer>
-        )}
-      </Subscribe>
+      <SlotOptionsContainer>
+        <OptionsContainer>
+          <NumberOfSlotsContainer>
+            Slots: <SlotOptionsDropdown slots />
+          </NumberOfSlotsContainer>
+        </OptionsContainer>
+        <OptionsContainer>
+          <NumberOfPlayersContainer>
+            Players: <SlotOptionsDropdown />
+          </NumberOfPlayersContainer>
+        </OptionsContainer>
+        <OptionsContainer>
+          <PickAllSlotsForTeam
+            onClick={() => {
+              dispatch({ type: 'FILL_ALL_SLOTS_WITH_FRIENDS' })
+            }}
+          >
+            Fill all the slots with my friends
+          </PickAllSlotsForTeam>
+        </OptionsContainer>
+        <OptionsContainer>
+          <PickAllSlotsForMe
+            onClick={() => {
+              dispatch({ type: 'FILL_ALL_SLOTS_FOR_ME' })
+            }}
+          >
+            Fill all the slots for me
+          </PickAllSlotsForMe>
+        </OptionsContainer>
+      </SlotOptionsContainer>
     )
   }
 
   const renderPrimary = () => {
     return (
-      <Subscribe to={[SessionsContainer]}>
-        {session => (
-          <SlotsContainer>
-            {renderSlotOptions()}
-            {renderSlots(session)}
-          </SlotsContainer>
-        )}
-      </Subscribe>
+      <SlotsContainer>
+        {renderSlotOptions()}
+        {renderSlots(allSessions.selectedSession)}
+      </SlotsContainer>
     )
   }
 
