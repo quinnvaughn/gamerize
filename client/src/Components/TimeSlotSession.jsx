@@ -186,6 +186,20 @@ const AddSessions = styled.button`
   border-radius: 4px;
 `
 
+const RemoveSessions = styled.button`
+  background: #fff;
+  pointer-events: ${props => props.disabled && 'none'};
+  padding: 1rem 1.4rem;
+  color: #db1422;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border: 1px solid #db1422;
+  border-radius: 4px;
+  margin-left: 1rem;
+`
+
 const AddSessionsContainer = styled.div`
   width: 100%;
   display: flex;
@@ -247,6 +261,7 @@ function TimeSlotSession(props) {
     Mixpanel.track('Selected a specific timeslot')
   }, {})
   const isMe = props.match.params.user === props.me.username
+  const noSlots = allSessions.sessionToBeAdded.slots === 0
   const disabled = isMe
     ? true
     : props.me.gamertags
@@ -291,27 +306,65 @@ function TimeSlotSession(props) {
     let slots = []
     let counter = 0
     let end = allSessions.selectedSession.slots
-    while (counter < end) {
-      let username = allSessions.selectedSession.players[counter]
-        ? allSessions.selectedSession.players[counter].player.username
-        : 'Available'
-      slots.push(
-        <Slot
-          index={counter}
-          taken={username !== 'Available'}
-          value={username ? counter : null}
-        >
-          {username}
-        </Slot>
-      )
-      counter++
+    const sameSessionSelection = allSessions.sessions.filter(
+      addedSession => addedSession.id === allSessions.selectedSession.id
+    )
+    const alreadySelected = sameSessionSelection.length > 0
+    if (alreadySelected) {
+      while (allSessions.selectedSession.players.length > counter) {
+        slots.push(
+          <Slot index={counter + 1} taken={true}>
+            {allSessions.selectedSession.players[counter].player.username}
+          </Slot>
+        )
+        counter++
+      }
+      while (
+        allSessions.selectedSession.players.length +
+          sameSessionSelection[0].slots >
+        counter
+      ) {
+        slots.push(<Slot index={counter + 1} taken={true} selected={true} />)
+        counter++
+      }
+      while (counter < end) {
+        let username = allSessions.selectedSession.players[counter]
+          ? allSessions.selectedSession.players[counter].player.username
+          : 'Available'
+        slots.push(
+          <Slot
+            index={counter + 1}
+            taken={username !== 'Available'}
+            value={username ? counter : null}
+          >
+            {username}
+          </Slot>
+        )
+        counter++
+      }
+    } else {
+      while (counter < end) {
+        let username = allSessions.selectedSession.players[counter]
+          ? allSessions.selectedSession.players[counter].player.username
+          : 'Available'
+        slots.push(
+          <Slot
+            index={counter + 1}
+            taken={username !== 'Available'}
+            value={username ? counter : null}
+          >
+            {username}
+          </Slot>
+        )
+        counter++
+      }
     }
     return (
       <Slots>
         {slots}
         <AddSessionsContainer>
           <AddSessions
-            disabled={disabled}
+            disabled={disabled || noSlots || alreadySelected}
             onClick={() => {
               dispatch({ type: 'ADD_SESSION' })
               Mixpanel.track('Added session/s')
@@ -319,6 +372,19 @@ function TimeSlotSession(props) {
           >
             Add Session
           </AddSessions>
+          {alreadySelected && (
+            <RemoveSessions
+              onClick={() => {
+                dispatch({
+                  type: 'REMOVE_SESSION',
+                  payload: allSessions.selectedSession.id,
+                })
+                Mixpanel.track('Removed session/s')
+              }}
+            >
+              Remove Session
+            </RemoveSessions>
+          )}
         </AddSessionsContainer>
         <ExtraContainer>
           {props.me === null && (

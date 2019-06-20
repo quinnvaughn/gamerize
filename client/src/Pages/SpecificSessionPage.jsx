@@ -31,6 +31,7 @@ import Loading from '../Components/Loading'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
 import { SessionsProvider, useSessions } from '../State/SessionsSelectedContext'
+import SelectedSlotsModal from '../Components/SelectedSlotsModal'
 
 //data
 
@@ -542,47 +543,40 @@ export default function SpecificSessionPage(props) {
           }
         </Media>
       </Content>
-      <Subscribe to={[SessionsContainer]}>
-        {sessions =>
-          allSessions.showModal && (
-            <Modal
-              onRequestClose={() => {
+      {allSessions.showSelectedSlotsModal && <SelectedSlotsModal />}
+      {allSessions.showModal && (
+        <Modal
+          onRequestClose={() => {
+            dispatch({ type: 'CLOSE_MODAL' })
+          }}
+        >
+          {allSessions.selectedSession ? (
+            <TimeSlotSession
+              me={thirdData.me}
+              selectedSession={allSessions.selectedSession}
+              gamer={data.getSpecificSession.creator.displayName}
+              system={data.getSpecificSession.system}
+              game={data.getSpecificSession.game.name}
+              close={() => {
                 dispatch({ type: 'CLOSE_MODAL' })
               }}
-            >
-              {allSessions.selectedSession ? (
-                <TimeSlotSession
-                  me={thirdData.me}
-                  selectedSession={allSessions.selectedSession}
-                  gamer={data.getSpecificSession.creator.displayName}
-                  system={data.getSpecificSession.system}
-                  game={data.getSpecificSession.game.name}
-                  goBack={() => sessions.goBack()}
-                  close={() => {
-                    dispatch({ type: 'CLOSE_MODAL' })
-                  }}
-                />
-              ) : allSessions.selectedDay ? (
-                <TimeSlotsHours
-                  setSelectedSession={sessions.setSelectedSession}
-                  day={allSessions.selectedDay}
-                  goBack={() => sessions.setSelectedDay(null)}
-                  close={() => {
-                    dispatch({ type: 'CLOSE_MODAL' })
-                  }}
-                />
-              ) : (
-                <Calendar
-                  setSelectedDay={sessions.setSelectedDay}
-                  close={() => {
-                    dispatch({ type: 'CLOSE_MODAL' })
-                  }}
-                />
-              )}
-            </Modal>
-          )
-        }
-      </Subscribe>
+            />
+          ) : allSessions.selectedDay ? (
+            <TimeSlotsHours
+              day={allSessions.selectedDay}
+              close={() => {
+                dispatch({ type: 'CLOSE_MODAL' })
+              }}
+            />
+          ) : (
+            <Calendar
+              close={() => {
+                dispatch({ type: 'CLOSE_MODAL' })
+              }}
+            />
+          )}
+        </Modal>
+      )}
       <Footer />
     </PageContainer>
   )

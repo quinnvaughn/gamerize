@@ -8,12 +8,14 @@ const initialState = {
   sessions: [],
   selectedSession: null,
   showModal: false,
+  showSelectedSlotsModal: false,
   selectedDay: null,
   sessionToBeAdded: {
     players: 0,
     slots: 0,
     id: null,
     availableSlots: 0,
+    startTime: null,
   },
 }
 
@@ -30,7 +32,28 @@ function sessionsReducer(state, action) {
     case 'ADD_SLOTS': {
       return {
         ...state,
-        sessionToBeAdded: { ...state.sessionToBeAdded, slots: action.payload },
+        sessionToBeAdded: {
+          ...state.sessionToBeAdded,
+          slots: action.payload,
+          players:
+            state.sessionToBeAdded.players > 0 && action.payload !== 0
+              ? state.sessionToBeAdded.players
+              : action.payload === 0
+              ? 0
+              : 1,
+        },
+      }
+    }
+    case 'SHOW_SELECTED_SLOTS_MODAL': {
+      return {
+        ...state,
+        showSelectedSlotsModal: true,
+      }
+    }
+    case 'CLOSE_SELECTED_SLOTS_MODAL': {
+      return {
+        ...state,
+        showSelectedSlotsModal: false,
       }
     }
     case 'FILL_ALL_SLOTS_WITH_FRIENDS': {
@@ -90,6 +113,7 @@ function sessionsReducer(state, action) {
           : dateFns.parse(action.payload.startTime),
         sessionToBeAdded: {
           ...state.sessionToBeAdded,
+          startTime: action.payload.startTime,
           availableSlots: action.payload.slots - action.payload.players.length,
           id: action.payload.id,
         },
@@ -101,6 +125,17 @@ function sessionsReducer(state, action) {
         selectedSession: initialState.selectedSession,
         sessionToBeAdded: initialState.sessionToBeAdded,
       }
+    }
+    case 'REMOVE_SESSION': {
+      return {
+        ...state,
+        sessions: state.sessions.filter(
+          session => session.id !== action.payload
+        ),
+      }
+    }
+    case 'CLEAR_STATE': {
+      return initialState
     }
     case 'SHOW_MODAL': {
       return {

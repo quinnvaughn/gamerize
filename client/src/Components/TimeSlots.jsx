@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { FaArrowRight } from 'react-icons/fa'
-import { Subscribe } from 'unstated'
 
-//local
-import SessionsContainer from '../Containers/SessionsContainer'
 import { singleOrPlural } from '../utils/Strings'
+import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 0.8rem;
   position: relative;
   max-width: 34.6rem;
+  margin-bottom: 0.8rem;
 `
 
 const TimeSlotLabel = styled.label`
@@ -61,27 +59,20 @@ export default function TimeSlots(props) {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, {})
+  const [allSessions, dispatch] = useSessions()
   return (
     <Container>
       <TimeSlotLabel>
         <TimeSlot>Time Slots</TimeSlot>
       </TimeSlotLabel>
       <SelectionContainer>
-        <Subscribe to={[SessionsContainer]}>
-          {sessions => (
-            <SelectionButton
-              onClick={() => sessions.setShowModal(!sessions.state.showModal)}
-            >
-              <NumberOfSessions>{`${
-                sessions.state.sessions.length
-              } ${singleOrPlural(
-                sessions.state.sessions,
-                'session'
-              )}`}</NumberOfSessions>
-              <ArrowRight />
-            </SelectionButton>
-          )}
-        </Subscribe>
+        <SelectionButton onClick={() => dispatch({ type: 'SHOW_MODAL' })}>
+          <NumberOfSessions>{`${allSessions.sessions.length} ${singleOrPlural(
+            allSessions.sessions,
+            'session'
+          )}`}</NumberOfSessions>
+          <ArrowRight />
+        </SelectionButton>
       </SelectionContainer>
     </Container>
   )

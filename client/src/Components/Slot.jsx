@@ -26,7 +26,8 @@ const Check = styled(FaCheck)`
 
 export default function Slot(props) {
   const [sessions] = useSessions()
-  const selected = sessions.sessionToBeAdded >= props.index
+  const selected =
+    sessions.sessionToBeAdded.slots >= props.index || props.selected
   return (
     <Container selected={selected} taken={props.taken}>
       {selected ? <Check /> : props.children}

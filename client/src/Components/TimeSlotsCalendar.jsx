@@ -223,21 +223,14 @@ function TimeSlotsCalendar(props) {
 
   function onDateClick(day) {
     dispatch({ type: 'SET_SELECTED_DAY', payload: day })
-    props.setSelectedDay(day)
   }
 
   function nextMonth() {
     setCurrentMonth(prev => dateFns.addMonths(prev, 1))
-    // this.setState(prevState => ({
-    //   currentMonth: dateFns.addMonths(prevState.currentMonth, 1),
-    // }))
   }
 
   function prevMonth() {
     setCurrentMonth(prev => dateFns.subMonths(prev, 1))
-    // this.setState(prevState => ({
-    //   currentMonth: dateFns.subMonths(prevState.currentMonth, 1),
-    // }))
   }
   return (
     <Container>

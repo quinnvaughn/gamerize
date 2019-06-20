@@ -15,7 +15,7 @@ const Container = styled.div`
   flex: 40%;
   display: flex;
   position: sticky;
-  top: 3rem;
+  top: 8rem;
   flex-direction: column;
   border: 1px solid #dddfe2;
   border-radius: 0.4rem;
