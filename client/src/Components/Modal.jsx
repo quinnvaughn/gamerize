@@ -1,4 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import styled, { keyframes, createGlobalStyle } from 'styled-components'
 
 //local imports
@@ -69,6 +70,8 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const modalRoot = document.getElementById('modal-root')
+
 export default function SimpleModal(props) {
   const node = useRef()
   const [lock, setLock] = useState(true)
@@ -90,12 +93,12 @@ export default function SimpleModal(props) {
       handleClickOutside()
     }, [])
   )
-  return (
+  return ReactDOM.createPortal(
     <Overlay id="modal">
-      <GlobalStyle />
       <Modal ref={node} width={props.width}>
         <ModalContent>{props.children}</ModalContent>
       </Modal>
-    </Overlay>
+    </Overlay>,
+    modalRoot
   )
 }
