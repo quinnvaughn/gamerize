@@ -203,7 +203,9 @@ function TimeSlotHours(props) {
 
     return (
       <Header>
-        <ChevronLeft onClick={props.goBack} />
+        <ChevronLeft
+          onClick={() => dispatch({ type: 'SET_SELECTED_DAY', payload: null })}
+        />
         <Day>{dateFns.format(props.day, dateFormat)}</Day>
         <Empty />
       </Header>
