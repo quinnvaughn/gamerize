@@ -103,7 +103,9 @@ export default function SelectionOptions({
       ) : (
         <Fragment>
           {/*TODO: Need slotsLeftToday to update at same time */}
-          <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
+          <HowManySlots>{`${slotsLeftToday} ${
+            slotsLeftToday === 1 ? 'slot' : 'slots'
+          } left today`}</HowManySlots>
           <TimeSlots gamer={gamer} game={game} />
           <Totals
             price={price}
