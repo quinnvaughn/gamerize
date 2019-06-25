@@ -1,19 +1,15 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
-import Media from 'react-media'
 
 //local imports
 import Loading from '../Components/Loading'
 import NavBar from '../Components/NavBar'
-import GamerRow from '../Components/TopGamersRow'
 
 import Jumbotron from '../Components/Jumbotron'
-import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
-import TopSessionsRow from '../Components/TopSessionsRow'
 import ErrorPage from './ErrorPage'
 import useNotifications from '../Hooks/useNotifications'
 import useEmailClick from '../Hooks/useEmailClick'
