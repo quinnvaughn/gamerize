@@ -450,6 +450,8 @@ const timeslot = {
     const creator = await ctx.prisma.user({ id: input.creatorId })
     const user = await ctx.prisma.user({ id: userId })
     const shouldCharge = input.totalWithFee > 0
+    // Check if correct amount of slots are there for selected slots - otherwise return error.
+    // Eventually should do this on front end with subscriptions.
     const charge = shouldCharge
       ? await stripe.charges.create({
           amount: input.totalWithFee * 100,

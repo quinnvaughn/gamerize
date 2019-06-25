@@ -120,7 +120,6 @@ const Availability = styled.div`
 
 export default function TodayAvailability(props) {
   const [allSessions, dispatch] = useSessions()
-  console.log(allSessions)
   useEffect(() => {
     const element = document.getElementById('current')
     element.scrollIntoView()
@@ -182,39 +181,34 @@ export default function TodayAvailability(props) {
           >
             {dateFns.format(dateFns.addHours(selectedDate, i), dateFormat)}
           </Hour>
-          <Subscribe to={[SessionsContainer]}>
-            {container => (
-              <Sessions>
-                {sessions.map(session => (
-                  <Session
-                    key={session.startTime}
-                    height={session.length}
-                    full={session.players.length === session.slots}
-                    startTime={dateFns.getMinutes(session.startTime)}
-                    onClick={() => {
-                      Mixpanel.track(
-                        'Selected session straight from today availability.'
-                      )
-                      dispatch({
-                        type: 'SET_SELECTED_SESSION',
-                        payload: session,
-                      })
-                      dispatch({
-                        type: 'SHOW_MODAL',
-                      })
-                    }}
-                    disabled={session.passed}
-                  >
-                    {`${session.slots -
-                      session.players.length} ${singleOrPlural(
-                      session.slots - session.players.length,
-                      'spot'
-                    )} left`}
-                  </Session>
-                ))}
-              </Sessions>
-            )}
-          </Subscribe>
+          <Sessions>
+            {sessions.map(session => (
+              <Session
+                key={session.startTime}
+                height={session.length}
+                full={session.players.length === session.slots}
+                startTime={dateFns.getMinutes(session.startTime)}
+                onClick={() => {
+                  Mixpanel.track(
+                    'Selected session straight from today availability.'
+                  )
+                  dispatch({
+                    type: 'SET_SELECTED_SESSION',
+                    payload: session,
+                  })
+                  dispatch({
+                    type: 'SHOW_MODAL',
+                  })
+                }}
+                disabled={session.passed}
+              >
+                {`${session.slots - session.players.length} ${singleOrPlural(
+                  session.slots - session.players.length,
+                  'spot'
+                )} left`}
+              </Session>
+            ))}
+          </Sessions>
         </Row>
       )
     }

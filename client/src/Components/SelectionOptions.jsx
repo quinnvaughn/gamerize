@@ -78,6 +78,7 @@ export default function SelectionOptions({
   refetch,
   customerId,
   creator,
+  notEnoughSpots,
   me,
 }) {
   return (
@@ -108,6 +109,7 @@ export default function SelectionOptions({
           } left today`}</HowManySlots>
           <TimeSlots gamer={gamer} game={game} />
           <Totals
+            notEnoughSpots={notEnoughSpots}
             price={price}
             refetch={refetch}
             me={me}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
@@ -351,8 +351,28 @@ const GET_ME = gql`
   }
 `
 
+function timeslotDoesNotHaveSlots(allSessions, setNotEnoughSpots, secondData) {
+  useEffect(() => {
+    allSessions.sessions.length === 0 && setNotEnoughSpots([])
+    secondData.specificSessionSlotsToday &&
+      secondData.specificSessionSlotsToday.map(slot => {
+        console.log(slot)
+        allSessions.sessions.map(session => {
+          if (session.id === slot.id) {
+            if (slot.slots - slot.players.length < session.slots) {
+              setNotEnoughSpots(prev => [...prev, slot])
+            }
+          } else {
+            setNotEnoughSpots([])
+          }
+        })
+      })
+  }, [allSessions.sessions, secondData.specificSessionSlotsToday])
+}
+
 export default function SpecificSessionPage(props) {
   const [allSessions, dispatch] = useSessions()
+  const [notEnoughSpots, setNotEnoughSpots] = useState([])
   useEffect(() => {
     Mixpanel.track('Clicked on a session')
   }, {})
@@ -380,6 +400,7 @@ export default function SpecificSessionPage(props) {
     refetch: meRefetch,
     error: thirdError,
   } = useQuery(GET_ME)
+  timeslotDoesNotHaveSlots(allSessions, setNotEnoughSpots, secondData)
   const errors = error || secondError || thirdError
   return loading || secondLoading || thirdLoading ? (
     <Loading />
@@ -525,6 +546,7 @@ export default function SpecificSessionPage(props) {
               />
             ) : (
               <SelectionOptions
+                notEnoughSpots={notEnoughSpots}
                 me={thirdData.me}
                 refetch={refetch}
                 meRefetch={meRefetch}
@@ -552,6 +574,7 @@ export default function SpecificSessionPage(props) {
         >
           {allSessions.selectedSession ? (
             <TimeSlotSession
+              slots={secondData.specificSessionSlotsToday}
               me={thirdData.me}
               selectedSession={allSessions.selectedSession}
               gamer={data.getSpecificSession.creator.displayName}

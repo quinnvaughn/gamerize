@@ -93,6 +93,7 @@ export default function SmallSelectionOptions({
   slotsLeftToday,
   me,
   launcher,
+  notEnoughSpots,
 }) {
   return (
     <Container>
@@ -124,6 +125,7 @@ export default function SmallSelectionOptions({
               <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
               <TimeSlots gamer={gamer} game={game} />
               <Totals
+                notEnoughSpots={notEnoughSpots}
                 price={price}
                 refetch={refetch}
                 meRefetch={meRefetch}

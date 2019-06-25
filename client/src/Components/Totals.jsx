@@ -14,6 +14,7 @@ import { calcFee } from '../utils/Fee'
 import FirstTimeCheckout from './FirstTimeCheckout'
 import { Mixpanel } from './Mixpanel'
 import { useSessions } from '../State/SessionsSelectedContext'
+import dateFns from 'date-fns'
 
 const Container = styled.div`
   width: 100%;
@@ -128,6 +129,13 @@ const AppropriateGT = styled.div`
   font-weight: 800;
   overflow-wrap: break-word;
 `
+
+const NotEnoughSlots = styled.div`
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  overflow-wrap: break-word;
+`
 const Me = styled.div`
   text-align: center;
   font-size: 1.6rem;
@@ -224,6 +232,7 @@ function Totals(props) {
   ) : (
     <AddSession>Please add a timeslot</AddSession>
   )
+  const endTime = 'h:mm a'
   return (
     <Container>
       <Fragment>
@@ -235,6 +244,15 @@ function Totals(props) {
           </SeeSelectedSlots>
         )}
         {content}
+        {props.notEnoughSpots.length > 0 &&
+          props.notEnoughSpots.map(spot => {
+            return (
+              <NotEnoughSlots>
+                The timeslot at {dateFns.format(spot.startTime, endTime)}{' '}
+                doesn't contain enough slots anymore. Please fix it.
+              </NotEnoughSlots>
+            )
+          })}
         {disabled && !isMe && (
           <AppropriateGT>
             {`You must add a gamertag for `}
@@ -245,7 +263,11 @@ function Totals(props) {
         )}
         <Book
           id="bookButton"
-          disabled={allSessions.sessions.length === 0 || disabled}
+          disabled={
+            allSessions.sessions.length === 0 ||
+            disabled ||
+            props.notEnoughSpots.length > 0
+          }
           onClick={async () => {
             if (!customerStripeId || !props.hasDefaultCard) {
               setNeedCard(true)
