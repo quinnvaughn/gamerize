@@ -1,9 +1,8 @@
-import React, { useState, Fragment, useEffect } from 'react'
+import React, { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import Media from 'react-media'
-import { Helmet } from 'react-helmet'
 
 //local imports
 import Loading from '../Components/Loading'
@@ -15,11 +14,11 @@ import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
 import TopSessionsRow from '../Components/TopSessionsRow'
-import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
 import useNotifications from '../Hooks/useNotifications'
 import useEmailClick from '../Hooks/useEmailClick'
 import useTwitterClick from '../Hooks/useTwitterClick'
+import useMixpanelTrack from '../Hooks/useMixpanelTrack'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -102,14 +101,14 @@ const GET_GAMES = gql`
 `
 
 export default function HomePage(props) {
+  // Hooks
   useTitle('Gamerize - Play games with your favorite people')
   useNotifications()
-  useEffect(() => {
-    Mixpanel.track('Consumer looked at website.')
-  }, {})
+  useMixpanelTrack('Consumer looked at website')
   useEmailClick()
   useTwitterClick()
   const [first, setFirst] = useState(4)
+
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
@@ -127,17 +126,14 @@ export default function HomePage(props) {
   } = useQuery(GET_SESSIONS, {
     variables: { first },
   })
-  const wait = loading || secondLoading || thirdLoading
-  const errors = error || secondError || thirdError
-  return wait ? (
+  const isLoading = loading || secondLoading || thirdLoading
+  const hasErrors = error || secondError || thirdError
+  return isLoading ? (
     <Loading />
-  ) : errors ? (
-    <ErrorPage errors={errors} />
+  ) : hasErrors ? (
+    <ErrorPage errors={hasErrors} />
   ) : (
     <PageContainer>
-      <Helmet>
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
       <NavBar />
       <Jumbotron />
       <Content>
