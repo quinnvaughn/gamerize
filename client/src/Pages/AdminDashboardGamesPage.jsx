@@ -9,7 +9,7 @@ import AdminDashboardNav from '../Components/AdminDashboardNav'
 import Modal from '../Components/Modal'
 import CreateGame from '../Components/CreateGame'
 import Loading from '../Components/Loading'
-import AdminGame from '../Components/AdminGame'
+import AdminGameList from '../Components/AdminGameList'
 import ErrorPage from './ErrorPage'
 
 const PageContainer = styled.div`
@@ -90,27 +90,8 @@ export default function AdminDashboardGamesPage(props) {
           </NewSession>
         </Top>
         <Games>
-          {data.allGames.map(game => (
-            <AdminGame
-              picture={game.picture}
-              name={game.name}
-              tags={game.tags}
-              numSessions={game.numSessions}
-            />
-          ))}
+          <AdminGameList array={data.allGames} />
         </Games>
-        {/* <Sessions>
-          {sessions.myGamingSessions.map(session => (
-            <CreatedSessionCard
-              session={session}
-              refetch={refetch}
-              setup={data.me.setup}
-              setOpen={setEdit}
-              key={session.title + session.game}
-            />
-          ))}
-        </Sessions>
-      </Content> */}
         {openNew && (
           <Modal onRequestClose={() => setOpenNew(false)} width={600}>
             <CreateGame setOpen={setOpenNew} refetch={refetch} />
