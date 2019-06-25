@@ -252,9 +252,8 @@ const Me = styled.div`
 `
 
 function TimeSlotSession(props) {
-  const { id } = props.selectedSession
-  const { system, game, launcher } = props.selectedSession.gamingSession
   const [allSessions, dispatch] = useSessions()
+  const { system, launcher } = allSessions.selectedSession.gamingSession
   useEffect(() => {
     const element = document.getElementById('modal')
     element.scrollTop = 0
@@ -281,16 +280,16 @@ function TimeSlotSession(props) {
           <Title>{`${props.gamer} - ${noUnderscores(props.game)}`}</Title>
           <System>{formatSystem(props.system)}</System>
           <Date>
-            {dateFns.format(props.selectedSession.startTime, dateFormat)}
+            {dateFns.format(allSessions.selectedSession.startTime, dateFormat)}
           </Date>
           <Time>
             {`${dateFns.format(
-              props.selectedSession.startTime,
+              allSessions.selectedSession.startTime,
               endTime
             )} - ${dateFns.format(
               dateFns.addMinutes(
-                props.selectedSession.startTime,
-                props.selectedSession.length
+                allSessions.selectedSession.startTime,
+                allSessions.selectedSession.length
               ),
               endTime
             )}`}
@@ -302,7 +301,9 @@ function TimeSlotSession(props) {
   }
 
   const renderSlots = () => {
-    // Need to fill if already selected session
+    // Should check for already booked slots and prevent from adding if they overlap.
+    // Should also check if slots get booked by someone else after selected
+    // but before booked.
     let slots = []
     let counter = 0
     let end = allSessions.selectedSession.slots
