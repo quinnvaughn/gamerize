@@ -56,11 +56,13 @@ const SEARCH_GAMERIZE = gql`
     searchGamerize(search: $search) {
       type
       game {
+        id
         tags
         name
         picture
       }
       user {
+        id
         role
         profilePicture
         numSessions
@@ -70,15 +72,18 @@ const SEARCH_GAMERIZE = gql`
       session {
         id
         game {
+          id
           name
         }
         title
         price
         creator {
+          id
           username
           profilePicture
         }
         gamers {
+          id
           username
         }
       }
@@ -91,7 +96,7 @@ export default function SearchBar(props) {
   const [search, setSearch] = useState('')
   const [width, setWidth] = useState(46)
   const [open, setOpen] = useState(false)
-  const { data } = useQueryNotBugged(SEARCH_GAMERIZE, {
+  const { data, error } = useQueryNotBugged(SEARCH_GAMERIZE, {
     skip: !search || search.length === 0,
     variables: { search },
   })
