@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'react-apollo-hooks'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import _ from 'lodash'
+import { Formik, Field } from 'formik'
 
 //local imports
 import EditProfileNav from '../Components/EditProfileNav'
@@ -13,6 +14,7 @@ import GenderDropdown from '../Components/GenderDropdown'
 import Loading from '../Components/Loading'
 import PaymentMethods from '../Components/PaymentMethods'
 import ErrorPage from './ErrorPage'
+import EditProfileInput from '../Components/EditProfileInput'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -242,42 +244,7 @@ const initialState = {
 export default function GamerDashboardAccountEdit(props) {
   const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
-  const [state, dispatch] = useReducer(reducer, initialState)
-  useEffect(() => {
-    if (!_.isNil(data) && !_.isNil(data.me)) {
-      dispatch({ type: 'setFirstName', payload: data.me.name.split(' ')[0] })
-      dispatch({ type: 'setLastName', payload: data.me.name.split(' ')[1] })
-      dispatch({ type: 'setDisplayName', payload: data.me.displayName })
-      dispatch({ type: 'setGender', payload: data.me.gender })
-      if (!_.isNil(data.me.aboutMe)) {
-        dispatch({
-          type: 'setAboutMe',
-          payload: data.me.aboutMe,
-        })
-      }
-      if (!_.isNil(data.me.gamertags)) {
-        dispatch({ type: 'setPSN', payload: data.me.gamertags.psn })
-        dispatch({ type: 'setNSO', payload: data.me.gamertags.nso })
-        dispatch({ type: 'setXBL', payload: data.me.gamertags.xbl })
-        dispatch({ type: 'setEpic', payload: data.me.gamertags.pc.epic })
-        dispatch({ type: 'setOrigin', payload: data.me.gamertags.pc.origin })
-        dispatch({ type: 'setSteam', payload: data.me.gamertags.pc.steam })
-        dispatch({ type: 'setGog', payload: data.me.gamertags.pc.gog })
-        dispatch({
-          type: 'setBattlenet',
-          payload: data.me.gamertags.pc.battlenet,
-        })
-        dispatch({ type: 'setUplay', payload: data.me.gamertags.pc.uplay })
-        dispatch({
-          type: 'setBethesda',
-          payload: data.me.gamertags.pc.bethesda,
-        })
-        dispatch({ type: 'setItch', payload: data.me.gamertags.pc.itch })
-        dispatch({ type: 'setWindows', payload: data.me.gamertags.pc.windows })
-        dispatch({ type: 'setRiot', payload: data.me.gamertags.pc.riot })
-      }
-    }
-  }, [data.me])
+  /// Change this to formik
   return loading ? (
     <Loading />
   ) : error ? (
@@ -288,12 +255,37 @@ export default function GamerDashboardAccountEdit(props) {
       <Content>
         <EditProfileNav />
         <OutsideContainer>
-          <Container>
+          <Formik
+            enableReinitialize
+            initialValues={{
+              firstName: data.me.name.split(' ')[0],
+              lastName: data.me.name.split(' ')[1],
+              displayName: data.me.displayName,
+              gender: data.me.gender,
+              aboutMe: data.me.aboutMe ? data.me.aboutMe : '',
+              psn: data.me.gamertags ? data.me.gamertags.psn : '',
+              nso: data.me.gamertags ? data.me.gamertags.nso : '',
+              xbl: data.me.gamertags ? data.me.gamertags.xbl : '',
+              epic: data.me.gamertags ? data.me.gamertags.epic : '',
+              origin: data.me.gamertags ? data.me.gamertags.origin : '',
+              steam: data.me.gamertags ? data.me.gamertags.steam : '',
+              gog: data.me.gamertags ? data.me.gamertags.gog : '',
+              battlenet: data.me.gamertags ? data.me.gamertags.battlenet : '',
+              uplay: data.me.gamertags ? data.me.gamertags.uplay : '',
+              bethesda: data.me.gamertags ? data.me.gamertags.bethesda : '',
+              itch: data.me.gamertags ? data.me.gamertags.itch : '',
+              windows: data.me.gamertags ? data.me.gamertags.windows : '',
+              riot: data.me.gamertags ? data.me.gamertags.riot : '',
+            }}
+            onSubmit={(values, actions) => {}}
+          >
             <Top>
               <Title>Required</Title>
             </Top>
             <Body>
-              <Row>
+              <Field name="firstName" component={EditProfileInput} />
+            </Body>
+            {/* <Row>
                 <RowLeft>
                   <Label>First Name</Label>
                 </RowLeft>
@@ -637,6 +629,7 @@ export default function GamerDashboardAccountEdit(props) {
               </Row>
             </Body>
           </Container>
+            </Formik>
           <Save
             onClick={async () => {
               dispatch({ type: 'setSaving', payload: true })
@@ -683,7 +676,8 @@ export default function GamerDashboardAccountEdit(props) {
             }}
           >
             {state.saving ? 'Saving' : state.saved ? <FaCheck /> : 'Save'}
-          </Save>
+          </Save> */}
+          </Formik>
         </OutsideContainer>
       </Content>
     </PageContainer>
