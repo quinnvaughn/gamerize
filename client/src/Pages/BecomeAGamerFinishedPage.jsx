@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
 import { Link } from 'react-router-dom'
 
 //local imports
-import Gamer from '../Containers/BecomeAGamerContainer'
 import ProgressNav from '../Components/ProgressNav'
 import useTitle from '../Hooks/useTitle'
 
@@ -63,24 +61,20 @@ const Return = styled(Link)`
 export default function BecomeAGamerFinished(props) {
   useTitle('Your application is finished')
   return (
-    <Subscribe to={[Gamer]}>
-      {container => (
-        <PageContainer>
-          <ProgressNav />
-          <Content>
-            <Container>
-              <Title>You're all set!</Title>
-              <Subtitle>
-                We will review your information and get a decision to you in the
-                next few days.
-              </Subtitle>
-              <ReturnContainer>
-                <Return to="/">Return Home</Return>
-              </ReturnContainer>
-            </Container>
-          </Content>
-        </PageContainer>
-      )}
-    </Subscribe>
+    <PageContainer>
+      <ProgressNav />
+      <Content>
+        <Container>
+          <Title>You're all set!</Title>
+          <Subtitle>
+            We will review your information and get a decision to you in the
+            next few days.
+          </Subtitle>
+          <ReturnContainer>
+            <Return to="/">Return Home</Return>
+          </ReturnContainer>
+        </Container>
+      </Content>
+    </PageContainer>
   )
 }
