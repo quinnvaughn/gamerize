@@ -189,6 +189,7 @@ export default function SearchBarDropdown(props) {
   )
 }
 
+// this is fetchMore stuff
 const MORE_SESSIONS = gql`
   query($search: String!, $skip: Int) {
     moreSessions(search: $search, skip: $skip) {
