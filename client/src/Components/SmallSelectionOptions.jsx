@@ -11,8 +11,6 @@ import Totals from './Totals'
 
 //data
 
-import sessions from '../data/sessions'
-
 const Container = styled.div`
   width: 100%;
   padding: 2.4rem;

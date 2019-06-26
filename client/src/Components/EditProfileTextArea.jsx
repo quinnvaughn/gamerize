@@ -26,7 +26,7 @@ const RowRight = styled.div`
   position: ${props => props.relative && 'relative'};
 `
 
-const Input = styled.input`
+const TextArea = styled.textarea`
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 4px;
@@ -42,7 +42,7 @@ const Input = styled.input`
   }
 `
 
-export default function EditProfileInput({
+export default function EditProfileTextArea({
   field,
   form: { touched, errors },
   label,
@@ -54,7 +54,12 @@ export default function EditProfileInput({
         <Label>{label}</Label>
       </RowLeft>
       <RowRight>
-        <Input type="text" {...field} {...props} />
+        <TextArea
+          rows={props.rows ? props.rows : '4'}
+          cols={props.cols ? props.cols : '50'}
+          {...field}
+          {...props}
+        />
       </RowRight>
     </Row>
   )

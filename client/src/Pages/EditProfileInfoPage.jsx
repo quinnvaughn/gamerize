@@ -1,20 +1,19 @@
-import React, { useReducer, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from 'react-apollo-hooks'
-import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
-import _ from 'lodash'
 import { Formik, Field } from 'formik'
 
 //local imports
 import EditProfileNav from '../Components/EditProfileNav'
 import NavBar from '../Components/NavBar'
-import { capitalize, formatGender } from '../utils/Strings'
-import GenderDropdown from '../Components/GenderDropdown'
 import Loading from '../Components/Loading'
 import PaymentMethods from '../Components/PaymentMethods'
 import ErrorPage from './ErrorPage'
 import EditProfileInput from '../Components/EditProfileInput'
+import EditProfileSection from '../Components/EditProfileSection'
+import EditProfileGenderDropdown from '../Components/EditProfileGenderDropdown'
+import EditProfileTextArea from '../Components/EditProfileTextArea'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -35,82 +34,6 @@ const Content = styled.div`
 
 const OutsideContainer = styled.div`
   flex: 75%;
-`
-
-const Container = styled.div`
-  border: 1px solid #ebebeb;
-  margin-bottom: 2rem;
-`
-
-const Top = styled.div`
-  width: 100%;
-  background: #ebebeb;
-  padding: 1.2rem 2rem;
-`
-
-const Title = styled.h2`
-  font-weight: 400;
-`
-
-const Body = styled.div`
-  padding: 2rem;
-`
-
-const Row = styled.div`
-  width: 100%;
-  display: flex;
-  margin-bottom: 0.5rem;
-`
-
-const RowLeft = styled.div`
-  flex: 25%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  text-align: right;
-  padding-right: 0.8rem;
-`
-
-const Label = styled.div`
-  font-size: 1.6rem;
-  font-weight: 400;
-`
-
-const RowRight = styled.div`
-  flex: 75%;
-  position: ${props => props.relative && 'relative'};
-`
-
-const Name = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  width: 100%;
-  font-weight: 400;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const AboutMe = styled.textarea`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  width: 100%;
-  font-weight: 400;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
 `
 
 const Save = styled.button`
@@ -172,75 +95,6 @@ const UPDATE_USER_PROFILE = gql`
   }
 `
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'setFirstName':
-      return { ...state, firstName: action.payload }
-    case 'setLastName':
-      return { ...state, lastName: action.payload }
-    case 'setDisplayName':
-      return { ...state, displayName: action.payload }
-    case 'setAboutMe':
-      return { ...state, aboutMe: action.payload }
-    case 'setSaving':
-      return { ...state, saving: action.payload }
-    case 'setSaved':
-      return { ...state, saved: action.payload }
-    case 'setGender':
-      return { ...state, gender: action.payload }
-    case 'setPSN':
-      return { ...state, psn: action.payload }
-    case 'setXBL':
-      return { ...state, xbl: action.payload }
-    case 'setNSO':
-      return { ...state, nso: action.payload }
-    case 'setEpic':
-      return { ...state, epic: action.payload }
-    case 'setOrigin':
-      return { ...state, origin: action.payload }
-    case 'setRiot':
-      return { ...state, riot: action.payload }
-    case 'setSteam':
-      return { ...state, steam: action.payload }
-    case 'setGog':
-      return { ...state, gog: action.payload }
-    case 'setBattlenet':
-      return { ...state, battlenet: action.payload }
-    case 'setUplay':
-      return { ...state, uplay: action.payload }
-    case 'setBethesda':
-      return { ...state, bethesda: action.payload }
-    case 'setItch':
-      return { ...state, itch: action.payload }
-    case 'setWindows':
-      return { ...state, windows: action.payload }
-    default:
-      return { ...state }
-  }
-}
-
-const initialState = {
-  firstName: '',
-  lastName: '',
-  aboutMe: '',
-  displayName: '',
-  psn: '',
-  nso: '',
-  xbl: '',
-  epic: '',
-  origin: '',
-  steam: '',
-  gog: '',
-  battlenet: '',
-  uplay: '',
-  bethesda: '',
-  itch: '',
-  windows: '',
-  gender: null,
-  saving: false,
-  saved: false,
-}
-
 export default function GamerDashboardAccountEdit(props) {
   const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
@@ -277,406 +131,153 @@ export default function GamerDashboardAccountEdit(props) {
               windows: data.me.gamertags ? data.me.gamertags.windows : '',
               riot: data.me.gamertags ? data.me.gamertags.riot : '',
             }}
-            onSubmit={(values, actions) => {}}
-          >
-            <Top>
-              <Title>Required</Title>
-            </Top>
-            <Body>
-              <Field name="firstName" component={EditProfileInput} />
-            </Body>
-            {/* <Row>
-                <RowLeft>
-                  <Label>First Name</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setFirstName', payload: '' })
-                        : dispatch({
-                            type: 'setFirstName',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.firstName ? state.firstName : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Last Name</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setLastName', payload: '' })
-                        : dispatch({
-                            type: 'setLastName',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.lastName ? state.lastName : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Display Name</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setDisplayName', payload: '' })
-                        : dispatch({
-                            type: 'setDisplayName',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.displayName ? state.displayName : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Gender</Label>
-                </RowLeft>
-                <RowRight relative>
-                  <GenderDropdown title={state.gender} dispatch={dispatch} />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-          <Container>
-            <Top>
-              <Title>Payment Options</Title>
-            </Top>
-            <Body>
-              <PaymentMethods
-                savedCards={data.me.savedCards}
-                email={data.me.email}
-                refetch={refetch}
-              />
-            </Body>
-          </Container>
-          <Container>
-            <Top>
-              <Title>Optional</Title>
-            </Top>
-            <Body>
-              <Row>
-                <RowLeft>
-                  <Label>About Me</Label>
-                </RowLeft>
-                <RowRight>
-                  <AboutMe
-                    rows="4"
-                    cols="50"
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setAboutMe', payload: '' })
-                        : dispatch({
-                            type: 'setAboutMe',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.aboutMe ? state.aboutMe : ''}
-                  />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-          <Container>
-            <Top>
-              <Title>Gamertags</Title>
-            </Top>
-            <Body>
-              <Row>
-                <RowLeft>
-                  <Label>Playstation Network</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setPSN', payload: '' })
-                        : dispatch({
-                            type: 'setPSN',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.psn ? state.psn : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Xbox Live</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setXBL', payload: '' })
-                        : dispatch({
-                            type: 'setXBL',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.xbl ? state.xbl : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Nintendo Switch</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setNSO', payload: '' })
-                        : dispatch({
-                            type: 'setNSO',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.nso ? state.nso : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Epic Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setEpic', payload: '' })
-                        : dispatch({
-                            type: 'setEpic',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.epic ? state.epic : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Origin Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setOrigin', payload: '' })
-                        : dispatch({
-                            type: 'setOrigin',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.origin ? state.origin : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Steam Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setSteam', payload: '' })
-                        : dispatch({
-                            type: 'setSteam',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.steam ? state.steam : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Battle.net Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setBattlenet', payload: '' })
-                        : dispatch({
-                            type: 'setBattlenet',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.battlenet ? state.battlenet : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Riot Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setRiot', payload: '' })
-                        : dispatch({
-                            type: 'setRiot',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.riot ? state.riot : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Uplay Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setUplay', payload: '' })
-                        : dispatch({
-                            type: 'setUplay',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.uplay ? state.uplay : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Gog Galaxy Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setGog', payload: '' })
-                        : dispatch({
-                            type: 'setGog',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.gog ? state.gog : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Bethesda Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setBethesda', payload: '' })
-                        : dispatch({
-                            type: 'setBethesda',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.bethesda ? state.bethesda : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Itch.io Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setItch', payload: '' })
-                        : dispatch({
-                            type: 'setItch',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.itch ? state.itch : ''}
-                  />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Windows Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setWindows', payload: '' })
-                        : dispatch({
-                            type: 'setWindows',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.windows ? state.windows : ''}
-                  />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-            </Formik>
-          <Save
-            onClick={async () => {
-              dispatch({ type: 'setSaving', payload: true })
+            onSubmit={async (values, actions) => {
               const pc = {
-                epic: state.epic,
-                steam: state.steam,
-                origin: state.origin,
-                gog: state.gog,
-                battlenet: state.battlenet,
-                uplay: state.uplay,
-                bethesda: state.bethesda,
-                itch: state.itch,
-                riot: state.riot,
-                windows: state.windows,
+                epic: values.epic,
+                steam: values.steam,
+                origin: values.origin,
+                gog: values.gog,
+                battlenet: values.battlenet,
+                uplay: values.uplay,
+                bethesda: values.bethesda,
+                itch: values.itch,
+                riot: values.riot,
+                windows: values.windows,
               }
               const gamertags = {
-                psn: state.psn,
-                xbl: state.xbl,
-                nso: state.nso,
+                psn: values.psn,
+                xbl: values.xbl,
+                nso: values.nso,
                 pc: pc,
               }
               const input = {
-                name: `${state.firstName} ${state.lastName}`,
-                displayName: state.displayName,
-                aboutMe: state.aboutMe,
-                gender: state.gender,
+                name: `${values.firstName} ${values.lastName}`,
+                displayName: values.displayName,
+                aboutMe: values.aboutMe,
+                gender: values.gender,
                 gamertags,
               }
               const { data } = await updateUserProfile({
                 variables: { input },
               })
               if (data.updateUserProfile.updated) {
-                setTimeout(
-                  () => dispatch({ type: 'setSaving', payload: false }),
-                  1000
-                )
-                dispatch({ type: 'setSaved', payload: true })
-                setTimeout(
-                  () => dispatch({ type: 'setSaved', payload: false }),
-                  3000
-                )
-                refetch()
+                setTimeout(() => {
+                  actions.setSubmitting(false)
+                  refetch()
+                }, 1000)
               }
             }}
           >
-            {state.saving ? 'Saving' : state.saved ? <FaCheck /> : 'Save'}
-          </Save> */}
+            {({ handleSubmit, isSubmitting }) => (
+              <form onSubmit={handleSubmit}>
+                <EditProfileSection title="Required">
+                  <Field
+                    name="firstName"
+                    label="First Name"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="lastName"
+                    label="Last Name"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="displayName"
+                    label="Display Name"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="gender"
+                    label="Gender"
+                    component={EditProfileGenderDropdown}
+                  />
+                </EditProfileSection>
+                <EditProfileSection title="Optional">
+                  <Field
+                    name="aboutMe"
+                    label="About Me"
+                    component={EditProfileTextArea}
+                  />
+                </EditProfileSection>
+                <EditProfileSection title="Payment Methods">
+                  <PaymentMethods
+                    savedCards={data.me.savedCards}
+                    email={data.me.email}
+                    refetch={refetch}
+                  />
+                </EditProfileSection>
+                <EditProfileSection title="Gamertags">
+                  <Field
+                    name="psn"
+                    label="Playstation Network"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="xbl"
+                    label="Xbox Live"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="nso"
+                    label="Nintendo Switch Online"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="epic"
+                    label="Epic Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="origin"
+                    label="Origin Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="steam"
+                    label="Steam Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="battlenet"
+                    label="Battle.net Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="riot"
+                    label="Riot Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="uplay"
+                    label="Uplay Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="gog"
+                    label="Gog Galaxy Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="bethesda"
+                    label="Bethesda Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="itch"
+                    label="Itch.io Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="windows"
+                    label="Windows Launcher"
+                    component={EditProfileInput}
+                  />
+                </EditProfileSection>
+                <Save type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Saving' : 'Save'}
+                </Save>
+              </form>
+            )}
           </Formik>
         </OutsideContainer>
       </Content>

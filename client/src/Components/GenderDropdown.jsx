@@ -94,16 +94,16 @@ const ChevronUp = styled(FaChevronUp)`
 
 const genders = ['MALE', 'FEMALE', 'OTHER']
 
-export default function GenderDropdown(props) {
+export default function GenderDropdown({
+  field,
+  form: { touched, errors, setFieldValue },
+  ...props
+}) {
   const [open, setOpen] = useState(false)
   return (
     <Container>
-      <SelectionContainer>
-        <Selection
-          onClick={() => setOpen(!open)}
-          value={formatGender(props.title)}
-          readOnly
-        />
+      <SelectionContainer onClick={() => setOpen(!open)}>
+        <Selection value={formatGender(field.value)} readOnly />
         {!open && <ChevronDown />}
         {open && <ChevronUp />}
         {open && (
@@ -112,7 +112,7 @@ export default function GenderDropdown(props) {
               <DropdownOption
                 key={gender}
                 onClick={() => {
-                  props.dispatch({ type: 'setGender', payload: gender })
+                  setFieldValue(field.name, gender)
                   setOpen(false)
                 }}
               >
