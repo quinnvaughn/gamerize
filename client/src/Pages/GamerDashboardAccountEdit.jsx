@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import * as Yup from 'yup'
 
 //local imports
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
@@ -64,6 +65,12 @@ const UPDATE_GAMER_PROFILE = gql`
   }
 `
 
+const EditSetupSchema = Yup.object().shape({
+  setup: Yup.number('Setup must be a number')
+    .min(1, 'Must at least have some setup')
+    .required('A setup is required'),
+})
+
 export default function GamerDashboardAccountEdit(props) {
   const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateGamerProfile = useMutation(UPDATE_GAMER_PROFILE)
@@ -78,6 +85,7 @@ export default function GamerDashboardAccountEdit(props) {
         <GamerDashboardAccountNav />
         <OutsideContainer>
           <Formik
+            validationSchema={EditSetupSchema}
             enableReinitialize
             initialValues={{ setup: data.me.setup }}
             onSubmit={async (values, actions) => {
@@ -97,13 +105,14 @@ export default function GamerDashboardAccountEdit(props) {
                   <Field
                     name="setup"
                     type="number"
+                    min="1"
                     component={EditProfileInput}
                   />
                 </EditProfileSection>
                 <Save
                   disabled={
                     !Number.isInteger(values.setup) ||
-                    values.setup === 0 ||
+                    values.setup <= 0 ||
                     isSubmitting
                   }
                   type="submit"

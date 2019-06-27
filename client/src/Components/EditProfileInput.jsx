@@ -42,6 +42,12 @@ const Input = styled.input`
   }
 `
 
+const SmallErrorMessage = styled.div`
+  margin-bottom: 0.2rem;
+  color: #db1422;
+  font-size: 1.2rem;
+`
+
 export default function EditProfileInput({
   field,
   form: { touched, errors },
@@ -55,6 +61,9 @@ export default function EditProfileInput({
       </RowLeft>
       <RowRight>
         <Input type={props.type ? props.type : 'text'} {...field} {...props} />
+        {errors[field.name] && touched[field.name] ? (
+          <SmallErrorMessage>{errors[field.name]}</SmallErrorMessage>
+        ) : null}
       </RowRight>
     </Row>
   )
