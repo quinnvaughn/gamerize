@@ -54,7 +54,7 @@ export default function EditProfileInput({
         <Label>{label}</Label>
       </RowLeft>
       <RowRight>
-        <Input type="text" {...field} {...props} />
+        <Input type={props.type ? props.type : 'text'} {...field} {...props} />
       </RowRight>
     </Row>
   )
