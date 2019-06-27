@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Image } from 'cloudinary-react'
 
 // local imports
-import DefaultAvatar from '../default-avatar.png'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import NavBarAvatarDropdown from './NavBarAvatarDropdown'
 

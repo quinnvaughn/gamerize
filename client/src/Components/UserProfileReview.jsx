@@ -4,7 +4,6 @@ import dateFns from 'date-fns'
 import { Link } from 'react-router-dom'
 
 //local imports
-import DefaultAvatar from '../default-avatar.png'
 import { noSpaces } from '../utils/Strings'
 
 const Container = styled.div`
@@ -97,7 +96,7 @@ const UserProfileReview = React.memo(function UserProfileReview({
       </ReviewTop>
       <NameAndAvatar>
         <AvatarLink to={`/users/${review.username}`}>
-          <Avatar src={DefaultAvatar} />
+          {/* <Avatar src={DefaultAvatar} /> */}
         </AvatarLink>
         <ReviewerNameContainer>
           <ReviewerName>{review.user}</ReviewerName>

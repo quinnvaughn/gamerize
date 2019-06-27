@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import DefaultAvatar from '../default-avatar.png'
 import { noSpaces } from '../utils/Strings'
 import DynamicImage from './DynamicImage'
 
