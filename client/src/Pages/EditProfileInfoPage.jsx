@@ -120,16 +120,18 @@ export default function GamerDashboardAccountEdit(props) {
               psn: data.me.gamertags ? data.me.gamertags.psn : '',
               nso: data.me.gamertags ? data.me.gamertags.nso : '',
               xbl: data.me.gamertags ? data.me.gamertags.xbl : '',
-              epic: data.me.gamertags ? data.me.gamertags.epic : '',
-              origin: data.me.gamertags ? data.me.gamertags.origin : '',
-              steam: data.me.gamertags ? data.me.gamertags.steam : '',
-              gog: data.me.gamertags ? data.me.gamertags.gog : '',
-              battlenet: data.me.gamertags ? data.me.gamertags.battlenet : '',
-              uplay: data.me.gamertags ? data.me.gamertags.uplay : '',
-              bethesda: data.me.gamertags ? data.me.gamertags.bethesda : '',
-              itch: data.me.gamertags ? data.me.gamertags.itch : '',
-              windows: data.me.gamertags ? data.me.gamertags.windows : '',
-              riot: data.me.gamertags ? data.me.gamertags.riot : '',
+              epic: data.me.gamertags ? data.me.gamertags.pc.epic : '',
+              origin: data.me.gamertags ? data.me.gamertags.pc.origin : '',
+              steam: data.me.gamertags ? data.me.gamertags.pc.steam : '',
+              gog: data.me.gamertags ? data.me.gamertags.pc.gog : '',
+              battlenet: data.me.gamertags
+                ? data.me.gamertags.pc.battlenet
+                : '',
+              uplay: data.me.gamertags ? data.me.gamertags.pc.uplay : '',
+              bethesda: data.me.gamertags ? data.me.gamertags.pc.bethesda : '',
+              itch: data.me.gamertags ? data.me.gamertags.pc.itch : '',
+              windows: data.me.gamertags ? data.me.gamertags.pc.windows : '',
+              riot: data.me.gamertags ? data.me.gamertags.pc.riot : '',
             }}
             onSubmit={async (values, actions) => {
               const pc = {

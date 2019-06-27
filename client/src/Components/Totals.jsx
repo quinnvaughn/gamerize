@@ -1,13 +1,11 @@
 import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router-dom'
 import { Elements } from 'react-stripe-elements'
 import { useMutation } from 'react-apollo-hooks'
 
-import SessionsContainer from '../Containers/SessionsContainer'
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { calcFee } from '../utils/Fee'
@@ -97,32 +95,6 @@ const SeeSelectedSlots = styled.button`
   margin-bottom: 1.5rem;
 `
 
-const NotCharged = styled.div`
-  margin-top: 0.8rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-`
-
-const NotChargedYet = styled.span`
-  font-size: 1.2rem;
-  font-weight: 600;
-  overflow-wrap: break-word;
-`
-
-const HowMuchYouPay = styled.div`
-  display: flex;
-  justify-content: center;
-  text-align: center;
-`
-
-const YouPay = styled.span`
-  margin-top: 0.8rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  overflow-wrap: break-word;
-`
-
 const AppropriateGT = styled.div`
   text-align: center;
   font-size: 1.6rem;
@@ -175,19 +147,20 @@ function Totals(props) {
   const [bookError, setBookError] = useState(false)
   const [needCard, setNeedCard] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
+  // Change these to functions that return value
   const disabled = props.me.gamertags
-    ? props.system === 'PC'
-      ? !props.me.gamertags[mapSystem(props.system)][
-          mapLauncher(props.launcher)
+    ? props.session.system === 'PC'
+      ? !props.me.gamertags[mapSystem(props.session.system)][
+          mapLauncher(props.session.launcher)
         ]
-      : !props.me.gamertags[mapSystem(props.system)]
+      : !props.me.gamertags[mapSystem(props.session.system)]
     : true
   const isMe = props.match.params.user === props.me.username
-  const customerStripeId = props.customerId
+  const customerStripeId = props.me.customerStripeId
 
   const total = allSessions.sessions
     .map(session => {
-      return { ...session, price: props.price }
+      return { ...session, price: props.session.price }
     })
     .reduce(totalReducer, 0)
   const slots = allSessions.sessions.reduce(numSessionsReducer, 0)
@@ -202,7 +175,7 @@ function Totals(props) {
       <NumberSlots>
         <Items>
           $
-          {`${parseFloat(props.price).toFixed(2)} x ${slots} ${
+          {`${parseFloat(props.session.price).toFixed(2)} x ${slots} ${
             slots === 1 ? 'slot' : 'slots'
           }`}
         </Items>
@@ -256,9 +229,9 @@ function Totals(props) {
         {disabled && !isMe && (
           <AppropriateGT>
             {`You must add a gamertag for `}
-            {props.system === 'PC'
-              ? `the ${capitalize(props.launcher)} Launcher`
-              : displaySystem(props.system)}
+            {props.session.system === 'PC'
+              ? `the ${capitalize(props.session.launcher)} Launcher`
+              : displaySystem(props.session.system)}
           </AppropriateGT>
         )}
         <Book
@@ -269,7 +242,7 @@ function Totals(props) {
             props.notEnoughSpots.length > 0
           }
           onClick={async () => {
-            if (!customerStripeId || !props.hasDefaultCard) {
+            if (!customerStripeId || !props.me.hasDefaultCard) {
               setNeedCard(true)
             } else {
               const timeSlots = allSessions.sessions.map(timeslot => {
@@ -283,7 +256,7 @@ function Totals(props) {
               })
               const input = {
                 timeSlots,
-                creatorId: props.creator.id,
+                creatorId: props.session.creator.id,
                 totalWithFee: totalMinusDiscounts,
                 totalWithoutFee: totalNotIncludingFees,
               }
@@ -325,18 +298,6 @@ function Totals(props) {
             />
           </Elements>
         )}
-        {/* <NotCharged>
-                <NotChargedYet>You will not be charged yet.</NotChargedYet>
-              </NotCharged> */}
-        {/* Don't need either until I have multi payment set up. 
-              {showTotals && (
-                <HowMuchYouPay>
-                  <YouPay>
-                    This is not necessarily how much you will pay, depending on
-                    how many players you have
-                  </YouPay>
-                </HowMuchYouPay>
-              )} */}
       </Fragment>
     </Container>
   )
