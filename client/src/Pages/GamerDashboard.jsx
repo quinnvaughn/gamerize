@@ -3,7 +3,6 @@ import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import { Redirect } from 'react-router-dom'
 
-import GamerDashboardHome from './GamerDashboardHome'
 import GamerRoute from '../Components/GamerRoute'
 import useTitle from '../Hooks/useTitle'
 import ErrorPage from './ErrorPage'
@@ -24,6 +23,8 @@ const GamerDashboardRetiredSessions = React.lazy(() =>
 const GamerDashboardCalendar = React.lazy(() =>
   import('./GamerDashboardCalendar')
 )
+
+const GamerDashboardHome = React.lazy(() => import('./GamerDashboardHome'))
 
 const routes = [
   {
