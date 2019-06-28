@@ -199,7 +199,7 @@ function Totals(props) {
   } = getTotalsInformation(
     allSessions,
     props.session.system,
-    props.session.gamertags,
+    props.me.gamertags,
     props.session.launcher,
     props.session.price
   )
@@ -283,7 +283,7 @@ function Totals(props) {
                   timeSlotId: timeslot.id,
                   slots: timeslot.slots,
                   players: timeslot.players,
-                  total: props.price * timeslot.slots,
+                  total: props.session.price * timeslot.slots,
                   startTime: timeslot.startTime,
                 }
               })

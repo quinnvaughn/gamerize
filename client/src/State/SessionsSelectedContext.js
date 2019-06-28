@@ -15,6 +15,7 @@ const initialState = {
     slots: 0,
     id: null,
     availableSlots: 0,
+    selected: [],
     startTime: null,
   },
 }
@@ -30,11 +31,19 @@ function sessionsReducer(state, action) {
       }
     }
     case 'ADD_SLOTS': {
+      const { players } = state.selectedSession
+
+      let selected = []
+
+      for (let i = players.length; i < players.length + action.payload; i++) {
+        selected.push(i)
+      }
       return {
         ...state,
         sessionToBeAdded: {
           ...state.sessionToBeAdded,
           slots: action.payload,
+          selected: action.payload === 0 ? [] : selected,
           players:
             state.sessionToBeAdded.players > 0 && action.payload !== 0
               ? state.sessionToBeAdded.players
@@ -77,6 +86,16 @@ function sessionsReducer(state, action) {
       }
     }
     case 'ADD_PLAYERS': {
+      const { players } = state.selectedSession
+      const { slots: numSlots } = state.sessionToBeAdded
+
+      let selected = []
+
+      if (action.payload > numSlots) {
+        for (let i = players.length; i < players.length + action.payload; i++) {
+          selected.push(i)
+        }
+      }
       return action.payload === 0
         ? {
             ...state,
@@ -84,6 +103,7 @@ function sessionsReducer(state, action) {
               ...state.sessionToBeAdded,
               players: action.payload,
               slots: action.payload,
+              selected: [],
             },
           }
         : {
@@ -91,6 +111,10 @@ function sessionsReducer(state, action) {
             sessionToBeAdded: {
               ...state.sessionToBeAdded,
               players: action.payload,
+              selected:
+                selected.length > 0
+                  ? selected
+                  : state.sessionToBeAdded.selected,
               slots:
                 action.payload > state.sessionToBeAdded.slots
                   ? action.payload
