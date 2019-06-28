@@ -139,6 +139,42 @@ const BOOK_TIME_SLOTS = gql`
   }
 `
 
+const getTotalsInformation = (
+  { sessions },
+  system,
+  gamertags,
+  launcher,
+  price
+) => {
+  const disabled = gamertags
+    ? system === 'PC'
+      ? !gamertags[mapSystem(system)][mapLauncher(launcher)]
+      : !gamertags[mapSystem(system)]
+    : true
+  const total = sessions
+    .map(session => {
+      return { ...session, price: price }
+    })
+    .reduce(totalReducer, 0)
+  const slots = sessions.reduce(numSessionsReducer, 0)
+  const fee = Number(calcFee(total, 'USD'))
+  const discount = 0
+
+  const totalMinusDiscounts = total + fee - discount
+  const totalNotIncludingFees = total - discount
+  const showTotals = sessions.length >= 1
+  return {
+    disabled,
+    slots,
+    total,
+    discount,
+    fee,
+    totalMinusDiscounts,
+    totalNotIncludingFees,
+    showTotals,
+  }
+}
+
 function Totals(props) {
   /// Clean this shit up
   const [allSessions, dispatch] = useSessions()
@@ -148,28 +184,25 @@ function Totals(props) {
   const [needCard, setNeedCard] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
   // Change these to functions that return value
-  const disabled = props.me.gamertags
-    ? props.session.system === 'PC'
-      ? !props.me.gamertags[mapSystem(props.session.system)][
-          mapLauncher(props.session.launcher)
-        ]
-      : !props.me.gamertags[mapSystem(props.session.system)]
-    : true
   const isMe = props.match.params.user === props.me.username
   const customerStripeId = props.me.customerStripeId
 
-  const total = allSessions.sessions
-    .map(session => {
-      return { ...session, price: props.session.price }
-    })
-    .reduce(totalReducer, 0)
-  const slots = allSessions.sessions.reduce(numSessionsReducer, 0)
-  const fee = Number(calcFee(total, 'USD'))
-  const discount = 0
-
-  const totalMinusDiscounts = total + fee - discount
-  const totalNotIncludingFees = total - discount
-  const showTotals = allSessions.sessions.length >= 1
+  const {
+    disabled,
+    slots,
+    total,
+    discount,
+    fee,
+    totalMinusDiscounts,
+    totalNotIncludingFees,
+    showTotals,
+  } = getTotalsInformation(
+    allSessions,
+    props.session.system,
+    props.session.gamertags,
+    props.session.launcher,
+    props.session.price
+  )
   const content = showTotals ? (
     <TotalsContainer>
       <NumberSlots>

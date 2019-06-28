@@ -427,23 +427,12 @@ export default function SpecificSessionPage(props) {
         <Media query="(max-width: 1127px)">
           {matches =>
             matches ? (
-              // This is too many props being sent down. Can just be getSpecificSession
               <FixedSelectionOptions
                 notEnoughSpots={notEnoughSpots}
                 me={thirdData.me}
                 refetch={refetch}
                 meRefetch={meRefetch}
                 session={data.getSpecificSession}
-                // gamer={formatGamers(data.getSpecificSession.gamers)}
-                // game={data.getSpecificSession.game.name}
-                // slotsLeftToday={data.getSpecificSession.slotsLeftToday}
-                // slots={data.getSpecificSession.slots}
-                // price={data.getSpecificSession.price}
-                // numReviews={data.getSpecificSession.numReviews}
-                // reviewRating={data.getSpecificSession.reviewRating}
-                // system={data.getSpecificSession.system}
-                // creator={data.getSpecificSession.creator}
-                // launcher={data.getSpecificSession.launcher}
               />
             ) : (
               <SelectionOptions
@@ -452,16 +441,6 @@ export default function SpecificSessionPage(props) {
                 refetch={refetch}
                 meRefetch={meRefetch}
                 session={data.getSpecificSession}
-                // gamer={formatGamers(data.getSpecificSession.gamers)}
-                // game={data.getSpecificSession.game.name}
-                // slotsLeftToday={data.getSpecificSession.slotsLeftToday}
-                // slots={data.getSpecificSession.slots}
-                // price={data.getSpecificSession.price}
-                // numReviews={data.getSpecificSession.numReviews}
-                // reviewRating={data.getSpecificSession.reviewRating}
-                // system={data.getSpecificSession.system}
-                // creator={data.getSpecificSession.creator}
-                // launcher={data.getSpecificSession.launcher}
               />
             )
           }
