@@ -250,7 +250,7 @@ export default function MyTimeSlot({
                 }
               }}
             >
-              Cancel session
+              Cancel booking
             </CancelBooking>
           </CancelContainer>
         )}
