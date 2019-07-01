@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import { Image } from 'cloudinary-react'
 
 import NavBar from '../Components/NavBar'
 import GamesRow from '../Components/GamesRow'
-import { noUnderscores, mapTags } from '../utils/Strings'
+import { noUnderscores } from '../utils/Strings'
 import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
+import TagList from '../Components/TagList'
 
 const PageContainer = styled.div`
   width: 100%;
@@ -40,41 +40,10 @@ const Content = styled.div`
   }
 `
 
-const HeaderContent = styled.div`
-  padding-left: 2.4rem;
-  padding-right: 2.4rem;
-  max-width: none;
-  overflow-anchor: none;
-  padding-bottom: 6rem;
-  @media (min-width: 1128px) {
-    margin: 0 auto;
-    padding-left: 8rem;
-    padding-right: 8rem;
-  }
-`
-
 const InnerContent = styled.div`
   margin-left: -0.8rem;
   margin-right: -0.8rem;
   overflow: hidden;
-`
-
-const Tags = styled.div`
-  font-size: 1.4rem;
-  font-weight: 400;
-  color: black;
-  margin-bottom: 3rem;
-`
-
-const Tag = styled.div`
-  padding: 0.5rem;
-  background: #db1422;
-  border-radius: 4px;
-  font-weight: 600;
-  color: #fff;
-  display: inline-flex;
-  font-size: 1.4rem;
-  margin-right: 0.5rem;
 `
 
 const Sessions = styled.div`
@@ -198,13 +167,8 @@ export default function SpecificGamePage(props) {
                 <TitleOfGame>{`${game.name}`}</TitleOfGame>
                 <Sessions>{`${game.numSessions} ${
                   game.numSessions === 1 ? 'session' : 'sessions'
-                }
-        `}</Sessions>
-                <Tags>
-                  {game.tags.map(tag => (
-                    <Tag>{mapTags(tag)}</Tag>
-                  ))}
-                </Tags>
+                } `}</Sessions>
+                <TagList tags={game.tags} />
               </InfoContainer>
             </Flex>
           </Placeholder>

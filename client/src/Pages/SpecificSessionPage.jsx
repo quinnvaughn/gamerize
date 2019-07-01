@@ -2,17 +2,12 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-apollo-hooks'
-import _ from 'lodash'
 import gql from 'graphql-tag'
 import Media from 'react-media'
-import { Subscribe } from 'unstated'
-import { Helmet } from 'react-helmet'
 
 //local
-import SessionsContainer from '../Containers/SessionsContainer'
 import SelectionOptions from '../Components/SelectionOptions'
 import Footer from '../Components/Footer'
-import Reviews from '../Components/Reviews'
 import TodayAvailability from '../Components/TodayAvailability'
 import NavBar from '../Components/NavBar'
 import FixedSelectionOptions from '../Components/FixedSelectionOptions'
@@ -20,18 +15,14 @@ import Modal from '../Components/Modal'
 import Calendar from '../Components/TimeSlotsCalendar'
 import TimeSlotsHours from '../Components/TimeSlotsHours'
 import TimeSlotSession from '../Components/TimeSlotSession'
-import {
-  noUnderscores,
-  capitalize,
-  formatOccupation,
-  mapGameType,
-} from '../utils/Strings'
-import { formatGamers, formatSystem } from '../utils/Strings'
+import { noUnderscores, capitalize, mapGameType } from '../utils/Strings'
+import { formatSystem } from '../utils/Strings'
 import Loading from '../Components/Loading'
 import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
-import { SessionsProvider, useSessions } from '../State/SessionsSelectedContext'
+import { useSessions } from '../State/SessionsSelectedContext'
 import SelectedSlotsModal from '../Components/SelectedSlotsModal'
+import OccupationList from '../Components/OccupationList'
 
 //data
 
@@ -110,60 +101,6 @@ const Game = styled.h3`
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 2.2rem;
-`
-
-const Occupations = styled.div`
-  font-size: 1.4rem;
-  font-weight: 400;
-  color: black;
-  margin-top: 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`
-
-const Occupation = styled.div`
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: black;
-  border: 1px solid #dddfe2;
-  padding: 0.4rem 0.6rem;
-  display: inline-block;
-  border-radius: 4px;
-  margin-right: 0.8rem;
-  margin-top: 0.5rem;
-  :last-child {
-    margin-right: 0;
-  }
-  :hover {
-    cursor: default;
-  }
-`
-
-const RequirementsAndDiscountsContainer = styled.div`
-  display: flex;
-  padding-bottom: 2.4rem;
-  margin-bottom: 2.4rem;
-  border-bottom: 1px solid #dddfe2;
-`
-
-const Requirement = styled.div`
-  font-size: 1.6rem;
-  line-height: 2.2rem;
-  font-weight: 400;
-`
-
-const InnerContainer = styled.div`
-  flex: 50%;
-  :not(:last-child) {
-    padding-right: 1rem;
-  }
-`
-
-const Discount = styled.div`
-  font-size: 1.6rem;
-  line-height: 2.2rem;
-  font-weight: 400;
 `
 
 const LeftSide = styled.div`
@@ -249,14 +186,6 @@ const GamerContainer = styled.div`
   align-items: center;
   flex: 3;
 `
-
-const formatCommas = (systems, system, index) => {
-  if (index < systems.length - 1) {
-    return <Systems key={system}>{`${system}, `}</Systems>
-  } else {
-    return <Systems key={system}>{`${system}`}</Systems>
-  }
-}
 
 const GET_SPECIFIC_SESSION = gql`
   query($sessionId: String!) {
@@ -352,11 +281,11 @@ const GET_ME = gql`
 `
 
 function timeslotDoesNotHaveSlots(allSessions, setNotEnoughSpots, secondData) {
+  // Probably better way to do this
   useEffect(() => {
     allSessions.sessions.length === 0 && setNotEnoughSpots([])
     secondData.specificSessionSlotsToday &&
       secondData.specificSessionSlotsToday.map(slot => {
-        console.log(slot)
         allSessions.sessions.map(session => {
           if (session.id === slot.id) {
             if (slot.slots - slot.players.length < session.slots) {
@@ -376,6 +305,8 @@ export default function SpecificSessionPage(props) {
   useEffect(() => {
     Mixpanel.track('Clicked on a session')
   }, {})
+
+  // data
   const { data, loading, error } = useQuery(GET_SPECIFIC_SESSION, {
     variables: {
       sessionId: props.match.params.id,
@@ -400,31 +331,19 @@ export default function SpecificSessionPage(props) {
     refetch: meRefetch,
     error: thirdError,
   } = useQuery(GET_ME)
+
+  // checks for timeslots
   timeslotDoesNotHaveSlots(allSessions, setNotEnoughSpots, secondData)
-  const errors = error || secondError || thirdError
-  return loading || secondLoading || thirdLoading ? (
+
+  const hasErrors = error || secondError || thirdError
+  const isLoading = loading || secondLoading || thirdLoading
+
+  return isLoading ? (
     <Loading />
-  ) : errors ? (
-    <ErrorPage errors={errors} />
+  ) : hasErrors ? (
+    <ErrorPage errors={hasErrors} />
   ) : (
     <PageContainer>
-      <Helmet>
-        <meta name="twitter:card" content="summary" />
-        <meta
-          name="twitter:title"
-          content={`${data.getSpecificSession.title}`}
-        />
-        <meta
-          name="twitter:description"
-          content={`Play ${data.getSpecificSession.game.name} with ${
-            data.getSpecificSession.creator.displayName
-          }`}
-        />
-        <meta
-          name="twitter:image"
-          content={`${data.getSpecificSession.creator.profilePicture}`}
-        />
-      </Helmet>
       <NavBar />
       <BannerContainer>
         <Banner src={data.getSpecificSession.creator.banner} alt="Banner" />
@@ -448,15 +367,9 @@ export default function SpecificSessionPage(props) {
                     data.getSpecificSession.creator.displayName
                   }`}</Gamer>
                 </GamerLink>
-                <Occupations>
-                  {data.getSpecificSession.creator.occupations.map(
-                    occupation => (
-                      <Occupation key={occupation}>
-                        {formatOccupation(occupation)}
-                      </Occupation>
-                    )
-                  )}
-                </Occupations>
+                <OccupationList
+                  occupations={data.getSpecificSession.creator.occupations}
+                />
               </GamerContainer>
             </TopContainer>
             <MiddleContainer>
@@ -505,44 +418,21 @@ export default function SpecificSessionPage(props) {
                 </Flex>
               </FlexHalf>
             </MiddleContainer>
-            {/* <RequirementsAndDiscountsContainer>
-              <InnerContainer>
-                <TypeOfContent>Requirements</TypeOfContent>
-                {gamer.requirements.map(requirement => (
-                  <Requirement key={requirement}>{requirement}</Requirement>
-                ))}
-              </InnerContainer>
-              <InnerContainer>
-                <TypeOfContent>Discounts</TypeOfContent>
-                {gamer.discounts.map(discount => (
-                  <Discount key={discount}>{discount}</Discount>
-                ))}
-              </InnerContainer>
-            </RequirementsAndDiscountsContainer> */}
           </GamerInfo>
           <TodayAvailability
             day={new Date()}
             sessions={secondData.specificSessionSlotsToday}
           />
-          {/*<Reviews reviews={gamer.reviews} numReviews={gamer.numReviews} /> */}
         </LeftSide>
         <Media query="(max-width: 1127px)">
           {matches =>
             matches ? (
               <FixedSelectionOptions
+                notEnoughSpots={notEnoughSpots}
                 me={thirdData.me}
                 refetch={refetch}
-                gamer={formatGamers(data.getSpecificSession.gamers)}
-                game={data.getSpecificSession.game.name}
-                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
-                slots={data.getSpecificSession.slots}
-                price={data.getSpecificSession.price}
-                numReviews={data.getSpecificSession.numReviews}
-                reviewRating={data.getSpecificSession.reviewRating}
-                system={data.getSpecificSession.system}
                 meRefetch={meRefetch}
-                creator={data.getSpecificSession.creator}
-                launcher={data.getSpecificSession.launcher}
+                session={data.getSpecificSession}
               />
             ) : (
               <SelectionOptions
@@ -550,16 +440,7 @@ export default function SpecificSessionPage(props) {
                 me={thirdData.me}
                 refetch={refetch}
                 meRefetch={meRefetch}
-                gamer={formatGamers(data.getSpecificSession.gamers)}
-                game={data.getSpecificSession.game.name}
-                slotsLeftToday={data.getSpecificSession.slotsLeftToday}
-                slots={data.getSpecificSession.slots}
-                price={data.getSpecificSession.price}
-                numReviews={data.getSpecificSession.numReviews}
-                reviewRating={data.getSpecificSession.reviewRating}
-                system={data.getSpecificSession.system}
-                creator={data.getSpecificSession.creator}
-                launcher={data.getSpecificSession.launcher}
+                session={data.getSpecificSession}
               />
             )
           }
@@ -573,6 +454,7 @@ export default function SpecificSessionPage(props) {
           }}
         >
           {allSessions.selectedSession ? (
+            // Also cut down on getSpecificSession props
             <TimeSlotSession
               slots={secondData.specificSessionSlotsToday}
               me={thirdData.me}

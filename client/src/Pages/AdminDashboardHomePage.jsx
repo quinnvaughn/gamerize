@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 //local imports
 import AdminDashboardNav from '../Components/AdminDashboardNav'
-import GamerRequestRow from '../Components/GamerRequestRow'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import Loading from '../Components/Loading'
 import GamerRequestTableColumns from '../Components/GamerRequestTableColumns'
 import ErrorPage from './ErrorPage'
+import GamerRequestRowList from '../Components/GamerRequestRowList'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -82,11 +82,12 @@ export default function AdminDashboardGamerHomePage(props) {
   } = useQuery(GET_NUM_REQUESTS, {
     pollInterval: 1000,
   })
-  const errors = error || secondError
-  return loading || secondLoading ? (
+  const hasErrors = error || secondError
+  const isLoading = loading || secondLoading
+  return isLoading ? (
     <Loading admin />
-  ) : errors ? (
-    <ErrorPage errors={errors} />
+  ) : hasErrors ? (
+    <ErrorPage errors={hasErrors} />
   ) : (
     <PageContainer>
       <AdminDashboardNav />
@@ -99,15 +100,10 @@ export default function AdminDashboardGamerHomePage(props) {
           </NumRequests>
           <Table>
             <GamerRequestTableColumns />
-            {data.getGamerRequests.map(gamerRequest => (
-              <GamerRequestRow
-                refetch={refetch}
-                id={gamerRequest.id}
-                user={gamerRequest.user}
-                socialMedia={gamerRequest.socialMedia}
-                occupations={gamerRequest.occupations}
-              />
-            ))}
+            <GamerRequestRowList
+              array={data.getGamerRequests}
+              refetch={refetch}
+            />
           </Table>
         </Top>
       </Content>

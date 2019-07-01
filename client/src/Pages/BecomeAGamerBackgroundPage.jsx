@@ -8,8 +8,10 @@ import _ from 'lodash'
 //local imports
 import Gamer from '../Containers/BecomeAGamerContainer'
 import ProgressNav from '../Components/ProgressNav'
+import TypeOfGamerList from '../Components/TypeOfGamerList'
 import useTitle from '../Hooks/useTitle'
 import { noUnderscores, capitalize } from '../utils/Strings'
+import BecomeAGamerBackgroundFooter from '../Components/BecomeAGamerBackgroundFooter'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -54,82 +56,6 @@ const Types = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 4rem;
-`
-
-const TypeOfGamer = styled.button`
-  border-radius: 4px;
-  cursor: pointer;
-  background: ${props => (props.selected ? '#db1422' : '#fff')};
-  color: ${props => (props.selected ? '#fff' : '#db1422')};
-  border: ${props =>
-    !props.selected ? '1px solid #db1422' : '1px solid transparent'};
-  padding: 1rem 1rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  outline: 0;
-  :last-of-type {
-    margin-right: 0;
-  }
-`
-
-const Previous = styled(Link)`
-  text-decoration: none;
-  outline: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`
-
-const PreviousText = styled.span`
-  color: #db1422;
-  font-size: 1.6rem;
-  font-weight: 600;
-`
-
-const PreviousArrow = styled(FaChevronLeft)`
-  color: #db1422;
-  font-size: 1.6rem;
-  margin-right: 0.5rem;
-`
-
-const Next = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-  outline: 0;
-  border-radius: 4px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  padding: 1rem 2.2rem;
-  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
-  pointer-events: ${props => props.disabled && 'none'};
-`
-
-const ButtonsContainer = styled.div`
-  position: fixed;
-  z-index: 200;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-`
-
-const ButtonsInner = styled.div`
-  max-width: 91.2rem;
-  margin: 0 auto;
-  padding-left: 2.4rem;
-  padding-right: 2.4rem;
-`
-
-const Buttons = styled.div`
-  background: #fff;
-  border-top: 1px solid #dddfe2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 3rem 3rem 1.6rem;
-  width: 60%;
-  @media (max-width: 1127px) {
-    width: 100%;
-  }
 `
 
 const DontSeeYours = styled.div`
@@ -197,14 +123,7 @@ export default function BecomeAGamerBackground(props) {
                 more searches.
               </Subtitle>
               <Types>
-                {_.map(occupation, type => (
-                  <TypeOfGamer
-                    onClick={() => container.setOccupations(type)}
-                    selected={container.state.occupations.includes(type)}
-                  >
-                    {type === 'DJ' ? type : capitalize(noUnderscores(type))}
-                  </TypeOfGamer>
-                ))}
+                <TypeOfGamerList array={occupation} container={container} />
               </Types>
               <DontSeeYours>
                 <YoursTitle>
@@ -214,22 +133,7 @@ export default function BecomeAGamerBackground(props) {
               </DontSeeYours>
             </Container>
           </Content>
-          <ButtonsContainer>
-            <ButtonsInner>
-              <Buttons>
-                <Previous to="/become-a-gamer">
-                  <PreviousArrow />
-                  <PreviousText>Previous</PreviousText>
-                </Previous>
-                <Next
-                  to="/become-a-gamer/details"
-                  disabled={container.state.occupations.length <= 0}
-                >
-                  Next
-                </Next>
-              </Buttons>
-            </ButtonsInner>
-          </ButtonsContainer>
+          <BecomeAGamerBackgroundFooter container={container} />
         </PageContainer>
       )}
     </Subscribe>

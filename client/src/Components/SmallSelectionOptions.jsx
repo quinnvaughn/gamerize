@@ -1,17 +1,10 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import StarRatings from 'react-star-ratings'
-import { Subscribe } from 'unstated'
-import dateFns from 'date-fns'
 import { MdClose } from 'react-icons/md'
 
 import TimeSlots from './TimeSlots'
-import SessionsContainer from '../Containers/SessionsContainer'
 import Totals from './Totals'
-
-//data
-
-import sessions from '../data/sessions'
+import { formatGamers } from '../utils/Strings'
 
 const Container = styled.div`
   width: 100%;
@@ -26,18 +19,6 @@ const Price = styled.div`
 const Per = styled.span`
   font-size: 1.2rem;
   font-weight: 600;
-`
-
-const NumReviews = styled.span`
-  margin-left: 0.5rem;
-  color: black;
-  font-size: 1.2rem;
-  font-weight: 600;
-`
-
-const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
 `
 
 const Top = styled.div`
@@ -80,20 +61,12 @@ const SignInToBook = styled.div`
 `
 
 export default function SmallSelectionOptions({
-  price,
-  reviews,
-  numReviews,
-  system,
-  gamer,
-  game,
   refetch,
   meRefetch,
-  creator,
   close,
-  slotsLeftToday,
   me,
-  launcher,
   notEnoughSpots,
+  session,
 }) {
   return (
     <Container>
@@ -102,43 +75,28 @@ export default function SmallSelectionOptions({
       </ExitContainer>
       <Top>
         <Price>
-          {`$${parseFloat(price).toFixed(2)}`} <Per>per slot</Per>
+          {`$${parseFloat(session.price).toFixed(2)}`} <Per>per slot</Per>
         </Price>
-        {/* <RatingContainer>
-          <StarRatings
-            rating={reviews}
-            starRatedColor="#db1422"
-            numberOfStars={5}
-            name="rating"
-            starDimension="1.2rem"
-            starSpacing=".1rem"
-          />
-          <NumReviews>{`${numReviews}`}</NumReviews>
-        </RatingContainer> */}
       </Top>
       {me === null ? (
         <SignInToBook>Please sign in to book</SignInToBook>
       ) : (
-        <Subscribe to={[SessionsContainer]}>
-          {session => (
-            <Fragment>
-              <HowManySlots>{`${slotsLeftToday} slots left today`}</HowManySlots>
-              <TimeSlots gamer={gamer} game={game} />
-              <Totals
-                notEnoughSpots={notEnoughSpots}
-                price={price}
-                refetch={refetch}
-                meRefetch={meRefetch}
-                me={me}
-                creator={creator}
-                hasDefaultCard={me && me.hasDefaultCard}
-                customerId={me.customerStripeId}
-                launcher={launcher}
-                system={system}
-              />
-            </Fragment>
-          )}
-        </Subscribe>
+        <Fragment>
+          <HowManySlots>{`${
+            session.slotsLeftToday
+          } slots left today`}</HowManySlots>
+          <TimeSlots
+            gamer={formatGamers(session.gamers)}
+            game={session.game.name}
+          />
+          <Totals
+            notEnoughSpots={notEnoughSpots}
+            refetch={refetch}
+            meRefetch={meRefetch}
+            me={me}
+            session={session}
+          />
+        </Fragment>
       )}
     </Container>
   )

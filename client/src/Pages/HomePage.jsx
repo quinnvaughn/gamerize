@@ -1,25 +1,21 @@
-import React, { useState, Fragment, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
-import Media from 'react-media'
-import { Helmet } from 'react-helmet'
 
 //local imports
 import Loading from '../Components/Loading'
 import NavBar from '../Components/NavBar'
-import GamerRow from '../Components/TopGamersRow'
 
 import Jumbotron from '../Components/Jumbotron'
-import GamesRow from '../Components/TopGamesRow'
 import Footer from '../Components/Footer'
 import useTitle from '../Hooks/useTitle'
-import TopSessionsRow from '../Components/TopSessionsRow'
-import { Mixpanel } from '../Components/Mixpanel'
 import ErrorPage from './ErrorPage'
 import useNotifications from '../Hooks/useNotifications'
 import useEmailClick from '../Hooks/useEmailClick'
 import useTwitterClick from '../Hooks/useTwitterClick'
+import useMixpanelTrack from '../Hooks/useMixpanelTrack'
+import HomePageDynamicRender from '../Components/HomePageDynamicRender'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -102,14 +98,14 @@ const GET_GAMES = gql`
 `
 
 export default function HomePage(props) {
+  // Hooks
   useTitle('Gamerize - Play games with your favorite people')
   useNotifications()
-  useEffect(() => {
-    Mixpanel.track('Consumer looked at website.')
-  }, {})
+  useMixpanelTrack('Consumer looked at website')
   useEmailClick()
   useTwitterClick()
   const [first, setFirst] = useState(4)
+
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
   })
@@ -127,101 +123,66 @@ export default function HomePage(props) {
   } = useQuery(GET_SESSIONS, {
     variables: { first },
   })
-  const wait = loading || secondLoading || thirdLoading
-  const errors = error || secondError || thirdError
-  return wait ? (
+  const isLoading = loading || secondLoading || thirdLoading
+  const hasErrors = error || secondError || thirdError
+  return isLoading ? (
     <Loading />
-  ) : errors ? (
-    <ErrorPage errors={errors} />
+  ) : hasErrors ? (
+    <ErrorPage errors={hasErrors} />
   ) : (
     <PageContainer>
-      <Helmet>
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
       <NavBar />
       <Jumbotron />
       <Content>
         <InnerContent>
-          <Media query={{ maxWidth: 969 }}>
-            {matches => {
-              matches && setFirst(4)
-              return matches ? (
-                <Fragment>
-                  <TopSessionsRow
-                    title="Sessions"
-                    data={thirdData}
-                    first={first}
-                  />
-                  <GamerRow title="Gamers" data={secondData} first={first} />
-                  <GamesRow title="Games" data={data} first={first} />
-                </Fragment>
-              ) : null
-            }}
-          </Media>
-          <Media query={{ minWidth: 970, maxWidth: 1239 }}>
-            {matches => {
-              matches && setFirst(6)
-              return matches ? (
-                <Fragment>
-                  <TopSessionsRow
-                    title="Sessions"
-                    data={thirdData}
-                    first={first}
-                  />
-                  <GamerRow title="Gamers" data={secondData} first={first} />
-                  <GamesRow title="Games" data={data} first={first} />
-                </Fragment>
-              ) : null
-            }}
-          </Media>
-          <Media query={{ minWidth: 1240, maxWidth: 1509 }}>
-            {matches => {
-              matches && setFirst(8)
-              return matches ? (
-                <Fragment>
-                  <TopSessionsRow
-                    title="Sessions"
-                    data={thirdData}
-                    first={first}
-                  />
-                  <GamerRow title="Gamers" data={secondData} first={first} />
-                  <GamesRow title="Games" data={data} first={first} />
-                </Fragment>
-              ) : null
-            }}
-          </Media>
-          <Media query={{ minWidth: 1510, maxWidth: 1779 }}>
-            {matches => {
-              matches && setFirst(5)
-              return matches ? (
-                <Fragment>
-                  <TopSessionsRow
-                    title="Sessions"
-                    data={thirdData}
-                    first={first}
-                  />
-                  <GamerRow title="Gamers" data={secondData} first={first} />
-                  <GamesRow title="Games" data={data} first={first} />
-                </Fragment>
-              ) : null
-            }}
-          </Media>
-          <Media query={{ minWidth: 1780 }}>
-            {matches => {
-              matches && setFirst(6)
-              return matches ? (
-                <Fragment>
-                  <TopSessionsRow
-                    title="Sessions"
-                    data={thirdData}
-                    first={first}
-                  />
-                  <GamerRow title="Gamers" data={secondData} first={first} />
-                  <GamesRow title="Games" data={data} first={first} />
-                </Fragment>
-              ) : null
-            }}
-          </Media>
+          <HomePageDynamicRender
+            maxWidth={969}
+            setFirst={setFirst}
+            setAt={4}
+            first={first}
+            thirdData={thirdData}
+            secondData={secondData}
+            data={data}
+          />
+          <HomePageDynamicRender
+            minWidth={970}
+            maxWidth={1239}
+            setAt={6}
+            setFirst={setFirst}
+            first={first}
+            thirdData={thirdData}
+            secondData={secondData}
+            data={data}
+          />
+          <HomePageDynamicRender
+            minWidth={1240}
+            maxWidth={1509}
+            setAt={8}
+            setFirst={setFirst}
+            first={first}
+            thirdData={thirdData}
+            secondData={secondData}
+            data={data}
+          />
+          <HomePageDynamicRender
+            minWidth={1510}
+            maxWidth={1779}
+            setAt={5}
+            setFirst={setFirst}
+            first={first}
+            thirdData={thirdData}
+            secondData={secondData}
+            data={data}
+          />
+          <HomePageDynamicRender
+            minWidth={1780}
+            setAt={6}
+            setFirst={setFirst}
+            first={first}
+            thirdData={thirdData}
+            secondData={secondData}
+            data={data}
+          />
         </InnerContent>
       </Content>
       <Footer />

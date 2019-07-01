@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { Link } from 'react-router-dom'
 import { useMutation } from 'react-apollo-hooks'
 
-import DefaultSessionPicture from '../default-game.gif'
 import { displaySystem, mapLauncher, mapSystem } from '../utils/System'
 import { capitalize } from '../utils/Strings.js'
 

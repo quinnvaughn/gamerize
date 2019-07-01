@@ -4,7 +4,6 @@ import dateFns from 'date-fns'
 import { Link } from 'react-router-dom'
 
 //local imports
-import DefaultAvatar from '../default-avatar.png'
 
 const Container = styled.div`
   padding-bottom: 2.4rem;
@@ -59,7 +58,7 @@ export default function Review({ review }) {
     <Container>
       <ReviewTop>
         <AvatarLink to={`/users/${review.username}`}>
-          <Avatar src={DefaultAvatar} />
+          {/* <Avatar src={DefaultAvatar} /> */}
         </AvatarLink>
         <ReviewerNameAndDate>
           <ReviewerName>{review.user}</ReviewerName>

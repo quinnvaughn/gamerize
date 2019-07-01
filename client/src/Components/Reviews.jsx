@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import StarRatings from 'react-star-ratings'
 
 //local imports
-import reviews from '../data/reviews'
 import Review from './Review'
 import ReviewSearchBar from './ReviewSearchBar'
 
@@ -60,9 +59,9 @@ export default function Reviews(props) {
         />
       </Top>
       <ReviewsContainer>
-        {reviews.map((review, index) => (
+        {/* {reviews.map((review, index) => (
           <Review review={review} key={`${review}${index}`} />
-        ))}
+        ))} */}
       </ReviewsContainer>
     </Container>
   )

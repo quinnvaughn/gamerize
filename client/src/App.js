@@ -14,7 +14,7 @@ import client from './ApolloClient'
 import routes from './routes'
 import GlobalStyle from './globalstyles'
 import ProtectedRoute from './Components/ProtectedRoute'
-import { SessionsProvider } from './State/SessionsSelectedContext'
+import AppProviders from './State/AppProvider'
 
 UNSTATED.isEnabled = false
 
@@ -32,7 +32,7 @@ class App extends Component {
                   <ScrollToTop>
                     <GlobalStyle />
                     <CloudinaryContext cloudName="gamerize">
-                      <SessionsProvider>
+                      <AppProviders>
                         <Switch>
                           {routes.map(route =>
                             route.protected ? (
@@ -52,7 +52,7 @@ class App extends Component {
                             )
                           )}
                         </Switch>
-                      </SessionsProvider>
+                      </AppProviders>
                     </CloudinaryContext>
                   </ScrollToTop>
                 </Provider>

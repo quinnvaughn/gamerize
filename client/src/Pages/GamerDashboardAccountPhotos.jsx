@@ -8,6 +8,8 @@ import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
+import { Formik } from 'formik'
+import ThumbImage from '../Components/ThumbImage'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -95,7 +97,23 @@ const Label = styled.label`
   font-size: 1.6rem;
   color: #db1422;
   cursor: pointer;
-  width: 100%;
+  display: inline-block;
+  margin-bottom: 1rem;
+`
+
+const AddPicture = styled.button`
+  margin-top: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
+  border-radius: 4px;
+  line-height: 2.4rem;
+  padding: 1rem 2.2rem;
+  outline: 0;
+  border: 0;
+  font-size: 1.6rem;
+  pointer-events: ${props => props.disabled && 'none'};
 `
 
 const GET_INFO = gql`
@@ -142,80 +160,125 @@ export default function GamerDashboardAccountPhotos(props) {
         <GamerDashboardAccountNav />
         <Sections>
           <OutsideContainer>
-            <Container>
-              <Top>
-                <Title>Profile Picture</Title>
-              </Top>
-              <Body>
-                <Row>
-                  <RowLeft>
-                    <Image
-                      publicId={`${data.me.profilePicture}`}
-                      width="225"
-                      crop="scale"
-                    />
-                  </RowLeft>
-                  <RowRight>
-                    <UploadingAPicture>
-                      Users are more likely to play with someone if they can put
-                      a face to a voice. Please make sure you have a profile
-                      picture.
-                    </UploadingAPicture>
-                    <Label>
-                      Upload Profile Picture
-                      <FileUpload
-                        type="file"
-                        onChange={async e => {
-                          const { data } = await uploadProfilePicture({
-                            variables: { file: e.target.files[0] },
-                          })
-                          if (data.uploadProfilePicture.updated) {
-                            refetch()
-                          }
-                        }}
-                      />
-                    </Label>
-                  </RowRight>
-                </Row>
-              </Body>
-            </Container>
+            <Formik
+              initialValues={{ profilePic: null }}
+              onSubmit={async (values, actions) => {
+                const { data } = await uploadProfilePicture({
+                  variables: { file: values.profilePic },
+                })
+                if (data.uploadProfilePicture.updated) {
+                  actions.setFieldValue('profilePic', null)
+                  actions.setSubmitting(false)
+                  refetch()
+                }
+              }}
+            >
+              {({ handleSubmit, setFieldValue, values, isSubmitting }) => (
+                <form onSubmit={handleSubmit}>
+                  <Container>
+                    <Top>
+                      <Title>Profile Picture</Title>
+                    </Top>
+                    <Body>
+                      <Row>
+                        <RowLeft>
+                          <Image
+                            publicId={`${data.me.profilePicture}`}
+                            width="225"
+                            crop="scale"
+                          />
+                        </RowLeft>
+                        <RowRight>
+                          <UploadingAPicture>
+                            Users are more likely to play with someone if they
+                            can put a face to a voice. Please make sure you have
+                            a profile picture.
+                          </UploadingAPicture>
+                          <Label>
+                            Upload Profile Picture
+                            <FileUpload
+                              type="file"
+                              onChange={e => {
+                                setFieldValue(
+                                  'profilePic',
+                                  e.currentTarget.files[0]
+                                )
+                              }}
+                            />
+                          </Label>
+                          <ThumbImage file={values.profilePic} />
+                          {values.profilePic && (
+                            <AddPicture type="submit" disabled={isSubmitting}>
+                              Change profile picture
+                            </AddPicture>
+                          )}
+                        </RowRight>
+                      </Row>
+                    </Body>
+                  </Container>
+                </form>
+              )}
+            </Formik>
           </OutsideContainer>
           <OutsideContainer>
-            <Container>
-              <Top>
-                <Title>Banner</Title>
-              </Top>
-              <Body>
-                <Row>
-                  <BannerLeft>
-                    <Image
-                      publicId={`${data.me.banner}`}
-                      width="300"
-                      crop="scale"
-                    />
-                  </BannerLeft>
-                  <BannerRight>
-                    <UploadingAPicture>
-                      Banners are a great way to promote yourself as a gamer.
-                    </UploadingAPicture>
-                    <Label>
-                      Upload Banner
-                      <FileUpload
-                        type="file"
-                        onChange={async e => {
-                          const { data } = await uploadBanner({
-                            variables: { file: e.target.files[0] },
-                          })
-                          if (data.uploadBanner.updated) {
-                            refetch()
-                          }
-                        }}
-                      />
-                    </Label>
-                  </BannerRight>
-                </Row>
-              </Body>
-            </Container>
+            <Formik
+              initialValues={{ banner: null }}
+              handleSubmit={async (values, actions) => {
+                const { data } = await uploadBanner({
+                  variables: { file: values.banner },
+                })
+                if (data.uploadBanner.updated) {
+                  actions.setFieldValue('banner', null)
+                  actions.setSubmitting(false)
+                  refetch()
+                }
+              }}
+            >
+              {({ handleSubmit, values, isSubmitting, setFieldValue }) => (
+                <form onSubmit={handleSubmit}>
+                  <Container>
+                    <Top>
+                      <Title>Banner</Title>
+                    </Top>
+                    <Body>
+                      <Row>
+                        <BannerLeft>
+                          <Image
+                            publicId={`${data.me.banner}`}
+                            width="300"
+                            crop="scale"
+                          />
+                        </BannerLeft>
+                        <BannerRight>
+                          <UploadingAPicture>
+                            Banners are a great way to promote yourself as a
+                            gamer.
+                          </UploadingAPicture>
+                          <Label>
+                            Upload Banner
+                            <FileUpload
+                              type="file"
+                              onChange={async e => {
+                                setFieldValue(
+                                  'banner',
+                                  e.currentTarget.files[0]
+                                )
+                              }}
+                            />
+                          </Label>
+                          <ThumbImage file={values.banner} />
+                          {values.banner && (
+                            <AddPicture type="submit" disabled={isSubmitting}>
+                              Change profile picture
+                            </AddPicture>
+                          )}
+                        </BannerRight>
+                      </Row>
+                    </Body>
+                  </Container>
+                </form>
+              )}
+            </Formik>
           </OutsideContainer>
         </Sections>
       </Content>

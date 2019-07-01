@@ -53,18 +53,6 @@ const Per = styled.span`
   font-weight: 600;
 `
 
-const NumReviews = styled.span`
-  margin-left: 0.5rem;
-  color: black;
-  font-size: 1.2rem;
-  font-weight: 600;
-`
-
-const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
-`
-
 const LeftSide = styled.div``
 
 const BookContainer = styled.div``
@@ -76,19 +64,9 @@ export default function FixedSelectionOptions(props) {
       <Content>
         <LeftSide>
           <Price>
-            {`$${parseFloat(props.price).toFixed(2)}`} <Per>per slot</Per>
+            {`$${parseFloat(props.session.price).toFixed(2)}`}{' '}
+            <Per>per slot</Per>
           </Price>
-          {/* <RatingContainer>
-            <StarRatings
-              rating={props.reviews}
-              starRatedColor="#db1422"
-              numberOfStars={5}
-              name="rating"
-              starDimension="1.2rem"
-              starSpacing=".1rem"
-            />
-            <NumReviews>{`${props.numReviews}`}</NumReviews>
-          </RatingContainer> */}
         </LeftSide>
         <BookContainer>
           <Book onClick={() => setModal(true)}>Book</Book>

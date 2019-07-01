@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from 'react-apollo-hooks'
-import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
+import * as Yup from 'yup'
 
 //local imports
 import GamerDashboardAccountNav from '../Components/GamerDashboardAccountNav'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
 import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
+import EditProfileSection from '../Components/EditProfileSection'
+import EditProfileInput from '../Components/EditProfileInput'
+import { Formik, Field } from 'formik'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -29,62 +32,6 @@ const Content = styled.div`
 
 const OutsideContainer = styled.div`
   flex: 75%;
-`
-
-const Container = styled.div`
-  border: 1px solid #ebebeb;
-`
-
-const Top = styled.div`
-  width: 100%;
-  background: #ebebeb;
-  padding: 1.2rem 2rem;
-`
-
-const Title = styled.h2`
-  font-weight: 400;
-`
-
-const Body = styled.div`
-  padding: 2rem;
-`
-
-const Row = styled.div`
-  width: 100%;
-  display: flex;
-`
-
-const RowLeft = styled.div`
-  flex: 25%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: 0.8rem;
-`
-
-const Label = styled.div`
-  font-size: 1.6rem;
-  font-weight: 400;
-`
-
-const RowRight = styled.div`
-  flex: 75%;
-`
-
-const SetupLength = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  width: 100%;
-  font-weight: 400;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
 `
 
 const Save = styled.button`
@@ -118,15 +65,15 @@ const UPDATE_GAMER_PROFILE = gql`
   }
 `
 
+const EditSetupSchema = Yup.object().shape({
+  setup: Yup.number('Setup must be a number')
+    .min(1, 'Must at least have some setup')
+    .required('A setup is required'),
+})
+
 export default function GamerDashboardAccountEdit(props) {
   const { data, loading, refetch, error } = useQuery(GET_INFO)
   const updateGamerProfile = useMutation(UPDATE_GAMER_PROFILE)
-  const [setup, setSetup] = useState(null)
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  useEffect(() => {
-    !loading && setSetup(data.me.setup)
-  }, [data.me])
   return loading ? (
     <Loading gamer />
   ) : error ? (
@@ -137,46 +84,44 @@ export default function GamerDashboardAccountEdit(props) {
       <Content>
         <GamerDashboardAccountNav />
         <OutsideContainer>
-          <Container>
-            <Top>
-              <Title>Required</Title>
-            </Top>
-            <Body>
-              <Row>
-                <RowLeft>
-                  <Label>Setup</Label>
-                </RowLeft>
-                <RowRight>
-                  <SetupLength
-                    onChange={e => {
-                      e.target.value === ''
-                        ? setSetup('')
-                        : setSetup(Number(e.target.value))
-                    }}
-                    value={setup ? setup : ''}
-                  />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-          <Save
-            disabled={!Number.isInteger(setup) || setup === 0}
-            onClick={async () => {
-              setSaving(true)
-              const input = { setup }
+          <Formik
+            validationSchema={EditSetupSchema}
+            enableReinitialize
+            initialValues={{ setup: data.me.setup }}
+            onSubmit={async (values, actions) => {
+              const input = { setup: values.setup }
               const { data } = await updateGamerProfile({
                 variables: { input },
               })
               if (data.updateGamerProfile.updated) {
-                setTimeout(() => setSaving(false), 1000)
-                await setSaved(true)
-                setTimeout(() => setSaved(false), 3000)
+                actions.setSubmitting(false)
                 refetch()
               }
             }}
           >
-            {saving ? 'Saving' : saved ? <FaCheck /> : 'Save'}
-          </Save>
+            {({ handleSubmit, isSubmitting, values }) => (
+              <form onSubmit={handleSubmit}>
+                <EditProfileSection title="Required">
+                  <Field
+                    name="setup"
+                    type="number"
+                    min="1"
+                    component={EditProfileInput}
+                  />
+                </EditProfileSection>
+                <Save
+                  disabled={
+                    !Number.isInteger(values.setup) ||
+                    values.setup <= 0 ||
+                    isSubmitting
+                  }
+                  type="submit"
+                >
+                  {isSubmitting ? 'Saving' : 'Save'}
+                </Save>
+              </form>
+            )}
+          </Formik>
         </OutsideContainer>
       </Content>
     </PageContainer>

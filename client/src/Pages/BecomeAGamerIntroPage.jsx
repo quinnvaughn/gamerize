@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 //local imports
 import NavBar from '../Components/NavBar'
 import ErrorPage from './ErrorPage'
+import Loading from '../Components/Loading'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -184,10 +185,12 @@ export default function BecomeAGamerIntroPage(props) {
   useEffect(() => {
     refetch()
   }, {})
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <PageContainer>
       <NavBar />
-      {loading ? null : data.me && data.me.currentGamerRequest ? (
+      {data.me && data.me.currentGamerRequest ? (
         <Content>
           <StopContainer>
             <Stop>Stop!</Stop>

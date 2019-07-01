@@ -1,13 +1,11 @@
 import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
 import { FaCheck } from 'react-icons/fa'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router-dom'
 import { Elements } from 'react-stripe-elements'
 import { useMutation } from 'react-apollo-hooks'
 
-import SessionsContainer from '../Containers/SessionsContainer'
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
 import { calcFee } from '../utils/Fee'
@@ -97,32 +95,6 @@ const SeeSelectedSlots = styled.button`
   margin-bottom: 1.5rem;
 `
 
-const NotCharged = styled.div`
-  margin-top: 0.8rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-`
-
-const NotChargedYet = styled.span`
-  font-size: 1.2rem;
-  font-weight: 600;
-  overflow-wrap: break-word;
-`
-
-const HowMuchYouPay = styled.div`
-  display: flex;
-  justify-content: center;
-  text-align: center;
-`
-
-const YouPay = styled.span`
-  margin-top: 0.8rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  overflow-wrap: break-word;
-`
-
 const AppropriateGT = styled.div`
   text-align: center;
   font-size: 1.6rem;
@@ -167,6 +139,42 @@ const BOOK_TIME_SLOTS = gql`
   }
 `
 
+const getTotalsInformation = (
+  { sessions },
+  system,
+  gamertags,
+  launcher,
+  price
+) => {
+  const disabled = gamertags
+    ? system === 'PC'
+      ? !gamertags[mapSystem(system)][mapLauncher(launcher)]
+      : !gamertags[mapSystem(system)]
+    : true
+  const total = sessions
+    .map(session => {
+      return { ...session, price: price }
+    })
+    .reduce(totalReducer, 0)
+  const slots = sessions.reduce(numSessionsReducer, 0)
+  const fee = Number(calcFee(total, 'USD'))
+  const discount = 0
+
+  const totalMinusDiscounts = total + fee - discount
+  const totalNotIncludingFees = total - discount
+  const showTotals = sessions.length >= 1
+  return {
+    disabled,
+    slots,
+    total,
+    discount,
+    fee,
+    totalMinusDiscounts,
+    totalNotIncludingFees,
+    showTotals,
+  }
+}
+
 function Totals(props) {
   /// Clean this shit up
   const [allSessions, dispatch] = useSessions()
@@ -175,34 +183,32 @@ function Totals(props) {
   const [bookError, setBookError] = useState(false)
   const [needCard, setNeedCard] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
-  const disabled = props.me.gamertags
-    ? props.system === 'PC'
-      ? !props.me.gamertags[mapSystem(props.system)][
-          mapLauncher(props.launcher)
-        ]
-      : !props.me.gamertags[mapSystem(props.system)]
-    : true
+  // Change these to functions that return value
   const isMe = props.match.params.user === props.me.username
-  const customerStripeId = props.customerId
+  const customerStripeId = props.me.customerStripeId
 
-  const total = allSessions.sessions
-    .map(session => {
-      return { ...session, price: props.price }
-    })
-    .reduce(totalReducer, 0)
-  const slots = allSessions.sessions.reduce(numSessionsReducer, 0)
-  const fee = Number(calcFee(total, 'USD'))
-  const discount = 0
-
-  const totalMinusDiscounts = total + fee - discount
-  const totalNotIncludingFees = total - discount
-  const showTotals = allSessions.sessions.length >= 1
+  const {
+    disabled,
+    slots,
+    total,
+    discount,
+    fee,
+    totalMinusDiscounts,
+    totalNotIncludingFees,
+    showTotals,
+  } = getTotalsInformation(
+    allSessions,
+    props.session.system,
+    props.me.gamertags,
+    props.session.launcher,
+    props.session.price
+  )
   const content = showTotals ? (
     <TotalsContainer>
       <NumberSlots>
         <Items>
           $
-          {`${parseFloat(props.price).toFixed(2)} x ${slots} ${
+          {`${parseFloat(props.session.price).toFixed(2)} x ${slots} ${
             slots === 1 ? 'slot' : 'slots'
           }`}
         </Items>
@@ -256,9 +262,9 @@ function Totals(props) {
         {disabled && !isMe && (
           <AppropriateGT>
             {`You must add a gamertag for `}
-            {props.system === 'PC'
-              ? `the ${capitalize(props.launcher)} Launcher`
-              : displaySystem(props.system)}
+            {props.session.system === 'PC'
+              ? `the ${capitalize(props.session.launcher)} Launcher`
+              : displaySystem(props.session.system)}
           </AppropriateGT>
         )}
         <Book
@@ -269,7 +275,7 @@ function Totals(props) {
             props.notEnoughSpots.length > 0
           }
           onClick={async () => {
-            if (!customerStripeId || !props.hasDefaultCard) {
+            if (!customerStripeId || !props.me.hasDefaultCard) {
               setNeedCard(true)
             } else {
               const timeSlots = allSessions.sessions.map(timeslot => {
@@ -277,13 +283,13 @@ function Totals(props) {
                   timeSlotId: timeslot.id,
                   slots: timeslot.slots,
                   players: timeslot.players,
-                  total: props.price * timeslot.slots,
+                  total: props.session.price * timeslot.slots,
                   startTime: timeslot.startTime,
                 }
               })
               const input = {
                 timeSlots,
-                creatorId: props.creator.id,
+                creatorId: props.session.creator.id,
                 totalWithFee: totalMinusDiscounts,
                 totalWithoutFee: totalNotIncludingFees,
               }
@@ -325,18 +331,6 @@ function Totals(props) {
             />
           </Elements>
         )}
-        {/* <NotCharged>
-                <NotChargedYet>You will not be charged yet.</NotChargedYet>
-              </NotCharged> */}
-        {/* Don't need either until I have multi payment set up. 
-              {showTotals && (
-                <HowMuchYouPay>
-                  <YouPay>
-                    This is not necessarily how much you will pay, depending on
-                    how many players you have
-                  </YouPay>
-                </HowMuchYouPay>
-              )} */}
       </Fragment>
     </Container>
   )

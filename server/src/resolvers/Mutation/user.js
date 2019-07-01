@@ -39,6 +39,11 @@ const user = {
         ...rest,
       },
     })
+    const gamertags = await ctx.prisma
+      .user({ id: userId })
+      .gamertags()
+      .pc()
+    console.log(gamertags)
     const updatedIndex = await ctx.prisma.updateUserIndex({
       where: { username: user.username.toLowerCase() },
       data: {

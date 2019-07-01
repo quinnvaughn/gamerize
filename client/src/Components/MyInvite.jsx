@@ -4,7 +4,6 @@ import dateFns from 'date-fns'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 
-import DefaultSessionPicture from '../default-game.gif'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 
 const Container = styled.div`
