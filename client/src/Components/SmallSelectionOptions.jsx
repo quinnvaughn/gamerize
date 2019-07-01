@@ -82,9 +82,9 @@ export default function SmallSelectionOptions({
         <SignInToBook>Please sign in to book</SignInToBook>
       ) : (
         <Fragment>
-          <HowManySlots>{`${
+          {/* <HowManySlots>{`${
             session.slotsLeftToday
-          } slots left today`}</HowManySlots>
+          } slots left today`}</HowManySlots> */}
           <TimeSlots
             gamer={formatGamers(session.gamers)}
             game={session.game.name}
