@@ -20,7 +20,6 @@ const AllTheGames = styled.div`
 `
 
 export default function DisplayGamers(props) {
-  console.log(props.data.getGamers)
   return (
     <Container>
       <AllTheGames>

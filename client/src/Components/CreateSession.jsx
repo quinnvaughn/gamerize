@@ -219,7 +219,7 @@ export default function CreateSession(props) {
               name="slots"
               min="1"
               type="number"
-              placeholder="Specify how you people you can play with"
+              placeholder="# Slots - Not Including Yourself"
               required
               component={CustomInput}
             />
