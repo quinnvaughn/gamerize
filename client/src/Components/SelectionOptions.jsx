@@ -65,9 +65,9 @@ export default function SelectionOptions({
       ) : (
         <Fragment>
           {/*TODO: Need slotsLeftToday to update at same time */}
-          <HowManySlots>{`${session.slotsLeftToday} ${
+          {/* <HowManySlots>{`${session.slotsLeftToday} ${
             session.slotsLeftToday === 1 ? 'slot' : 'slots'
-          } left today`}</HowManySlots>
+          } left today`}</HowManySlots> */}
           <TimeSlots
             gamer={formatGamers(session.gamers)}
             game={session.game.name}
