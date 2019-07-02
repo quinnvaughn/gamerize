@@ -129,6 +129,24 @@ type Mutation {
   deleteCard(input: DeleteCardInput!): DeleteCardPayload!
   changeDefaultCard(input: ChangeDefaultCardInput!): ChangeDefaultCardPayload!
   logIntoStripe: LogIntoStripePayload!
+  viewUserProfile(input: ViewUserProfileInput!): ViewUserProfilePayload!
+  viewGamingSession(input: ViewGamingSessionInput!): ViewGamingSessionPayload!
+}
+
+input ViewGamingSessionInput {
+  gamingSessionId: String!
+}
+
+type ViewGamingSessionPayload {
+  viewed: Boolean!
+}
+
+input ViewUserProfileInput {
+  userId: String!
+}
+
+type ViewUserProfilePayload {
+  viewed: Boolean!
 }
 
 type LogIntoStripePayload {
@@ -563,6 +581,7 @@ type User {
   reviewRating: Float!
   invites: [BookingInvite!]!
   invitesReceived: [BookingInvite!]!
+  views: Int
 }
 
 type MostPlayedGames {
@@ -596,6 +615,7 @@ type GamingSession {
   reviewRating: Float!
   slotsLeftToday: Int!
   slotsAvailable: Boolean!
+  views: Int
 }
 
 type GamingTimeSlot {

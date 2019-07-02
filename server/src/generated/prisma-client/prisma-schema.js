@@ -2358,6 +2358,8 @@ type GamingSession {
   requirements(where: RequirementWhereInput, orderBy: RequirementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Requirement!]
   discounts(where: DiscountWhereInput, orderBy: DiscountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Discount!]
   timeslots(where: GamingTimeSlotWhereInput, orderBy: GamingTimeSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GamingTimeSlot!]
+  popularity: Int
+  views: Int
   retired: Boolean!
 }
 
@@ -2382,6 +2384,8 @@ input GamingSessionCreateInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2424,6 +2428,8 @@ input GamingSessionCreateWithoutGameInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2441,6 +2447,8 @@ input GamingSessionCreateWithoutGamersInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2458,6 +2466,8 @@ input GamingSessionCreateWithoutReviewsInput {
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
   timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2475,6 +2485,8 @@ input GamingSessionCreateWithoutTimeslotsInput {
   slots: Int!
   requirements: RequirementCreateManyInput
   discounts: DiscountCreateManyInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2681,6 +2693,10 @@ enum GamingSessionOrderByInput {
   type_DESC
   slots_ASC
   slots_DESC
+  popularity_ASC
+  popularity_DESC
+  views_ASC
+  views_DESC
   retired_ASC
   retired_DESC
 }
@@ -2696,6 +2712,8 @@ type GamingSessionPreviousValues {
   system: System!
   type: TypeOfGame!
   slots: Int!
+  popularity: Int
+  views: Int
   retired: Boolean!
 }
 
@@ -2780,6 +2798,22 @@ input GamingSessionScalarWhereInput {
   slots_lte: Int
   slots_gt: Int
   slots_gte: Int
+  popularity: Int
+  popularity_not: Int
+  popularity_in: [Int!]
+  popularity_not_in: [Int!]
+  popularity_lt: Int
+  popularity_lte: Int
+  popularity_gt: Int
+  popularity_gte: Int
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   retired: Boolean
   retired_not: Boolean
   AND: [GamingSessionScalarWhereInput!]
@@ -2820,6 +2854,8 @@ input GamingSessionUpdateDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2838,6 +2874,8 @@ input GamingSessionUpdateInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2849,6 +2887,8 @@ input GamingSessionUpdateManyDataInput {
   system: System
   type: TypeOfGame
   slots: Int
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2860,6 +2900,8 @@ input GamingSessionUpdateManyMutationInput {
   system: System
   type: TypeOfGame
   slots: Int
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2927,6 +2969,8 @@ input GamingSessionUpdateWithoutGameDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2944,6 +2988,8 @@ input GamingSessionUpdateWithoutGamersDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2961,6 +3007,8 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
   timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -2978,6 +3026,8 @@ input GamingSessionUpdateWithoutTimeslotsDataInput {
   slots: Int
   requirements: RequirementUpdateManyInput
   discounts: DiscountUpdateManyInput
+  popularity: Int
+  views: Int
   retired: Boolean
 }
 
@@ -3116,6 +3166,22 @@ input GamingSessionWhereInput {
   timeslots_every: GamingTimeSlotWhereInput
   timeslots_some: GamingTimeSlotWhereInput
   timeslots_none: GamingTimeSlotWhereInput
+  popularity: Int
+  popularity_not: Int
+  popularity_in: [Int!]
+  popularity_not_in: [Int!]
+  popularity_lt: Int
+  popularity_lte: Int
+  popularity_gt: Int
+  popularity_gte: Int
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   retired: Boolean
   retired_not: Boolean
   AND: [GamingSessionWhereInput!]
@@ -5821,6 +5887,7 @@ type User {
   savedCards(where: SavedCardWhereInput, orderBy: SavedCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedCard!]
   invitesReceived(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   setup: Int
+  views: Int
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   gamertags: GamerTag
@@ -5854,6 +5921,7 @@ input UserCreateInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -5935,6 +6003,7 @@ input UserCreateWithoutGamertagsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   role: Role
@@ -5961,6 +6030,7 @@ input UserCreateWithoutIndexInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -5986,6 +6056,7 @@ input UserCreateWithoutInvitesInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6012,6 +6083,7 @@ input UserCreateWithoutInvitesReceivedInput {
   invites: BookingInviteCreateManyWithoutFromInput
   savedCards: SavedCardCreateManyWithoutUserInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6039,6 +6111,7 @@ input UserCreateWithoutReviewsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
   role: Role
@@ -6064,6 +6137,7 @@ input UserCreateWithoutSavedCardsInput {
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6090,6 +6164,7 @@ input UserCreateWithoutSessionsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6116,6 +6191,7 @@ input UserCreateWithoutTimeSlotsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6381,6 +6457,8 @@ enum UserOrderByInput {
   aboutMe_DESC
   setup_ASC
   setup_DESC
+  views_ASC
+  views_DESC
   role_ASC
   role_DESC
 }
@@ -6403,6 +6481,7 @@ type UserPreviousValues {
   name: String!
   aboutMe: String
   setup: Int
+  views: Int
   role: Role!
 }
 
@@ -6591,6 +6670,14 @@ input UserScalarWhereInput {
   setup_lte: Int
   setup_gt: Int
   setup_gte: Int
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   role: Role
   role_not: Role
   role_in: [Role!]
@@ -6638,6 +6725,7 @@ input UserUpdateDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6665,6 +6753,7 @@ input UserUpdateInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6687,6 +6776,7 @@ input UserUpdateManyDataInput {
   name: String
   aboutMe: String
   setup: Int
+  views: Int
   role: Role
 }
 
@@ -6717,6 +6807,7 @@ input UserUpdateManyMutationInput {
   name: String
   aboutMe: String
   setup: Int
+  views: Int
   role: Role
 }
 
@@ -6833,6 +6924,7 @@ input UserUpdateWithoutGamertagsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   role: Role
@@ -6859,6 +6951,7 @@ input UserUpdateWithoutIndexDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6884,6 +6977,7 @@ input UserUpdateWithoutInvitesDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6910,6 +7004,7 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   invites: BookingInviteUpdateManyWithoutFromInput
   savedCards: SavedCardUpdateManyWithoutUserInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6937,6 +7032,7 @@ input UserUpdateWithoutReviewsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
   role: Role
@@ -6962,6 +7058,7 @@ input UserUpdateWithoutSavedCardsDataInput {
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -6988,6 +7085,7 @@ input UserUpdateWithoutSessionsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -7014,6 +7112,7 @@ input UserUpdateWithoutTimeSlotsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -7289,6 +7388,14 @@ input UserWhereInput {
   setup_lte: Int
   setup_gt: Int
   setup_gte: Int
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   reviews_every: SessionReviewWhereInput
   reviews_some: SessionReviewWhereInput
   reviews_none: SessionReviewWhereInput

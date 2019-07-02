@@ -1260,6 +1260,10 @@ export type GamingSessionOrderByInput =
   | "type_DESC"
   | "slots_ASC"
   | "slots_DESC"
+  | "popularity_ASC"
+  | "popularity_DESC"
+  | "views_ASC"
+  | "views_DESC"
   | "retired_ASC"
   | "retired_DESC";
 
@@ -1296,6 +1300,8 @@ export type UserOrderByInput =
   | "aboutMe_DESC"
   | "setup_ASC"
   | "setup_DESC"
+  | "views_ASC"
+  | "views_DESC"
   | "role_ASC"
   | "role_DESC";
 
@@ -1708,6 +1714,7 @@ export interface UserUpdateDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -2014,6 +2021,8 @@ export interface GamingSessionUpdateWithoutGamersDataInput {
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
   timeslots?: Maybe<GamingTimeSlotUpdateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -2262,6 +2271,7 @@ export interface UserUpdateWithoutReviewsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
   role?: Maybe<Role>;
@@ -2407,6 +2417,8 @@ export interface GamingSessionUpdateWithoutTimeslotsDataInput {
   slots?: Maybe<Int>;
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -2430,6 +2442,7 @@ export interface UserCreateWithoutIndexInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -2483,6 +2496,7 @@ export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
   aboutMe?: Maybe<String>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   role?: Maybe<Role>;
 }
 
@@ -2505,6 +2519,7 @@ export interface UserUpdateWithoutSessionsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -3068,6 +3083,14 @@ export interface UserWhereInput {
   setup_lte?: Maybe<Int>;
   setup_gt?: Maybe<Int>;
   setup_gte?: Maybe<Int>;
+  views?: Maybe<Int>;
+  views_not?: Maybe<Int>;
+  views_in?: Maybe<Int[] | Int>;
+  views_not_in?: Maybe<Int[] | Int>;
+  views_lt?: Maybe<Int>;
+  views_lte?: Maybe<Int>;
+  views_gt?: Maybe<Int>;
+  views_gte?: Maybe<Int>;
   reviews_every?: Maybe<SessionReviewWhereInput>;
   reviews_some?: Maybe<SessionReviewWhereInput>;
   reviews_none?: Maybe<SessionReviewWhereInput>;
@@ -3152,6 +3175,7 @@ export interface UserUpdateWithoutSavedCardsDataInput {
   invites?: Maybe<BookingInviteUpdateManyWithoutFromInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -3178,6 +3202,7 @@ export interface UserUpdateWithoutTimeSlotsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -3319,6 +3344,7 @@ export interface UserCreateWithoutSavedCardsInput {
   invites?: Maybe<BookingInviteCreateManyWithoutFromInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -3555,6 +3581,7 @@ export interface UserUpdateWithoutInvitesDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -3653,6 +3680,8 @@ export interface GamingSessionUpdateWithoutReviewsDataInput {
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
   timeslots?: Maybe<GamingTimeSlotUpdateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -3750,6 +3779,8 @@ export interface GamingSessionUpdateManyMutationInput {
   system?: Maybe<System>;
   type?: Maybe<TypeOfGame>;
   slots?: Maybe<Int>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -3772,6 +3803,8 @@ export interface GamingSessionUpdateInput {
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
   timeslots?: Maybe<GamingTimeSlotUpdateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -3942,6 +3975,7 @@ export interface UserCreateInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -4310,6 +4344,7 @@ export interface UserCreateWithoutReviewsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
   role?: Maybe<Role>;
@@ -4373,6 +4408,8 @@ export interface GamingSessionCreateWithoutTimeslotsInput {
   slots: Int;
   requirements?: Maybe<RequirementCreateManyInput>;
   discounts?: Maybe<DiscountCreateManyInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -4400,6 +4437,7 @@ export interface UserCreateWithoutSessionsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -4529,6 +4567,7 @@ export interface UserCreateWithoutTimeSlotsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -4555,6 +4594,7 @@ export interface UserUpdateWithoutInvitesReceivedDataInput {
   invites?: Maybe<BookingInviteUpdateManyWithoutFromInput>;
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -4622,6 +4662,7 @@ export interface UserCreateWithoutInvitesInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -4826,6 +4867,14 @@ export interface UserScalarWhereInput {
   setup_lte?: Maybe<Int>;
   setup_gt?: Maybe<Int>;
   setup_gte?: Maybe<Int>;
+  views?: Maybe<Int>;
+  views_not?: Maybe<Int>;
+  views_in?: Maybe<Int[] | Int>;
+  views_not_in?: Maybe<Int[] | Int>;
+  views_lt?: Maybe<Int>;
+  views_lte?: Maybe<Int>;
+  views_gt?: Maybe<Int>;
+  views_gte?: Maybe<Int>;
   role?: Maybe<Role>;
   role_not?: Maybe<Role>;
   role_in?: Maybe<Role[] | Role>;
@@ -4849,6 +4898,8 @@ export interface GamingSessionCreateWithoutReviewsInput {
   requirements?: Maybe<RequirementCreateManyInput>;
   discounts?: Maybe<DiscountCreateManyInput>;
   timeslots?: Maybe<GamingTimeSlotCreateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -4876,6 +4927,7 @@ export interface UserUpdateManyDataInput {
   name?: Maybe<String>;
   aboutMe?: Maybe<String>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   role?: Maybe<Role>;
 }
 
@@ -4973,6 +5025,7 @@ export interface UserCreateWithoutInvitesReceivedInput {
   invites?: Maybe<BookingInviteCreateManyWithoutFromInput>;
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -5446,6 +5499,7 @@ export interface UserUpdateWithoutIndexDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -5821,6 +5875,22 @@ export interface GamingSessionWhereInput {
   timeslots_every?: Maybe<GamingTimeSlotWhereInput>;
   timeslots_some?: Maybe<GamingTimeSlotWhereInput>;
   timeslots_none?: Maybe<GamingTimeSlotWhereInput>;
+  popularity?: Maybe<Int>;
+  popularity_not?: Maybe<Int>;
+  popularity_in?: Maybe<Int[] | Int>;
+  popularity_not_in?: Maybe<Int[] | Int>;
+  popularity_lt?: Maybe<Int>;
+  popularity_lte?: Maybe<Int>;
+  popularity_gt?: Maybe<Int>;
+  popularity_gte?: Maybe<Int>;
+  views?: Maybe<Int>;
+  views_not?: Maybe<Int>;
+  views_in?: Maybe<Int[] | Int>;
+  views_not_in?: Maybe<Int[] | Int>;
+  views_lt?: Maybe<Int>;
+  views_lte?: Maybe<Int>;
+  views_gt?: Maybe<Int>;
+  views_gte?: Maybe<Int>;
   retired?: Maybe<Boolean>;
   retired_not?: Maybe<Boolean>;
   AND?: Maybe<GamingSessionWhereInput[] | GamingSessionWhereInput>;
@@ -5959,6 +6029,8 @@ export interface GamingSessionUpdateDataInput {
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
   timeslots?: Maybe<GamingTimeSlotUpdateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -6166,6 +6238,8 @@ export interface GamingSessionCreateWithoutGamersInput {
   requirements?: Maybe<RequirementCreateManyInput>;
   discounts?: Maybe<DiscountCreateManyInput>;
   timeslots?: Maybe<GamingTimeSlotCreateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -6793,6 +6867,22 @@ export interface GamingSessionScalarWhereInput {
   slots_lte?: Maybe<Int>;
   slots_gt?: Maybe<Int>;
   slots_gte?: Maybe<Int>;
+  popularity?: Maybe<Int>;
+  popularity_not?: Maybe<Int>;
+  popularity_in?: Maybe<Int[] | Int>;
+  popularity_not_in?: Maybe<Int[] | Int>;
+  popularity_lt?: Maybe<Int>;
+  popularity_lte?: Maybe<Int>;
+  popularity_gt?: Maybe<Int>;
+  popularity_gte?: Maybe<Int>;
+  views?: Maybe<Int>;
+  views_not?: Maybe<Int>;
+  views_in?: Maybe<Int[] | Int>;
+  views_not_in?: Maybe<Int[] | Int>;
+  views_lt?: Maybe<Int>;
+  views_lte?: Maybe<Int>;
+  views_gt?: Maybe<Int>;
+  views_gte?: Maybe<Int>;
   retired?: Maybe<Boolean>;
   retired_not?: Maybe<Boolean>;
   AND?: Maybe<GamingSessionScalarWhereInput[] | GamingSessionScalarWhereInput>;
@@ -6828,6 +6918,8 @@ export interface GamingSessionUpdateManyDataInput {
   system?: Maybe<System>;
   type?: Maybe<TypeOfGame>;
   slots?: Maybe<Int>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -6908,6 +7000,8 @@ export interface GamingSessionCreateInput {
   requirements?: Maybe<RequirementCreateManyInput>;
   discounts?: Maybe<DiscountCreateManyInput>;
   timeslots?: Maybe<GamingTimeSlotCreateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -6939,6 +7033,7 @@ export interface UserCreateWithoutGamertagsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
   role?: Maybe<Role>;
@@ -7171,6 +7266,8 @@ export interface GamingSessionCreateWithoutGameInput {
   requirements?: Maybe<RequirementCreateManyInput>;
   discounts?: Maybe<DiscountCreateManyInput>;
   timeslots?: Maybe<GamingTimeSlotCreateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -7249,6 +7346,7 @@ export interface UserUpdateWithoutGamertagsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   role?: Maybe<Role>;
@@ -7283,6 +7381,8 @@ export interface GamingSessionUpdateWithoutGameDataInput {
   requirements?: Maybe<RequirementUpdateManyInput>;
   discounts?: Maybe<DiscountUpdateManyInput>;
   timeslots?: Maybe<GamingTimeSlotUpdateManyWithoutGamingSessionInput>;
+  popularity?: Maybe<Int>;
+  views?: Maybe<Int>;
   retired?: Maybe<Boolean>;
 }
 
@@ -7439,6 +7539,7 @@ export interface UserUpdateInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -7818,6 +7919,8 @@ export interface GamingSession {
   system: System;
   type: TypeOfGame;
   slots: Int;
+  popularity?: Int;
+  views?: Int;
   retired: Boolean;
 }
 
@@ -7881,6 +7984,8 @@ export interface GamingSessionPromise
     first?: Int;
     last?: Int;
   }) => T;
+  popularity: () => Promise<Int>;
+  views: () => Promise<Int>;
   retired: () => Promise<Boolean>;
 }
 
@@ -7944,6 +8049,8 @@ export interface GamingSessionSubscription
     first?: Int;
     last?: Int;
   }) => T;
+  popularity: () => Promise<AsyncIterator<Int>>;
+  views: () => Promise<AsyncIterator<Int>>;
   retired: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -8007,6 +8114,8 @@ export interface GamingSessionNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  popularity: () => Promise<Int>;
+  views: () => Promise<Int>;
   retired: () => Promise<Boolean>;
 }
 
@@ -8204,6 +8313,7 @@ export interface User {
   name: String;
   aboutMe?: String;
   setup?: Int;
+  views?: Int;
   role: Role;
 }
 
@@ -8270,6 +8380,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     last?: Int;
   }) => T;
   setup: () => Promise<Int>;
+  views: () => Promise<Int>;
   reviews: <T = FragmentableArray<SessionReview>>(args?: {
     where?: SessionReviewWhereInput;
     orderBy?: SessionReviewOrderByInput;
@@ -8360,6 +8471,7 @@ export interface UserSubscription
     last?: Int;
   }) => T;
   setup: () => Promise<AsyncIterator<Int>>;
+  views: () => Promise<AsyncIterator<Int>>;
   reviews: <T = Promise<AsyncIterator<SessionReviewSubscription>>>(args?: {
     where?: SessionReviewWhereInput;
     orderBy?: SessionReviewOrderByInput;
@@ -8448,6 +8560,7 @@ export interface UserNullablePromise
     last?: Int;
   }) => T;
   setup: () => Promise<Int>;
+  views: () => Promise<Int>;
   reviews: <T = FragmentableArray<SessionReview>>(args?: {
     where?: SessionReviewWhereInput;
     orderBy?: SessionReviewOrderByInput;
@@ -8871,6 +8984,7 @@ export interface UserPreviousValues {
   name: String;
   aboutMe?: String;
   setup?: Int;
+  views?: Int;
   role: Role;
 }
 
@@ -8894,6 +9008,7 @@ export interface UserPreviousValuesPromise
   name: () => Promise<String>;
   aboutMe: () => Promise<String>;
   setup: () => Promise<Int>;
+  views: () => Promise<Int>;
   role: () => Promise<Role>;
 }
 
@@ -8917,6 +9032,7 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   aboutMe: () => Promise<AsyncIterator<String>>;
   setup: () => Promise<AsyncIterator<Int>>;
+  views: () => Promise<AsyncIterator<Int>>;
   role: () => Promise<AsyncIterator<Role>>;
 }
 
@@ -9814,6 +9930,8 @@ export interface GamingSessionPreviousValues {
   system: System;
   type: TypeOfGame;
   slots: Int;
+  popularity?: Int;
+  views?: Int;
   retired: Boolean;
 }
 
@@ -9830,6 +9948,8 @@ export interface GamingSessionPreviousValuesPromise
   system: () => Promise<System>;
   type: () => Promise<TypeOfGame>;
   slots: () => Promise<Int>;
+  popularity: () => Promise<Int>;
+  views: () => Promise<Int>;
   retired: () => Promise<Boolean>;
 }
 
@@ -9846,6 +9966,8 @@ export interface GamingSessionPreviousValuesSubscription
   system: () => Promise<AsyncIterator<System>>;
   type: () => Promise<AsyncIterator<TypeOfGame>>;
   slots: () => Promise<AsyncIterator<Int>>;
+  popularity: () => Promise<AsyncIterator<Int>>;
+  views: () => Promise<AsyncIterator<Int>>;
   retired: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -11571,12 +11693,12 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
 */
 export type Float = number;
 
