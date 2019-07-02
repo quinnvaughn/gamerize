@@ -116,6 +116,28 @@ const gamingsession = {
       return { unretired: unretiredSession ? true : false }
     }
   },
+  async viewGamingSession(parent, { input }, ctx) {
+    const QUERY = `
+    {
+      gamingSession(where:{id:"${input.gamingSessionId}"}) {
+        views
+      }
+    }
+    `
+    const {
+      gamingSession: { views },
+    } = await ctx.prisma.$graphql(QUERY)
+    const newViews = views ? views : 0
+    const updatedGamingSession = await ctx.prisma.updateGamingSession({
+      data: {
+        views: newViews + 1,
+      },
+      where: {
+        id: input.gamingSessionId,
+      },
+    })
+    return updatedGamingSession ? { viewed: true } : { viewed: false }
+  },
 }
 
 module.exports = { gamingsession }

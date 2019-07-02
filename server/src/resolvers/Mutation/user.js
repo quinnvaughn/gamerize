@@ -39,11 +39,6 @@ const user = {
         ...rest,
       },
     })
-    const gamertags = await ctx.prisma
-      .user({ id: userId })
-      .gamertags()
-      .pc()
-    console.log(gamertags)
     const updatedIndex = await ctx.prisma.updateUserIndex({
       where: { username: user.username.toLowerCase() },
       data: {
@@ -52,6 +47,28 @@ const user = {
       },
     })
     return updated && updatedIndex ? { updated: true } : { updated: false }
+  },
+  async viewUserProfile(parent, { input }, ctx) {
+    const QUERY = `
+    {
+      user(where:{id:"${input.userId}"}) {
+        views
+      }
+    }
+    `
+    const {
+      user: { views },
+    } = await ctx.prisma.$graphql(QUERY)
+    const newViews = views ? views : 0
+    const updatedUser = await ctx.prisma.updateUser({
+      data: {
+        views: newViews + 1,
+      },
+      where: {
+        id: input.userId,
+      },
+    })
+    return updatedUser ? { viewed: true } : { viewed: false }
   },
 }
 

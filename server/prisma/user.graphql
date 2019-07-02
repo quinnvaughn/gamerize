@@ -24,6 +24,7 @@ type User {
   savedCards: [SavedCard!]! @relation(name: "SavedCards")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   setup: Int
+  views: Int @default(value: 0)
   reviews: [SessionReview!]!
   friends: [User!]!
   gamertags: GamerTag @relation(name: "UserGamerTags", onDelete: CASCADE)

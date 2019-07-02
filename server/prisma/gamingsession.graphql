@@ -16,6 +16,8 @@ type GamingSession {
   requirements: [Requirement!]!
   discounts: [Discount!]!
   timeslots: [GamingTimeSlot!]!
+  popularity: Int @default(value: 0)
+  views: Int @default(value: 0)
   retired: Boolean! @default(value: false)
 }
 
