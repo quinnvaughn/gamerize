@@ -12,6 +12,7 @@ import ErrorPage from './ErrorPage'
 import EditProfileSection from '../Components/EditProfileSection'
 import EditProfileInput from '../Components/EditProfileInput'
 import { Formik, Field } from 'formik'
+import SubmitButton from '../Components/SubmitButton'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -99,8 +100,8 @@ export default function GamerDashboardAccountEdit(props) {
               }
             }}
           >
-            {({ handleSubmit, isSubmitting, values }) => (
-              <form onSubmit={handleSubmit}>
+            {({ handleSubmit, isSubmitting, values, isValid }) => (
+              <form method="post" onSubmit={handleSubmit}>
                 <EditProfileSection title="Required">
                   <Field
                     name="setup"
@@ -109,16 +110,17 @@ export default function GamerDashboardAccountEdit(props) {
                     component={EditProfileInput}
                   />
                 </EditProfileSection>
-                <Save
+                <SubmitButton
                   disabled={
-                    !Number.isInteger(values.setup) ||
-                    values.setup <= 0 ||
-                    isSubmitting
+                    !Number.isInteger(values.setup) || values.setup <= 0
                   }
-                  type="submit"
+                  primary
+                  width={70}
+                  isSubmitting={isSubmitting}
+                  isValid={Number.isInteger(values.setup)}
                 >
-                  {isSubmitting ? 'Saving' : 'Save'}
-                </Save>
+                  Save
+                </SubmitButton>
               </form>
             )}
           </Formik>

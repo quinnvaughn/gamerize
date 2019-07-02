@@ -14,7 +14,7 @@ const Button = styled.button`
   font-size: 1.6rem;
   font-weight: 600;
   margin-top: 1rem;
-  width: ${props => (props.width ? props.width : '160px')};
+  width: ${props => (props.width ? `${props.width}px` : '160px')};
   pointer-events: ${props => props.disabled && 'none'};
   display: flex;
   justify-content: center;
@@ -30,14 +30,14 @@ export default function SubmitButton(props) {
       type="submit"
       width={props.width}
       isValid={props.isValid}
-      disabled={props.isSubmitting || !props.isValid}
+      disabled={props.isSubmitting || !props.isValid || props.disabled}
     >
       {props.isSubmitting ? (
         <ReactLoading
           type="spinningBubbles"
           color={props.primary ? '#fff' : '#db1422'}
-          height={20}
-          width={20}
+          height={19}
+          width={19}
         />
       ) : (
         props.children
