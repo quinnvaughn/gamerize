@@ -51,7 +51,7 @@ const user = {
   async viewUserProfile(parent, { input }, ctx) {
     const QUERY = `
     {
-      user(where:{id:"${input.userId}"}) {
+      user(where:{username:"${input.username}"}) {
         views
       }
     }
@@ -65,7 +65,7 @@ const user = {
         views: newViews + 1,
       },
       where: {
-        id: input.userId,
+        username: input.username,
       },
     })
     return updatedUser ? { viewed: true } : { viewed: false }

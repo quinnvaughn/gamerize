@@ -23,6 +23,7 @@ import ErrorPage from './ErrorPage'
 import { useSessions } from '../State/SessionsSelectedContext'
 import SelectedSlotsModal from '../Components/SelectedSlotsModal'
 import OccupationList from '../Components/OccupationList'
+import useViewGamingSession from '../Hooks/useViewGamingSession'
 
 //data
 
@@ -331,6 +332,9 @@ export default function SpecificSessionPage(props) {
     refetch: meRefetch,
     error: thirdError,
   } = useQuery(GET_ME)
+
+  // view session
+  useViewGamingSession(props.match.params.id)
 
   // checks for timeslots
   timeslotDoesNotHaveSlots(allSessions, setNotEnoughSpots, secondData)

@@ -26,9 +26,9 @@ const gamingsession = {
       },
     })
   },
-  async allSessions(parent, { first, orderBy }, { prisma }) {
+  async allSessions(parent, { first }, { prisma }) {
     return await prisma.gamingSessions({
-      orderBy: orderBy ? orderBy : 'title_ASC',
+      orderBy: 'views_DESC',
       first,
       where: {
         retired: false,

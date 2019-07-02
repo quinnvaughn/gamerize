@@ -142,7 +142,7 @@ type ViewGamingSessionPayload {
 }
 
 input ViewUserProfileInput {
-  userId: String!
+  username: String!
 }
 
 type ViewUserProfilePayload {

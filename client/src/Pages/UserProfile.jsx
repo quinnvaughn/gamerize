@@ -15,6 +15,7 @@ import useTitle from '../Hooks/useTitle'
 import AddFriendButton from '../Components/AddFriendButton'
 import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
+import useViewProfile from '../Hooks/useViewProfile'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -346,6 +347,10 @@ export default function UserProfile(props) {
   useEffect(() => {
     scrolledTo && window.parent.scrollTo(0, 0)
   }, [scrolledTo])
+
+  //view user
+  useViewProfile(props.match.params.user)
+
   return loading || secondLoading || thirdLoading ? (
     <Loading />
   ) : errors ? (

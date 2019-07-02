@@ -2,6 +2,7 @@ const gamer = {
   async getGamers(parent, { first }, { prisma }) {
     return await prisma.users({
       where: { role: 'GAMER', gamerIsSetup: true },
+      orderBy: 'views_DESC',
       first,
     })
   },
