@@ -11,6 +11,7 @@ import { formatSystem, capitalize } from '../utils/Strings'
 import { formatLauncher } from '../utils/System'
 import CustomInput from './CustomInput'
 import CustomSelect from './CustomSelect'
+import SubmitButton from './SubmitButton'
 
 const Card = styled.div`
   background: #fff;
@@ -205,21 +206,21 @@ export default function CreatedSessionCardBack({
               type: values.type,
             }
             const { data } = await updateSession({ variables: { input } })
-            if (data.updateSession.updated) {
-              await refetch()
+            if (data.updateSession.updatedSession.id) {
               actions.setSubmitting(false)
+              await refetch()
+              dispatch({ type: 'flip', payload: false })
             }
-            dispatch({ type: 'flip', payload: false })
           } else if (submitAction === 'retire') {
             const input = {
               sessionId: session.id,
             }
             const { data } = await retireSession({ variables: { input } })
             if (data.retireSession.retired) {
-              await refetch()
               actions.setSubmitting(false)
+              await refetch()
+              dispatch({ type: 'flip', payload: false })
             }
-            dispatch({ type: 'flip', payload: false })
           }
         }}
       >
@@ -329,24 +330,25 @@ export default function CreatedSessionCardBack({
               component={CustomSelect}
             />
             <ButtonContainer>
-              <EditSession
+              <SubmitButton
+                primary
                 onClick={async () => {
                   await setSubmitAction('update')
-                  await submitForm()
                 }}
-                disabled={isSubmitting || !isValid}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
               >
                 Update Session
-              </EditSession>
-              <DeleteSession
-                disabled={isSubmitting}
+              </SubmitButton>
+              <SubmitButton
                 onClick={async () => {
                   await setSubmitAction('retire')
-                  await submitForm()
                 }}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
               >
                 Retire Session
-              </DeleteSession>
+              </SubmitButton>
             </ButtonContainer>
           </UpdateSessionForm>
         )}

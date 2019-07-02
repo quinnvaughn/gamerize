@@ -11,24 +11,11 @@ import { formatLauncher } from '../utils/System'
 import { Mixpanel } from './Mixpanel'
 import CustomInput from './CustomInput'
 import CustomSelect from './CustomSelect'
+import SubmitButton from './SubmitButton'
 
 const Container = styled.div`
   width: 100%;
   padding: 2rem;
-`
-
-const CreateSessionButton = styled.button`
-  background: ${props => (props.disabled ? '#ebebeb' : '#db1422')};
-  padding: 1rem 1.4rem;
-  color: #fff;
-  cursor: pointer;
-  outline: 0;
-  border: 1px solid ${props => (props.disabled ? '#ebebeb' : '#db1422')};
-  border-radius: 4px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-top: 1rem;
-  pointer-events: ${props => props.disabled && 'none'};
 `
 
 const Title = styled.div`
@@ -151,11 +138,13 @@ export default function CreateSession(props) {
             slots: values.slots,
             type: values.type,
           }
-          const data = await createSession({ variables: { input } })
-          actions.setSubmitting(false)
-          Mixpanel.track('Session created')
-          await props.refetch()
-          props.setOpen(false)
+          const { data } = await createSession({ variables: { input } })
+          if (data.createGamingSession.created) {
+            actions.setSubmitting(false)
+            Mixpanel.track('Session created')
+            await props.refetch()
+            props.setOpen(false)
+          }
         }}
       >
         {({ values, handleSubmit, isValid, isSubmitting }) => (
@@ -232,12 +221,9 @@ export default function CreateSession(props) {
               placeholder="Choose the type of game"
               component={CustomSelect}
             />
-            <CreateSessionButton
-              type="submit"
-              disabled={isSubmitting || !isValid}
-            >
+            <SubmitButton primary isSubmitting={isSubmitting} isValid={isValid}>
               Create Session
-            </CreateSessionButton>
+            </SubmitButton>
           </CreateSessionForm>
         )}
       </Formik>
