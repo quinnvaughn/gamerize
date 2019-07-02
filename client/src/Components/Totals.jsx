@@ -5,6 +5,8 @@ import gql from 'graphql-tag'
 import { withRouter } from 'react-router-dom'
 import { Elements } from 'react-stripe-elements'
 import { useMutation } from 'react-apollo-hooks'
+import dateFns from 'date-fns'
+import { Formik } from 'formik'
 
 import { capitalize } from '../utils/Strings'
 import { displaySystem, mapSystem, mapLauncher } from '../utils/System'
@@ -12,7 +14,7 @@ import { calcFee } from '../utils/Fee'
 import FirstTimeCheckout from './FirstTimeCheckout'
 import { Mixpanel } from './Mixpanel'
 import { useSessions } from '../State/SessionsSelectedContext'
-import dateFns from 'date-fns'
+import SubmitButton from './SubmitButton'
 
 const Container = styled.div`
   width: 100%;
@@ -267,16 +269,11 @@ function Totals(props) {
               : displaySystem(props.session.system)}
           </AppropriateGT>
         )}
-        <Book
-          id="bookButton"
-          disabled={
-            allSessions.sessions.length === 0 ||
-            disabled ||
-            props.notEnoughSpots.length > 0
-          }
-          onClick={async () => {
+        <Formik
+          onSubmit={async (_, actions) => {
             if (!customerStripeId || !props.me.hasDefaultCard) {
               setNeedCard(true)
+              actions.setSubmitting(false)
             } else {
               const timeSlots = allSessions.sessions.map(timeslot => {
                 return {
@@ -293,35 +290,45 @@ function Totals(props) {
                 totalWithFee: totalMinusDiscounts,
                 totalWithoutFee: totalNotIncludingFees,
               }
-              setLoading(true)
               const { data } = await bookTimeSlots({
                 variables: { input },
               })
               if (data.bookTimeSlots.booked) {
+                actions.setSubmitting(false)
                 Mixpanel.track('Booked a timeslot/s.')
-                setLoading(false)
-                setBooked(true)
                 dispatch({ type: 'CLEAR_STATE' })
-                setTimeout(() => {
-                  setBooked(false)
-                  props.refetch()
-                }, 1000)
+                props.refetch()
               } else {
                 setBookError(true)
               }
             }
           }}
         >
-          {loading ? (
-            'Booking'
-          ) : !loading && booked ? (
-            <FaCheck />
-          ) : bookError ? (
-            'Please Try Again'
-          ) : (
-            'Book'
+          {({ handleSubmit, isSubmitting }) => (
+            <form onSubmit={handleSubmit}>
+              <SubmitButton
+                primary
+                fontWeight={800}
+                isSubmitting={isSubmitting}
+                disabled={
+                  allSessions.sessions.length === 0 ||
+                  disabled ||
+                  props.notEnoughSpots.length > 0
+                }
+                isValid={
+                  !(
+                    allSessions.sessions.length === 0 ||
+                    disabled ||
+                    props.notEnoughSpots.length > 0
+                  )
+                }
+                width="100%"
+              >
+                Book
+              </SubmitButton>
+            </form>
           )}
-        </Book>
+        </Formik>
         {needCard && (
           <Elements>
             <FirstTimeCheckout

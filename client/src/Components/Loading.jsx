@@ -40,12 +40,7 @@ export default function Loading(props) {
       <GamerDashboardNav />
       <Content>
         <Container>
-          <ReactLoading
-            type="bubbles"
-            color="#db1422"
-            width={100}
-            height={500}
-          />
+          <ReactLoading type="bars" color="#db1422" width={100} height={500} />
         </Container>
       </Content>
     </PageContainer>
@@ -54,12 +49,7 @@ export default function Loading(props) {
       <AdminDashboardNav />
       <Content>
         <Container>
-          <ReactLoading
-            type="bubbles"
-            color="#db1422"
-            width={100}
-            height={500}
-          />
+          <ReactLoading type="bars" color="#db1422" width={100} height={500} />
         </Container>
       </Content>
     </PageContainer>
@@ -68,12 +58,7 @@ export default function Loading(props) {
       <NavBar />
       <Content>
         <Container>
-          <ReactLoading
-            type="bubbles"
-            color="#db1422"
-            width={100}
-            height={500}
-          />
+          <ReactLoading type="bars" color="#db1422" width={100} height={500} />
         </Container>
       </Content>
     </PageContainer>
