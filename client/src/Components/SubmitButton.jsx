@@ -13,9 +13,14 @@ const Button = styled.button`
   border: 1px solid ${props => (!props.isValid ? '#ebebeb' : '#db1422')};
   border-radius: 4px;
   font-size: 1.6rem;
-  font-weight: 600;
+  font-weight: ${props => (props.fontWeight ? props.fontWeight : 600)};
   margin-top: 1rem;
-  width: ${props => (props.width ? `${props.width}px` : '160px')};
+  width: ${props =>
+    props.width === '100%'
+      ? '100%'
+      : props.width
+      ? `${props.width}px`
+      : '160px'};
   pointer-events: ${props => props.disabled && 'none'};
   display: flex;
   justify-content: center;
@@ -24,12 +29,14 @@ const Button = styled.button`
 `
 
 export default function SubmitButton(props) {
+  console.log(props.disabled)
   return (
     <Button
       primary={props.primary}
       onClick={props.onClick}
       type="submit"
       width={props.width}
+      fontWeight={props.fontWeight}
       isValid={props.isValid}
       disabled={props.isSubmitting || !props.isValid || props.disabled}
     >
