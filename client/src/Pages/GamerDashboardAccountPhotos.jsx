@@ -10,6 +10,7 @@ import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
 import { Formik } from 'formik'
 import ThumbImage from '../Components/ThumbImage'
+import SubmitButton from '../Components/SubmitButton'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -208,9 +209,13 @@ export default function GamerDashboardAccountPhotos(props) {
                           </Label>
                           <ThumbImage file={values.profilePic} />
                           {values.profilePic && (
-                            <AddPicture type="submit" disabled={isSubmitting}>
-                              Change profile picture
-                            </AddPicture>
+                            <SubmitButton
+                              primary
+                              isSubmitting={isSubmitting}
+                              width={231}
+                            >
+                              Change banner
+                            </SubmitButton>
                           )}
                         </RowRight>
                       </Row>
@@ -268,9 +273,13 @@ export default function GamerDashboardAccountPhotos(props) {
                           </Label>
                           <ThumbImage file={values.banner} />
                           {values.banner && (
-                            <AddPicture type="submit" disabled={isSubmitting}>
-                              Change profile picture
-                            </AddPicture>
+                            <SubmitButton
+                              primary
+                              isSubmitting={isSubmitting}
+                              width={200}
+                            >
+                              Change banner
+                            </SubmitButton>
                           )}
                         </BannerRight>
                       </Row>

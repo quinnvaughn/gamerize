@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ReactLoading from 'react-loading'
+import PropTypes from 'prop-types'
 
 const Button = styled.button`
   background: ${props =>
@@ -44,4 +45,10 @@ export default function SubmitButton(props) {
       )}
     </Button>
   )
+}
+
+SubmitButton.defaultProps = {
+  isValid: true,
+  disabled: false,
+  primary: true,
 }
