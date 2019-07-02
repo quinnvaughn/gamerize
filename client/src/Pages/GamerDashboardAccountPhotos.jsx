@@ -223,7 +223,7 @@ export default function GamerDashboardAccountPhotos(props) {
           <OutsideContainer>
             <Formik
               initialValues={{ banner: null }}
-              handleSubmit={async (values, actions) => {
+              onSubmit={async (values, actions) => {
                 const { data } = await uploadBanner({
                   variables: { file: values.banner },
                 })
