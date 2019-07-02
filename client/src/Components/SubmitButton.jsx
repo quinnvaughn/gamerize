@@ -29,7 +29,6 @@ const Button = styled.button`
 `
 
 export default function SubmitButton(props) {
-  console.log(props.disabled)
   return (
     <Button
       primary={props.primary}

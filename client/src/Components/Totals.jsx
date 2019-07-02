@@ -329,61 +329,6 @@ function Totals(props) {
             </form>
           )}
         </Formik>
-        {/* <Book
-          id="bookButton"
-          disabled={
-            allSessions.sessions.length === 0 ||
-            disabled ||
-            props.notEnoughSpots.length > 0
-          }
-          onClick={async () => {
-            if (!customerStripeId || !props.me.hasDefaultCard) {
-              setNeedCard(true)
-            } else {
-              const timeSlots = allSessions.sessions.map(timeslot => {
-                return {
-                  timeSlotId: timeslot.id,
-                  slots: timeslot.slots,
-                  players: timeslot.players,
-                  total: props.session.price * timeslot.slots,
-                  startTime: timeslot.startTime,
-                }
-              })
-              const input = {
-                timeSlots,
-                creatorId: props.session.creator.id,
-                totalWithFee: totalMinusDiscounts,
-                totalWithoutFee: totalNotIncludingFees,
-              }
-              setLoading(true)
-              const { data } = await bookTimeSlots({
-                variables: { input },
-              })
-              if (data.bookTimeSlots.booked) {
-                Mixpanel.track('Booked a timeslot/s.')
-                setLoading(false)
-                setBooked(true)
-                dispatch({ type: 'CLEAR_STATE' })
-                setTimeout(() => {
-                  setBooked(false)
-                  props.refetch()
-                }, 1000)
-              } else {
-                setBookError(true)
-              }
-            }
-          }}
-        >
-          {loading ? (
-            'Booking'
-          ) : !loading && booked ? (
-            <FaCheck />
-          ) : bookError ? (
-            'Please Try Again'
-          ) : (
-            'Book'
-          )}
-        </Book> */}
         {needCard && (
           <Elements>
             <FirstTimeCheckout
