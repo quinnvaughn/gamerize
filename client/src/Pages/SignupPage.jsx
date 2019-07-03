@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
-import { Formik } from 'formik'
+import { Formik, Field } from 'formik'
 import { Mixpanel } from '../Components/Mixpanel'
+import LoginInput from '../Components/LoginInput'
+import SubmitButton from '../Components/SubmitButton'
 
 const Container = styled.div`
   display: flex;
@@ -24,34 +26,10 @@ const LoginForm = styled.form`
   text-align: center;
 `
 
-const Item = styled.input`
-  outline: 0;
-  border-radius: 4px;
-  border: 1px solid #dddfe2;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  :last-of-type {
-    margin-bottom: 2rem;
-  }
-`
-
 const Title = styled.div`
   font-size: 3rem;
   font-weight: 800;
   margin-bottom: 2rem;
-`
-
-const SignupButton = styled.button`
-  outline: 0;
-  border: 0;
-  border-radius: 4rem;
-  color: #fff;
-  font-weight: 700;
-  padding: 1rem 1.6rem;
-  text-transform: uppercase;
-  background: #db1422;
-  width: 100%;
-  cursor: pointer;
 `
 
 const StyledLink = styled(Link)`
@@ -63,12 +41,6 @@ const StyledLink = styled(Link)`
   :hover {
     text-decoration: underline;
   }
-`
-
-const SmallErrorMessage = styled.div`
-  margin-bottom: 0.2rem;
-  color: #db1422;
-  font-size: 1.2rem;
 `
 
 const ErrorMessage = styled.div`
@@ -103,6 +75,10 @@ const signupSchema = yup.object().shape({
     .trim()
     .min(6, 'Password must be at least 6 characters')
     .required('Password is required'),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Password confirmation is required'),
   username: yup
     .string()
     .min(2, 'Username must be at least 2 characters')
@@ -121,7 +97,13 @@ export default function SignUpPage(props) {
   return (
     <Container>
       <Formik
-        initialValues={{ email: '', password: '', username: '', name: '' }}
+        initialValues={{
+          email: '',
+          password: '',
+          username: '',
+          name: '',
+          passwordConfirmation: '',
+        }}
         validationSchema={signupSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true)
@@ -148,69 +130,51 @@ export default function SignUpPage(props) {
           }
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => (
+        {({ isValid, handleSubmit, isSubmitting }) => (
           <LoginForm onSubmit={handleSubmit}>
             <Title>Sign up for Gamerize</Title>
-            <Item
+            <Field
               type="email"
               placeholder="Email"
               name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
               required
+              component={LoginInput}
             />
-            {touched.email && errors.email && (
-              <SmallErrorMessage>{errors.email}</SmallErrorMessage>
-            )}
-            <Item
+            <Field
               type="password"
               placeholder="Password"
               name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
               required
+              component={LoginInput}
             />
-            {touched.password && errors.password && (
-              <SmallErrorMessage>{errors.password}</SmallErrorMessage>
-            )}
-            <Item
-              type="text"
+            <Field
+              type="password"
+              placeholder="Confirm your password"
+              name="passwordConfirmation"
+              required
+              component={LoginInput}
+            />
+            <Field
               placeholder="Username"
               name="username"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.username}
               required
+              component={LoginInput}
             />
-            {touched.username && errors.username && (
-              <SmallErrorMessage>{errors.username}</SmallErrorMessage>
-            )}
-            <Item
-              type="text"
+            <Field
               placeholder="Full Name"
               name="name"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.name}
               required
+              component={LoginInput}
             />
-            {touched.name && errors.name && (
-              <SmallErrorMessage>{errors.name}</SmallErrorMessage>
-            )}
             {error && <ErrorMessage>{error}</ErrorMessage>}
-            <SignupButton type="submit" disabled={isSubmitting}>
+            <SubmitButton
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              primary
+              width="100%"
+            >
               Sign Up
-            </SignupButton>
+            </SubmitButton>
             <StyledLink to="/login">Login</StyledLink>
           </LoginForm>
         )}

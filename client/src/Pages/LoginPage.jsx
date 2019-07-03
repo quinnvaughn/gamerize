@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
-import { Formik } from 'formik'
-import { spawn } from 'child_process'
+import { Formik, Field } from 'formik'
 import { Mixpanel } from '../Components/Mixpanel'
+import LoginInput from '../Components/LoginInput'
+import SubmitButton from '../Components/SubmitButton'
 
 const Container = styled.div`
   display: flex;
@@ -25,34 +26,10 @@ const LoginForm = styled.form`
   text-align: center;
 `
 
-const Item = styled.input`
-  outline: 0;
-  border-radius: 4px;
-  border: 1px solid #dddfe2;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  :last-of-type {
-    margin-bottom: 2rem;
-  }
-`
-
 const Title = styled.div`
   font-size: 3rem;
   font-weight: 800;
   margin-bottom: 2rem;
-`
-
-const LoginButton = styled.button`
-  outline: 0;
-  border: 0;
-  border-radius: 4rem;
-  color: #fff;
-  font-weight: 700;
-  padding: 1rem 1.6rem;
-  text-transform: uppercase;
-  background: #db1422;
-  width: 100%;
-  cursor: pointer;
 `
 
 const StyledLink = styled(Link)`
@@ -64,12 +41,6 @@ const StyledLink = styled(Link)`
   :hover {
     text-decoration: underline;
   }
-`
-
-const SmallErrorMessage = styled.div`
-  margin-bottom: 0.2rem;
-  color: #db1422;
-  font-size: 1.2rem;
 `
 
 const ErrorMessage = styled.div`
@@ -138,43 +109,32 @@ export default function LoginPage(props) {
           }
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => (
+        {({ isValid, handleSubmit, isSubmitting }) => (
           <LoginForm onSubmit={handleSubmit} method="post">
             <Title>Login to Gamerize</Title>
-            <Item
+            <Field
               type="email"
-              placeholder="Email"
               name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
+              placeholder="Email"
               required
+              component={LoginInput}
             />
-            {touched.email && errors.email && (
-              <SmallErrorMessage>{errors.email}</SmallErrorMessage>
-            )}
-            <Item
+            <Field
               type="password"
-              placeholder="Password"
               name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
+              placeholder="Password"
               required
+              component={LoginInput}
             />
-            {touched.password && errors.password && (
-              <SmallErrorMessage>{errors.password}</SmallErrorMessage>
-            )}
             {error && <ErrorMessage>{error}</ErrorMessage>}
-            <LoginButton type="submit">Login</LoginButton>
+            <SubmitButton
+              isValid={isValid}
+              width="100%"
+              primary
+              isSubmitting={isSubmitting}
+            >
+              Login
+            </SubmitButton>
             <StyledLink to="/sign-up">Sign up</StyledLink>
           </LoginForm>
         )}
