@@ -5887,6 +5887,8 @@ type User {
   savedCards(where: SavedCardWhereInput, orderBy: SavedCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedCard!]
   invitesReceived(where: BookingInviteWhereInput, orderBy: BookingInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingInvite!]
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews(where: SessionReviewWhereInput, orderBy: SessionReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SessionReview!]
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -5921,6 +5923,8 @@ input UserCreateInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6003,6 +6007,8 @@ input UserCreateWithoutGamertagsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6030,6 +6036,8 @@ input UserCreateWithoutIndexInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6056,6 +6064,8 @@ input UserCreateWithoutInvitesInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6083,6 +6093,8 @@ input UserCreateWithoutInvitesReceivedInput {
   invites: BookingInviteCreateManyWithoutFromInput
   savedCards: SavedCardCreateManyWithoutUserInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6111,6 +6123,8 @@ input UserCreateWithoutReviewsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   friends: UserCreateManyInput
   gamertags: GamerTagCreateOneWithoutUserInput
@@ -6137,6 +6151,8 @@ input UserCreateWithoutSavedCardsInput {
   invites: BookingInviteCreateManyWithoutFromInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6164,6 +6180,8 @@ input UserCreateWithoutSessionsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6191,6 +6209,8 @@ input UserCreateWithoutTimeSlotsInput {
   savedCards: SavedCardCreateManyWithoutUserInput
   invitesReceived: BookingInviteCreateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewCreateManyWithoutUserInput
   friends: UserCreateManyInput
@@ -6457,6 +6477,10 @@ enum UserOrderByInput {
   aboutMe_DESC
   setup_ASC
   setup_DESC
+  resetPasswordToken_ASC
+  resetPasswordToken_DESC
+  resetPasswordExpires_ASC
+  resetPasswordExpires_DESC
   views_ASC
   views_DESC
   role_ASC
@@ -6481,6 +6505,8 @@ type UserPreviousValues {
   name: String!
   aboutMe: String
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   role: Role!
 }
@@ -6670,6 +6696,28 @@ input UserScalarWhereInput {
   setup_lte: Int
   setup_gt: Int
   setup_gte: Int
+  resetPasswordToken: String
+  resetPasswordToken_not: String
+  resetPasswordToken_in: [String!]
+  resetPasswordToken_not_in: [String!]
+  resetPasswordToken_lt: String
+  resetPasswordToken_lte: String
+  resetPasswordToken_gt: String
+  resetPasswordToken_gte: String
+  resetPasswordToken_contains: String
+  resetPasswordToken_not_contains: String
+  resetPasswordToken_starts_with: String
+  resetPasswordToken_not_starts_with: String
+  resetPasswordToken_ends_with: String
+  resetPasswordToken_not_ends_with: String
+  resetPasswordExpires: DateTime
+  resetPasswordExpires_not: DateTime
+  resetPasswordExpires_in: [DateTime!]
+  resetPasswordExpires_not_in: [DateTime!]
+  resetPasswordExpires_lt: DateTime
+  resetPasswordExpires_lte: DateTime
+  resetPasswordExpires_gt: DateTime
+  resetPasswordExpires_gte: DateTime
   views: Int
   views_not: Int
   views_in: [Int!]
@@ -6725,6 +6773,8 @@ input UserUpdateDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -6753,6 +6803,8 @@ input UserUpdateInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -6776,6 +6828,8 @@ input UserUpdateManyDataInput {
   name: String
   aboutMe: String
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   role: Role
 }
@@ -6807,6 +6861,8 @@ input UserUpdateManyMutationInput {
   name: String
   aboutMe: String
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   role: Role
 }
@@ -6924,6 +6980,8 @@ input UserUpdateWithoutGamertagsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -6951,6 +7009,8 @@ input UserUpdateWithoutIndexDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -6977,6 +7037,8 @@ input UserUpdateWithoutInvitesDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -7004,6 +7066,8 @@ input UserUpdateWithoutInvitesReceivedDataInput {
   invites: BookingInviteUpdateManyWithoutFromInput
   savedCards: SavedCardUpdateManyWithoutUserInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -7032,6 +7096,8 @@ input UserUpdateWithoutReviewsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   friends: UserUpdateManyInput
   gamertags: GamerTagUpdateOneWithoutUserInput
@@ -7058,6 +7124,8 @@ input UserUpdateWithoutSavedCardsDataInput {
   invites: BookingInviteUpdateManyWithoutFromInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -7085,6 +7153,8 @@ input UserUpdateWithoutSessionsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -7112,6 +7182,8 @@ input UserUpdateWithoutTimeSlotsDataInput {
   savedCards: SavedCardUpdateManyWithoutUserInput
   invitesReceived: BookingInviteUpdateManyWithoutToInput
   setup: Int
+  resetPasswordToken: String
+  resetPasswordExpires: DateTime
   views: Int
   reviews: SessionReviewUpdateManyWithoutUserInput
   friends: UserUpdateManyInput
@@ -7388,6 +7460,28 @@ input UserWhereInput {
   setup_lte: Int
   setup_gt: Int
   setup_gte: Int
+  resetPasswordToken: String
+  resetPasswordToken_not: String
+  resetPasswordToken_in: [String!]
+  resetPasswordToken_not_in: [String!]
+  resetPasswordToken_lt: String
+  resetPasswordToken_lte: String
+  resetPasswordToken_gt: String
+  resetPasswordToken_gte: String
+  resetPasswordToken_contains: String
+  resetPasswordToken_not_contains: String
+  resetPasswordToken_starts_with: String
+  resetPasswordToken_not_starts_with: String
+  resetPasswordToken_ends_with: String
+  resetPasswordToken_not_ends_with: String
+  resetPasswordExpires: DateTime
+  resetPasswordExpires_not: DateTime
+  resetPasswordExpires_in: [DateTime!]
+  resetPasswordExpires_not_in: [DateTime!]
+  resetPasswordExpires_lt: DateTime
+  resetPasswordExpires_lte: DateTime
+  resetPasswordExpires_gt: DateTime
+  resetPasswordExpires_gte: DateTime
   views: Int
   views_not: Int
   views_in: [Int!]
@@ -7417,6 +7511,7 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   username: String
+  resetPasswordToken: String
 }
 `
       }

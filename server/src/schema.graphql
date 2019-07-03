@@ -131,6 +131,40 @@ type Mutation {
   logIntoStripe: LogIntoStripePayload!
   viewUserProfile(input: ViewUserProfileInput!): ViewUserProfilePayload!
   viewGamingSession(input: ViewGamingSessionInput!): ViewGamingSessionPayload!
+  sendForgotPasswordEmail(
+    input: SendForgotPasswordEmailInput!
+  ): SendForgotPasswordEmailPayload!
+  updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
+  checkUpdatePasswordToken(
+    input: CheckUpdatePasswordTokenInput!
+  ): CheckUpdatePasswordTokenPayload!
+}
+
+input CheckUpdatePasswordTokenInput {
+  resetPasswordToken: String!
+}
+
+type CheckUpdatePasswordTokenPayload {
+  valid: Boolean!
+}
+
+input UpdatePasswordInput {
+  resetPasswordToken: String!
+  password: String!
+}
+
+type UpdatePasswordPayload {
+  updated: Boolean
+  error: String
+}
+
+input SendForgotPasswordEmailInput {
+  email: String!
+}
+
+type SendForgotPasswordEmailPayload {
+  sent: Boolean
+  error: String
 }
 
 input ViewGamingSessionInput {

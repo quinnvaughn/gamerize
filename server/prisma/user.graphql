@@ -24,6 +24,8 @@ type User {
   savedCards: [SavedCard!]! @relation(name: "SavedCards")
   invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
   setup: Int
+  resetPasswordToken: String @unique
+  resetPasswordExpires: DateTime
   views: Int @default(value: 0)
   reviews: [SessionReview!]!
   friends: [User!]!

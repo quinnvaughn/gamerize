@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik, Field } from 'formik'
-import { Mixpanel } from '../Components/Mixpanel'
 import LoginInput from '../Components/LoginInput'
 import SubmitButton from '../Components/SubmitButton'
 
@@ -17,7 +16,7 @@ const Container = styled.div`
   align-items: center;
 `
 
-const LoginForm = styled.form`
+const RecoverPasswordForm = styled.form`
   padding: 4rem;
   border-radius: 4px;
   border: 1px solid #dddfe2;
@@ -50,16 +49,18 @@ const ErrorMessage = styled.div`
   font-weight: 700;
 `
 
-const LOGIN = gql`
-  mutation($input: LoginInput!) {
-    login(input: $input) {
-      token
+const SentEmail = styled.div`
+  margin-bottom: 0.8rem;
+  color: black;
+  font-size: 1.6rem;
+  font-weight: 700;
+`
+
+const SEND_FORGOT_PASSWORD_EMAIL = gql`
+  mutation($input: SendForgotPasswordEmailInput!) {
+    sendForgotPasswordEmail(input: $input) {
+      sent
       error
-      user {
-        id
-        email
-        name
-      }
     }
   }
 `
@@ -69,75 +70,67 @@ const loginSchema = yup.object().shape({
     .string()
     .email('Email is not valid')
     .required('Email is required'),
-  password: yup
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
 })
 
-export default function LoginPage(props) {
-  const login = useMutation(LOGIN)
-  const [error, setError] = useState('')
+export default function ForgotPasswordPage(props) {
+  const sendForgotPasswordEmail = useMutation(SEND_FORGOT_PASSWORD_EMAIL)
+  const [errorMsg, setError] = useState('')
+  const [sentEmail, setSentEmail] = useState('')
   return (
     <Container>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: '' }}
         validationSchema={loginSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          setSubmitting(true)
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          const input = {
+            email: values.email,
+          }
           const {
             data: {
-              login: { error, token, user },
+              sendForgotPasswordEmail: { sent, error },
             },
-          } = await login({ variables: { input: values } })
+          } = await sendForgotPasswordEmail({ variables: { input } })
           if (error) {
             setError(error)
             setSubmitting(false)
-            Mixpanel.track('Unsuccessful login')
           } else {
-            Mixpanel.identify(user.id)
-            Mixpanel.people.set({
-              $email: user.email,
-              $first_name: user.name.split(' ')[0],
-              $last_name: user.name.split(' ')[1],
-              $last_login: new Date(),
-            })
-            Mixpanel.track('Successful login')
-            await localStorage.setItem('TOKEN', token)
-            setSubmitting(false)
-            props.history.push('/')
+            if (sent) {
+              setSubmitting(false)
+              setSentEmail(
+                `Your recovery email was successfully sent.,You can close this window.,`
+              )
+              resetForm()
+            } else {
+              setError('Email did not send. Please try again')
+              setSubmitting(false)
+            }
           }
         }}
       >
         {({ isValid, handleSubmit, isSubmitting }) => (
-          <LoginForm onSubmit={handleSubmit} method="post">
-            <Title>Login to Gamerize</Title>
+          <RecoverPasswordForm onSubmit={handleSubmit} method="post">
+            <Title>Recover your Password</Title>
             <Field
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="Please enter your email"
               required
               component={LoginInput}
             />
-            <Field
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-              component={LoginInput}
-            />
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {sentEmail &&
+              sentEmail.split(',').map(sent => <SentEmail>{sent}</SentEmail>)}
+            {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <SubmitButton
               isValid={isValid}
               width="100%"
               primary
               isSubmitting={isSubmitting}
             >
-              Login
+              Recover Password
             </SubmitButton>
-            <StyledLink to="/forgot-password">Forgot your password?</StyledLink>
-            <StyledLink to="/sign-up">Sign up</StyledLink>
-          </LoginForm>
+            <StyledLink to="/login">Login</StyledLink>
+            <StyledLink to="/sign-up">Sign Up</StyledLink>
+          </RecoverPasswordForm>
         )}
       </Formik>
     </Container>
