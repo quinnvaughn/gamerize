@@ -1300,6 +1300,10 @@ export type UserOrderByInput =
   | "aboutMe_DESC"
   | "setup_ASC"
   | "setup_DESC"
+  | "resetPasswordToken_ASC"
+  | "resetPasswordToken_DESC"
+  | "resetPasswordExpires_ASC"
+  | "resetPasswordExpires_DESC"
   | "views_ASC"
   | "views_DESC"
   | "role_ASC"
@@ -1714,6 +1718,8 @@ export interface UserUpdateDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -2271,6 +2277,8 @@ export interface UserUpdateWithoutReviewsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyInput>;
   gamertags?: Maybe<GamerTagUpdateOneWithoutUserInput>;
@@ -2442,6 +2450,8 @@ export interface UserCreateWithoutIndexInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -2496,6 +2506,8 @@ export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
   aboutMe?: Maybe<String>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   role?: Maybe<Role>;
 }
@@ -2519,6 +2531,8 @@ export interface UserUpdateWithoutSessionsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -3083,6 +3097,28 @@ export interface UserWhereInput {
   setup_lte?: Maybe<Int>;
   setup_gt?: Maybe<Int>;
   setup_gte?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordToken_not?: Maybe<String>;
+  resetPasswordToken_in?: Maybe<String[] | String>;
+  resetPasswordToken_not_in?: Maybe<String[] | String>;
+  resetPasswordToken_lt?: Maybe<String>;
+  resetPasswordToken_lte?: Maybe<String>;
+  resetPasswordToken_gt?: Maybe<String>;
+  resetPasswordToken_gte?: Maybe<String>;
+  resetPasswordToken_contains?: Maybe<String>;
+  resetPasswordToken_not_contains?: Maybe<String>;
+  resetPasswordToken_starts_with?: Maybe<String>;
+  resetPasswordToken_not_starts_with?: Maybe<String>;
+  resetPasswordToken_ends_with?: Maybe<String>;
+  resetPasswordToken_not_ends_with?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
+  resetPasswordExpires_not?: Maybe<DateTimeInput>;
+  resetPasswordExpires_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  resetPasswordExpires_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  resetPasswordExpires_lt?: Maybe<DateTimeInput>;
+  resetPasswordExpires_lte?: Maybe<DateTimeInput>;
+  resetPasswordExpires_gt?: Maybe<DateTimeInput>;
+  resetPasswordExpires_gte?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   views_not?: Maybe<Int>;
   views_in?: Maybe<Int[] | Int>;
@@ -3175,6 +3211,8 @@ export interface UserUpdateWithoutSavedCardsDataInput {
   invites?: Maybe<BookingInviteUpdateManyWithoutFromInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -3202,6 +3240,8 @@ export interface UserUpdateWithoutTimeSlotsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -3344,6 +3384,8 @@ export interface UserCreateWithoutSavedCardsInput {
   invites?: Maybe<BookingInviteCreateManyWithoutFromInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -3581,6 +3623,8 @@ export interface UserUpdateWithoutInvitesDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -3975,6 +4019,8 @@ export interface UserCreateInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -4344,6 +4390,8 @@ export interface UserCreateWithoutReviewsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   friends?: Maybe<UserCreateManyInput>;
   gamertags?: Maybe<GamerTagCreateOneWithoutUserInput>;
@@ -4437,6 +4485,8 @@ export interface UserCreateWithoutSessionsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -4567,6 +4617,8 @@ export interface UserCreateWithoutTimeSlotsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -4594,6 +4646,8 @@ export interface UserUpdateWithoutInvitesReceivedDataInput {
   invites?: Maybe<BookingInviteUpdateManyWithoutFromInput>;
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -4662,6 +4716,8 @@ export interface UserCreateWithoutInvitesInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -4867,6 +4923,28 @@ export interface UserScalarWhereInput {
   setup_lte?: Maybe<Int>;
   setup_gt?: Maybe<Int>;
   setup_gte?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordToken_not?: Maybe<String>;
+  resetPasswordToken_in?: Maybe<String[] | String>;
+  resetPasswordToken_not_in?: Maybe<String[] | String>;
+  resetPasswordToken_lt?: Maybe<String>;
+  resetPasswordToken_lte?: Maybe<String>;
+  resetPasswordToken_gt?: Maybe<String>;
+  resetPasswordToken_gte?: Maybe<String>;
+  resetPasswordToken_contains?: Maybe<String>;
+  resetPasswordToken_not_contains?: Maybe<String>;
+  resetPasswordToken_starts_with?: Maybe<String>;
+  resetPasswordToken_not_starts_with?: Maybe<String>;
+  resetPasswordToken_ends_with?: Maybe<String>;
+  resetPasswordToken_not_ends_with?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
+  resetPasswordExpires_not?: Maybe<DateTimeInput>;
+  resetPasswordExpires_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  resetPasswordExpires_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  resetPasswordExpires_lt?: Maybe<DateTimeInput>;
+  resetPasswordExpires_lte?: Maybe<DateTimeInput>;
+  resetPasswordExpires_gt?: Maybe<DateTimeInput>;
+  resetPasswordExpires_gte?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   views_not?: Maybe<Int>;
   views_in?: Maybe<Int[] | Int>;
@@ -4927,6 +5005,8 @@ export interface UserUpdateManyDataInput {
   name?: Maybe<String>;
   aboutMe?: Maybe<String>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   role?: Maybe<Role>;
 }
@@ -5025,6 +5105,8 @@ export interface UserCreateWithoutInvitesReceivedInput {
   invites?: Maybe<BookingInviteCreateManyWithoutFromInput>;
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -5499,6 +5581,8 @@ export interface UserUpdateWithoutIndexDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -7033,6 +7117,8 @@ export interface UserCreateWithoutGamertagsInput {
   savedCards?: Maybe<SavedCardCreateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteCreateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewCreateManyWithoutUserInput>;
   friends?: Maybe<UserCreateManyInput>;
@@ -7346,6 +7432,8 @@ export interface UserUpdateWithoutGamertagsDataInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -7539,6 +7627,8 @@ export interface UserUpdateInput {
   savedCards?: Maybe<SavedCardUpdateManyWithoutUserInput>;
   invitesReceived?: Maybe<BookingInviteUpdateManyWithoutToInput>;
   setup?: Maybe<Int>;
+  resetPasswordToken?: Maybe<String>;
+  resetPasswordExpires?: Maybe<DateTimeInput>;
   views?: Maybe<Int>;
   reviews?: Maybe<SessionReviewUpdateManyWithoutUserInput>;
   friends?: Maybe<UserUpdateManyInput>;
@@ -8313,6 +8403,8 @@ export interface User {
   name: String;
   aboutMe?: String;
   setup?: Int;
+  resetPasswordToken?: String;
+  resetPasswordExpires?: DateTimeOutput;
   views?: Int;
   role: Role;
 }
@@ -8380,6 +8472,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     last?: Int;
   }) => T;
   setup: () => Promise<Int>;
+  resetPasswordToken: () => Promise<String>;
+  resetPasswordExpires: () => Promise<DateTimeOutput>;
   views: () => Promise<Int>;
   reviews: <T = FragmentableArray<SessionReview>>(args?: {
     where?: SessionReviewWhereInput;
@@ -8471,6 +8565,8 @@ export interface UserSubscription
     last?: Int;
   }) => T;
   setup: () => Promise<AsyncIterator<Int>>;
+  resetPasswordToken: () => Promise<AsyncIterator<String>>;
+  resetPasswordExpires: () => Promise<AsyncIterator<DateTimeOutput>>;
   views: () => Promise<AsyncIterator<Int>>;
   reviews: <T = Promise<AsyncIterator<SessionReviewSubscription>>>(args?: {
     where?: SessionReviewWhereInput;
@@ -8560,6 +8656,8 @@ export interface UserNullablePromise
     last?: Int;
   }) => T;
   setup: () => Promise<Int>;
+  resetPasswordToken: () => Promise<String>;
+  resetPasswordExpires: () => Promise<DateTimeOutput>;
   views: () => Promise<Int>;
   reviews: <T = FragmentableArray<SessionReview>>(args?: {
     where?: SessionReviewWhereInput;
@@ -8984,6 +9082,8 @@ export interface UserPreviousValues {
   name: String;
   aboutMe?: String;
   setup?: Int;
+  resetPasswordToken?: String;
+  resetPasswordExpires?: DateTimeOutput;
   views?: Int;
   role: Role;
 }
@@ -9008,6 +9108,8 @@ export interface UserPreviousValuesPromise
   name: () => Promise<String>;
   aboutMe: () => Promise<String>;
   setup: () => Promise<Int>;
+  resetPasswordToken: () => Promise<String>;
+  resetPasswordExpires: () => Promise<DateTimeOutput>;
   views: () => Promise<Int>;
   role: () => Promise<Role>;
 }
@@ -9032,6 +9134,8 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   aboutMe: () => Promise<AsyncIterator<String>>;
   setup: () => Promise<AsyncIterator<Int>>;
+  resetPasswordToken: () => Promise<AsyncIterator<String>>;
+  resetPasswordExpires: () => Promise<AsyncIterator<DateTimeOutput>>;
   views: () => Promise<AsyncIterator<Int>>;
   role: () => Promise<AsyncIterator<Role>>;
 }

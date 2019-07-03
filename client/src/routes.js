@@ -22,6 +22,7 @@ import GamerOnboarding from './Pages/GamerOnboarding'
 import SessionsPage from './Pages/SessionsPage'
 import NotThere from './Pages/404Page'
 import FAQPage from './Pages/FAQPage'
+import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 
 const routes = [
   {
@@ -90,6 +91,10 @@ const routes = [
   {
     path: '/sign-up',
     component: SignUpPage,
+  },
+  {
+    path: '/forgot-password',
+    component: ForgotPasswordPage,
   },
   {
     path: '/faq',

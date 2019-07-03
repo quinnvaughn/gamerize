@@ -33,6 +33,7 @@ const { photos } = require('./Mutation/photos')
 const { admin } = require('./Query/admin')
 const { GamerRequest } = require('./Type/GamerRequest')
 const { stripe } = require('./Mutation/stripe')
+const { email } = require('./Mutation/email')
 
 module.exports = {
   Query: {
@@ -49,6 +50,7 @@ module.exports = {
     ...timeSlotQuery,
   },
   Mutation: {
+    ...email,
     ...stripe,
     ...photos,
     ...user,
