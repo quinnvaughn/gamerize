@@ -7511,6 +7511,7 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   username: String
+  resetPasswordToken: String
 }
 `
       }

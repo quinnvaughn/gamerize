@@ -23,6 +23,7 @@ import SessionsPage from './Pages/SessionsPage'
 import NotThere from './Pages/404Page'
 import FAQPage from './Pages/FAQPage'
 import ForgotPasswordPage from './Pages/ForgotPasswordPage'
+import UpdatePasswordPage from './Pages/UpdatePasswordPage'
 
 const routes = [
   {
@@ -95,6 +96,10 @@ const routes = [
   {
     path: '/forgot-password',
     component: ForgotPasswordPage,
+  },
+  {
+    path: '/reset/:token',
+    component: UpdatePasswordPage,
   },
   {
     path: '/faq',

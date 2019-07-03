@@ -135,10 +135,21 @@ type Mutation {
     input: SendForgotPasswordEmailInput!
   ): SendForgotPasswordEmailPayload!
   updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
+  checkUpdatePasswordToken(
+    input: CheckUpdatePasswordTokenInput!
+  ): CheckUpdatePasswordTokenPayload!
+}
+
+input CheckUpdatePasswordTokenInput {
+  resetPasswordToken: String!
+}
+
+type CheckUpdatePasswordTokenPayload {
+  valid: Boolean!
 }
 
 input UpdatePasswordInput {
-  token: String!
+  resetPasswordToken: String!
   password: String!
 }
 

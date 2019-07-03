@@ -3918,6 +3918,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
   username?: Maybe<String>;
+  resetPasswordToken?: Maybe<String>;
 }>;
 
 export interface RequirementUpdateManyWithWhereNestedInput {
