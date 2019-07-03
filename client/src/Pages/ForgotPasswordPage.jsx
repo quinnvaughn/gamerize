@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { Formik, Field } from 'formik'
-import { Mixpanel } from '../Components/Mixpanel'
 import LoginInput from '../Components/LoginInput'
 import SubmitButton from '../Components/SubmitButton'
 
@@ -73,7 +72,7 @@ const loginSchema = yup.object().shape({
     .required('Email is required'),
 })
 
-export default function LoginPage(props) {
+export default function ForgotPasswordPage(props) {
   const sendForgotPasswordEmail = useMutation(SEND_FORGOT_PASSWORD_EMAIL)
   const [errorMsg, setError] = useState('')
   const [sentEmail, setSentEmail] = useState('')
