@@ -111,7 +111,16 @@ export default function SignUpPage(props) {
             data: {
               signup: { error, token, user },
             },
-          } = await signup({ variables: { input: values } })
+          } = await signup({
+            variables: {
+              input: {
+                email: values.email,
+                password: values.password,
+                username: values.username,
+                name: values.name,
+              },
+            },
+          })
           if (error) {
             setError(error)
             setSubmitting(false)
