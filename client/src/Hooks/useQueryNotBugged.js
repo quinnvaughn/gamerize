@@ -3,7 +3,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 export default function useQueryNotBugged(query, options) {
   const prevDataRef = useRef()
-  const { loading, error, data, refetch } = useQuery(query, options)
+  const { loading, error, data, refetch, fetchMore } = useQuery(query, options)
   const hasData = data && Object.keys(data).length
   const activeData = hasData ? data : prevDataRef.current
 
@@ -14,6 +14,7 @@ export default function useQueryNotBugged(query, options) {
   })
 
   return {
+    fetchMore,
     data: activeData,
     refetch,
     loading,
