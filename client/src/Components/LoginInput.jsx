@@ -5,7 +5,7 @@ const Input = styled.input`
   outline: 0;
   border-radius: 4px;
   border: 1px solid #dddfe2;
-  margin-bottom: ${props => (props.hasError ? '0.5rem' : '1rem')};
+  margin-bottom: 1rem;
   padding: 0.5rem 1rem;
   :last-of-type {
     margin-bottom: 2rem;
@@ -26,12 +26,7 @@ export default function LoginInput({
 }) {
   return (
     <Fragment>
-      <Input
-        type={props.type ? props.type : 'text'}
-        {...field}
-        {...props}
-        hasError={errors[field.name]}
-      />
+      <Input type={props.type ? props.type : 'text'} {...field} {...props} />
       {errors[field.name] && touched[field.name] ? (
         <SmallErrorMessage>{errors[field.name]}</SmallErrorMessage>
       ) : null}
