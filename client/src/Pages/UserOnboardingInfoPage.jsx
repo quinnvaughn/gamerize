@@ -7,7 +7,12 @@ import { withRouter } from 'react-router-dom'
 //local imports
 import NavBar from '../Components/NavBar'
 import ErrorPage from './ErrorPage'
-import GenderDropdown from '../Components/GenderDropdown'
+import EditProfileInput from '../Components/EditProfileInput'
+import EditProfileSection from '../Components/EditProfileSection'
+import EditProfileGenderDropdown from '../Components/EditProfileGenderDropdown'
+import EditProfileTextArea from '../Components/EditProfileTextArea'
+import { Formik, Field } from 'formik'
+import SubmitButton from '../Components/SubmitButton'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -217,13 +222,6 @@ const GET_ME = gql`
 function UserOnboardingInfoPage(props) {
   const { data, loading, error } = useQuery(GET_ME)
   const updateUserProfile = useMutation(UPDATE_USER_PROFILE)
-  const [state, dispatch] = useReducer(reducer, initialState)
-  useEffect(() => {
-    if (data && data.me && data.me.name) {
-      dispatch({ type: 'setDisplayName', payload: data.me.name })
-      dispatch({ type: 'setName', payload: data.me.name })
-    }
-  }, [data.me])
   return loading ? null : error ? (
     <ErrorPage errors={error} />
   ) : (
@@ -232,339 +230,173 @@ function UserOnboardingInfoPage(props) {
       <Content>
         <AddInfo>
           <LetsAdd>Let's add some info</LetsAdd>
-          <Container>
-            <Top>
-              <Title>Info</Title>
-            </Top>
-            <Body>
-              <Row>
-                <RowLeft>
-                  <Label>Gender</Label>
-                </RowLeft>
-                <RowRight relative>
-                  <GenderDropdown title={state.gender} dispatch={dispatch} />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Display Name</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setDisplayName', payload: '' })
-                        : dispatch({
-                            type: 'setDisplayName',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.displayName ? state.displayName : ''}
+          <Formik
+            initialValues={{
+              firstName: data.me.name.split(' ')[0],
+              lastName: data.me.name.split(' ')[1],
+              displayName: data.me.name,
+              gender: 'MALE',
+              aboutMe: '',
+              psn: '',
+              nso: '',
+              xbl: '',
+              epic: '',
+              origin: '',
+              steam: '',
+              gog: '',
+              battlenet: '',
+              uplay: '',
+              bethesda: '',
+              itch: '',
+              windows: '',
+              riot: '',
+            }}
+            onSubmit={async (values, actions) => {
+              const pc = {
+                epic: values.epic,
+                steam: values.steam,
+                origin: values.origin,
+                gog: values.gog,
+                battlenet: values.battlenet,
+                uplay: values.uplay,
+                bethesda: values.bethesda,
+                itch: values.itch,
+                riot: values.riot,
+                windows: values.windows,
+              }
+              const gamertags = {
+                psn: values.psn,
+                xbl: values.xbl,
+                nso: values.nso,
+                pc: pc,
+              }
+              const input = {
+                aboutMe: values.aboutMe,
+                gender: values.gender,
+                displayName: values.displayName,
+                name: `${values.firstName} ${values.lastName}`,
+                gamertags,
+              }
+              const { data } = await updateUserProfile({
+                variables: { input },
+              })
+              if (data.updateUserProfile.updated) {
+                actions.setSubmitting(false)
+                await props.history.push('/user-onboarding/need-to-know')
+              }
+            }}
+          >
+            {({ handleSubmit, isSubmitting }) => (
+              <form onSubmit={handleSubmit}>
+                <EditProfileSection title="Required">
+                  <Field
+                    name="firstName"
+                    label="First Name"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>About Me</Label>
-                </RowLeft>
-                <RowRight>
-                  <AboutMe
-                    rows="4"
-                    cols="50"
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setAboutMe', payload: '' })
-                        : dispatch({
-                            type: 'setAboutMe',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.aboutMe ? state.aboutMe : ''}
+                  <Field
+                    name="lastName"
+                    label="Last Name"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-          <Container>
-            <Top>
-              <Title>Gamertags</Title>
-            </Top>
-            <Body>
-              <Row>
-                <RowLeft>
-                  <Label>Playstation Network</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setPSN', payload: '' })
-                        : dispatch({
-                            type: 'setPSN',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.psn ? state.psn : ''}
+                  <Field
+                    name="displayName"
+                    label="Display Name"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Xbox Live</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setXBL', payload: '' })
-                        : dispatch({
-                            type: 'setXBL',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.xbl ? state.xbl : ''}
+                  <Field
+                    name="gender"
+                    label="Gender"
+                    component={EditProfileGenderDropdown}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Nintendo Switch</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setNSO', payload: '' })
-                        : dispatch({
-                            type: 'setNSO',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.nso ? state.nso : ''}
+                </EditProfileSection>
+                <EditProfileSection title="Optional">
+                  <Field
+                    name="aboutMe"
+                    label="About Me"
+                    component={EditProfileTextArea}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Epic Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setEpic', payload: '' })
-                        : dispatch({
-                            type: 'setEpic',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.epic ? state.epic : ''}
+                </EditProfileSection>
+                <EditProfileSection title="Gamertags">
+                  <Field
+                    name="psn"
+                    label="Playstation Network"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Origin Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setOrigin', payload: '' })
-                        : dispatch({
-                            type: 'setOrigin',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.origin ? state.origin : ''}
+                  <Field
+                    name="xbl"
+                    label="Xbox Live"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Steam Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setSteam', payload: '' })
-                        : dispatch({
-                            type: 'setSteam',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.steam ? state.steam : ''}
+                  <Field
+                    name="nso"
+                    label="Nintendo Switch Online"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Battle.net Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setBattlenet', payload: '' })
-                        : dispatch({
-                            type: 'setBattlenet',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.battlenet ? state.battlenet : ''}
+                  <Field
+                    name="epic"
+                    label="Epic Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Riot Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setRiot', payload: '' })
-                        : dispatch({
-                            type: 'setRiot',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.riot ? state.riot : ''}
+                  <Field
+                    name="origin"
+                    label="Origin Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Uplay Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setUplay', payload: '' })
-                        : dispatch({
-                            type: 'setUplay',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.uplay ? state.uplay : ''}
+                  <Field
+                    name="steam"
+                    label="Steam Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Gog Galaxy Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setGog', payload: '' })
-                        : dispatch({
-                            type: 'setGog',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.gog ? state.gog : ''}
+                  <Field
+                    name="battlenet"
+                    label="Battle.net Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Bethesda Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setBethesda', payload: '' })
-                        : dispatch({
-                            type: 'setBethesda',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.bethesda ? state.bethesda : ''}
+                  <Field
+                    name="riot"
+                    label="Riot Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Itch.io Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setItch', payload: '' })
-                        : dispatch({
-                            type: 'setItch',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.itch ? state.itch : ''}
+                  <Field
+                    name="uplay"
+                    label="Uplay Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-              <Row>
-                <RowLeft>
-                  <Label>Windows Launcher</Label>
-                </RowLeft>
-                <RowRight>
-                  <Name
-                    onChange={e => {
-                      e.target.value === ''
-                        ? dispatch({ type: 'setWindows', payload: '' })
-                        : dispatch({
-                            type: 'setWindows',
-                            payload: String(e.target.value),
-                          })
-                    }}
-                    value={state.windows ? state.windows : ''}
+                  <Field
+                    name="gog"
+                    label="Gog Galaxy Launcher"
+                    component={EditProfileInput}
                   />
-                </RowRight>
-              </Row>
-            </Body>
-          </Container>
-          <NextContainer>
-            <Next
-              onClick={async () => {
-                const pc = {
-                  epic: state.epic,
-                  steam: state.steam,
-                  origin: state.origin,
-                  gog: state.gog,
-                  battlenet: state.battlenet,
-                  uplay: state.uplay,
-                  bethesda: state.bethesda,
-                  itch: state.itch,
-                  riot: state.riot,
-                  windows: state.windows,
-                }
-                const gamertags = {
-                  psn: state.psn,
-                  xbl: state.xbl,
-                  nso: state.nso,
-                  pc: pc,
-                }
-                const input = {
-                  aboutMe: state.aboutMe,
-                  gender: state.gender,
-                  displayName: state.displayName,
-                  name: state.name,
-                  gamertags,
-                }
-                const { data } = await updateUserProfile({
-                  variables: { input },
-                })
-                if (data.updateUserProfile.updated) {
-                  await props.history.push('/user-onboarding/need-to-know')
-                }
-              }}
-            >
-              Next
-            </Next>
-          </NextContainer>
+                  <Field
+                    name="bethesda"
+                    label="Bethesda Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="itch"
+                    label="Itch.io Launcher"
+                    component={EditProfileInput}
+                  />
+                  <Field
+                    name="windows"
+                    label="Windows Launcher"
+                    component={EditProfileInput}
+                  />
+                </EditProfileSection>
+                <NextContainer>
+                  <SubmitButton
+                    type="submit"
+                    primary
+                    width={83}
+                    isSubmitting={isSubmitting}
+                  >
+                    Next
+                  </SubmitButton>
+                </NextContainer>
+              </form>
+            )}
+          </Formik>
         </AddInfo>
       </Content>
     </PageContainer>
