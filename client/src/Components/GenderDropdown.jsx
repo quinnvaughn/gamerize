@@ -96,7 +96,7 @@ const genders = ['MALE', 'FEMALE', 'OTHER']
 
 export default function GenderDropdown({
   field,
-  form: { touched, errors, setFieldValue },
+  form: { setFieldValue },
   ...props
 }) {
   const [open, setOpen] = useState(false)
