@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from 'react-apollo-hooks'
@@ -48,96 +48,6 @@ const LetsAdd = styled.div`
   margin-bottom: 3rem;
 `
 
-const Container = styled.div`
-  border: 1px solid #ebebeb;
-  margin-bottom: 2rem;
-`
-
-const Top = styled.div`
-  width: 100%;
-  background: #ebebeb;
-  padding: 1.2rem 2rem;
-`
-
-const Title = styled.h2`
-  font-weight: 400;
-`
-
-const Body = styled.div`
-  padding: 2rem;
-`
-
-const Row = styled.div`
-  width: 100%;
-  display: flex;
-  margin-bottom: 0.5rem;
-`
-
-const RowLeft = styled.div`
-  flex: 25%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  text-align: right;
-  padding-right: 0.8rem;
-`
-
-const Label = styled.div`
-  font-size: 1.6rem;
-  font-weight: 400;
-`
-
-const RowRight = styled.div`
-  flex: 75%;
-  position: ${props => props.relative && 'relative'};
-`
-
-const AboutMe = styled.textarea`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  width: 100%;
-  font-weight: 400;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const Name = styled.input`
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-  transition: box-shadow 200ms ease-in;
-  transition: width 200ms ease-in;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 1.6rem;
-  width: 100%;
-  font-weight: 400;
-  :hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
-  }
-`
-
-const Next = styled.button`
-  color: #fff;
-  text-decoration: none;
-  outline: 0;
-  cursor: pointer;
-  border: 0;
-  border-radius: 4px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  padding: 1rem 2.2rem;
-  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
-  pointer-events: ${props => props.disabled && 'none'};
-`
-
 const NextContainer = styled.div`
   width: 100%;
   display: flex;
@@ -151,64 +61,6 @@ const UPDATE_USER_PROFILE = gql`
     }
   }
 `
-
-const initialState = {
-  aboutMe: '',
-  displayName: '',
-  psn: '',
-  nso: '',
-  xbl: '',
-  epic: '',
-  origin: '',
-  steam: '',
-  gog: '',
-  battlenet: '',
-  uplay: '',
-  bethesda: '',
-  itch: '',
-  windows: '',
-  gender: 'MALE',
-}
-function reducer(state, action) {
-  switch (action.type) {
-    case 'setAboutMe':
-      return { ...state, aboutMe: action.payload }
-    case 'setGender':
-      return { ...state, gender: action.payload }
-    case 'setDisplayName':
-      return { ...state, displayName: action.payload }
-    case 'setName':
-      return { ...state, name: action.payload }
-    case 'setPSN':
-      return { ...state, psn: action.payload }
-    case 'setXBL':
-      return { ...state, xbl: action.payload }
-    case 'setNSO':
-      return { ...state, nso: action.payload }
-    case 'setEpic':
-      return { ...state, epic: action.payload }
-    case 'setOrigin':
-      return { ...state, origin: action.payload }
-    case 'setRiot':
-      return { ...state, riot: action.payload }
-    case 'setSteam':
-      return { ...state, steam: action.payload }
-    case 'setGog':
-      return { ...state, gog: action.payload }
-    case 'setBattlenet':
-      return { ...state, battlenet: action.payload }
-    case 'setUplay':
-      return { ...state, uplay: action.payload }
-    case 'setBethesda':
-      return { ...state, bethesda: action.payload }
-    case 'setItch':
-      return { ...state, itch: action.payload }
-    case 'setWindows':
-      return { ...state, windows: action.payload }
-    default:
-      return { ...state }
-  }
-}
 
 const GET_ME = gql`
   {

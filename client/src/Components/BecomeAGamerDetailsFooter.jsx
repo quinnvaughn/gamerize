@@ -4,8 +4,10 @@ import gql from 'graphql-tag'
 import { FaChevronLeft } from 'react-icons/fa'
 import { useMutation } from 'react-apollo-hooks'
 import { withRouter, Link } from 'react-router-dom'
+import { Formik } from 'formik'
 
 import { objectIsEmpty } from '../utils/Objects'
+import SubmitButton from './SubmitButton'
 
 const Previous = styled(Link)`
   text-decoration: none;
@@ -88,20 +90,42 @@ function BecomeAGamerDetailsFooter(props) {
             <PreviousArrow />
             <PreviousText>Previous</PreviousText>
           </Previous>
-          <Finish
-            disabled={objectIsEmpty(props.container.state.socialMedia)}
-            onClick={async () => {
-              const input = { ...props.container.state }
-              await createGamerRequest({
-                variables: {
-                  input,
-                },
+          <Formik
+            enableReinitialize
+            initialValues={{
+              occupations: props.container.state.occupations || [],
+              addToOccupations: props.container.state.addToOccupations || '',
+              socialMedia: props.container.state.socialMedia,
+            }}
+            onSubmit={async (values, actions) => {
+              const input = {
+                occupations: values.occupations,
+                addToOccupations: values.addToOccupations,
+                socialMedia: values.socialMedia,
+              }
+              const { data } = await createGamerRequest({
+                variables: { input },
               })
-              props.history.push('/become-a-gamer/finished')
+              if (data.createGamerRequest.created) {
+                actions.setSubmitting(false)
+                props.history.push('/become-a-gamer/finished')
+              }
             }}
           >
-            Finish
-          </Finish>
+            {({ handleSubmit, isSubmitting }) => (
+              <form onSubmit={handleSubmit}>
+                <SubmitButton
+                  primary
+                  width={85}
+                  isSubmitting={isSubmitting}
+                  isValid={!objectIsEmpty(props.container.state.socialMedia)}
+                  disabled={objectIsEmpty(props.container.state.socialMedia)}
+                >
+                  Finish
+                </SubmitButton>
+              </form>
+            )}
+          </Formik>
         </Buttons>
       </ButtonsInner>
     </ButtonsContainer>
