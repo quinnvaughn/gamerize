@@ -49,6 +49,7 @@ const GET_GAMES = gql`
 export default function GamesPage(props) {
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { orderBy: 'numSessions_DESC' },
+    pollInterval: 10000,
   })
   return loading ? (
     <Loading />

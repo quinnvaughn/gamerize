@@ -50,7 +50,7 @@ const GET_GAMERS = gql`
 `
 
 export default function GamersPage(props) {
-  const { data, loading, error } = useQuery(GET_GAMERS)
+  const { data, loading, error } = useQuery(GET_GAMERS, { pollInterval: 10000 })
   return loading ? (
     <Loading />
   ) : error ? (

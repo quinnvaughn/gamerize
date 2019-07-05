@@ -58,7 +58,9 @@ const GET_SESSIONS = gql`
 `
 
 export default function SessionsPage(props) {
-  const { data, loading, error } = useQuery(GET_SESSIONS)
+  const { data, loading, error } = useQuery(GET_SESSIONS, {
+    pollInterval: 10000,
+  })
   const errors = error
   return loading ? (
     <Loading />

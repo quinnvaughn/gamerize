@@ -100,6 +100,12 @@ const StyledLink = styled(Link)`
   }
 `
 
+const SlotsAvailable = styled.div`
+  color: #db1422;
+  font-size: 1.6rem;
+  font-weight: 600;
+`
+
 const Bottom = styled.div`
   display: flex;
   align-items: center;
@@ -122,6 +128,11 @@ export default function SmallSession(props) {
         <Price>{`Starting at $${parseFloat(props.price).toFixed(
           2
         )} a game`}</Price>
+        <Bottom>
+          {props.slotsAvailable && (
+            <SlotsAvailable>Slots Available</SlotsAvailable>
+          )}
+        </Bottom>
         {/* <Bottom>
           <StarRatings
             rating={props.reviewRating}

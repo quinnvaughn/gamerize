@@ -108,6 +108,7 @@ export default function HomePage(props) {
 
   const { data, loading, error } = useQuery(GET_GAMES, {
     variables: { first, orderBy: 'numSessions_DESC' },
+    pollInterval: 10000,
   })
   const {
     data: secondData,
@@ -115,6 +116,7 @@ export default function HomePage(props) {
     error: secondError,
   } = useQuery(GET_GAMERS, {
     variables: { first },
+    pollInterval: 10000,
   })
   const {
     data: thirdData,
@@ -122,6 +124,7 @@ export default function HomePage(props) {
     error: thirdError,
   } = useQuery(GET_SESSIONS, {
     variables: { first },
+    pollInterval: 10000,
   })
   const isLoading = loading || secondLoading || thirdLoading
   const hasErrors = error || secondError || thirdError

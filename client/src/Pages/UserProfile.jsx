@@ -273,6 +273,7 @@ const GET_USER = gql`
         picture
       }
       sessions {
+        slotsAvailable
         id
         title
         game {
@@ -482,6 +483,7 @@ export default function UserProfile(props) {
                         profilePicture={data.getUser.profilePicture}
                         reviewRating={session.reviewRating}
                         numReviews={session.numReviews}
+                        slotsAvailable={session.slotsAvailable}
                       />
                     ))}
                   </SessionsMapped>
