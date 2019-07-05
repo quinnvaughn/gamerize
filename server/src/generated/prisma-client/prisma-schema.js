@@ -3205,6 +3205,7 @@ type GamingTimeSlot {
   players(where: BookedPlayerWhereInput, orderBy: BookedPlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookedPlayer!]
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 type GamingTimeSlotConnection {
@@ -3222,6 +3223,7 @@ input GamingTimeSlotCreateInput {
   players: BookedPlayerCreateManyWithoutTimeslotInput
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 input GamingTimeSlotCreateManyWithoutGamersInput {
@@ -3252,6 +3254,7 @@ input GamingTimeSlotCreateWithoutBookingsInput {
   players: BookedPlayerCreateManyWithoutTimeslotInput
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 input GamingTimeSlotCreateWithoutGamersInput {
@@ -3262,6 +3265,7 @@ input GamingTimeSlotCreateWithoutGamersInput {
   players: BookedPlayerCreateManyWithoutTimeslotInput
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 input GamingTimeSlotCreateWithoutGamingSessionInput {
@@ -3272,6 +3276,7 @@ input GamingTimeSlotCreateWithoutGamingSessionInput {
   players: BookedPlayerCreateManyWithoutTimeslotInput
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 input GamingTimeSlotCreateWithoutPlayersInput {
@@ -3282,6 +3287,7 @@ input GamingTimeSlotCreateWithoutPlayersInput {
   bookings: BookingCreateManyWithoutTimeslotInput
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 type GamingTimeSlotEdge {
@@ -3304,6 +3310,8 @@ enum GamingTimeSlotOrderByInput {
   length_DESC
   slots_ASC
   slots_DESC
+  slotsLeft_ASC
+  slotsLeft_DESC
 }
 
 type GamingTimeSlotPreviousValues {
@@ -3314,6 +3322,7 @@ type GamingTimeSlotPreviousValues {
   endTime: DateTime!
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }
 
 input GamingTimeSlotScalarWhereInput {
@@ -3379,6 +3388,14 @@ input GamingTimeSlotScalarWhereInput {
   slots_lte: Int
   slots_gt: Int
   slots_gte: Int
+  slotsLeft: Int
+  slotsLeft_not: Int
+  slotsLeft_in: [Int!]
+  slotsLeft_not_in: [Int!]
+  slotsLeft_lt: Int
+  slotsLeft_lte: Int
+  slotsLeft_gt: Int
+  slotsLeft_gte: Int
   AND: [GamingTimeSlotScalarWhereInput!]
   OR: [GamingTimeSlotScalarWhereInput!]
   NOT: [GamingTimeSlotScalarWhereInput!]
@@ -3411,6 +3428,7 @@ input GamingTimeSlotUpdateInput {
   players: BookedPlayerUpdateManyWithoutTimeslotInput
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateManyDataInput {
@@ -3418,6 +3436,7 @@ input GamingTimeSlotUpdateManyDataInput {
   endTime: DateTime
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateManyMutationInput {
@@ -3425,6 +3444,7 @@ input GamingTimeSlotUpdateManyMutationInput {
   endTime: DateTime
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateManyWithoutGamersInput {
@@ -3478,6 +3498,7 @@ input GamingTimeSlotUpdateWithoutBookingsDataInput {
   players: BookedPlayerUpdateManyWithoutTimeslotInput
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateWithoutGamersDataInput {
@@ -3488,6 +3509,7 @@ input GamingTimeSlotUpdateWithoutGamersDataInput {
   players: BookedPlayerUpdateManyWithoutTimeslotInput
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateWithoutGamingSessionDataInput {
@@ -3498,6 +3520,7 @@ input GamingTimeSlotUpdateWithoutGamingSessionDataInput {
   players: BookedPlayerUpdateManyWithoutTimeslotInput
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateWithoutPlayersDataInput {
@@ -3508,6 +3531,7 @@ input GamingTimeSlotUpdateWithoutPlayersDataInput {
   bookings: BookingUpdateManyWithoutTimeslotInput
   length: Int
   slots: Int
+  slotsLeft: Int
 }
 
 input GamingTimeSlotUpdateWithWhereUniqueWithoutGamersInput {
@@ -3615,6 +3639,14 @@ input GamingTimeSlotWhereInput {
   slots_lte: Int
   slots_gt: Int
   slots_gte: Int
+  slotsLeft: Int
+  slotsLeft_not: Int
+  slotsLeft_in: [Int!]
+  slotsLeft_not_in: [Int!]
+  slotsLeft_lt: Int
+  slotsLeft_lte: Int
+  slotsLeft_gt: Int
+  slotsLeft_gte: Int
   AND: [GamingTimeSlotWhereInput!]
   OR: [GamingTimeSlotWhereInput!]
   NOT: [GamingTimeSlotWhereInput!]

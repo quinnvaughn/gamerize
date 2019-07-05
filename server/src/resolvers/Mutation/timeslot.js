@@ -2,8 +2,8 @@ const { getUserId, addMinutes, AuthError } = require('../../utils')
 const dateFns = require('date-fns')
 const _ = require('lodash')
 const { stripe } = require('../../stripe')
-const { DateTime } = require('luxon')
 const { formatToTimeZone } = require('date-fns-timezone')
+const AsyncLock = require('async-lock')
 
 const timeslot = {
   async cancelExtraSlot(parent, { input }, ctx) {
@@ -139,6 +139,7 @@ const timeslot = {
         gamingSession: { connect: { id: input.gamingSessionId } },
         gamers: { connect: gamers },
         slots: sessions.slots,
+        slotsLeft: sessions.slots,
       })
       return {
         created: true,
@@ -446,13 +447,13 @@ const timeslot = {
   },
   async bookTimeSlots(parent, { input }, ctx) {
     const userId = getUserId(ctx)
-    let timeslotsBought = []
     const creator = await ctx.prisma.user({ id: input.creatorId })
     const user = await ctx.prisma.user({ id: userId })
+    const timeslotPlayers = []
+
+    // Check to see if Stripe should be used
     const shouldCharge = input.totalWithFee > 0
-    // Check if correct amount of slots are there for selected slots - otherwise return error.
-    // Eventually should do this on front end with subscriptions.
-    const charge = shouldCharge
+    const charged = shouldCharge
       ? await stripe.charges.create({
           amount: input.totalWithFee * 100,
           currency: 'usd',
@@ -463,142 +464,128 @@ const timeslot = {
           },
         })
       : true
-    if (shouldCharge && !charge) {
-      return { booked: false }
+    if (shouldCharge && !charged) {
+      done(null, false)
     }
-    for (const timeslot of input.timeSlots) {
-      const timeslotPlayers = []
-      _.times(timeslot.slots, () =>
-        timeslotPlayers.push({
-          player: {
-            connect: { id: userId },
-          },
-          timeslot: { connect: { id: timeslot.timeSlotId } },
-        })
-      )
-      const timeslotBought = shouldCharge
-        ? await ctx.prisma.createBooking({
-            charge: charge.id,
-            total: timeslot.total,
-            numSlots: timeslot.slots,
-            numPlayers: timeslot.players,
-            timeslot: {
-              connect: {
-                id: timeslot.timeSlotId,
-              },
-            },
-            bookee: {
-              connect: {
-                id: userId,
-              },
-            },
-            players: {
-              create: timeslotPlayers,
-            },
-          })
-        : await ctx.prisma.createBooking({
-            total: timeslot.total,
-            numSlots: timeslot.slots,
-            numPlayers: timeslot.players,
-            timeslot: {
-              connect: {
-                id: timeslot.timeSlotId,
-              },
-            },
-            bookee: {
-              connect: {
-                id: userId,
-              },
-            },
-            players: {
-              create: timeslotPlayers,
-            },
-          })
-      const players = await ctx.prisma
-        .booking({ id: timeslotBought.id })
-        .players()
-      const player = players[0]
-      const QUERY = `
-          {
-            gamingTimeSlot(where: {id: "${timeslot.timeSlotId}"}) {
-              gamers {
-                id
-              }
-              gamingSession {
-                game {
-                  name
-                }
+    const bookedTimeslots = _.map(input.timeSlots, 'timeSlotId')
+    const lock = new AsyncLock({ timeout: 5000 })
+    const booked = await lock.acquire(bookedTimeslots, async done => {
+      let timeSlotsBought = []
+      for (const timeslot of input.timeSlots) {
+        const QUERY = `
+        {
+          gamingTimeSlot(where: {id: "${timeslot.timeSlotId}"}) {
+            slotsLeft
+            gamers {
+              id
+            }
+            gamingSession {
+              game {
+                name
               }
             }
           }
-        `
-      const {
-        gamingTimeSlot: {
-          gamers,
-          gamingSession: { game },
-        },
-      } = await ctx.prisma.$graphql(QUERY)
-      for (const gamer of gamers) {
-        await ctx.prisma.createNotification({
-          for: {
-            connect: {
-              id: gamer.id,
-            },
-          },
-          type: 'BOOKED_TIMESLOT',
-          text: `${user.username} booked a timeslot for ${game.name}`,
-          booking: {
-            connect: {
-              id: timeslotBought.id,
-            },
-          },
-        })
-      }
-      timeslotsBought.push(timeslotBought)
-      let counter = 0
-      let end = timeslot.slots
-      while (counter < end) {
-        await ctx.prisma.updateGamingTimeSlot({
-          data: {
-            players: {
-              connect: {
-                id: player.id,
-              },
-            },
-          },
-          where: {
-            id: timeslot.timeSlotId,
-          },
-        })
-        counter++
-      }
-      if (timeslot.players > 1) {
-        let counter = 0
-        // The number of players you can send an invite to. Doesn't include you.
-        let end = timeslot.players - 1
-        while (counter < end) {
-          await ctx.prisma.createBookingInvite({
-            booking: {
-              connect: {
-                id: timeslotBought.id,
-              },
-            },
-            from: {
-              connect: {
-                id: userId,
-              },
-            },
-            startTime: timeslot.startTime,
-            sent: false,
-          })
-          counter++
         }
+      `
+        const {
+          gamingTimeSlot: {
+            slotsLeft,
+            gamers,
+            gamingSession: { game },
+          },
+        } = await ctx.prisma.$graphql(QUERY)
+        const notifications = []
+        const invites = []
+        // add notifications
+        _.each(gamers, gamer => {
+          notifications.push({
+            for: {
+              connect: {
+                id: gamer.id,
+              },
+            },
+            type: 'BOOKED_TIMESLOT',
+            text: `${user.username} booked a timeslot for ${game.name}`,
+          })
+        })
+        // Add booking invites
+        if (timeslot.players > 1) {
+          _.times(timeslot.slots - 1, () => {
+            invites.push({
+              from: {
+                connect: {
+                  id: userId,
+                },
+              },
+              startTime: timeslot.startTime,
+              sent: false,
+            })
+          })
+        }
+        // add the players
+        _.times(timeslot.slots, () =>
+          timeslotPlayers.push({
+            player: {
+              connect: { id: userId },
+            },
+            timeslot: { connect: { id: timeslot.timeSlotId } },
+          })
+        )
+
+        // Create the booking with all the fields already created
+        const timeslotBought = await ctx.prisma.createBooking({
+          charge: shouldCharge ? charged.id : null,
+          total: timeslot.total,
+          numSlots: timeslot.slots,
+          numPlayers: timeslot.players,
+          timeslot: {
+            connect: {
+              id: timeslot.timeSlotId,
+            },
+          },
+          bookee: {
+            connect: {
+              id: userId,
+            },
+          },
+          players: {
+            create: timeslotPlayers,
+          },
+          notifications: {
+            create: notifications,
+          },
+          invites: {
+            create: invites,
+          },
+        })
+        // Get player for updatedTimeSlot
+        const players = await ctx.prisma
+          .booking({ id: timeslotBought.id })
+          .players()
+        const player = players[0]
+        timeSlotsBought.push(timeslotBought)
+        _.times(timeslot.slots - 1, async () => {
+          await ctx.prisma.updateGamingTimeSlot({
+            data: {
+              slotsLeft: slotsLeft - timeslot.slots,
+              players: {
+                connect: {
+                  id: player.id,
+                },
+              },
+            },
+            where: {
+              id: timeslot.timeSlotId,
+            },
+          })
+        })
       }
+      const booked = timeSlotsBought.length > 0
+      done(null, booked)
+    })
+    return {
+      booked,
     }
-    if (timeslotsBought.length > 0) {
-      return { booked: true }
-    }
-    return { booked: false }
   },
 }
 

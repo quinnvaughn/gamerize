@@ -13,4 +13,5 @@ type GamingTimeSlot {
     @relation(name: "TimeSlotBookedPlayers", onDelete: CASCADE)
   length: Int!
   slots: Int!
+  slotsLeft: Int
 }

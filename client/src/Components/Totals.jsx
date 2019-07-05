@@ -180,8 +180,6 @@ const getTotalsInformation = (
 function Totals(props) {
   /// Clean this shit up
   const [allSessions, dispatch] = useSessions()
-  const [loading, setLoading] = useState(false)
-  const [booked, setBooked] = useState(false)
   const [bookError, setBookError] = useState(false)
   const [needCard, setNeedCard] = useState(false)
   const bookTimeSlots = useMutation(BOOK_TIME_SLOTS)
@@ -298,7 +296,8 @@ function Totals(props) {
                 Mixpanel.track('Booked a timeslot/s.')
                 dispatch({ type: 'CLEAR_STATE' })
                 props.refetch()
-              } else {
+              } else if (data.bookTimeSlots.booked === false) {
+                actions.setSubmitting(false)
                 setBookError(true)
               }
             }

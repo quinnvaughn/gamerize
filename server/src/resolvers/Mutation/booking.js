@@ -4,11 +4,27 @@ const { stripe } = require('../../stripe')
 const booking = {
   async cancelBooking(parent, { input }, ctx) {
     const userId = getUserId(ctx)
-    const bookee = await ctx.prisma.booking({ id: input.bookingId }).bookee()
+    const QUERY = `
+      {
+        booking(where: {id: "${input.bookingId}"}) {
+          bookee {
+            id
+          }
+          charge 
+          numSlots 
+          timeslot {
+            id
+            slotsLeft
+          }
+        }
+      }
+    `
+    const {
+      booking: { bookee, charge, numSlots, timeslot },
+    } = await ctx.prisma.$graphql(QUERY)
     if (bookee.id !== userId) {
       throw new AuthError()
     }
-    const { charge } = await ctx.prisma.booking({ id: input.bookingId })
     const refund = charge
       ? await stripe.refunds.create({
           charge,
@@ -20,7 +36,17 @@ const booking = {
           id: input.bookingId,
         })
       : false
-    return cancelledBooking ? { cancelled: true } : { cancelled: false }
+    const updatedTimeSlot = await ctx.prisma.updateGamingTimeSlot({
+      where: {
+        id: timeslot.id,
+      },
+      data: {
+        slotsLeft: timeslot.slotsLeft + numSlots,
+      },
+    })
+    return cancelledBooking && updatedTimeSlot
+      ? { cancelled: true }
+      : { cancelled: false }
   },
   async cancelNotBookeeBooking(parent, { input }, ctx) {
     // Difference is this is when you didn't make the booking and you're cancelling your slot.

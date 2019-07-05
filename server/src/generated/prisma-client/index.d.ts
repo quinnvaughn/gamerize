@@ -1069,7 +1069,9 @@ export type GamingTimeSlotOrderByInput =
   | "length_ASC"
   | "length_DESC"
   | "slots_ASC"
-  | "slots_DESC";
+  | "slots_DESC"
+  | "slotsLeft_ASC"
+  | "slotsLeft_DESC";
 
 export type GamingSessionIndexOrderByInput =
   | "id_ASC"
@@ -2356,6 +2358,7 @@ export interface GamingTimeSlotUpdateWithoutGamersDataInput {
   players?: Maybe<BookedPlayerUpdateManyWithoutTimeslotInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface UserUpdateOneRequiredWithoutIndexInput {
@@ -3152,6 +3155,7 @@ export interface GamingTimeSlotUpdateWithoutPlayersDataInput {
   bookings?: Maybe<BookingUpdateManyWithoutTimeslotInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface SessionReviewCreateInput {
@@ -3677,6 +3681,7 @@ export interface GamingTimeSlotUpdateInput {
   players?: Maybe<BookedPlayerUpdateManyWithoutTimeslotInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface SessionReviewUpdateWithWhereUniqueWithoutUserInput {
@@ -4408,6 +4413,7 @@ export interface GamingTimeSlotUpdateWithoutGamingSessionDataInput {
   players?: Maybe<BookedPlayerUpdateManyWithoutTimeslotInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface GamingTimeSlotCreateWithoutGamersInput {
@@ -4418,6 +4424,7 @@ export interface GamingTimeSlotCreateWithoutGamersInput {
   players?: Maybe<BookedPlayerCreateManyWithoutTimeslotInput>;
   length: Int;
   slots: Int;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface BookingUpdateManyWithoutTimeslotInput {
@@ -4588,6 +4595,7 @@ export interface GamingTimeSlotCreateWithoutPlayersInput {
   bookings?: Maybe<BookingCreateManyWithoutTimeslotInput>;
   length: Int;
   slots: Int;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface UserUpdateOneWithoutInvitesReceivedInput {
@@ -5035,6 +5043,7 @@ export interface GamingTimeSlotCreateWithoutGamingSessionInput {
   players?: Maybe<BookedPlayerCreateManyWithoutTimeslotInput>;
   length: Int;
   slots: Int;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface GamerTagUpdateWithoutUserDataInput {
@@ -5384,6 +5393,7 @@ export interface GamingTimeSlotUpdateWithoutBookingsDataInput {
   players?: Maybe<BookedPlayerUpdateManyWithoutTimeslotInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface BookingInviteWhereInput {
@@ -5763,6 +5773,14 @@ export interface GamingTimeSlotWhereInput {
   slots_lte?: Maybe<Int>;
   slots_gt?: Maybe<Int>;
   slots_gte?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
+  slotsLeft_not?: Maybe<Int>;
+  slotsLeft_in?: Maybe<Int[] | Int>;
+  slotsLeft_not_in?: Maybe<Int[] | Int>;
+  slotsLeft_lt?: Maybe<Int>;
+  slotsLeft_lte?: Maybe<Int>;
+  slotsLeft_gt?: Maybe<Int>;
+  slotsLeft_gte?: Maybe<Int>;
   AND?: Maybe<GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput>;
   OR?: Maybe<GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput>;
   NOT?: Maybe<GamingTimeSlotWhereInput[] | GamingTimeSlotWhereInput>;
@@ -6092,6 +6110,7 @@ export interface GamingTimeSlotCreateInput {
   players?: Maybe<BookedPlayerCreateManyWithoutTimeslotInput>;
   length: Int;
   slots: Int;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface BookingUpsertWithoutNotificationsInput {
@@ -6437,6 +6456,14 @@ export interface GamingTimeSlotScalarWhereInput {
   slots_lte?: Maybe<Int>;
   slots_gt?: Maybe<Int>;
   slots_gte?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
+  slotsLeft_not?: Maybe<Int>;
+  slotsLeft_in?: Maybe<Int[] | Int>;
+  slotsLeft_not_in?: Maybe<Int[] | Int>;
+  slotsLeft_lt?: Maybe<Int>;
+  slotsLeft_lte?: Maybe<Int>;
+  slotsLeft_gt?: Maybe<Int>;
+  slotsLeft_gte?: Maybe<Int>;
   AND?: Maybe<
     GamingTimeSlotScalarWhereInput[] | GamingTimeSlotScalarWhereInput
   >;
@@ -6466,6 +6493,7 @@ export interface GamingTimeSlotUpdateManyDataInput {
   endTime?: Maybe<DateTimeInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface SavedCardCreateManyWithoutUserInput {
@@ -6630,6 +6658,7 @@ export interface GamingTimeSlotCreateWithoutBookingsInput {
   players?: Maybe<BookedPlayerCreateManyWithoutTimeslotInput>;
   length: Int;
   slots: Int;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface BookedPlayerUpsertWithWhereUniqueWithoutBookingInput {
@@ -7035,6 +7064,7 @@ export interface GamingTimeSlotUpdateManyMutationInput {
   endTime?: Maybe<DateTimeInput>;
   length?: Maybe<Int>;
   slots?: Maybe<Int>;
+  slotsLeft?: Maybe<Int>;
 }
 
 export interface BookingCreateInput {
@@ -10415,6 +10445,7 @@ export interface GamingTimeSlotPreviousValues {
   endTime: DateTimeOutput;
   length: Int;
   slots: Int;
+  slotsLeft?: Int;
 }
 
 export interface GamingTimeSlotPreviousValuesPromise
@@ -10427,6 +10458,7 @@ export interface GamingTimeSlotPreviousValuesPromise
   endTime: () => Promise<DateTimeOutput>;
   length: () => Promise<Int>;
   slots: () => Promise<Int>;
+  slotsLeft: () => Promise<Int>;
 }
 
 export interface GamingTimeSlotPreviousValuesSubscription
@@ -10439,6 +10471,7 @@ export interface GamingTimeSlotPreviousValuesSubscription
   endTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   length: () => Promise<AsyncIterator<Int>>;
   slots: () => Promise<AsyncIterator<Int>>;
+  slotsLeft: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface AggregateGamingSessionIndex {
@@ -11514,6 +11547,7 @@ export interface GamingTimeSlot {
   endTime: DateTimeOutput;
   length: Int;
   slots: Int;
+  slotsLeft?: Int;
 }
 
 export interface GamingTimeSlotPromise
@@ -11554,6 +11588,7 @@ export interface GamingTimeSlotPromise
   }) => T;
   length: () => Promise<Int>;
   slots: () => Promise<Int>;
+  slotsLeft: () => Promise<Int>;
 }
 
 export interface GamingTimeSlotSubscription
@@ -11594,6 +11629,7 @@ export interface GamingTimeSlotSubscription
   }) => T;
   length: () => Promise<AsyncIterator<Int>>;
   slots: () => Promise<AsyncIterator<Int>>;
+  slotsLeft: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GamingTimeSlotNullablePromise
@@ -11634,6 +11670,7 @@ export interface GamingTimeSlotNullablePromise
   }) => T;
   length: () => Promise<Int>;
   slots: () => Promise<Int>;
+  slotsLeft: () => Promise<Int>;
 }
 
 export interface SessionReviewIndexPreviousValues {

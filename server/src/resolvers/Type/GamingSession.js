@@ -19,6 +19,7 @@ const GamingSession = {
     const sessions = await prisma.gamingSession({ id: parent.id }).timeslots({
       where: {
         startTime_gte: currentTime,
+        slotsLeft_gte: 1,
       },
     })
     return sessions.length > 0 ? true : false
