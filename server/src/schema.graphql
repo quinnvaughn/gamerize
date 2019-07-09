@@ -54,7 +54,7 @@ type Query {
     sessionId: String!
     timeZone: String!
   ): [GamingTimeSlot!]!
-  searchGamerize(search: String!): [SearchResult!]!
+  searchGamerize(input: SearchGamerizeInput!): [SearchResult!]!
   moreSessions(search: String!, skip: Int): [GamingSession!]!
   moreGames(search: String!, skip: Int): [Game!]!
   moreUsers(search: String!, skip: Int): [User!]!
@@ -138,6 +138,26 @@ type Mutation {
   checkUpdatePasswordToken(
     input: CheckUpdatePasswordTokenInput!
   ): CheckUpdatePasswordTokenPayload!
+}
+
+input SearchGamerizeInput {
+  text: String
+  type: SearchType
+  systems: [SearchSystem]
+}
+
+enum SearchSystem {
+  PS4
+  PC
+  NINTENDO_SWITCH
+  XBOX_ONE
+}
+
+enum SearchType {
+  SESSIONS
+  USERS
+  GAMES
+  NULL
 }
 
 input CheckUpdatePasswordTokenInput {

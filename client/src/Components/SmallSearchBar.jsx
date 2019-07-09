@@ -2,11 +2,11 @@ import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
-import gql from 'graphql-tag'
+import { withRouter } from 'react-router-dom'
+import { Formik } from 'formik'
 
+import { useSearch } from '../State/SearchContext'
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
-import SearchBarDropdown from './SearchBarDropdown'
-import useQueryNotBugged from '../Hooks/useQueryNotBugged'
 
 const Input = styled.input`
   border: none;
@@ -23,7 +23,7 @@ const Input = styled.input`
   }
 `
 
-const Container = styled.div`
+const Container = styled.form`
   display: flex;
   align-items: center;
   height: 4.8rem;
@@ -52,89 +52,63 @@ const StyledSearch = styled(FaSearch)`
   margin-right: 2rem;
 `
 
-const StyledClose = styled(MdClose)`
-  height: 2.4rem;
-  width: 2.4rem;
-  margin-right: 1rem;
+const StyledExit = styled(MdClose)`
+  height: 1.8rem;
+  width: 1.8rem;
+  margin-left: 1.2rem;
+  cursor: pointer;
+  margin-right: 1.2rem;
 `
 
-const SEARCH_GAMERIZE = gql`
-  query($search: String!) {
-    searchGamerize(search: $search) {
-      type
-      game {
-        tags
-        name
-        picture
-      }
-      user {
-        role
-        profilePicture
-        numSessions
-        username
-        displayName
-      }
-      session {
-        id
-        game {
-          name
-        }
-        title
-        price
-        creator {
-          username
-          profilePicture
-        }
-        gamers {
-          username
-        }
-      }
-    }
-  }
-`
-
-export default function SmallSearchBar(props) {
-  const node = useRef()
-  const [search, setSearch] = useState('')
+function SmallSearchBar(props) {
+  const searchInput = useRef()
+  const [search, dispatch] = useSearch()
   const [open, setOpen] = useState(false)
-  const { data } = useQueryNotBugged(SEARCH_GAMERIZE, {
-    skip: !search || search.length === 0,
-    variables: { search },
-  })
   useOnOutsideClick(
-    node,
+    searchInput,
     useCallback(() => {
       setOpen(false)
       props.setClicked(false)
     }, [])
   )
   return (
-    <Container
-      onClick={() => {
-        setOpen(true)
-        props.setClicked(true)
+    <Formik
+      enableReinitialize
+      initialValues={search}
+      onSubmit={async () => {
+        props.history.push('/search')
       }}
-      ref={node}
     >
-      <StyledSearch />
-      <Input
-        type="text"
-        placeholder="Search"
-        value={search}
-        onChange={event => {
-          setSearch(event.target.value)
-        }}
-      />
-      {props.clicked && (
-        <StyledClose
-          onClick={async () => {
-            await setSearch('')
-            await setOpen(false)
-            await props.setClicked(false)
+      {({ handleSubmit }) => (
+        <Container
+          onSubmit={handleSubmit}
+          onClick={() => {
+            setOpen(true)
+            props.setClicked(true)
           }}
-        />
+          ref={searchInput}
+        >
+          <StyledSearch />
+          <Input
+            type="text"
+            placeholder="Search"
+            value={search.text}
+            onChange={event => {
+              dispatch({ type: 'SET_TEXT', payload: event.target.value })
+            }}
+          />
+          {search.text.length > 0 && (
+            <StyledExit
+              onClick={() => {
+                dispatch({ type: 'CLEAR_TEXT' })
+                searchInput.current.focus()
+              }}
+            />
+          )}
+        </Container>
       )}
-      {open && <SearchBarDropdown data={data} search={search} />}
-    </Container>
+    </Formik>
   )
 }
+
+export default withRouter(SmallSearchBar)
