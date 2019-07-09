@@ -31,6 +31,8 @@ export const displaySystem = system => {
       return 'Playstation Network'
     case 'NINTENDO_SWITCH':
       return 'Nintendo Switch Online'
+    case 'PC':
+      return 'PC'
     default:
       return 'Not a system'
   }

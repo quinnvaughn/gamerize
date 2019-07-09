@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const AsyncLock = require('async-lock')
 
 function getUserId(context) {
   const Authorization = context.req.get('Authorization')

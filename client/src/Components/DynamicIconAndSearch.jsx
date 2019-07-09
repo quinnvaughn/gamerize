@@ -30,7 +30,9 @@ function DynamicIconAndSearch(props) {
                 admin={props.admin}
               />
             )}
-            <SmallSearchBar setClicked={setClicked} clicked={clicked} />
+            {props.match.path === '/search' ? null : (
+              <SmallSearchBar setClicked={setClicked} clicked={clicked} />
+            )}
           </Fragment>
         ) : (
           <Media query={{ maxWidth: 1127 }}>
@@ -42,7 +44,7 @@ function DynamicIconAndSearch(props) {
                     gamer={props.gamer}
                     admin={props.admin}
                   />
-                  <SearchBar />
+                  {props.match.path === '/search' ? null : <SearchBar />}
                 </Fragment>
               ) : (
                 <Fragment>
@@ -53,7 +55,7 @@ function DynamicIconAndSearch(props) {
                       await props.history.push('/')
                     }}
                   />
-                  <SearchBar />
+                  {props.match.path === '/search' ? null : <SearchBar />}
                 </Fragment>
               )
             }
