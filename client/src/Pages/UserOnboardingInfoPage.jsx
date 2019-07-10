@@ -140,7 +140,7 @@ function UserOnboardingInfoPage(props) {
             }}
           >
             {({ handleSubmit, isSubmitting }) => (
-              <form onSubmit={handleSubmit} autocomplete="off">
+              <form onSubmit={handleSubmit}>
                 <EditProfileSection title="Required">
                   <Field
                     name="firstName"

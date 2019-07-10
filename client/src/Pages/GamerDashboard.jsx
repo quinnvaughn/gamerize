@@ -1,7 +1,9 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, Fragment } from 'react'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import { Redirect } from 'react-router-dom'
+import Media from 'react-media'
+import styled from 'styled-components'
 
 import GamerRoute from '../Components/GamerRoute'
 import useTitle from '../Hooks/useTitle'
@@ -62,6 +64,22 @@ const GET_IS_SETUP = gql`
   }
 `
 
+const PageContainer = styled.div`
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+`
+
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  text-align: center;
+`
+
 export default function GamerDashboard(props) {
   useTitle('Your Gamer Dashboard')
   const { data, loading, error } = useQuery(GET_IS_SETUP)
@@ -71,14 +89,31 @@ export default function GamerDashboard(props) {
     <ErrorPage errors={error} />
   ) : (
     <Suspense fallback={<Loading gamer />}>
-      {routes.map(route => (
-        <GamerRoute
-          path={route.path}
-          key={route.path}
-          exact={route.exact}
-          component={route.component}
-        />
-      ))}
+      <Media query={{ maxWidth: 640 }}>
+        {matches => {
+          return matches ? (
+            <PageContainer>
+              <Content>
+                <span>
+                  Please only use the Gamer Dashboard on a computer for now
+                  while we work on optimizing it for mobile.
+                </span>
+              </Content>
+            </PageContainer>
+          ) : (
+            <Fragment>
+              {routes.map(route => (
+                <GamerRoute
+                  path={route.path}
+                  key={route.path}
+                  exact={route.exact}
+                  component={route.component}
+                />
+              ))}
+            </Fragment>
+          )
+        }}
+      </Media>
     </Suspense>
   )
 }
