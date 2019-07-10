@@ -35,6 +35,8 @@ const { GamerRequest } = require('./Type/GamerRequest')
 const { stripe } = require('./Mutation/stripe')
 const { email } = require('./Mutation/email')
 
+const { Subscription } = require('./Subscription')
+
 module.exports = {
   Query: {
     ...admin,
@@ -65,6 +67,7 @@ module.exports = {
     ...game,
     ...gamingsession,
   },
+  Subscription,
   GamerRequest,
   Game,
   GamerTag,

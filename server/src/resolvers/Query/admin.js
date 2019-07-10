@@ -54,5 +54,3 @@ const admin = {
 }
 
 module.exports = { admin }
-
-// postgres://postgres:1fec82e0690cc59925b62e6287909296@dokku-postgres-prisma-server-db:5432/prisma_server_db

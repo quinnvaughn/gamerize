@@ -60,6 +60,10 @@ type Query {
   moreUsers(search: String!, skip: Int): [User!]!
 }
 
+type Subscription {
+  gamerEditsTimeslots: GamingTimeSlot
+}
+
 type Mutation {
   signup(input: SignupInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
