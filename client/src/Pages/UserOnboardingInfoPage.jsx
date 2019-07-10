@@ -83,11 +83,11 @@ function UserOnboardingInfoPage(props) {
         <AddInfo>
           <LetsAdd>Let's add some info</LetsAdd>
           <Formik
-          enableReinitialize
+            enableReinitialize
             initialValues={{
-              firstName: data.me.name.split(' ')[0],
-              lastName: data.me.name.split(' ')[1],
-              displayName: data.me.name,
+              firstName: data.me ? data.me.name.split(' ')[0] : '',
+              lastName: data.me ? data.me.name.split(' ')[1] : '',
+              displayName: data.me ? data.me.name : '',
               gender: 'MALE',
               aboutMe: '',
               psn: '',
@@ -140,7 +140,7 @@ function UserOnboardingInfoPage(props) {
             }}
           >
             {({ handleSubmit, isSubmitting }) => (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} autocomplete="off">
                 <EditProfileSection title="Required">
                   <Field
                     name="firstName"

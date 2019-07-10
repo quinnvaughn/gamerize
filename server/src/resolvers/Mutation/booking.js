@@ -22,6 +22,7 @@ const booking = {
     const {
       booking: { bookee, charge, numSlots, timeslot },
     } = await ctx.prisma.$graphql(QUERY)
+    const newSlotsLeft = timeslot.slotsLeft + numSlots
     if (bookee.id !== userId) {
       throw new AuthError()
     }
@@ -41,7 +42,7 @@ const booking = {
         id: timeslot.id,
       },
       data: {
-        slotsLeft: timeslot.slotsLeft + numSlots,
+        slotsLeft: newSlotsLeft,
       },
     })
     return cancelledBooking && updatedTimeSlot

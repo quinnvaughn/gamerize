@@ -564,10 +564,11 @@ const timeslot = {
           .players()
         const player = players[0]
         timeSlotsBought.push(timeslotBought)
-        _.times(timeslot.slots - 1, async () => {
-          await ctx.prisma.updateGamingTimeSlot({
+        const newSlots = slotsLeft - timeslot.slots
+        _.times(timeslot.slots, async () => {
+          const updatedSlot = await ctx.prisma.updateGamingTimeSlot({
             data: {
-              slotsLeft: slotsLeft - timeslot.slots,
+              slotsLeft: newSlots,
               players: {
                 connect: {
                   id: player.id,
