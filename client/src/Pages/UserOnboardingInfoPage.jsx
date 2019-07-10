@@ -83,6 +83,7 @@ function UserOnboardingInfoPage(props) {
         <AddInfo>
           <LetsAdd>Let's add some info</LetsAdd>
           <Formik
+          enableReinitialize
             initialValues={{
               firstName: data.me.name.split(' ')[0],
               lastName: data.me.name.split(' ')[1],
