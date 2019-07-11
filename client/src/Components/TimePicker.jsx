@@ -46,20 +46,29 @@ export default function TimePicker({
         minute: now.get('minute'),
       })
       .toDate()
-    endTime
-      ? setFieldValue(
-          field.name,
-          moment(nextMoment)
-            .add(15, 'minutes')
-            .add(1, 'hours')
-            .toDate()
-        )
-      : setFieldValue(
-          field.name,
-          moment(nextMoment)
-            .add(15, 'minutes')
-            .toDate()
-        )
+    if (field.value) {
+      const current = moment(field.value)
+      const newDate = moment(day).set({
+        hour: current.get('hour'),
+        minute: current.get('minute'),
+      })
+      setFieldValue(field.name, moment(newDate).toDate())
+    } else {
+      endTime
+        ? setFieldValue(
+            field.name,
+            moment(nextMoment)
+              .add(15, 'minutes')
+              .add(1, 'hours')
+              .toDate()
+          )
+        : setFieldValue(
+            field.name,
+            moment(nextMoment)
+              .add(15, 'minutes')
+              .toDate()
+          )
+    }
   }, [day])
   const now = moment()
   const nextMoment = moment(day)

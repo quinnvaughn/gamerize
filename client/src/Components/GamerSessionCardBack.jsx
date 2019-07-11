@@ -214,9 +214,6 @@ export default function GamerSessionCardBack({
   last,
 }) {
   const [side, setSide] = useState(null)
-  const [day, setDay] = useState(dateFns.format(new Date(), dateFormat))
-  const [startTime, setStartTime] = useState(null)
-  const [endTime, setEndTime] = useState(null)
   const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
   const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
   return (
@@ -354,7 +351,11 @@ export default function GamerSessionCardBack({
                   </LabelAndDay>
                   <LabelAndPicker>
                     <Label>Start Time</Label>
-                    <Field name="startTime" component={TimePicker} day={day} />
+                    <Field
+                      name="startTime"
+                      component={TimePicker}
+                      day={values.day}
+                    />
                   </LabelAndPicker>
                   <LabelAndPicker>
                     <Label>End Time</Label>
@@ -362,7 +363,7 @@ export default function GamerSessionCardBack({
                       name="endTime"
                       endTime
                       component={TimePicker}
-                      day={day}
+                      day={values.day}
                     />
                   </LabelAndPicker>
                   <MessageContainer>
