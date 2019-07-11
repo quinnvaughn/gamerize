@@ -37,7 +37,11 @@ const Date = styled.input`
     outline: none;
   }
 `
-export default function SelectDayForSession({ day, setDay }) {
+export default function SelectDayForSession({
+  day,
+  form: { setFieldValue },
+  ...props
+}) {
   const [dropdown, setDropdown] = useState(false)
   const node = useRef()
   useOnOutsideClick(node, () => {
@@ -48,7 +52,10 @@ export default function SelectDayForSession({ day, setDay }) {
       <Date value={day} readOnly />
       {dropdown && (
         <Dropdown>
-          <GamerCalendar setDate={setDay} setDropdown={setDropdown} />
+          <GamerCalendar
+            setFieldValue={setFieldValue}
+            setDropdown={setDropdown}
+          />
         </Dropdown>
       )}
     </Container>

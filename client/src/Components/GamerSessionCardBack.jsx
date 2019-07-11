@@ -4,12 +4,13 @@ import { FaChevronLeft } from 'react-icons/fa'
 import { useMutation } from 'react-apollo-hooks'
 import dateFns from 'date-fns'
 import gql from 'graphql-tag'
+import { Formik, Field } from 'formik'
 
 //local imports
 import TimePicker from './TimePicker'
 import SelectDayForSession from './SelectDayForSession'
-import { convertTo24Hours, convertToDay } from '../utils/Dates'
-import { Mixpanel } from './Mixpanel';
+import { Mixpanel } from './Mixpanel'
+import SubmitButton from './SubmitButton'
 
 const Card = styled.div`
   background: #fff;
@@ -219,148 +220,177 @@ export default function GamerSessionCardBack({
   const createGamingSlot = useMutation(CREATE_GAMING_TIME_SLOT)
   const createBulkGamingSlots = useMutation(CREATE_BULK_GAMING_TIME_SLOTS)
   return (
-    <Card back last={last}>
-      {side === null && (
-        <Fragment>
-          <Buttons>
-            <AddOne
-              onClick={e => {
-                setSide('ONE')
-              }}
-            >
-              Add One
-            </AddOne>
-            <AddBulk
-              onClick={e => {
-                setSide('BULK')
-              }}
-            >
-              Add Bulk
-            </AddBulk>
-          </Buttons>
-          <Back
-            onClick={() => {
-              setState('FRONT')
-            }}
-          >
-            <BackArrow />
-            <BackText>Back</BackText>
-          </Back>
-        </Fragment>
+    <Formik
+      initialValues={{
+        day: dateFns.format(new Date(), dateFormat),
+        startTime: null,
+        endTime: null,
+      }}
+      onSubmit={async (values, actions) => {
+        if (values.endTime !== null) {
+          const input = {
+            startTime: values.startTime,
+            endTime: values.endTime,
+            gamingSessionId: session.id,
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }
+          const { data } = await createBulkGamingSlots({
+            variables: { input },
+          })
+          Mixpanel.track('Added several time slots')
+          data.createBulkGamingTimeSlots.successMsg &&
+            setSuccess(data.createBulkGamingTimeSlots.successMsg)
+          data.createBulkGamingTimeSlots.errorMsg &&
+            setError(data.createBulkGamingTimeSlots.errorMsg)
+          actions.setSubmitting(false)
+          refetch()
+          setTimeout(() => {
+            setSuccess(null)
+            setError(null)
+          }, 2000)
+        } else {
+          const input = {
+            startTime: values.startTime,
+            gamingSessionId: session.id,
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }
+          const { data } = await createGamingSlot({
+            variables: { input },
+          })
+          Mixpanel.track('Added one time slot')
+          data.createGamingTimeSlot.successMsg &&
+            setSuccess(data.createGamingTimeSlot.successMsg)
+          data.createGamingTimeSlot.errorMsg &&
+            setError(data.createGamingTimeSlot.errorMsg)
+          actions.setSubmitting(false)
+          refetch()
+          setTimeout(() => {
+            setSuccess(null)
+            setError(null)
+          }, 2000)
+        }
+      }}
+    >
+      {({ handleSubmit, isSubmitting, values }) => (
+        <form onSubmit={handleSubmit}>
+          <Card back last={last}>
+            {side === null && (
+              <Fragment>
+                <Buttons>
+                  <AddOne
+                    onClick={e => {
+                      setSide('ONE')
+                    }}
+                  >
+                    Add One
+                  </AddOne>
+                  <AddBulk
+                    onClick={e => {
+                      setSide('BULK')
+                    }}
+                  >
+                    Add Bulk
+                  </AddBulk>
+                </Buttons>
+                <Back
+                  onClick={() => {
+                    setState('FRONT')
+                  }}
+                >
+                  <BackArrow />
+                  <BackText>Back</BackText>
+                </Back>
+              </Fragment>
+            )}
+            {side === 'ONE' && (
+              <OneAdd>
+                <AddOneTop>
+                  <LabelAndDay>
+                    <Label>Select Day</Label>
+                    <Field
+                      name="day"
+                      day={values.day}
+                      component={SelectDayForSession}
+                    />
+                  </LabelAndDay>
+                  <LabelAndPicker>
+                    <Label>Start Time</Label>
+                    <Field
+                      name="startTime"
+                      day={values.day}
+                      component={TimePicker}
+                    />
+                  </LabelAndPicker>
+                </AddOneTop>
+                <MessageContainer>
+                  {error && <ErrorMessage>{error}</ErrorMessage>}
+                  {success && <SuccessMessage>{success}</SuccessMessage>}
+                </MessageContainer>
+                <SelectionButtons>
+                  <Cancel
+                    onClick={() => {
+                      setSide(null)
+                    }}
+                  >
+                    <CancelArrow />
+                    <CancelText>Cancel</CancelText>
+                  </Cancel>
+                  <SubmitButton isValid={true} isSubmitting={isSubmitting}>
+                    Add Session
+                  </SubmitButton>
+                </SelectionButtons>
+              </OneAdd>
+            )}
+            {side === 'BULK' && (
+              <BulkAdd>
+                <BulkAddTop>
+                  <LabelAndDay>
+                    <Label>Select Day</Label>
+                    <Field
+                      name="day"
+                      day={values.day}
+                      component={SelectDayForSession}
+                    />
+                  </LabelAndDay>
+                  <LabelAndPicker>
+                    <Label>Start Time</Label>
+                    <Field name="startTime" component={TimePicker} day={day} />
+                  </LabelAndPicker>
+                  <LabelAndPicker>
+                    <Label>End Time</Label>
+                    <Field
+                      name="endTime"
+                      endTime
+                      component={TimePicker}
+                      day={day}
+                    />
+                  </LabelAndPicker>
+                  <MessageContainer>
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    {success &&
+                      success.map(success => (
+                        <SuccessMessage>{success}</SuccessMessage>
+                      ))}
+                  </MessageContainer>
+                </BulkAddTop>
+                <SelectionButtons>
+                  <Cancel
+                    onClick={() => {
+                      setSide(null)
+                    }}
+                  >
+                    <CancelArrow />
+                    <CancelText>Cancel</CancelText>
+                  </Cancel>
+                  <SubmitButton isValid={true} isSubmitting={isSubmitting}>
+                    Add Sessions
+                  </SubmitButton>
+                </SelectionButtons>
+              </BulkAdd>
+            )}
+          </Card>
+        </form>
       )}
-      {side === 'ONE' && (
-        <OneAdd>
-          <AddOneTop>
-            <LabelAndDay>
-              <Label>Select Day</Label>
-              <SelectDayForSession day={day} setDay={setDay} />
-            </LabelAndDay>
-            <LabelAndPicker>
-              <Label>Start Time</Label>
-              <TimePicker setTime={setStartTime} day={day} />
-            </LabelAndPicker>
-          </AddOneTop>
-          <MessageContainer>
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            {success && <SuccessMessage>{success}</SuccessMessage>}
-          </MessageContainer>
-          <SelectionButtons>
-            <Cancel
-              onClick={() => {
-                setSide(null)
-              }}
-            >
-              <CancelArrow />
-              <CancelText>Cancel</CancelText>
-            </Cancel>
-            <Add
-              // disabled={state.loading}
-              onClick={async () => {
-                const input = {
-                  startTime,
-                  gamingSessionId: session.id,
-                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                }
-                const { data } = await createGamingSlot({
-                  variables: { input },
-                })
-                Mixpanel.track('Added one time slot')
-                data.createGamingTimeSlot.successMsg &&
-                  setSuccess(data.createGamingTimeSlot.successMsg)
-                data.createGamingTimeSlot.errorMsg &&
-                  setError(data.createGamingTimeSlot.errorMsg)
-                refetch()
-                setTimeout(() => {
-                  setSuccess(null)
-                  setError(null)
-                }, 2000)
-              }}
-            >
-              Add Session
-            </Add>
-          </SelectionButtons>
-        </OneAdd>
-      )}
-      {side === 'BULK' && (
-        <BulkAdd>
-          <BulkAddTop>
-            <LabelAndDay>
-              <Label>Select Day</Label>
-              <SelectDayForSession day={day} setDay={setDay} />
-            </LabelAndDay>
-            <LabelAndPicker>
-              <Label>Start Time</Label>
-              <TimePicker setTime={setStartTime} />
-            </LabelAndPicker>
-            <LabelAndPicker>
-              <Label>End Time</Label>
-              <TimePicker setTime={setEndTime} endTime />
-            </LabelAndPicker>
-            <MessageContainer>
-              {error && <ErrorMessage>{error}</ErrorMessage>}
-              {success &&
-                success.map(success => (
-                  <SuccessMessage>{success}</SuccessMessage>
-                ))}
-            </MessageContainer>
-          </BulkAddTop>
-          <SelectionButtons>
-            <Cancel
-              onClick={() => {
-                setSide(null)
-              }}
-            >
-              <CancelArrow />
-              <CancelText>Cancel</CancelText>
-            </Cancel>
-            <Add
-              onClick={async () => {
-                const input = {
-                  startTime,
-                  endTime,
-                  gamingSessionId: session.id,
-                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                }
-                const { data } = await createBulkGamingSlots({
-                  variables: { input },
-                })
-                Mixpanel.track('Added several time slots')
-                data.createBulkGamingTimeSlots.successMsg &&
-                  setSuccess(data.createBulkGamingTimeSlots.successMsg)
-                data.createBulkGamingTimeSlots.errorMsg &&
-                  setError(data.createBulkGamingTimeSlots.errorMsg)
-                refetch()
-                setTimeout(() => {
-                  setSuccess(null)
-                  setError(null)
-                }, 2000)
-              }}
-            >
-              Add Sessions
-            </Add>
-          </SelectionButtons>
-        </BulkAdd>
-      )}
-    </Card>
+    </Formik>
   )
 }

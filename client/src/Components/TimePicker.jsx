@@ -3,10 +3,8 @@ import styled from 'styled-components'
 import CustomPicker from 'rc-time-picker'
 import 'rc-time-picker/assets/index.css'
 import moment from 'moment'
-import { FaSortDown } from 'react-icons/fa'
 
 //local imports
-import { setMinutes } from '../utils/Dates'
 
 const Container = styled.div`
   /* display: flex;
@@ -33,7 +31,13 @@ const Container = styled.div`
   } */
 `
 
-export default function TimePicker({ setTime, endTime, day }) {
+export default function TimePicker({
+  field,
+  form: { setFieldValue },
+  day,
+  endTime,
+  ...props
+}) {
   useEffect(() => {
     const now = moment()
     const nextMoment = moment(day)
@@ -43,13 +47,15 @@ export default function TimePicker({ setTime, endTime, day }) {
       })
       .toDate()
     endTime
-      ? setTime(
+      ? setFieldValue(
+          field.name,
           moment(nextMoment)
             .add(15, 'minutes')
             .add(1, 'hours')
             .toDate()
         )
-      : setTime(
+      : setFieldValue(
+          field.name,
           moment(nextMoment)
             .add(15, 'minutes')
             .toDate()
@@ -63,8 +69,9 @@ export default function TimePicker({ setTime, endTime, day }) {
     })
     .toDate()
   return (
-    <Container onClick={e => e.stopPropagation()}>
+    <Container>
       <CustomPicker
+        {...props}
         showSecond={false}
         defaultValue={
           endTime
@@ -75,14 +82,14 @@ export default function TimePicker({ setTime, endTime, day }) {
         }
         use12Hours
         onChange={value => {
-          setTime(
+          setFieldValue(
+            field.name,
             moment(day).set({
               hour: value.get('hour'),
               minute: value.get('minute'),
             })
           )
         }}
-        onClick={e => e.stopPropagation()}
         allowEmpty={false}
       />
     </Container>
