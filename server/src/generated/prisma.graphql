@@ -2356,6 +2356,7 @@ type GamingSession {
   popularity: Int
   views: Int
   retired: Boolean!
+  index: GamingSessionIndex!
 }
 
 type GamingSessionConnection {
@@ -2382,6 +2383,7 @@ input GamingSessionCreateInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexCreateOneWithoutGamingSessionInput!
 }
 
 input GamingSessionCreateManyWithoutGameInput {
@@ -2394,8 +2396,8 @@ input GamingSessionCreateManyWithoutGamersInput {
   connect: [GamingSessionWhereUniqueInput!]
 }
 
-input GamingSessionCreateOneInput {
-  create: GamingSessionCreateInput
+input GamingSessionCreateOneWithoutIndexInput {
+  create: GamingSessionCreateWithoutIndexInput
   connect: GamingSessionWhereUniqueInput
 }
 
@@ -2426,9 +2428,31 @@ input GamingSessionCreateWithoutGameInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexCreateOneWithoutGamingSessionInput!
 }
 
 input GamingSessionCreateWithoutGamersInput {
+  creator: UserCreateOneInput!
+  game: GameCreateOneWithoutSessionsInput!
+  title: String!
+  length: Int!
+  price: Float!
+  launcher: Launcher
+  reviews: SessionReviewCreateManyWithoutSessionInput
+  system: System!
+  type: TypeOfGame!
+  slots: Int!
+  requirements: RequirementCreateManyInput
+  discounts: DiscountCreateManyInput
+  timeslots: GamingTimeSlotCreateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
+  retired: Boolean
+  index: GamingSessionIndexCreateOneWithoutGamingSessionInput!
+}
+
+input GamingSessionCreateWithoutIndexInput {
+  gamers: UserCreateManyWithoutSessionsInput
   creator: UserCreateOneInput!
   game: GameCreateOneWithoutSessionsInput!
   title: String!
@@ -2464,6 +2488,7 @@ input GamingSessionCreateWithoutReviewsInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexCreateOneWithoutGamingSessionInput!
 }
 
 input GamingSessionCreateWithoutTimeslotsInput {
@@ -2483,6 +2508,7 @@ input GamingSessionCreateWithoutTimeslotsInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexCreateOneWithoutGamingSessionInput!
 }
 
 type GamingSessionEdge {
@@ -2512,7 +2538,19 @@ input GamingSessionIndexCreateInput {
   gamer: String!
   game: String
   launcher: Launcher
-  gamingSession: GamingSessionCreateOneInput!
+  gamingSession: GamingSessionCreateOneWithoutIndexInput!
+}
+
+input GamingSessionIndexCreateOneWithoutGamingSessionInput {
+  create: GamingSessionIndexCreateWithoutGamingSessionInput
+  connect: GamingSessionIndexWhereUniqueInput
+}
+
+input GamingSessionIndexCreateWithoutGamingSessionInput {
+  title: String!
+  gamer: String!
+  game: String
+  launcher: Launcher
 }
 
 type GamingSessionIndexEdge {
@@ -2570,7 +2608,7 @@ input GamingSessionIndexUpdateInput {
   gamer: String
   game: String
   launcher: Launcher
-  gamingSession: GamingSessionUpdateOneRequiredInput
+  gamingSession: GamingSessionUpdateOneRequiredWithoutIndexInput
 }
 
 input GamingSessionIndexUpdateManyMutationInput {
@@ -2578,6 +2616,25 @@ input GamingSessionIndexUpdateManyMutationInput {
   gamer: String
   game: String
   launcher: Launcher
+}
+
+input GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput {
+  create: GamingSessionIndexCreateWithoutGamingSessionInput
+  update: GamingSessionIndexUpdateWithoutGamingSessionDataInput
+  upsert: GamingSessionIndexUpsertWithoutGamingSessionInput
+  connect: GamingSessionIndexWhereUniqueInput
+}
+
+input GamingSessionIndexUpdateWithoutGamingSessionDataInput {
+  title: String
+  gamer: String
+  game: String
+  launcher: Launcher
+}
+
+input GamingSessionIndexUpsertWithoutGamingSessionInput {
+  update: GamingSessionIndexUpdateWithoutGamingSessionDataInput!
+  create: GamingSessionIndexCreateWithoutGamingSessionInput!
 }
 
 input GamingSessionIndexWhereInput {
@@ -2834,26 +2891,6 @@ input GamingSessionSubscriptionWhereInput {
   NOT: [GamingSessionSubscriptionWhereInput!]
 }
 
-input GamingSessionUpdateDataInput {
-  gamers: UserUpdateManyWithoutSessionsInput
-  creator: UserUpdateOneRequiredInput
-  game: GameUpdateOneRequiredWithoutSessionsInput
-  title: String
-  length: Int
-  price: Float
-  launcher: Launcher
-  reviews: SessionReviewUpdateManyWithoutSessionInput
-  system: System
-  type: TypeOfGame
-  slots: Int
-  requirements: RequirementUpdateManyInput
-  discounts: DiscountUpdateManyInput
-  timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
-  popularity: Int
-  views: Int
-  retired: Boolean
-}
-
 input GamingSessionUpdateInput {
   gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
@@ -2872,6 +2909,7 @@ input GamingSessionUpdateInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateManyDataInput {
@@ -2929,10 +2967,10 @@ input GamingSessionUpdateManyWithWhereNestedInput {
   data: GamingSessionUpdateManyDataInput!
 }
 
-input GamingSessionUpdateOneRequiredInput {
-  create: GamingSessionCreateInput
-  update: GamingSessionUpdateDataInput
-  upsert: GamingSessionUpsertNestedInput
+input GamingSessionUpdateOneRequiredWithoutIndexInput {
+  create: GamingSessionCreateWithoutIndexInput
+  update: GamingSessionUpdateWithoutIndexDataInput
+  upsert: GamingSessionUpsertWithoutIndexInput
   connect: GamingSessionWhereUniqueInput
 }
 
@@ -2967,9 +3005,31 @@ input GamingSessionUpdateWithoutGameDataInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateWithoutGamersDataInput {
+  creator: UserUpdateOneRequiredInput
+  game: GameUpdateOneRequiredWithoutSessionsInput
+  title: String
+  length: Int
+  price: Float
+  launcher: Launcher
+  reviews: SessionReviewUpdateManyWithoutSessionInput
+  system: System
+  type: TypeOfGame
+  slots: Int
+  requirements: RequirementUpdateManyInput
+  discounts: DiscountUpdateManyInput
+  timeslots: GamingTimeSlotUpdateManyWithoutGamingSessionInput
+  popularity: Int
+  views: Int
+  retired: Boolean
+  index: GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput
+}
+
+input GamingSessionUpdateWithoutIndexDataInput {
+  gamers: UserUpdateManyWithoutSessionsInput
   creator: UserUpdateOneRequiredInput
   game: GameUpdateOneRequiredWithoutSessionsInput
   title: String
@@ -3005,6 +3065,7 @@ input GamingSessionUpdateWithoutReviewsDataInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateWithoutTimeslotsDataInput {
@@ -3024,6 +3085,7 @@ input GamingSessionUpdateWithoutTimeslotsDataInput {
   popularity: Int
   views: Int
   retired: Boolean
+  index: GamingSessionIndexUpdateOneRequiredWithoutGamingSessionInput
 }
 
 input GamingSessionUpdateWithWhereUniqueWithoutGameInput {
@@ -3036,9 +3098,9 @@ input GamingSessionUpdateWithWhereUniqueWithoutGamersInput {
   data: GamingSessionUpdateWithoutGamersDataInput!
 }
 
-input GamingSessionUpsertNestedInput {
-  update: GamingSessionUpdateDataInput!
-  create: GamingSessionCreateInput!
+input GamingSessionUpsertWithoutIndexInput {
+  update: GamingSessionUpdateWithoutIndexDataInput!
+  create: GamingSessionCreateWithoutIndexInput!
 }
 
 input GamingSessionUpsertWithoutReviewsInput {
@@ -3179,6 +3241,7 @@ input GamingSessionWhereInput {
   views_gte: Int
   retired: Boolean
   retired_not: Boolean
+  index: GamingSessionIndexWhereInput
   AND: [GamingSessionWhereInput!]
   OR: [GamingSessionWhereInput!]
   NOT: [GamingSessionWhereInput!]

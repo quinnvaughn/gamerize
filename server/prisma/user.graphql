@@ -15,14 +15,16 @@ type User {
   occupations: [Occupations!]!
   name: String!
   aboutMe: String
-  sessions: [GamingSession!]! @relation(name: "MySessions")
-  timeSlots: [GamingTimeSlot!]! @relation(name: "MyGamingTimeSlots")
+  sessions: [GamingSession!]! @relation(name: "MySessions", onDelete: CASCADE)
+  timeSlots: [GamingTimeSlot!]!
+    @relation(name: "MyGamingTimeSlots", onDelete: CASCADE)
   #timeSlotsBooked: [Booking!]! @relation(name: "Bookee", onDelete: SET_NULL)
   # timeSlotsPlayed: [Booking!]!
   #   @relation(name: "BookingPlayers", onDelete: SET_NULL)
-  invites: [BookingInvite!]! @relation(name: "InvitesFromMe")
-  savedCards: [SavedCard!]! @relation(name: "SavedCards")
-  invitesReceived: [BookingInvite!]! @relation(name: "InvitesReceived")
+  invites: [BookingInvite!]! @relation(name: "InvitesFromMe", onDelete: CASCADE)
+  savedCards: [SavedCard!]! @relation(name: "SavedCards", onDelete: CASCADE)
+  invitesReceived: [BookingInvite!]!
+    @relation(name: "InvitesReceived", onDelete: CASCADE)
   setup: Int
   resetPasswordToken: String @unique
   resetPasswordExpires: DateTime

@@ -16,9 +16,12 @@ type GamingSession {
   requirements: [Requirement!]!
   discounts: [Discount!]!
   timeslots: [GamingTimeSlot!]!
+    @relation(name: "GamingSessionTimeSlots", onDelete: CASCADE)
   popularity: Int @default(value: 0)
   views: Int @default(value: 0)
   retired: Boolean! @default(value: false)
+  index: GamingSessionIndex!
+    @relation(name: "GamingSessionToGamingSessionIndex", onDelete: CASCADE)
 }
 
 ## Workaround for no case insensitive search in prisma yet.
@@ -31,6 +34,7 @@ type GamingSessionIndex {
   game: String
   launcher: Launcher
   gamingSession: GamingSession!
+    @relation(name: "GamingSessionToGamingSessionIndex")
 }
 
 type Requirement {

@@ -5,6 +5,7 @@ type GamingTimeSlot {
   startTime: DateTime!
   endTime: DateTime!
   gamingSession: GamingSession!
+    @relation(name: "GamingSessionTimeSlots", onDelete: SET_NULL)
   ## gaming session also has this info, but this way the user doesn't have to go through that
   ## to get to this info.
   gamers: [User!]! @relation(name: "MyGamingTimeSlots")
