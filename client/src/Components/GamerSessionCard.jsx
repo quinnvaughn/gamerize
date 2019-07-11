@@ -1,13 +1,9 @@
 import React, { useState, useRef, Fragment } from 'react'
 import styled from 'styled-components'
-import ReactCardFlip from 'react-card-flip'
-import dateFns from 'date-fns'
 
 //local imports
-import useOnOutsideClick from '../Hooks/useOnOutsideClick'
 import GamerSessionCardFront from './GamerSessionCardFront'
 import GamerSessionCardBack from './GamerSessionCardBack'
-import { setAMPM, setMinutes, addMinutes, set12Hours } from '../utils/Dates'
 
 const Container = styled.div`
   position: relative;
