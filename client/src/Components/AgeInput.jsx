@@ -12,7 +12,7 @@ const InputLabel = styled.label`
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: ${props => props.color};
+  color: black;
 `
 
 const Input = styled.input`
@@ -27,21 +27,18 @@ const Input = styled.input`
   }
 `
 
-export default function SocialMediaInput(props) {
-  const [becomeAGamer, dispatch] = useBecomeAGamer()
+export default function AgeInput(props) {
+  const [_, dispatch] = useBecomeAGamer()
   return (
     <InputContainer>
-      <InputLabel color={props.color}>{props.label}</InputLabel>
+      <InputLabel>Age</InputLabel>
       <Input
-        placeholder="Link"
-        value={becomeAGamer.socialMedia[props.socialMedia]}
-        name={props.socialMedia}
-        onChange={e =>
-          dispatch({
-            type: 'SET_SOCIAL_MEDIA',
-            payload: { account: e.target.name, info: e.target.value },
-          })
-        }
+        type="number"
+        min="1"
+        step="1"
+        onChange={e => {
+          dispatch({ type: 'SET_AGE', payload: e.target.value })
+        }}
       />
     </InputContainer>
   )

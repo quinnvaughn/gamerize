@@ -6,8 +6,9 @@ import { useMutation } from 'react-apollo-hooks'
 import { withRouter, Link } from 'react-router-dom'
 import { Formik } from 'formik'
 
-import { objectIsEmpty } from '../utils/Objects'
+import { emptyStrings } from '../utils/Objects'
 import SubmitButton from './SubmitButton'
+import { useBecomeAGamer } from '../State/BecomeAGamerContext'
 
 const Previous = styled(Link)`
   text-decoration: none;
@@ -27,23 +28,6 @@ const PreviousArrow = styled(FaChevronLeft)`
   color: #db1422;
   font-size: 1.6rem;
   margin-right: 0.5rem;
-`
-
-const Finish = styled.button`
-  color: #fff;
-  text-decoration: none;
-  outline: 0;
-  border-radius: 4px;
-  font-size: 1.6rem;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 1rem 2.2rem;
-  background: ${props => (props.disabled ? '#dddfe2' : '#db1422')};
-  pointer-events: ${props => props.disabled && 'none'};
-  border: none;
-  :focus {
-    outline: none;
-  }
 `
 
 const ButtonsContainer = styled.div`
@@ -82,6 +66,7 @@ const CREATE_GAMER_REQUEST = gql`
 
 function BecomeAGamerDetailsFooter(props) {
   const createGamerRequest = useMutation(CREATE_GAMER_REQUEST)
+  const [becomeAGamer] = useBecomeAGamer()
   return (
     <ButtonsContainer>
       <ButtonsInner>
@@ -93,15 +78,20 @@ function BecomeAGamerDetailsFooter(props) {
           <Formik
             enableReinitialize
             initialValues={{
-              occupations: props.container.state.occupations || [],
-              addToOccupations: props.container.state.addToOccupations || '',
-              socialMedia: props.container.state.socialMedia,
+              occupations: becomeAGamer.occupations,
+              addToOccupations: becomeAGamer.addToOccupations,
+              socialMedia: becomeAGamer.socialMedia,
+              age: becomeAGamer.age,
+              ownsOwnBankAccount: becomeAGamer.ownsOwnBankAccount,
             }}
             onSubmit={async (values, actions) => {
               const input = {
                 occupations: values.occupations,
                 addToOccupations: values.addToOccupations,
                 socialMedia: values.socialMedia,
+                age: values.age,
+                ownsOwnBankAccount:
+                  values.ownsOwnBankAccount === 'YES' ? true : false,
               }
               const { data } = await createGamerRequest({
                 variables: { input },
@@ -118,8 +108,16 @@ function BecomeAGamerDetailsFooter(props) {
                   primary
                   width={85}
                   isSubmitting={isSubmitting}
-                  isValid={!objectIsEmpty(props.container.state.socialMedia)}
-                  disabled={objectIsEmpty(props.container.state.socialMedia)}
+                  isValid={
+                    !emptyStrings(becomeAGamer.socialMedia) &&
+                    becomeAGamer.age != null &&
+                    becomeAGamer.ownsOwnBankAccount != null
+                  }
+                  disabled={
+                    emptyStrings(becomeAGamer.socialMedia) ||
+                    becomeAGamer.age == null ||
+                    becomeAGamer.ownsOwnBankAccount == null
+                  }
                 >
                   Finish
                 </SubmitButton>

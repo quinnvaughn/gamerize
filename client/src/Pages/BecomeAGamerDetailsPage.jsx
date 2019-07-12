@@ -1,13 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
 
 //local imports
-import Gamer from '../Containers/BecomeAGamerContainer'
 import ProgressNav from '../Components/ProgressNav'
-import useTitle from '../Hooks/useTitle'
 import SocialMediaInput from '../Components/SocialMediaInput'
 import BecomeAGamerDetailsFooter from '../Components/BecomeAGamerDetailsFooter'
+import AgeInput from '../Components/AgeInput'
+import OwnBankAccount from '../Components/OwnBankAccount'
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -46,63 +45,63 @@ const Subtitle = styled.div`
 `
 
 function BecomeAGamerDetails(props) {
-  useTitle('Let us know who you are')
   return (
-    <Subscribe to={[Gamer]}>
-      {container => (
-        <PageContainer>
-          <ProgressNav />
-          <Content>
-            <Container>
-              <Title>Your links</Title>
-              <Subtitle>
-                We require at least one of these to know you have a sizable
-                enough presence on the internet to reach out to fans. Also, you
-                must currently be living in America to be approved as a gamer.
-                We hope to address this in the future.
-              </Subtitle>
-              <SocialMediaInput
-                container={container}
-                socialMedia="twitter"
-                color="#38A1F3"
-                label="Twitter"
-              />
-              <SocialMediaInput
-                container={container}
-                socialMedia="facebook"
-                color="#4267b2"
-                label="Facebook Page"
-              />
-              <SocialMediaInput
-                container={container}
-                socialMedia="youtube"
-                color="#ED3833"
-                label="Youtube"
-              />
-              <SocialMediaInput
-                container={container}
-                socialMedia="instagram"
-                color="#C13584"
-                label="Instagram"
-              />
-              <SocialMediaInput
-                container={container}
-                socialMedia="twitch"
-                color="#6441A5"
-                label="Twitch"
-              />
-              <SocialMediaInput
-                container={container}
-                socialMedia="snapchat"
-                color="#FDD835"
-                label="Snapchat"
-              />
-            </Container>
-            <BecomeAGamerDetailsFooter container={container} />
-          </Content>
-        </PageContainer>
-      )}
-    </Subscribe>
+    <PageContainer>
+      <ProgressNav />
+      <Content>
+        <Container>
+          <Title>Info</Title>
+          <Subtitle>
+            We require at least one of these to know you have a sizable enough
+            presence on the internet to reach out to fans. Also, you must
+            currently be living in America and be in control of your own bank
+            account to be approved as a gamer. We use Stripe as our payment
+            provider.
+          </Subtitle>
+          <Subtitle>
+            Please include https:// or http:// for the URL to be valid.
+          </Subtitle>
+          <SocialMediaInput
+            socialMedia="twitter"
+            color="#38A1F3"
+            label="Twitter"
+          />
+          <SocialMediaInput
+            socialMedia="facebook"
+            color="#4267b2"
+            label="Facebook Page"
+          />
+          <SocialMediaInput
+            socialMedia="youtube"
+            color="#ED3833"
+            label="Youtube"
+          />
+          <SocialMediaInput
+            socialMedia="instagram"
+            color="#C13584"
+            label="Instagram"
+          />
+          <SocialMediaInput
+            socialMedia="twitch"
+            color="#6441A5"
+            label="Twitch"
+          />
+          <SocialMediaInput
+            socialMedia="snapchat"
+            color="#FDD835"
+            label="Snapchat"
+          />
+          <br />
+          <br />
+          <Subtitle>
+            We need this info to make sure you can use Stripe properly.
+          </Subtitle>
+          <AgeInput />
+          <OwnBankAccount />
+        </Container>
+        <BecomeAGamerDetailsFooter />
+      </Content>
+    </PageContainer>
   )
 }
 

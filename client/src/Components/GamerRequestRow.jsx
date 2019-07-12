@@ -86,6 +86,7 @@ const DECLINE_REQUEST = gql`
 export default function GamerRequestRow(props) {
   const acceptGamerRequest = useMutation(ACCEPT_REQUEST)
   const declineGamerRequest = useMutation(DECLINE_REQUEST)
+  console.log(props.ownsOwnBankAccount)
   return (
     <Container>
       <Cell>
@@ -99,6 +100,8 @@ export default function GamerRequestRow(props) {
       <Cell>{props.socialMedia.youtube}</Cell>
       <Cell>{props.socialMedia.instagram}</Cell>
       <Cell>{props.socialMedia.snapchat}</Cell>
+      <Cell>{props.age}</Cell>
+      <Cell>{props.ownsOwnBankAccount === true ? 'Yes' : 'No'}</Cell>
       <Cell>
         {props.occupations.map(occupation => (
           <Occupation>{occupation}</Occupation>

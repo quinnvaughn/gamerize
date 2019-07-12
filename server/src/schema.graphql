@@ -527,6 +527,8 @@ input CreateGamerRequestInput {
   occupations: [Occupations!]!
   addToOccupations: String
   socialMedia: SocialMediaInput!
+  age: Int!
+  ownsOwnBankAccount: Boolean!
 }
 
 input CreateGamingTimeSlotInput {

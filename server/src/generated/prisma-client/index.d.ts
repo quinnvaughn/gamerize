@@ -1111,7 +1111,11 @@ export type GamerRequestOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "addToOccupations_ASC"
-  | "addToOccupations_DESC";
+  | "addToOccupations_DESC"
+  | "age_ASC"
+  | "age_DESC"
+  | "ownsOwnBankAccount_ASC"
+  | "ownsOwnBankAccount_DESC";
 
 export type RequirementOrderByInput =
   | "id_ASC"
@@ -1336,7 +1340,7 @@ export type Occupations =
   | "MEDIA"
   | "SPORTS_PERSONALITY"
   | "INTERNET_PERSONALITY"
-  | "ATHLETE"
+  | "PROFESSIONAL_ATHLETE"
   | "PROFESIONAL_GAMER"
   | "ACTOR"
   | "COMEDIAN"
@@ -1578,6 +1582,8 @@ export interface GamerRequestUpdateInput {
   user?: Maybe<UserUpdateOneRequiredInput>;
   occupations?: Maybe<GamerRequestUpdateoccupationsInput>;
   addToOccupations?: Maybe<String>;
+  age?: Maybe<Int>;
+  ownsOwnBankAccount?: Maybe<Boolean>;
   socialMedia?: Maybe<SocialMediaUpdateOneRequiredInput>;
 }
 
@@ -7079,6 +7085,16 @@ export interface GamerRequestWhereInput {
   addToOccupations_not_starts_with?: Maybe<String>;
   addToOccupations_ends_with?: Maybe<String>;
   addToOccupations_not_ends_with?: Maybe<String>;
+  age?: Maybe<Int>;
+  age_not?: Maybe<Int>;
+  age_in?: Maybe<Int[] | Int>;
+  age_not_in?: Maybe<Int[] | Int>;
+  age_lt?: Maybe<Int>;
+  age_lte?: Maybe<Int>;
+  age_gt?: Maybe<Int>;
+  age_gte?: Maybe<Int>;
+  ownsOwnBankAccount?: Maybe<Boolean>;
+  ownsOwnBankAccount_not?: Maybe<Boolean>;
   socialMedia?: Maybe<SocialMediaWhereInput>;
   AND?: Maybe<GamerRequestWhereInput[] | GamerRequestWhereInput>;
   OR?: Maybe<GamerRequestWhereInput[] | GamerRequestWhereInput>;
@@ -7296,6 +7312,8 @@ export interface GamingSessionUpdateManyWithoutGameInput {
 export interface GamerRequestUpdateManyMutationInput {
   occupations?: Maybe<GamerRequestUpdateoccupationsInput>;
   addToOccupations?: Maybe<String>;
+  age?: Maybe<Int>;
+  ownsOwnBankAccount?: Maybe<Boolean>;
 }
 
 export interface GamingSessionUpdateWithWhereUniqueWithoutGameInput {
@@ -7766,6 +7784,8 @@ export interface GamerRequestCreateInput {
   user: UserCreateOneInput;
   occupations?: Maybe<GamerRequestCreateoccupationsInput>;
   addToOccupations?: Maybe<String>;
+  age: Int;
+  ownsOwnBankAccount: Boolean;
   socialMedia: SocialMediaCreateOneInput;
 }
 
@@ -9614,6 +9634,8 @@ export interface GamerRequest {
   updatedAt: DateTimeOutput;
   occupations: Occupations[];
   addToOccupations?: String;
+  age: Int;
+  ownsOwnBankAccount: Boolean;
 }
 
 export interface GamerRequestPromise
@@ -9625,6 +9647,8 @@ export interface GamerRequestPromise
   user: <T = UserPromise>() => T;
   occupations: () => Promise<Occupations[]>;
   addToOccupations: () => Promise<String>;
+  age: () => Promise<Int>;
+  ownsOwnBankAccount: () => Promise<Boolean>;
   socialMedia: <T = SocialMediaPromise>() => T;
 }
 
@@ -9637,6 +9661,8 @@ export interface GamerRequestSubscription
   user: <T = UserSubscription>() => T;
   occupations: () => Promise<AsyncIterator<Occupations[]>>;
   addToOccupations: () => Promise<AsyncIterator<String>>;
+  age: () => Promise<AsyncIterator<Int>>;
+  ownsOwnBankAccount: () => Promise<AsyncIterator<Boolean>>;
   socialMedia: <T = SocialMediaSubscription>() => T;
 }
 
@@ -9649,6 +9675,8 @@ export interface GamerRequestNullablePromise
   user: <T = UserPromise>() => T;
   occupations: () => Promise<Occupations[]>;
   addToOccupations: () => Promise<String>;
+  age: () => Promise<Int>;
+  ownsOwnBankAccount: () => Promise<Boolean>;
   socialMedia: <T = SocialMediaPromise>() => T;
 }
 
@@ -9864,6 +9892,8 @@ export interface GamerRequestPreviousValues {
   updatedAt: DateTimeOutput;
   occupations: Occupations[];
   addToOccupations?: String;
+  age: Int;
+  ownsOwnBankAccount: Boolean;
 }
 
 export interface GamerRequestPreviousValuesPromise
@@ -9874,6 +9904,8 @@ export interface GamerRequestPreviousValuesPromise
   updatedAt: () => Promise<DateTimeOutput>;
   occupations: () => Promise<Occupations[]>;
   addToOccupations: () => Promise<String>;
+  age: () => Promise<Int>;
+  ownsOwnBankAccount: () => Promise<Boolean>;
 }
 
 export interface GamerRequestPreviousValuesSubscription
@@ -9884,6 +9916,8 @@ export interface GamerRequestPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   occupations: () => Promise<AsyncIterator<Occupations[]>>;
   addToOccupations: () => Promise<AsyncIterator<String>>;
+  age: () => Promise<AsyncIterator<Int>>;
+  ownsOwnBankAccount: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface UserSubscriptionPayload {

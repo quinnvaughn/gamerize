@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { noUnderscores, capitalize } from '../utils/Strings'
+import { useBecomeAGamer } from '../State/BecomeAGamerContext'
 
 const TypeOfGamer = styled.button`
   border-radius: 4px;
@@ -20,10 +21,11 @@ const TypeOfGamer = styled.button`
 `
 
 export default function TypeOfGamerList(props) {
+  const [becomeAGamer, dispatch] = useBecomeAGamer()
   return props.array.map(type => (
     <TypeOfGamer
-      onClick={() => props.container.setOccupations(type)}
-      selected={props.container.state.occupations.includes(type)}
+      onClick={() => dispatch({ type: 'SET_OCCUPATIONS', payload: type })}
+      selected={becomeAGamer.occupations.includes(type)}
     >
       {type === 'DJ' ? type : capitalize(noUnderscores(type))}
     </TypeOfGamer>

@@ -53,6 +53,8 @@ const GET_GAMER_REQUESTS = gql`
   {
     getGamerRequests {
       id
+      age
+      ownsOwnBankAccount
       user {
         id
         username

@@ -1790,6 +1790,8 @@ type GamerRequest {
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
+  age: Int!
+  ownsOwnBankAccount: Boolean!
   socialMedia: SocialMedia!
 }
 
@@ -1803,6 +1805,8 @@ input GamerRequestCreateInput {
   user: UserCreateOneInput!
   occupations: GamerRequestCreateoccupationsInput
   addToOccupations: String
+  age: Int!
+  ownsOwnBankAccount: Boolean!
   socialMedia: SocialMediaCreateOneInput!
 }
 
@@ -1824,6 +1828,10 @@ enum GamerRequestOrderByInput {
   updatedAt_DESC
   addToOccupations_ASC
   addToOccupations_DESC
+  age_ASC
+  age_DESC
+  ownsOwnBankAccount_ASC
+  ownsOwnBankAccount_DESC
 }
 
 type GamerRequestPreviousValues {
@@ -1832,6 +1840,8 @@ type GamerRequestPreviousValues {
   updatedAt: DateTime!
   occupations: [Occupations!]!
   addToOccupations: String
+  age: Int!
+  ownsOwnBankAccount: Boolean!
 }
 
 type GamerRequestSubscriptionPayload {
@@ -1856,12 +1866,16 @@ input GamerRequestUpdateInput {
   user: UserUpdateOneRequiredInput
   occupations: GamerRequestUpdateoccupationsInput
   addToOccupations: String
+  age: Int
+  ownsOwnBankAccount: Boolean
   socialMedia: SocialMediaUpdateOneRequiredInput
 }
 
 input GamerRequestUpdateManyMutationInput {
   occupations: GamerRequestUpdateoccupationsInput
   addToOccupations: String
+  age: Int
+  ownsOwnBankAccount: Boolean
 }
 
 input GamerRequestUpdateoccupationsInput {
@@ -1914,6 +1928,16 @@ input GamerRequestWhereInput {
   addToOccupations_not_starts_with: String
   addToOccupations_ends_with: String
   addToOccupations_not_ends_with: String
+  age: Int
+  age_not: Int
+  age_in: [Int!]
+  age_not_in: [Int!]
+  age_lt: Int
+  age_lte: Int
+  age_gt: Int
+  age_gte: Int
+  ownsOwnBankAccount: Boolean
+  ownsOwnBankAccount_not: Boolean
   socialMedia: SocialMediaWhereInput
   AND: [GamerRequestWhereInput!]
   OR: [GamerRequestWhereInput!]
@@ -4254,7 +4278,7 @@ enum Occupations {
   MEDIA
   SPORTS_PERSONALITY
   INTERNET_PERSONALITY
-  ATHLETE
+  PROFESSIONAL_ATHLETE
   PROFESIONAL_GAMER
   ACTOR
   COMEDIAN
