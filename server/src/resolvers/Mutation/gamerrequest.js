@@ -11,6 +11,8 @@ const gamerrequest = {
         addToOccupations: input.addToOccupations,
         occupations: { set: input.occupations },
         socialMedia: { create: input.socialMedia },
+        age: input.age,
+        ownsOwnBankAccount: input.ownsOwnBankAccount,
         user: {
           connect: {
             id: userId,

@@ -1,16 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
-import { Link } from 'react-router-dom'
-import { FaChevronLeft } from 'react-icons/fa'
-import _ from 'lodash'
 
 //local imports
-import Gamer from '../Containers/BecomeAGamerContainer'
 import ProgressNav from '../Components/ProgressNav'
 import TypeOfGamerList from '../Components/TypeOfGamerList'
-import useTitle from '../Hooks/useTitle'
-import { noUnderscores, capitalize } from '../utils/Strings'
 import BecomeAGamerBackgroundFooter from '../Components/BecomeAGamerBackgroundFooter'
 
 const PageContainer = styled.div`
@@ -81,7 +74,7 @@ const YoursText = styled.textarea`
   }
 `
 
-const occupation = [
+const occupations = [
   'CELEBRITY',
   'INFLUENCER',
   'ENTERTAINER',
@@ -90,7 +83,7 @@ const occupation = [
   'MEDIA',
   'SPORTS_PERSONALITY',
   'INTERNET_PERSONALITY',
-  'ATHLETE',
+  'PROFESSIONAL_ATHLETE',
   'PROFESSIONAL_GAMER',
   'ACTOR',
   'ACTRESS',
@@ -109,33 +102,26 @@ const occupation = [
 ]
 
 export default function BecomeAGamerBackground(props) {
-  useTitle('Kind of Gamer')
   return (
-    <Subscribe to={[Gamer]}>
-      {container => (
-        <PageContainer>
-          <ProgressNav />
-          <Content>
-            <Container>
-              <Title>What kind of gamer are you?</Title>
-              <Subtitle>
-                You may pick multiple if they apply. Would make you show up in
-                more searches.
-              </Subtitle>
-              <Types>
-                <TypeOfGamerList array={occupation} container={container} />
-              </Types>
-              <DontSeeYours>
-                <YoursTitle>
-                  Don't see your type? Let us know to add it.
-                </YoursTitle>
-                <YoursText rows="4" cols="50" />
-              </DontSeeYours>
-            </Container>
-          </Content>
-          <BecomeAGamerBackgroundFooter container={container} />
-        </PageContainer>
-      )}
-    </Subscribe>
+    <PageContainer>
+      <ProgressNav />
+      <Content>
+        <Container>
+          <Title>What kind of gamer are you?</Title>
+          <Subtitle>
+            You may pick multiple if they apply. Would make you show up in more
+            searches.
+          </Subtitle>
+          <Types>
+            <TypeOfGamerList array={occupations} />
+          </Types>
+          <DontSeeYours>
+            <YoursTitle>Don't see your type? Let us know to add it.</YoursTitle>
+            <YoursText rows="4" cols="50" />
+          </DontSeeYours>
+        </Container>
+      </Content>
+      <BecomeAGamerBackgroundFooter />
+    </PageContainer>
   )
 }

@@ -10,6 +10,8 @@ export default function GamerRequestRowList(props) {
       user={gamerRequest.user}
       socialMedia={gamerRequest.socialMedia}
       occupations={gamerRequest.occupations}
+      age={gamerRequest.age}
+      ownsOwnBankAccount={gamerRequest.ownsOwnBankAccount}
     />
   ))
 }

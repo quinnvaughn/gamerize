@@ -8,6 +8,8 @@ type GamerRequest {
   user: User!
   occupations: [Occupations!]!
   addToOccupations: String
+  age: Int!
+  ownsOwnBankAccount: Boolean!
   socialMedia: SocialMedia!
     @relation(name: "GamerRequestSocialMedia", onDelete: CASCADE)
 }

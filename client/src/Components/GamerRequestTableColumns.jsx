@@ -28,6 +28,8 @@ export default function GamerRequestTableColumns(props) {
       <Cell>Youtube</Cell>
       <Cell>Instagram</Cell>
       <Cell>Snapchat</Cell>
+      <Cell>Age</Cell>
+      <Cell>Owns own bank account</Cell>
       <Cell>Occupations</Cell>
       <Cell>Approve/Deny</Cell>
     </Container>

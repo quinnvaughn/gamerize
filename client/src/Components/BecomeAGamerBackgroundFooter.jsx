@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { FaChevronLeft } from 'react-icons/fa'
+import { useBecomeAGamer } from '../State/BecomeAGamerContext'
 
 const Previous = styled(Link)`
   text-decoration: none;
@@ -64,6 +65,7 @@ const Buttons = styled.div`
 `
 
 export default function BecomeAGamerBackgroundFooter(props) {
+  const [becomeAGamer] = useBecomeAGamer()
   return (
     <ButtonsContainer>
       <ButtonsInner>
@@ -74,7 +76,7 @@ export default function BecomeAGamerBackgroundFooter(props) {
           </Previous>
           <Next
             to="/become-a-gamer/details"
-            disabled={props.container.state.occupations.length <= 0}
+            disabled={becomeAGamer.occupations.length <= 0}
           >
             Next
           </Next>
