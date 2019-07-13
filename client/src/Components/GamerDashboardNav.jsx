@@ -12,8 +12,6 @@ const Container = styled.div`
   height: 8rem;
   border-bottom: 1px solid #dddfe2;
   width: 100vw;
-  position: sticky;
-  top: 0;
   background: white;
   z-index: 9999;
   display: flex;

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
 import { useStore } from 'react-hookstore'
+import ReactLoading from 'react-loading'
 
 import useInterval from '../Hooks/useInterval'
 import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
@@ -12,69 +12,23 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   max-height: calc(100vh - 18rem);
-  overflow-y: scroll;
-  background: #fff;
-  border: 1px solid #dddfe2;
-  border-radius: 4px;
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 0;
+    height: 0;
   }
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-`
-
-const Header = styled.div`
-  text-transform: uppercase;
-  width: 100%;
-  border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 4rem 2rem;
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  font-size: 3rem;
-  font-weight: 700;
-  color: black;
-  justify-content: space-between;
-  max-width: inherit;
-  position: sticky;
-  align-items: center;
+  border-radius: 4px;
 `
-
-const Day = styled.span`
-  font-size: 3rem;
-  cursor: default;
-  margin-left: ${props => props.day && '-4rem'};
-`
-
-//For formatting.
-const Empty = styled.div``
-
-const Back = styled.div`
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-  :hover {
-    cursor: pointer;
-    color: #db1422;
-  }
-`
-
-const BackText = styled.span`
-  font-size: 1.8rem;
-  margin-left: 0.5rem;
-`
-
-const ChevronLeft = styled(FaChevronLeft)`
-  cursor: pointer;
-  font-size: 1.8rem;
+  justify-content: center;
 `
 
 const Row = styled.div`
@@ -161,7 +115,7 @@ const TimeOfGame = styled.div`
 
 export default function GamerDay(props) {
   const [time, setTime] = useState(props.day ? new Date(props.day) : new Date())
-  const [state, dispatch] = useStore(gamerSessionSelection)
+  const [_, dispatch] = useStore(gamerSessionSelection)
   useInterval(() => {
     props.day ? setTime(new Date(props.day)) : setTime(new Date())
   }, 60000)
@@ -171,25 +125,6 @@ export default function GamerDay(props) {
     element && element.scrollIntoView(true)
     window.parent.scrollTo(0, 0)
   }, {})
-  const renderHeader = () => {
-    const dateFormat = 'MMMM Do, YYYY'
-
-    return (
-      <Header>
-        {props.day ? (
-          <Back onClick={() => props.setSelectedDay(null)}>
-            <ChevronLeft />
-            <BackText>Back</BackText>
-          </Back>
-        ) : (
-          <Empty />
-        )}
-        <Day day={props.day}>{dateFns.format(time, dateFormat)}</Day>
-        <Empty />
-      </Header>
-    )
-  }
-
   const renderHours = () => {
     const dateFormat = 'ha'
     const sessionFormat = 'h:mm a'
@@ -288,8 +223,13 @@ export default function GamerDay(props) {
   }
   return (
     <Container>
-      {renderHeader()}
-      {renderHours()}
+      {props.loading ? (
+        <LoadingContainer>
+          <ReactLoading type="bars" color="#db1422" width={100} height={500} />
+        </LoadingContainer>
+      ) : (
+        renderHours()
+      )}
     </Container>
   )
 }

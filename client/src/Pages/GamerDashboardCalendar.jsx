@@ -3,18 +3,19 @@ import { useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import { useStore } from 'react-hookstore'
 import gql from 'graphql-tag'
+import dateFns from 'date-fns'
 
 //local imports
 import GamerDay from '../Components/GamerDay'
 import GamerDashboardNav from '../Components/GamerDashboardNav'
-import GamerSessionCard from '../Components/GamerSessionCard'
 import SessionsIsGoingOn from '../Components/SessionsIsGoingOn'
-import BigGamerCalendar from '../Components/BigGamerCalendar'
 import GamerSelectedSession from '../Components/GamerSelectedSession'
 import gamerSessionSelection from '../Stores/GamerSessionSelectionStore'
 import NextSession from '../Components/NextSession'
 import Loading from '../Components/Loading'
 import ErrorPage from './ErrorPage'
+import GamerCalendar from '../Components/GamerCalendar'
+import { useGamerCalendar } from '../State/GamerCalendarContext'
 
 const PageContainer = styled.div`
   height: 100%;
@@ -23,86 +24,52 @@ const PageContainer = styled.div`
 const Content = styled.div`
   max-width: none;
   margin: 0 auto;
-  padding-left: 8rem;
-  padding-right: 8rem;
-  padding-top: 1rem;
-  margin-bottom: 9rem;
   display: flex;
 `
 
-const LeftSide = styled.div`
+const Left = styled.div`
   flex: 60%;
-  margin-right: 4rem;
 `
 
-const RightSide = styled.div`
+const Right = styled.div`
   flex: 40%;
-  height: calc(100vh - 80rem);
+  background: #f8f8f8;
 `
 
-const YourSessions = styled.div`
+const Date = styled.div`
+  padding: 2rem;
+`
+
+const DayOfWeek = styled.div`
+  color: #bcbcbc;
   font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
 `
-const SessionInfo = styled.div`
+const SelectedDay = styled.div`
   font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-`
-
-const Info = styled.div`
-  font-weight: 400;
-  line-height: 1.5em;
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-`
-
-const SetButton = styled.button`
-  font-size: 1.4rem;
   color: black;
-  text-decoration: none;
-  cursor: pointer;
-  margin-right: 1.5rem;
+  font-weight: 700;
+`
+
+const Year = styled.div`
+  color: #bcbcbc;
+  font-size: 3rem;
   font-weight: 600;
-  padding: 1rem 0.8rem;
-  margin-bottom: 2rem;
-  background: #fff;
-  outline: none;
-  border: none;
-  border-bottom: ${props =>
-    props.active ? '2px solid #db1422' : '2px solid transparent'};
 `
 
-const Top = styled.div`
-  margin-bottom: 2rem;
+const AddTimeSlots = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
-const AllSessions = styled.div`
-  height: 40rem;
-  overflow-y: scroll;
-  border: 1px solid #ebebeb;
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+const AddTimeSlotsText = styled.span`
+  font-size: 2rem;
+  :hover {
+    cursor: pointer;
+    color: #db1422;
   }
 `
-
-const Bottom = styled.div`
-  height: 100%;
-`
-
-const MONTH = 'MONTH'
-
-const TODAY = 'TODAY'
 
 const MY_GAMING_SESSIONS = gql`
   {
@@ -124,8 +91,8 @@ const MY_GAMING_SESSIONS = gql`
 `
 
 const SLOTS_TODAY = gql`
-  query($today: Boolean, $timeZone: String!) {
-    thatDaySessions(today: $today, timeZone: $timeZone) {
+  query($day: DateTime!, $timeZone: String!) {
+    thatDaySessions(day: $day, timeZone: $timeZone) {
       id
       startTime
       endTime
@@ -192,7 +159,7 @@ const ME = gql`
   }
 `
 export default function GamerDashboardCalendar(props) {
-  const [dayOrMonth, setDayOrMonth] = useState(TODAY)
+  const [gamerCalendar] = useGamerCalendar()
   const { data, loading, refetch, error } = useQuery(ME, {
     pollInterval: 1000,
   })
@@ -209,15 +176,17 @@ export default function GamerDashboardCalendar(props) {
     error: thirdError,
   } = useQuery(SLOTS_TODAY, {
     variables: {
-      today: true,
+      day: gamerCalendar.selectedDay,
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     pollInterval: 1000,
-    skip: dayOrMonth === 'MONTH',
   })
   const [state] = useStore(gamerSessionSelection)
   const errors = error || secondError || thirdError
-  return loading || secondLoading || thirdLoading ? (
+  const dayOfWeek = 'dddd'
+  const date = 'D MMMM'
+  const year = 'YYYY'
+  return loading || secondLoading ? (
     <Loading gamer />
   ) : errors ? (
     <ErrorPage errors={errors} />
@@ -225,64 +194,73 @@ export default function GamerDashboardCalendar(props) {
     <PageContainer>
       <GamerDashboardNav />
       <Content>
-        <LeftSide>
-          <SetButton
-            onClick={() => setDayOrMonth(TODAY)}
-            active={dayOrMonth === 'TODAY'}
-          >
-            Today
-          </SetButton>
-          <SetButton
-            onClick={() => setDayOrMonth(MONTH)}
-            active={dayOrMonth === 'MONTH'}
-          >
-            Calendar
-          </SetButton>
-          {dayOrMonth === MONTH ? (
-            <BigGamerCalendar />
-          ) : (
-            data.me &&
+        <Left>
+          <Date>
+            <DayOfWeek>
+              {dateFns.format(gamerCalendar.selectedDay, dayOfWeek)}
+            </DayOfWeek>
+            <SelectedDay>
+              {dateFns.format(gamerCalendar.selectedDay, date)}
+            </SelectedDay>
+            <Year>{dateFns.format(gamerCalendar.selectedDay, year)}</Year>
+          </Date>
+          {data.me &&
             data.me.setup &&
             thirdData &&
             thirdData.thatDaySessions && (
-              <GamerDay todaySessions={thirdData.thatDaySessions} />
-            )
-          )}
-        </LeftSide>
-        <RightSide>
-          <Top>
-            <SessionInfo>Time Slots Info</SessionInfo>
-            {data.me &&
-              data.me.sessionIsGoingOn &&
-              data.me.sessionIsGoingOn.goingOn === true && (
-                <SessionsIsGoingOn
+              <GamerDay
+                todaySessions={thirdData.thatDaySessions}
+                loading={thirdLoading}
+              />
+            )}
+        </Left>
+        <Right>
+          <GamerCalendar />
+          {data.me &&
+            data.me.sessionIsGoingOn &&
+            data.me.sessionIsGoingOn.goingOn === true && (
+              <SessionsIsGoingOn
+                refetch={refetch}
+                currentSession={data.me.sessionIsGoingOn.session}
+              />
+            )}
+          <NextSession />
+          <AddTimeSlots>
+            <AddTimeSlotsText>Add Timeslots</AddTimeSlotsText>
+          </AddTimeSlots>
+        </Right>
+        {/* <Top>
+          <SessionInfo>Time Slots Info</SessionInfo>
+          {data.me &&
+            data.me.sessionIsGoingOn &&
+            data.me.sessionIsGoingOn.goingOn === true && (
+              <SessionsIsGoingOn
+                refetch={refetch}
+                currentSession={data.me.sessionIsGoingOn.session}
+              />
+            )}
+          <NextSession />
+        </Top>
+        <Bottom>
+          <YourSessions>Your sessions</YourSessions>
+          <Info>
+            These are all your sessions. Click on them to get options to add
+            them to your calendar. Edit them in the sessions tab.
+          </Info>
+          <AllSessions>
+            {secondData.myGamingSessions &&
+              data.me.setup &&
+              secondData.myGamingSessions.map((session, index) => (
+                <GamerSessionCard
+                  session={session}
+                  key={session.id}
+                  setup={data.me.setup}
+                  last={index === secondData.myGamingSessions.length - 1}
                   refetch={refetch}
-                  currentSession={data.me.sessionIsGoingOn.session}
                 />
-              )}
-            <NextSession />
-          </Top>
-          <Bottom>
-            <YourSessions>Your sessions</YourSessions>
-            <Info>
-              These are all your sessions. Click on them to get options to add
-              them to your calendar. Edit them in the sessions tab.
-            </Info>
-            <AllSessions>
-              {secondData.myGamingSessions &&
-                data.me.setup &&
-                secondData.myGamingSessions.map((session, index) => (
-                  <GamerSessionCard
-                    session={session}
-                    key={session.id}
-                    setup={data.me.setup}
-                    last={index === secondData.myGamingSessions.length - 1}
-                    refetch={refetch}
-                  />
-                ))}
-            </AllSessions>
-          </Bottom>
-        </RightSide>
+              ))}
+          </AllSessions>
+        </Bottom> */}
       </Content>
       {state.selectedSession && <GamerSelectedSession refetch={refetch} />}
     </PageContainer>

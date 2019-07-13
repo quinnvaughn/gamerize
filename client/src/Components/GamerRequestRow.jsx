@@ -86,7 +86,6 @@ const DECLINE_REQUEST = gql`
 export default function GamerRequestRow(props) {
   const acceptGamerRequest = useMutation(ACCEPT_REQUEST)
   const declineGamerRequest = useMutation(DECLINE_REQUEST)
-  console.log(props.ownsOwnBankAccount)
   return (
     <Container>
       <Cell>

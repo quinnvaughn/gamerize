@@ -8,8 +8,6 @@ import dateFns from 'date-fns'
 import { mapSystem, mapLauncher } from '../utils/System'
 
 const Container = styled.div`
-  background: #fff;
-  border: 1px solid #dddfe2;
   border-radius: 4px;
   padding: 2rem;
   width: 100%;
@@ -19,11 +17,11 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 2.2rem;
   font-weight: 900;
-  margin-bottom: 0.5rem;
 `
 
 const Content = styled.div`
   display: flex;
+  flex-direction: column;
 `
 
 const FlexHalf = styled.div`
@@ -33,10 +31,15 @@ const FlexHalf = styled.div`
 const Game = styled.div`
   font-size: 1.7rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
 `
 const Times = styled.div`
   font-size: 1.6rem;
+`
+
+const InfoContainer = styled.div`
+  border-bottom: 1px solid #c0c0c0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 `
 
 const Usernames = styled.div`
@@ -45,6 +48,15 @@ const Usernames = styled.div`
 `
 
 const Username = styled.div`
+  font-size: 1.6rem;
+`
+
+const Discords = styled.div`
+  font-size: 1.7rem;
+  font-weight: 700;
+`
+
+const Discord = styled.div`
   font-size: 1.6rem;
 `
 
@@ -141,14 +153,16 @@ export default function NextSession(props) {
   const dateFormat = 'h:mm a'
   return (
     <Container>
-      <Title>Next Session:</Title>
+      <InfoContainer>
+        <Title>Next Session</Title>
+      </InfoContainer>
       {loading ? null : data.nextTimeSlot === null ? (
         <NoUpcoming>
           You have no upcoming time slots! Be sure to add some!
         </NoUpcoming>
       ) : (
         <Content>
-          <FlexHalf>
+          <InfoContainer>
             <Game>{data.nextTimeSlot.gamingSession.game.name}</Game>
             <Day>{dateFns.format(data.nextTimeSlot.startTime, dayFormat)}</Day>
             <Times>
@@ -157,7 +171,7 @@ export default function NextSession(props) {
                 dateFormat
               )} - ${dateFns.format(data.nextTimeSlot.endTime, dateFormat)}`}
             </Times>
-          </FlexHalf>
+          </InfoContainer>
           {renderUsernames()}
         </Content>
       )}

@@ -173,7 +173,6 @@ function BigGamerCalendar(props) {
     },
     // pollInterval: 1000,
   })
-  console.log(selectedDay)
   const renderHeader = () => {
     const dateFormat = 'MMMM YYYY'
 

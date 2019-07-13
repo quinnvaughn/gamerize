@@ -22,12 +22,13 @@ const gamingsession = {
       system: input.system,
       requirements: { create: [] },
       discounts: { create: [] },
-    })
-    await ctx.prisma.createGamingSessionIndex({
-      title: input.title.toLowerCase(),
-      gamer: gamer.username.toLowerCase(),
-      game: input.game.toLowerCase(),
-      gamingSession: { connect: { id: gamingSession.id } },
+      index: {
+        create: {
+          title: input.title.toLowerCase(),
+          gamer: gamer.username.toLowerCase(),
+          game: input.game.toLowerCase(),
+        },
+      },
     })
     return gamingSession
       ? { gamingSession, created: true }
