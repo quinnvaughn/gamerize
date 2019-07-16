@@ -284,7 +284,7 @@ function TimeSlotSession(props) {
       : !props.me.gamertags[mapSystem(system)]
     : true
   const renderHeader = () => {
-    const dateFormat = 'MMM Do, YYYY'
+    const dateFormat = 'MMMM Do'
     const endTime = 'h:mm a'
     return (
       <Header>

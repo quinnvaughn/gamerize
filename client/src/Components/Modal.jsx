@@ -4,7 +4,6 @@ import styled, { keyframes, createGlobalStyle } from 'styled-components'
 
 //local imports
 import useOnOutsideClick from '../Hooks/useOnOutsideClick'
-import useLockBodyScroll from '../Hooks/useLockBodyScroll'
 
 const show = keyframes`
     0%: {
@@ -61,13 +60,6 @@ const Modal = styled.div`
 
 const ModalContent = styled.div`
   position: relative;
-`
-
-// So navbar isn't over modal overlay.
-const GlobalStyle = createGlobalStyle`
-  .navbar {
-    z-index: 0;
-  }
 `
 
 const modalRoot = document.getElementById('modal-root')

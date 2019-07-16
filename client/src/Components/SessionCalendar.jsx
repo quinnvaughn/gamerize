@@ -1,42 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import { MdClose } from 'react-icons/md'
 import dateFns from 'date-fns'
-import { withRouter } from 'react-router-dom'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+
+import { useSessionCalendar } from '../State/SessionCalendarContext'
 import { useSessions } from '../State/SessionsSelectedContext'
 
 const Container = styled.div`
-  display: block;
-  position: relative;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #dddfe2;
-  padding-bottom: 3rem;
+  padding: 2rem;
 `
-
 const Header = styled.div`
   width: 100%;
-  border-bottom: 1px solid #dddfe2;
-  background: #fff;
-  padding: 1rem 2rem 4rem 2rem;
+  padding: 3rem 0;
   margin: 0;
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: black;
-  max-width: inherit;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`
-
-const HeaderInfo = styled.div`
-  align-items: center;
-  justify-content: space-between;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: black;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -59,10 +44,6 @@ const ChevronRight = styled(FaChevronRight)`
     transition: 0.25s ease-out;
     color: #db1422;
   }
-`
-
-const Month = styled.span`
-  cursor: default;
 `
 
 const CenterColumn = styled.div`
@@ -113,9 +94,6 @@ const Cell = styled.div`
   color: ${props =>
     props.disabled ? '#dddfe2' : props.current ? 'white' : 'black'};
   pointer-events: ${props => props.disabled && 'none'};
-  @media (min-width: 640px) {
-    font-size: 2rem;
-  }
 `
 
 const Current = styled.span`
@@ -138,52 +116,47 @@ const Row = styled.div`
   width: 100%;
 `
 
-const Exit = styled(MdClose)`
-  font-size: 3rem;
-  cursor: pointer;
-  z-index: 1000;
-  color: black;
-  :hover {
-    color: #db1422;
-  }
+const Month = styled.span`
+  cursor: default;
 `
 
-const ExitContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
+const AvailabilityContainer = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  position: relative;
+  padding-bottom: 2.4rem;
+  margin-bottom: 2.4rem;
+  border-bottom: 1px solid #dddfe2;
 `
 
-function TimeSlotsCalendar(props) {
-  const [currentMonth, setCurrentMonth] = useState(new Date())
-  const [currentDay] = useState(new Date())
-  const [_, dispatch] = useSessions()
+const Availability = styled.div`
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+`
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  })
-
-  function renderHeader() {
+export default function SessionCalendar(props) {
+  const [sessionCalendar, dispatch] = useSessionCalendar()
+  const [_, selectedDispatch] = useSessions()
+  const renderHeader = () => {
     const dateFormat = 'MMMM'
 
     return (
       <Header>
-        <ExitContainer>
-          <Exit onClick={props.close} />
-        </ExitContainer>
-        <HeaderInfo>
-          <ChevronLeft onClick={prevMonth} />
-          <Month>{dateFns.format(currentMonth, dateFormat)}</Month>
-          <ChevronRight onClick={nextMonth} />
-        </HeaderInfo>
+        <ChevronLeft onClick={() => dispatch({ type: 'PREVIOUS_MONTH' })} />
+        <Month>
+          {dateFns.format(sessionCalendar.currentMonth, dateFormat)}
+        </Month>
+        <ChevronRight onClick={() => dispatch({ type: 'NEXT_MONTH' })} />
       </Header>
     )
   }
 
-  function renderDays() {
+  const renderDays = () => {
     const dateFormat = 'ddd'
     const days = []
 
-    let startDate = dateFns.startOfWeek(currentMonth)
+    let startDate = dateFns.startOfWeek(sessionCalendar.currentMonth)
 
     for (let i = 0; i < 7; i++) {
       days.push(
@@ -196,8 +169,8 @@ function TimeSlotsCalendar(props) {
     return <Days>{days}</Days>
   }
 
-  function renderCells() {
-    const monthStart = dateFns.startOfMonth(currentMonth)
+  const renderCells = () => {
+    const monthStart = dateFns.startOfMonth(sessionCalendar.currentMonth)
     const monthEnd = dateFns.endOfMonth(monthStart)
     const startDate = dateFns.startOfWeek(monthStart)
     const endDate = dateFns.endOfWeek(monthEnd)
@@ -213,13 +186,18 @@ function TimeSlotsCalendar(props) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat)
         const cloneDay = day
-        const current = dateFns.isSameDay(day, currentDay)
+        const current = dateFns.isSameDay(day, sessionCalendar.currentDay)
         days.push(
           <Cell
             disabled={!dateFns.isSameMonth(day, monthStart)}
             key={cloneDay}
-            onClick={() => onDateClick(dateFns.parse(cloneDay))}
-            current={dateFns.isSameDay(day, currentDay)}
+            onClick={() => {
+              selectedDispatch({
+                type: 'SET_SELECTED_DAY',
+                payload: dateFns.parse(cloneDay),
+              })
+              selectedDispatch({ type: 'SHOW_MODAL' })
+            }}
           >
             {current ? (
               <Current>
@@ -235,27 +213,16 @@ function TimeSlotsCalendar(props) {
       rows.push(<Row key={day}>{days}</Row>)
       days = []
     }
-    return <div className="body">{rows}</div>
-  }
-
-  function onDateClick(day) {
-    dispatch({ type: 'SET_SELECTED_DAY', payload: day })
-  }
-
-  function nextMonth() {
-    setCurrentMonth(prev => dateFns.addMonths(prev, 1))
-  }
-
-  function prevMonth() {
-    setCurrentMonth(prev => dateFns.subMonths(prev, 1))
+    return <div>{rows}</div>
   }
   return (
-    <Container>
-      {renderHeader()}
-      {renderDays()}
-      {renderCells()}
-    </Container>
+    <AvailabilityContainer>
+      <Availability>Calendar</Availability>
+      <Container>
+        {renderHeader()}
+        {renderDays()}
+        {renderCells()}
+      </Container>
+    </AvailabilityContainer>
   )
 }
-
-export default withRouter(TimeSlotsCalendar)
