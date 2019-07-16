@@ -469,6 +469,9 @@ export default function SpecificSessionPage(props) {
               close={() => {
                 dispatch({ type: 'CLOSE_MODAL' })
               }}
+              goBack={() => {
+                dispatch({ type: 'GO_BACK' })
+              }}
             />
           ) : allSessions.selectedDay ? (
             <TimeSlotsHours

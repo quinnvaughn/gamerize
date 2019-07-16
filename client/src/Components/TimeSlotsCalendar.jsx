@@ -15,21 +15,26 @@ const Container = styled.div`
 `
 
 const Header = styled.div`
-  text-transform: uppercase;
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 1rem 2rem 3rem;
+  padding: 1rem 2rem 4rem 2rem;
   margin: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   font-size: 3rem;
   font-weight: 700;
   color: black;
-  justify-content: space-between;
-  width: 100%;
+  max-width: inherit;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+`
+
+const HeaderInfo = styled.div`
   align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -145,7 +150,6 @@ const Exit = styled(MdClose)`
 const ExitContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding-right: 1rem;
 `
 
 function TimeSlotsCalendar(props) {
@@ -162,15 +166,20 @@ function TimeSlotsCalendar(props) {
 
     return (
       <Header>
-        <ChevronLeft onClick={prevMonth} />
-        <Month>{dateFns.format(currentMonth, dateFormat)}</Month>
-        <ChevronRight onClick={nextMonth} />
+        <ExitContainer>
+          <Exit onClick={props.close} />
+        </ExitContainer>
+        <HeaderInfo>
+          <ChevronLeft onClick={prevMonth} />
+          <Month>{dateFns.format(currentMonth, dateFormat)}</Month>
+          <ChevronRight onClick={nextMonth} />
+        </HeaderInfo>
       </Header>
     )
   }
 
   function renderDays() {
-    const dateFormat = 'dddd'
+    const dateFormat = 'ddd'
     const days = []
 
     let startDate = dateFns.startOfWeek(currentMonth)
@@ -234,9 +243,6 @@ function TimeSlotsCalendar(props) {
   }
   return (
     <Container>
-      <ExitContainer>
-        <Exit onClick={props.close} />
-      </ExitContainer>
       {renderHeader()}
       {renderDays()}
       {renderCells()}

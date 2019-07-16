@@ -25,18 +25,23 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 4rem 2rem;
+  padding: 1rem 2rem 4rem 2rem;
   margin: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   font-size: 3rem;
   font-weight: 700;
   color: black;
-  justify-content: space-between;
   max-width: inherit;
   position: sticky;
+  top: 0;
+  z-index: 1000;
+`
+
+const HeaderInfo = styled.div`
   align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -145,7 +150,6 @@ const Exit = styled(MdClose)`
 const ExitContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding-right: 1rem;
   background: #fff;
 `
 
@@ -189,25 +193,33 @@ function TimeSlotHours(props) {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
-  const [session, dispatch] = useSessions()
+  const [_, dispatch] = useSessions()
   useEffect(() => {
+    const header = document.getElementById('header')
+    const modal = document.getElementById('modal')
     const element = document.getElementById('currentCalendar')
-    element && element.scrollIntoView()
-    setTimeout(() => {
-      window.scrollBy(0, -30)
-    }, 500)
-    window.parent.scrollTo(0, 0)
+    const bounding = element && element.getBoundingClientRect()
+    if (header && bounding && modal) {
+      modal.scrollTop = bounding.top - header.offsetHeight
+    }
   }, [data])
   const renderHeader = () => {
     const dateFormat = 'MMMM Do, YYYY'
 
     return (
-      <Header>
-        <ChevronLeft
-          onClick={() => dispatch({ type: 'SET_SELECTED_DAY', payload: null })}
-        />
-        <Day>{dateFns.format(props.day, dateFormat)}</Day>
-        <Empty />
+      <Header id="header">
+        <ExitContainer>
+          <Exit onClick={props.close} />
+        </ExitContainer>
+        <HeaderInfo>
+          <ChevronLeft
+            onClick={() =>
+              dispatch({ type: 'SET_SELECTED_DAY', payload: null })
+            }
+          />
+          <Day>{dateFns.format(props.day, dateFormat)}</Day>
+          <Empty />
+        </HeaderInfo>
       </Header>
     )
   }
@@ -309,9 +321,6 @@ function TimeSlotHours(props) {
   }
   return loading ? null : (
     <Container>
-      <ExitContainer>
-        <Exit onClick={props.close} />
-      </ExitContainer>
       {renderHeader()}
       {renderHours()}
     </Container>

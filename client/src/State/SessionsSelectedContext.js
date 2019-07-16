@@ -128,6 +128,12 @@ function sessionsReducer(state, action) {
         selectedDay: action.payload,
       }
     }
+    case 'GO_BACK': {
+      return {
+        ...state,
+        selectedSession: null,
+      }
+    }
     case 'SET_SELECTED_SESSION': {
       return {
         ...state,
