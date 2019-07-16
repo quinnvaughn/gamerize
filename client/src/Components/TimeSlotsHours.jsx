@@ -21,13 +21,12 @@ const Container = styled.div`
 `
 
 const Header = styled.div`
-  text-transform: uppercase;
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
   padding: 1rem 2rem 4rem 2rem;
   margin: 0;
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: black;
   max-width: inherit;
@@ -50,14 +49,12 @@ const ChevronLeft = styled(FaChevronLeft)`
   font-size: 1.8rem;
   color: black;
   :hover {
-    transform: scale(1.75);
     transition: 0.25s ease-out;
     color: #db1422;
   }
 `
 
 const Day = styled.span`
-  font-size: 3rem;
   cursor: default;
   margin-left: ${props => props.day && '-4rem'};
 `
@@ -204,7 +201,7 @@ function TimeSlotHours(props) {
     }
   }, [data])
   const renderHeader = () => {
-    const dateFormat = 'MMMM Do, YYYY'
+    const dateFormat = 'MMMM Do'
 
     return (
       <Header id="header">

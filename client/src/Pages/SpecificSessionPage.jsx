@@ -24,6 +24,7 @@ import { useSessions } from '../State/SessionsSelectedContext'
 import SelectedSlotsModal from '../Components/SelectedSlotsModal'
 import OccupationList from '../Components/OccupationList'
 import useViewGamingSession from '../Hooks/useViewGamingSession'
+import SessionCalendar from '../Components/SessionCalendar'
 
 //data
 
@@ -423,6 +424,7 @@ export default function SpecificSessionPage(props) {
               </FlexHalf>
             </MiddleContainer>
           </GamerInfo>
+          <SessionCalendar />
           <TodayAvailability
             day={new Date()}
             sessions={secondData.specificSessionSlotsToday}
