@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import styled from 'styled-components'
 import { FaChevronLeft } from 'react-icons/fa'
 import dateFns from 'date-fns'
-import { Subscribe } from 'unstated'
 import { withRouter } from 'react-router-dom'
 import { MdClose } from 'react-icons/md'
+import Media from 'react-media'
 
 //local imports
 import Slot from './Slot'
-import SessionsContainer from '../Containers/SessionsContainer'
 import SlotOptionsDropdown from './SlotOptionsDropdown'
 import { noUnderscores } from '../utils/Strings'
 import { capitalize } from '../utils/Strings'
@@ -30,20 +29,15 @@ const Header = styled.div`
   width: 100%;
   border-bottom: 1px solid #dddfe2;
   background: #fff;
-  padding: 4rem 2rem;
+  padding: 1rem 2rem 4rem 2rem;
   margin: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   font-size: 3rem;
   font-weight: 700;
   color: black;
-  justify-content: space-between;
-  top: 0;
-  left: 0;
-  z-index: 9999;
   max-width: inherit;
-  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 `
 
 const ChevronLeft = styled(FaChevronLeft)`
@@ -68,6 +62,9 @@ const Title = styled.span`
   font-size: 3rem;
   cursor: default;
   font-weight: 700;
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
 `
 
 const Date = styled.span`
@@ -108,6 +105,9 @@ const SlotOptionsContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
 `
 
 const OptionsContainer = styled.div`
@@ -123,16 +123,27 @@ const OptionsContainer = styled.div`
   }
 `
 
+const SlotsAndPlayersContainer = styled.div`
+  width: 100%;
+  display: flex;
+`
+
 const NumberOfSlotsContainer = styled.label`
   display: flex;
   align-items: center;
   font-size: 1.6rem;
+  @media (max-width: 640px) {
+    margin-bottom: 0.5rem;
+  }
 `
 
 const NumberOfPlayersContainer = styled.label`
   display: flex;
   align-items: center;
   font-size: 1.6rem;
+  @media (max-width: 640px) {
+    margin-bottom: 0.5rem;
+  }
 `
 
 const Slots = styled.div`
@@ -220,13 +231,7 @@ const Exit = styled(MdClose)`
 const ExitContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding-right: 1rem;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
   background: #fff;
-  height: 3rem;
 `
 
 const ExtraContainer = styled.div`
@@ -249,6 +254,14 @@ const Me = styled.div`
   font-size: 1.6rem;
   font-weight: 800;
   overflow-wrap: break-word;
+`
+
+const HeaderInfo = styled.div`
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `
 
 function TimeSlotSession(props) {
@@ -275,27 +288,35 @@ function TimeSlotSession(props) {
     const endTime = 'h:mm a'
     return (
       <Header>
-        <ChevronLeft onClick={props.goBack} />
-        <Center>
-          <Title>{`${props.gamer} - ${noUnderscores(props.game)}`}</Title>
-          <System>{formatSystem(props.system)}</System>
-          <Date>
-            {dateFns.format(allSessions.selectedSession.startTime, dateFormat)}
-          </Date>
-          <Time>
-            {`${dateFns.format(
-              allSessions.selectedSession.startTime,
-              endTime
-            )} - ${dateFns.format(
-              dateFns.addMinutes(
+        <ExitContainer>
+          <Exit onClick={props.close} />
+        </ExitContainer>
+        <HeaderInfo>
+          <ChevronLeft onClick={props.goBack} />
+          <Center>
+            <Title>{`${props.gamer} - ${noUnderscores(props.game)}`}</Title>
+            <System>{formatSystem(props.system)}</System>
+            <Date>
+              {dateFns.format(
                 allSessions.selectedSession.startTime,
-                allSessions.selectedSession.length
-              ),
-              endTime
-            )}`}
-          </Time>
-        </Center>
-        <Empty />
+                dateFormat
+              )}
+            </Date>
+            <Time>
+              {`${dateFns.format(
+                allSessions.selectedSession.startTime,
+                endTime
+              )} - ${dateFns.format(
+                dateFns.addMinutes(
+                  allSessions.selectedSession.startTime,
+                  allSessions.selectedSession.length
+                ),
+                endTime
+              )}`}
+            </Time>
+          </Center>
+          <Empty />
+        </HeaderInfo>
       </Header>
     )
   }
@@ -408,16 +429,37 @@ function TimeSlotSession(props) {
   const renderSlotOptions = () => {
     return (
       <SlotOptionsContainer>
-        <OptionsContainer>
-          <NumberOfSlotsContainer>
-            Slots: <SlotOptionsDropdown slots />
-          </NumberOfSlotsContainer>
-        </OptionsContainer>
-        <OptionsContainer>
-          <NumberOfPlayersContainer>
-            Players: <SlotOptionsDropdown />
-          </NumberOfPlayersContainer>
-        </OptionsContainer>
+        <Media query={{ maxWidth: 640 }}>
+          {matches =>
+            matches ? (
+              <SlotsAndPlayersContainer>
+                <OptionsContainer>
+                  <NumberOfSlotsContainer>
+                    Slots: <SlotOptionsDropdown slots />
+                  </NumberOfSlotsContainer>
+                </OptionsContainer>
+                <OptionsContainer>
+                  <NumberOfPlayersContainer>
+                    Players: <SlotOptionsDropdown />
+                  </NumberOfPlayersContainer>
+                </OptionsContainer>
+              </SlotsAndPlayersContainer>
+            ) : (
+              <Fragment>
+                <OptionsContainer>
+                  <NumberOfSlotsContainer>
+                    Slots: <SlotOptionsDropdown slots />
+                  </NumberOfSlotsContainer>
+                </OptionsContainer>
+                <OptionsContainer>
+                  <NumberOfPlayersContainer>
+                    Players: <SlotOptionsDropdown />
+                  </NumberOfPlayersContainer>
+                </OptionsContainer>
+              </Fragment>
+            )
+          }
+        </Media>
         <OptionsContainer>
           <PickAllSlotsForTeam
             onClick={() => {
@@ -451,9 +493,6 @@ function TimeSlotSession(props) {
 
   return (
     <Container>
-      <ExitContainer>
-        <Exit onClick={props.close} />
-      </ExitContainer>
       {renderHeader()}
       {renderPrimary()}
     </Container>
